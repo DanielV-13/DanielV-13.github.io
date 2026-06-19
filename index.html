@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Portafolio Académico · Daniel Vaca</title>
+<meta name="description" content="Portafolio académico interactivo en forma de cielo estrellado. Cada estrella es una materia; sus constelaciones, los proyectos." />
+<style>
+  /* ====== Paleta y base ====== */
+  :root{
+    --bg-0:#02030a;
+    --bg-1:#070a1f;
+    --bg-2:#0d1130;
+    --star:#eaf2ff;
+    --accent:#7db4ff;
+    --accent-2:#b98bff;
+    --accent-3:#ffd479;
+    --text:#dfe6ff;
+    --muted:#8a93b8;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{
+    background:radial-gradient(ellipse at 50% 30%, var(--bg-2) 0%, var(--bg-1) 45%, var(--bg-0) 100%);
+    color:var(--text);
+    font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ====== Capas ====== */
+  #sky{position:fixed;inset:0;z-index:0;}
+  #lines{position:fixed;inset:0;z-index:1;pointer-events:none;}
+  #stage{position:fixed;inset:0;z-index:2;}
+
+  /* ====== Cabecera / HUD ====== */
+  .hud{
+    position:fixed;z-index:5;left:0;right:0;top:0;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 26px;pointer-events:none;
+  }
+  .brand{pointer-events:auto;}
+  .brand h1{
+    margin:0;font-size:18px;font-weight:600;letter-spacing:.5px;
+    text-shadow:0 0 18px rgba(125,180,255,.45);
+  }
+  .brand p{margin:2px 0 0;font-size:12px;color:var(--muted);}
+  .back{
+    pointer-events:auto;cursor:pointer;display:flex;align-items:center;gap:8px;
+    background:rgba(125,180,255,.08);border:1px solid rgba(125,180,255,.3);
+    color:var(--text);padding:9px 16px;border-radius:999px;font-size:13px;
+    backdrop-filter:blur(6px);transition:all .25s ease;opacity:0;transform:translateY(-6px);
+    pointer-events:none;
+  }
+  .back.show{opacity:1;transform:none;pointer-events:auto;}
+  .back:hover{background:rgba(125,180,255,.2);border-color:var(--accent);}
+
+  /* ====== Título central de nivel ====== */
+  .level-title{
+    position:fixed;z-index:4;left:50%;top:34px;transform:translateX(-50%);
+    text-align:center;pointer-events:none;transition:opacity .5s ease;
+  }
+  .level-title .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);}
+  .level-title h2{margin:6px 0 0;font-size:clamp(22px,4vw,34px);font-weight:300;letter-spacing:1px;}
+
+  /* ====== Pista inferior ====== */
+  .hint{
+    position:fixed;z-index:4;left:50%;bottom:26px;transform:translateX(-50%);
+    font-size:12.5px;color:var(--muted);letter-spacing:.5px;
+    background:rgba(7,10,31,.5);padding:8px 18px;border-radius:999px;
+    border:1px solid rgba(138,147,184,.18);backdrop-filter:blur(6px);
+    transition:opacity .4s ease;
+  }
+
+  /* ====== Nodos (estrellas) ====== */
+  .node{
+    position:absolute;transform:translate(-50%,-50%) scale(.4);
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    cursor:pointer;opacity:0;transition:opacity .55s ease, transform .55s cubic-bezier(.2,.8,.25,1);
+    text-align:center;
+  }
+  .node.in{opacity:1;transform:translate(-50%,-50%) scale(1);}
+  .orb{
+    position:relative;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #ffffff 0%, var(--c1) 38%, var(--c2) 100%);
+    box-shadow:0 0 22px 4px var(--glow), 0 0 60px 8px var(--glow2);
+    transition:transform .3s ease, box-shadow .3s ease;
+  }
+  .node:hover .orb{transform:scale(1.18);box-shadow:0 0 30px 8px var(--glow), 0 0 90px 18px var(--glow2);}
+  .orb::after{ /* halo pulsante */
+    content:"";position:absolute;inset:-10px;border-radius:50%;
+    border:1px solid var(--ring);opacity:.5;animation:pulse 3.2s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{transform:scale(1);opacity:.5;}50%{transform:scale(1.25);opacity:0;}}
+  .label{
+    font-size:13px;color:var(--text);max-width:160px;line-height:1.3;
+    text-shadow:0 1px 10px rgba(0,0,0,.9);
+  }
+  .label .sub{display:block;font-size:10.5px;color:var(--muted);margin-top:3px;letter-spacing:.5px;}
+  .badge{
+    display:inline-block;margin-top:4px;font-size:9.5px;letter-spacing:.5px;text-transform:uppercase;
+    padding:2px 9px;border-radius:999px;border:1px solid currentColor;
+  }
+  .badge.done{color:#7be3a3;}
+  .badge.wip{color:var(--accent-3);}
+
+  /* central de nivel proyectos */
+  .node.center .label{font-size:15px;}
+
+  /* ====== Intro overlay ====== */
+  #intro{
+    position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:22px;text-align:center;
+    background:radial-gradient(ellipse at 50% 50%, rgba(13,17,48,.6), rgba(2,3,10,.95));
+    transition:opacity .8s ease;padding:24px;
+  }
+  #intro h1{font-size:clamp(28px,6vw,52px);font-weight:200;margin:0;letter-spacing:2px;
+    text-shadow:0 0 30px rgba(125,180,255,.5);}
+  #intro .accent{color:var(--accent);}
+  #intro p{color:var(--muted);max-width:480px;margin:0;font-size:15px;line-height:1.6;}
+  #enter{
+    margin-top:6px;cursor:pointer;background:transparent;color:var(--text);
+    border:1px solid var(--accent);padding:13px 34px;border-radius:999px;
+    font-size:14px;letter-spacing:1px;transition:all .3s ease;
+  }
+  #enter:hover{background:var(--accent);color:#04060f;box-shadow:0 0 30px rgba(125,180,255,.6);}
+  #intro.hide{opacity:0;pointer-events:none;}
+
+  @media (max-width:600px){
+    .label{font-size:11px;max-width:110px;}
+    .hud{padding:16px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- Capas visuales -->
+<canvas id="sky"></canvas>
+<svg id="lines"></svg>
+<div id="stage"></div>
+
+<!-- HUD -->
+<div class="hud">
+  <div class="brand">
+    <h1>Daniel Vaca · Portafolio</h1>
+    <p>Universo Académico</p>
+  </div>
+  <div id="back" class="back">&larr; Volver</div>
+</div>
+
+<div class="level-title" id="levelTitle">
+  <div class="eyebrow" id="eyebrow">Universo</div>
+  <h2 id="title">Selecciona un periodo</h2>
+</div>
+
+<div class="hint" id="hint">Haz clic en una estrella para viajar hacia ella ✦</div>
+
+<!-- Intro -->
+<div id="intro">
+  <h1>El <span class="accent">Universo</span> de mis proyectos</h1>
+  <p>Cada estrella es una materia. Acércate a ella y descubre la constelación de proyectos que orbitan a su alrededor. Haz clic para explorar.</p>
+  <button id="enter">Entrar al universo ✦</button>
+</div>
+
+<script>
+/* =====================================================================
+   DATOS DEL PORTAFOLIO  ←  edita SOLO esta sección para añadir contenido
+   ---------------------------------------------------------------------
+   Estructura:  Periodo  →  Materias (estrellas)  →  Proyectos (constelación)
+   - Cada proyecto vive en SU PROPIO repositorio (pon su URL en "url").
+   - status: "done" (Completado) | "wip" (En desarrollo)
+   ===================================================================== */
+const PORTFOLIO = {
+  periods: [
+    {
+      id: "2026-1",
+      name: "2026-1",
+      subjects: [
+        {
+          name: "Lenguajes de Programación",
+          color: ["#9ecbff", "#3f6fd1"],          // [brillo, núcleo]
+          projects: [
+            {
+              name: "Analizador Léxico",
+              desc: "Proyecto 01",
+              status: "wip",
+              url: "https://github.com/DanielV-13/proyecto-01-analizador-lexico"
+            },
+            {
+              name: "Intérprete",
+              desc: "Proyecto 02",
+              status: "wip",
+              url: "https://github.com/DanielV-13/proyecto-02-interpreter"
+            }
+          ]
+        }
+        // ➕ Añade más materias de este periodo aquí
+      ]
+    }
+    // ➕ Cuando empiece otro periodo, copia el bloque y cambia id/name.
+    // {
+    //   id: "2026-2", name: "2026-2",
+    //   subjects: [ { name: "Bases de Datos", color:["#b98bff","#6a3fd1"], projects:[ ... ] } ]
+    // }
+  ]
+};
+
+/* ===================== MOTOR (no hace falta editar) ===================== */
+const stage   = document.getElementById('stage');
+const svg     = document.getElementById('lines');
+const backBtn = document.getElementById('back');
+const eyebrow = document.getElementById('eyebrow');
+const title   = document.getElementById('title');
+const hint    = document.getElementById('hint');
+
+let view = { level: 'periods', period: null, subject: null };
+
+/* ---- Posiciones en círculo (porcentaje de pantalla) ---- */
+function ringPositions(n, radius, cx=50, cy=52){
+  if(n === 1) return [{x:cx, y:cy}];
+  const out=[];
+  const start=-Math.PI/2;
+  for(let i=0;i<n;i++){
+    const a = start + i*(2*Math.PI/n);
+    out.push({ x: cx + Math.cos(a)*radius, y: cy + Math.sin(a)*radius*0.82 });
+  }
+  return out;
+}
+
+/* ---- Crea un nodo-estrella ---- */
+function makeNode({label, sub, badge, pos, size, colors, glow, onClick, center}){
+  const node=document.createElement('div');
+  node.className='node'+(center?' center':'');
+  node.style.left=pos.x+'%';
+  node.style.top =pos.y+'%';
+
+  const orb=document.createElement('div');
+  orb.className='orb';
+  orb.style.width=size+'px';
+  orb.style.height=size+'px';
+  orb.style.setProperty('--c1', colors[0]);
+  orb.style.setProperty('--c2', colors[1]);
+  orb.style.setProperty('--glow', glow+'66');
+  orb.style.setProperty('--glow2', glow+'22');
+  orb.style.setProperty('--ring', colors[0]);
+
+  const lab=document.createElement('div');
+  lab.className='label';
+  lab.innerHTML = label + (sub?`<span class="sub">${sub}</span>`:'') +
+                  (badge?`<span class="badge ${badge.cls}">${badge.text}</span>`:'');
+
+  node.appendChild(orb);
+  node.appendChild(lab);
+  node.addEventListener('click', onClick);
+  stage.appendChild(node);
+  return node;
+}
+
+/* ---- Limpia y dibuja un nivel ---- */
+function clearStage(){
+  stage.querySelectorAll('.node').forEach(n=>{
+    n.classList.remove('in');
+    setTimeout(()=>n.remove(), 300);
+  });
+  svg.innerHTML='';
+}
+
+function animateIn(){
+  requestAnimationFrame(()=>{
+    stage.querySelectorAll('.node').forEach((n,i)=>{
+      setTimeout(()=>n.classList.add('in'), 60*i);
+    });
+  });
+}
+
+/* ---- Nivel: PERIODOS ---- */
+function renderPeriods(){
+  view={level:'periods',period:null,subject:null};
+  clearStage();
+  backBtn.classList.remove('show');
+  eyebrow.textContent='Universo';
+  title.textContent = PORTFOLIO.periods.length>1 ? 'Selecciona un periodo' : 'Mis materias';
+  hint.textContent='Haz clic en una estrella para viajar hacia ella ✦';
+
+  // Si solo hay 1 periodo, saltamos directo a sus materias
+  if(PORTFOLIO.periods.length===1){ renderSubjects(PORTFOLIO.periods[0]); return; }
+
+  const pos=ringPositions(PORTFOLIO.periods.length, 26);
+  PORTFOLIO.periods.forEach((p,i)=>{
+    makeNode({
+      label:`Periodo ${p.name}`, sub:`${p.subjects.length} materia(s)`,
+      pos:pos[i], size:64, colors:["#ffd479","#d18a2f"], glow:"#ffd479",
+      onClick:()=>renderSubjects(p)
+    });
+  });
+  animateIn();
+}
+
+/* ---- Nivel: MATERIAS ---- */
+function renderSubjects(period){
+  view={level:'subjects',period,subject:null};
+  clearStage();
+  backBtn.classList.add('show');
+  eyebrow.textContent=`Periodo ${period.name}`;
+  title.textContent='Materias';
+  hint.textContent='Cada estrella es una materia · clic para ver sus proyectos ✦';
+
+  const pos=ringPositions(period.subjects.length, 27);
+  period.subjects.forEach((s,i)=>{
+    const c=s.color||["#9ecbff","#3f6fd1"];
+    makeNode({
+      label:s.name, sub:`${s.projects.length} proyecto(s)`,
+      pos:pos[i], size:58, colors:c, glow:c[0],
+      onClick:()=>renderProjects(period,s)
+    });
+  });
+  animateIn();
+}
+
+/* ---- Nivel: PROYECTOS (constelación) ---- */
+function renderProjects(period, subject){
+  view={level:'projects',period,subject};
+  clearStage();
+  backBtn.classList.add('show');
+  eyebrow.textContent=`${period.name} · ${subject.name}`;
+  title.textContent='Constelación de proyectos';
+  hint.textContent='Clic en un proyecto para abrir su repositorio ✦';
+
+  const c=subject.color||["#9ecbff","#3f6fd1"];
+  const center={x:50,y:52};
+
+  // estrella central = la materia
+  makeNode({
+    label:subject.name, sub:'Materia', center:true,
+    pos:center, size:80, colors:c, glow:c[0],
+    onClick:()=>{}
+  });
+
+  const positions = ringPositions(subject.projects.length, 30);
+  const nodes=[];
+  subject.projects.forEach((pr,i)=>{
+    const badge = pr.status==='done'
+      ? {cls:'done', text:'Completado'}
+      : {cls:'wip',  text:'En desarrollo'};
+    nodes.push({pos:positions[i]});
+    makeNode({
+      label:pr.name, sub:pr.desc||'', badge,
+      pos:positions[i], size:40, colors:["#eaf2ff", c[1]], glow:c[0],
+      onClick:()=>{ if(pr.url) window.open(pr.url,'_blank'); }
+    });
+  });
+
+  // líneas de la constelación (centro → cada proyecto)
+  drawLines(center, nodes.map(n=>n.pos), c[0]);
+  animateIn();
+}
+
+function drawLines(center, points, color){
+  const w=window.innerWidth, h=window.innerHeight;
+  const cx=center.x/100*w, cy=center.y/100*h;
+  let html='';
+  points.forEach(p=>{
+    const x=p.x/100*w, y=p.y/100*h;
+    html+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}"
+            stroke="${color}" stroke-width="1" stroke-opacity="0.35"
+            stroke-dasharray="3 5"/>`;
+  });
+  svg.innerHTML=html;
+}
+
+/* ---- Navegación atrás ---- */
+function goBack(){
+  if(view.level==='projects') renderSubjects(view.period);
+  else if(view.level==='subjects'){
+    if(PORTFOLIO.periods.length>1) renderPeriods();
+  }
+}
+backBtn.addEventListener('click', goBack);
+window.addEventListener('keydown', e=>{ if(e.key==='Escape') goBack(); });
+window.addEventListener('resize', ()=>{
+  if(view.level==='projects') renderProjects(view.period, view.subject);
+});
+
+/* ===================== FONDO: CIELO ESTRELLADO ===================== */
+const sky=document.getElementById('sky'); const ctx=sky.getContext('2d');
+let W,H,stars=[],shooting=[];
+function resize(){ W=sky.width=innerWidth; H=sky.height=innerHeight; buildStars(); }
+function buildStars(){
+  stars=[];
+  const count=Math.round(W*H/1600);
+  for(let i=0;i<count;i++){
+    stars.push({
+      x:Math.random()*W, y:Math.random()*H,
+      r:Math.random()*1.4+0.2,
+      base:Math.random()*0.5+0.3,
+      tw:Math.random()*Math.PI*2,
+      sp:Math.random()*0.02+0.005
+    });
+  }
+}
+function maybeShoot(){
+  if(Math.random()<0.004){
+    shooting.push({x:Math.random()*W*0.7,y:Math.random()*H*0.4,
+      vx:6+Math.random()*4, vy:3+Math.random()*2, life:1});
+  }
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  for(const s of stars){
+    s.tw+=s.sp;
+    const a=s.base+Math.sin(s.tw)*0.35;
+    ctx.globalAlpha=Math.max(0,a);
+    ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,7);ctx.fillStyle='#eaf2ff';ctx.fill();
+  }
+  ctx.globalAlpha=1;
+  maybeShoot();
+  for(let i=shooting.length-1;i>=0;i--){
+    const m=shooting[i];
+    const g=ctx.createLinearGradient(m.x,m.y,m.x-m.vx*8,m.y-m.vy*8);
+    g.addColorStop(0,'rgba(234,242,255,.9)');g.addColorStop(1,'rgba(234,242,255,0)');
+    ctx.strokeStyle=g;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(m.x,m.y);ctx.lineTo(m.x-m.vx*8,m.y-m.vy*8);ctx.stroke();
+    m.x+=m.vx;m.y+=m.vy;m.life-=0.012;
+    if(m.life<=0||m.x>W||m.y>H)shooting.splice(i,1);
+  }
+  requestAnimationFrame(draw);
+}
+addEventListener('resize',resize); resize(); draw();
+
+/* ===================== INTRO ===================== */
+document.getElementById('enter').addEventListener('click',()=>{
+  document.getElementById('intro').classList.add('hide');
+  renderPeriods();
+});
+</script>
+</body>
+</html>
