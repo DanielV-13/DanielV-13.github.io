@@ -142,8 +142,7 @@
 <!-- HUD -->
 <div class="hud">
   <div class="brand">
-    <h1>Daniel Vaca · Portafolio</h1>
-    <p>Universo Académico</p>
+    <h1>Portafolio Estudiantil · Daniel Vaca</h1>
   </div>
   <div id="back" class="back">&larr; Volver</div>
 </div>
@@ -157,9 +156,9 @@
 
 <!-- Intro -->
 <div id="intro">
-  <h1>El <span class="accent">Universo</span> de mis proyectos</h1>
-  <p>Cada estrella es una materia. Acércate a ella y descubre la constelación de proyectos que orbitan a su alrededor. Haz clic para explorar.</p>
-  <button id="enter">Entrar al universo ✦</button>
+  <h1>Portafolio Estudiantil <span class="accent">Daniel Vaca</span></h1>
+  <p>Navegue por una serie de proyectos de diversas materias universitarias.</p>
+  <button id="enter">Entrar al Portafolio ✦</button>
 </div>
 
 <script>
@@ -176,25 +175,52 @@ const PORTFOLIO = {
       id: "2026-1",
       name: "2026-1",
       subjects: [
+        // El ORDEN de esta lista define el trazo del rayo (constelación).
+        {
+          name: "Programación Orientada a Objetos",
+          color: ["#ff9e9e", "#d14f4f"],
+          projects: []   // ➕ agrega proyectos cuando los tengas
+        },
+        {
+          name: "Estructura de Datos",
+          color: ["#9ecbff", "#3f6fd1"],
+          projects: []
+        },
+        {
+          name: "Human Computer Interaction",
+          color: ["#b98bff", "#6a3fd1"],
+          projects: []
+        },
+        {
+          name: "Sistemas Operativos",
+          color: ["#9effce", "#2fae74"],
+          projects: []
+        },
         {
           name: "Lenguajes de Programación",
-          color: ["#9ecbff", "#3f6fd1"],          // [brillo, núcleo]
+          color: ["#ffd479", "#d18a2f"],
           projects: [
-            {
-              name: "Analizador Léxico",
-              desc: "Proyecto 01",
-              status: "wip",
-              url: "https://github.com/DanielV-13/proyecto-01-analizador-lexico"
-            },
-            {
-              name: "Intérprete",
-              desc: "Proyecto 02",
-              status: "wip",
-              url: "https://github.com/DanielV-13/proyecto-02-interpreter"
-            }
+            { name: "Analizador Léxico", desc: "Proyecto 01", status: "wip",
+              url: "https://github.com/DanielV-13/proyecto-01-analizador-lexico" },
+            { name: "Intérprete", desc: "Proyecto 02", status: "wip",
+              url: "https://github.com/DanielV-13/proyecto-02-interpreter" }
           ]
+        },
+        {
+          name: "Sistemas Distribuidos",
+          color: ["#8be0ff", "#2f9bd1"],
+          projects: []
+        },
+        {
+          name: "Datathon WIDS 2026",
+          color: ["#ff9ed8", "#d14f9e"],
+          projects: []
+        },
+        {
+          name: "Sobre Mí",
+          color: ["#eaf2ff", "#8a93b8"],
+          projects: []
         }
-        // ➕ Añade más materias de este periodo aquí
       ]
     }
     // ➕ Cuando empiece otro periodo, copia el bloque y cambia id/name.
@@ -225,6 +251,28 @@ function ringPositions(n, radius, cx=50, cy=52){
     out.push({ x: cx + Math.cos(a)*radius, y: cy + Math.sin(a)*radius*0.82 });
   }
   return out;
+}
+
+/* ---- Posiciones en zigzag (forma de rayo / constelación) ---- */
+function boltPositions(n){
+  const out=[]; const top=17, bottom=85; const xs=[40,60];
+  for(let i=0;i<n;i++){
+    const y = n===1 ? 50 : top + (bottom-top)*(i/(n-1));
+    out.push({ x: xs[i%2], y });
+  }
+  return out;
+}
+
+/* ---- Dibuja una polilínea conectando puntos consecutivos ---- */
+function drawPolyline(points, color){
+  const w=window.innerWidth, h=window.innerHeight;
+  let html='';
+  for(let i=0;i<points.length-1;i++){
+    const a=points[i], b=points[i+1];
+    html+=`<line x1="${a.x/100*w}" y1="${a.y/100*h}" x2="${b.x/100*w}" y2="${b.y/100*h}"
+      stroke="${color}" stroke-width="1.5" stroke-opacity="0.4"/>`;
+  }
+  svg.innerHTML=html;
 }
 
 /* ---- Crea un nodo-estrella ---- */
@@ -300,17 +348,20 @@ function renderPeriods(){
 function renderSubjects(period){
   view={level:'subjects',period,subject:null};
   clearStage();
-  backBtn.classList.add('show');
-  eyebrow.textContent=`Periodo ${period.name}`;
-  title.textContent='Materias';
-  hint.textContent='Cada estrella es una materia · clic para ver sus proyectos ✦';
+  if(PORTFOLIO.periods.length>1) backBtn.classList.add('show'); else backBtn.classList.remove('show');
+  eyebrow.textContent='';
+  title.textContent='Selecciona un tema';
+  hint.textContent='Haz clic en un punto para abrir su contenido ✦';
 
-  const pos=ringPositions(period.subjects.length, 27);
+  const pos=boltPositions(period.subjects.length);
+  // Constelación en forma de rayo: une los puntos en el orden de la lista
+  drawPolyline(pos, '#9ec5ff');
   period.subjects.forEach((s,i)=>{
     const c=s.color||["#9ecbff","#3f6fd1"];
+    const count=s.projects.length;
     makeNode({
-      label:s.name, sub:`${s.projects.length} proyecto(s)`,
-      pos:pos[i], size:58, colors:c, glow:c[0],
+      label:s.name, sub: count ? `${count} proyecto(s)` : 'Próximamente',
+      pos:pos[i], size:46, colors:c, glow:c[0],
       onClick:()=>renderProjects(period,s)
     });
   });
@@ -322,16 +373,18 @@ function renderProjects(period, subject){
   view={level:'projects',period,subject};
   clearStage();
   backBtn.classList.add('show');
-  eyebrow.textContent=`${period.name} · ${subject.name}`;
-  title.textContent='Constelación de proyectos';
-  hint.textContent='Clic en un proyecto para abrir su repositorio ✦';
+  eyebrow.textContent='';
+  title.textContent=subject.name;
+  hint.textContent = subject.projects.length
+    ? 'Clic en un proyecto para abrir su repositorio ✦'
+    : 'Aún no hay proyectos publicados aquí ✦';
 
   const c=subject.color||["#9ecbff","#3f6fd1"];
   const center={x:50,y:52};
 
-  // estrella central = la materia
+  // estrella central = el tema seleccionado
   makeNode({
-    label:subject.name, sub:'Materia', center:true,
+    label:subject.name, sub:'', center:true,
     pos:center, size:80, colors:c, glow:c[0],
     onClick:()=>{}
   });
@@ -379,6 +432,7 @@ backBtn.addEventListener('click', goBack);
 window.addEventListener('keydown', e=>{ if(e.key==='Escape') goBack(); });
 window.addEventListener('resize', ()=>{
   if(view.level==='projects') renderProjects(view.period, view.subject);
+  else if(view.level==='subjects') renderSubjects(view.period);
 });
 
 /* ===================== FONDO: CIELO ESTRELLADO ===================== */
