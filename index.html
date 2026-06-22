@@ -203,7 +203,7 @@ const PORTFOLIO = {
           name: "2026-1 - Lenguajes de Programación",
           color: ["#ffd479", "#d18a2f"],
           projects: [
-            { name: "RPG Prolog Bot", desc: "Prolog + Laravel", status: "wip",
+            { name: "RPG Prolog Bot", desc: "Prolog + Laravel", status: "done",
               url: "https://github.com/DanielV-13/Actividad_Recuperacion_Prolog_Laravel" },
             { name: "Gestión de Libros", desc: "App web · con Paula Martillo", status: "done",
               url: "https://github.com/paumquintana/ProyectoIParcialLenguajesProgramacion" }
@@ -225,7 +225,10 @@ const PORTFOLIO = {
         {
           name: "Sobre Mí",
           color: ["#eaf2ff", "#8a93b8"],
-          projects: []
+          projects: [
+            { name: "LinkedIn", desc: "Mi perfil profesional",
+              url: "https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" }
+          ]
         }
       ]
     }
@@ -382,7 +385,7 @@ function renderProjects(period, subject){
   eyebrow.textContent='';
   title.textContent=subject.name;
   hint.textContent = subject.projects.length
-    ? 'Clic en un proyecto para abrir su repositorio ✦'
+    ? 'Clic en un punto para abrir su enlace ✦'
     : 'Aún no hay proyectos publicados aquí ✦';
 
   const c=subject.color||["#9ecbff","#3f6fd1"];
@@ -400,9 +403,9 @@ function renderProjects(period, subject){
   const positions = n===1 ? [{x:50, y:24}] : ringPositions(n, 30);
   const nodes=[];
   subject.projects.forEach((pr,i)=>{
-    const badge = pr.status==='done'
-      ? {cls:'done', text:'Completado'}
-      : {cls:'wip',  text:'En desarrollo'};
+    const badge = pr.status==='done' ? {cls:'done', text:'Completado'}
+                : pr.status==='wip' ? {cls:'wip',  text:'En desarrollo'}
+                : null;  // sin status => sin etiqueta (ej. enlaces como LinkedIn)
     nodes.push({pos:positions[i]});
     makeNode({
       label:pr.name, sub:pr.desc||'', badge,
