@@ -387,7 +387,9 @@ function renderProjects(period, subject){
     onClick:()=>{}
   });
 
-  const positions = ringPositions(subject.projects.length, 30);
+  // Con 1 solo proyecto lo colocamos arriba (no encima de la estrella central)
+  const n = subject.projects.length;
+  const positions = n===1 ? [{x:50, y:24}] : ringPositions(n, 30);
   const nodes=[];
   subject.projects.forEach((pr,i)=>{
     const badge = pr.status==='done'
