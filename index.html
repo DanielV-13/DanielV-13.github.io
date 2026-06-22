@@ -148,8 +148,8 @@
 </div>
 
 <div class="level-title" id="levelTitle">
-  <div class="eyebrow" id="eyebrow">Universo</div>
-  <h2 id="title">Selecciona un periodo</h2>
+  <div class="eyebrow" id="eyebrow"></div>
+  <h2 id="title"></h2>
 </div>
 
 <div class="hint" id="hint">Haz clic en una estrella para viajar hacia ella ✦</div>
@@ -359,7 +359,7 @@ function renderSubjects(period){
   clearStage();
   if(PORTFOLIO.periods.length>1) backBtn.classList.add('show'); else backBtn.classList.remove('show');
   eyebrow.textContent='';
-  title.textContent='Selecciona un tema';
+  title.textContent='';
   hint.textContent='Haz clic en un punto para abrir su contenido ✦';
 
   const pos=boltPositions(period.subjects.length);
