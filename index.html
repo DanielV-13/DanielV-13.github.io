@@ -107,6 +107,16 @@
   /* central de nivel proyectos */
   .node.center .label{font-size:15px;}
 
+  /* etiquetas de año (cúmulos) */
+  .year-label{
+    position:absolute;transform:translate(-50%,-50%);text-align:center;
+    pointer-events:none;opacity:0;transition:opacity .6s ease;
+    text-shadow:0 0 16px rgba(0,0,0,.85);
+  }
+  .year-label.in{opacity:1;}
+  .year-label .yr{font-size:22px;font-weight:700;letter-spacing:1px;}
+  .year-label .cm{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+
   /* ====== Intro overlay ====== */
   #intro{
     position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;
@@ -320,7 +330,7 @@ function makeNode({label, sub, badge, pos, size, colors, glow, onClick, center})
 
 /* ---- Limpia y dibuja un nivel ---- */
 function clearStage(){
-  stage.querySelectorAll('.node').forEach(n=>{
+  stage.querySelectorAll('.node, .year-label').forEach(n=>{
     n.classList.remove('in');
     setTimeout(()=>n.remove(), 300);
   });
@@ -329,8 +339,8 @@ function clearStage(){
 
 function animateIn(){
   requestAnimationFrame(()=>{
-    stage.querySelectorAll('.node').forEach((n,i)=>{
-      setTimeout(()=>n.classList.add('in'), 60*i);
+    stage.querySelectorAll('.node, .year-label').forEach((n,i)=>{
+      setTimeout(()=>n.classList.add('in'), 50*i);
     });
   });
 }
@@ -359,26 +369,82 @@ function renderPeriods(){
 }
 
 /* ---- Nivel: MATERIAS ---- */
+/* ---- Agrupación de materias en cúmulos por año ---- */
+const YEAR_COLORS = { '2025':'#7db4ff', '2026':'#ffd479', 'Sin fecha':'#9aa4cf' };
+function yearOf(name){ const m=name.match(/20\d{2}/); return m ? m[0] : 'Sin fecha'; }
+function displayName(name){ return name.replace(/^20\d{2}\s*-\s*\d+\s*-\s*/,'').trim(); }
+function groupByYear(subjects){
+  const map={};
+  subjects.forEach(s=>{ const y=yearOf(s.name); (map[y]=map[y]||[]).push(s); });
+  return Object.keys(map)
+    .sort((a,b)=> a==='Sin fecha'?1 : b==='Sin fecha'?-1 : a.localeCompare(b))
+    .map(y=>({year:y, subjects:map[y]}));
+}
+function clusterRadius(n){ return n<=1 ? 7 : Math.min(12, 6 + n*1.4); }
+function clusterCenters(n){
+  if(n<=1) return [{x:50,y:52}];
+  if(n===2) return [{x:30,y:50},{x:70,y:50}];
+  if(n===3) return [{x:24,y:42},{x:76,y:40},{x:50,y:74}];
+  const out=[]; for(let i=0;i<n;i++){ const a=-Math.PI/2+i*2*Math.PI/n; out.push({x:50+Math.cos(a)*32, y:52+Math.sin(a)*26}); } return out;
+}
+function clusterRing(center, count){
+  if(count<=1) return [{x:center.x,y:center.y}];
+  const r=clusterRadius(count), pts=[], start=-Math.PI/2;
+  for(let i=0;i<count;i++){ const a=start+i*2*Math.PI/count; pts.push({x:center.x+Math.cos(a)*r, y:center.y+Math.sin(a)*r*0.92}); }
+  return pts;
+}
+
 function renderSubjects(period){
   view={level:'subjects',period,subject:null};
   clearStage();
   if(PORTFOLIO.periods.length>1) backBtn.classList.add('show'); else backBtn.classList.remove('show');
-  eyebrow.textContent='';
-  title.textContent='';
-  hint.textContent='Haz clic en un punto para abrir su contenido ✦';
+  eyebrow.textContent=''; title.textContent='';
+  hint.textContent='Cada cúmulo agrupa las materias por año · clic en una para ver su contenido ✦';
 
-  const pos=boltPositions(period.subjects.length);
-  // Constelación en forma de rayo: une los puntos en el orden de la lista
-  drawPolyline(pos, '#9ec5ff');
-  period.subjects.forEach((s,i)=>{
-    const c=s.color||["#9ecbff","#3f6fd1"];
-    const count=s.projects.length;
-    makeNode({
-      label:s.name, sub: count ? `${count} proyecto(s)` : 'Próximamente',
-      pos:pos[i], size:46, colors:c, glow:c[0],
-      onClick:()=>renderProjects(period,s)
+  const w=window.innerWidth, h=window.innerHeight;
+  const clusters=groupByYear(period.subjects);
+  const centers=clusterCenters(clusters.length);
+  let svgHtml='';
+
+  clusters.forEach((cl,ci)=>{
+    const center=centers[ci];
+    const color=YEAR_COLORS[cl.year]||'#9aa4cf';
+    const r=clusterRadius(cl.subjects.length);
+    const ring=clusterRing(center, cl.subjects.length);
+
+    // halo del cúmulo
+    svgHtml += `<ellipse cx="${center.x/100*w}" cy="${center.y/100*h}" rx="${(r+6)/100*w}" ry="${(r+6)/100*h}" fill="${color}" fill-opacity="0.04" stroke="${color}" stroke-opacity="0.18" stroke-dasharray="2 7"/>`;
+
+    // constelación interna (une las materias del año)
+    if(ring.length>1){
+      for(let i=0;i<ring.length;i++){
+        const a=ring[i], b=ring[(i+1)%ring.length];
+        svgHtml += `<line x1="${a.x/100*w}" y1="${a.y/100*h}" x2="${b.x/100*w}" y2="${b.y/100*h}" stroke="${color}" stroke-opacity="0.28" stroke-width="1"/>`;
+      }
+    }
+
+    // etiqueta del año
+    const lbl=document.createElement('div');
+    lbl.className='year-label';
+    lbl.style.left=center.x+'%';
+    lbl.style.top=(center.y-(r+9))+'%';
+    lbl.style.color=color;
+    lbl.innerHTML=`<div class="yr">${cl.year}</div><div class="cm">cúmulo</div>`;
+    stage.appendChild(lbl);
+
+    // estrellas (materias)
+    cl.subjects.forEach((s,i)=>{
+      const c=s.color||["#9ecbff","#3f6fd1"];
+      const count=s.projects.length;
+      makeNode({
+        label:displayName(s.name), sub: count ? `${count} proyecto(s)` : 'Próximamente',
+        pos:ring[i], size:40, colors:c, glow:c[0],
+        onClick:()=>renderProjects(period,s)
+      });
     });
   });
+
+  svg.innerHTML=svgHtml;
   animateIn();
 }
 
