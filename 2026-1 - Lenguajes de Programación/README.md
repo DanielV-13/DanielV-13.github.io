@@ -4,8 +4,7 @@
 
 | # | Proyecto | Estado | Repositorio |
 |---|----------|--------|-------------|
-| 01 | Analizador Léxico | 🟡 En desarrollo | [Ver repo](https://github.com/DanielV-13/proyecto-01-analizador-lexico) |
-| 02 | Intérprete | 🟡 En desarrollo | [Ver repo](https://github.com/DanielV-13/proyecto-02-interpreter) |
+| 01 | RPG Prolog Bot (Prolog + Laravel) | 🟡 En curso | [Ver repo](https://github.com/DanielV-13/Actividad_Recuperacion_Prolog_Laravel) |
 
 > Actualiza esta tabla y los enlaces a medida que crees los repositorios de cada proyecto.
 
