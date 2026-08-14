@@ -30,7 +30,7 @@
 
   /* ====== Capas ====== */
   #sky{position:fixed;inset:0;z-index:0;}
-  #lines{position:fixed;inset:0;z-index:1;pointer-events:none;}
+  #lines{position:fixed;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;}
   #stage{position:fixed;inset:0;z-index:2;}
 
   /* ====== Cabecera / HUD ====== */
@@ -411,7 +411,16 @@ function groupByYear(subjects){
     .sort((a,b)=> a==='Sin fecha'?1 : b==='Sin fecha'?-1 : a.localeCompare(b))
     .map(y=>({year:y, subjects:map[y]}));
 }
-function clusterRadius(n){ return n<=1 ? 0 : Math.min(18, 7 + n*1.9); }
+function clusterRadius(n){ return n<=1 ? 0 : Math.min(16, 7 + n*1.7); }
+/* Centros simétricos (equidistantes del centro, misma altura) para los cúmulos con año */
+function symmetricCenters(n, hub){
+  const cy=hub.y;
+  if(n<=0) return [];
+  if(n===1) return [{x:28,y:cy}];
+  if(n===2) return [{x:26,y:cy},{x:74,y:cy}];
+  if(n===3) return [{x:20,y:cy},{x:80,y:cy},{x:50,y:cy-26}];
+  const out=[]; for(let i=0;i<n;i++){ const a=Math.PI+i*2*Math.PI/n; out.push({x:50+Math.cos(a)*30, y:cy+Math.sin(a)*22}); } return out;
+}
 function clusterCenters(n){
   if(n<=1) return [{x:50,y:52}];
   if(n===2) return [{x:30,y:50},{x:70,y:50}];
@@ -444,8 +453,10 @@ function renderSubjects(period){
   const clusters=groupByYear(period.subjects);
   const dated  = clusters.filter(c=>c.year!=='Sin fecha');   // cúmulos con año
   const noDate = clusters.find(c=>c.year==='Sin fecha');      // "Sobre Mí", etc.
-  const centers=spreadCenters(dated.length);
+  const hub={x:50, y:52};                                     // centro = Sobre Mí
+  const centers=symmetricCenters(dated.length, hub);
   let svgHtml='';
+  const spokes=[];                                            // posición de cada materia
 
   dated.forEach((cl,ci)=>{
     const center=centers[ci];
@@ -454,15 +465,7 @@ function renderSubjects(period){
     const ring=clusterRing(center, cl.subjects.length);
 
     // halo del cúmulo
-    svgHtml += `<ellipse cx="${center.x/100*w}" cy="${center.y/100*h}" rx="${(r+6)/100*w}" ry="${(r+6)/100*h}" fill="${color}" fill-opacity="0.04" stroke="${color}" stroke-opacity="0.18" stroke-dasharray="2 7"/>`;
-
-    // constelación interna (une las materias del año)
-    if(ring.length>1){
-      for(let i=0;i<ring.length;i++){
-        const a=ring[i], b=ring[(i+1)%ring.length];
-        svgHtml += `<line x1="${a.x/100*w}" y1="${a.y/100*h}" x2="${b.x/100*w}" y2="${b.y/100*h}" stroke="${color}" stroke-opacity="0.28" stroke-width="1"/>`;
-      }
-    }
+    svgHtml += `<ellipse cx="${center.x/100*w}" cy="${center.y/100*h}" rx="${(r+6)/100*w}" ry="${(r+6)/100*h}" fill="${color}" fill-opacity="0.04" stroke="${color}" stroke-opacity="0.16" stroke-dasharray="2 7"/>`;
 
     // etiqueta del año
     const lbl=document.createElement('div');
@@ -477,6 +480,7 @@ function renderSubjects(period){
     cl.subjects.forEach((s,i)=>{
       const c=s.color||["#9ecbff","#3f6fd1"];
       const count=s.projects.length;
+      spokes.push(ring[i]);
       makeNode({
         label:displayName(s.name), sub: count ? `${count} proyecto(s)` : 'Próximamente',
         pos:ring[i], size:40, colors:c, glow:c[0],
@@ -485,22 +489,33 @@ function renderSubjects(period){
     });
   });
 
-  // Materias sin año (p.ej. "Sobre Mí") → al centro, SIN etiqueta de cúmulo
+  // Líneas que SALEN del centro (Sobre Mí) hacia cada materia
+  const cx=hub.x/100*w, cy=hub.y/100*h;
+  let lines='';
+  spokes.forEach(p=>{
+    lines += `<line x1="${cx}" y1="${cy}" x2="${p.x/100*w}" y2="${p.y/100*h}" stroke="#ffffff" stroke-opacity="0.16" stroke-width="1" stroke-dasharray="2 6"/>`;
+  });
+
+  // Cuadrado transparente de borde blanco que encierra a "Sobre Mí"
+  const sq=94;
+  const square = `<rect x="${cx-sq/2}" y="${cy-sq/2}" width="${sq}" height="${sq}" rx="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.55)" stroke-width="1.5"/>`;
+
+  // fondo: líneas + halos, y el cuadrado encima
+  svg.innerHTML = lines + svgHtml + square;
+
+  // Nodo central "Sobre Mí" (dentro del cuadrado)
   if(noDate){
-    const center={x:50, y:56};
-    const ring=clusterRing(center, noDate.subjects.length);
-    noDate.subjects.forEach((s,i)=>{
+    noDate.subjects.forEach((s)=>{
       const c=s.color||["#eaf2ff","#8a93b8"];
       const count=s.projects.length;
       makeNode({
         label:displayName(s.name), sub: count ? `${count} proyecto(s)` : 'Próximamente',
-        pos:ring[i], size:46, colors:c, glow:c[0],
+        pos:hub, size:44, colors:c, glow:c[0],
         onClick:()=>renderProjects(period,s)
       });
     });
   }
 
-  svg.innerHTML=svgHtml;
   animateIn();
 }
 
