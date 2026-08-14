@@ -409,12 +409,20 @@ function groupByYear(subjects){
     .sort((a,b)=> a==='Sin fecha'?1 : b==='Sin fecha'?-1 : a.localeCompare(b))
     .map(y=>({year:y, subjects:map[y]}));
 }
-function clusterRadius(n){ return n<=1 ? 7 : Math.min(12, 6 + n*1.4); }
+function clusterRadius(n){ return n<=1 ? 0 : Math.min(18, 7 + n*1.9); }
 function clusterCenters(n){
   if(n<=1) return [{x:50,y:52}];
   if(n===2) return [{x:30,y:50},{x:70,y:50}];
   if(n===3) return [{x:24,y:42},{x:76,y:40},{x:50,y:74}];
   const out=[]; for(let i=0;i<n;i++){ const a=-Math.PI/2+i*2*Math.PI/n; out.push({x:50+Math.cos(a)*32, y:52+Math.sin(a)*26}); } return out;
+}
+/* Centros para los cúmulos CON año, repartidos horizontalmente con aire */
+function spreadCenters(n){
+  if(n<=0) return [];
+  if(n===1) return [{x:50,y:46}];
+  if(n===2) return [{x:24,y:46},{x:76,y:46}];
+  if(n===3) return [{x:19,y:45},{x:50,y:38},{x:81,y:45}];
+  const out=[]; for(let i=0;i<n;i++){ const a=-Math.PI/2+i*2*Math.PI/n; out.push({x:50+Math.cos(a)*35, y:46+Math.sin(a)*24}); } return out;
 }
 function clusterRing(center, count){
   if(count<=1) return [{x:center.x,y:center.y}];
@@ -432,10 +440,12 @@ function renderSubjects(period){
 
   const w=window.innerWidth, h=window.innerHeight;
   const clusters=groupByYear(period.subjects);
-  const centers=clusterCenters(clusters.length);
+  const dated  = clusters.filter(c=>c.year!=='Sin fecha');   // cúmulos con año
+  const noDate = clusters.find(c=>c.year==='Sin fecha');      // "Sobre Mí", etc.
+  const centers=spreadCenters(dated.length);
   let svgHtml='';
 
-  clusters.forEach((cl,ci)=>{
+  dated.forEach((cl,ci)=>{
     const center=centers[ci];
     const color=YEAR_COLORS[cl.year]||'#9aa4cf';
     const r=clusterRadius(cl.subjects.length);
@@ -456,7 +466,7 @@ function renderSubjects(period){
     const lbl=document.createElement('div');
     lbl.className='year-label';
     lbl.style.left=center.x+'%';
-    lbl.style.top=(center.y-(r+9))+'%';
+    lbl.style.top=(center.y-(r+11))+'%';
     lbl.style.color=color;
     lbl.innerHTML=`<div class="yr">${cl.year}</div><div class="cm">cúmulo</div>`;
     stage.appendChild(lbl);
@@ -472,6 +482,21 @@ function renderSubjects(period){
       });
     });
   });
+
+  // Materias sin año (p.ej. "Sobre Mí") → al centro, SIN etiqueta de cúmulo
+  if(noDate){
+    const center={x:50, y:56};
+    const ring=clusterRing(center, noDate.subjects.length);
+    noDate.subjects.forEach((s,i)=>{
+      const c=s.color||["#eaf2ff","#8a93b8"];
+      const count=s.projects.length;
+      makeNode({
+        label:displayName(s.name), sub: count ? `${count} proyecto(s)` : 'Próximamente',
+        pos:ring[i], size:46, colors:c, glow:c[0],
+        onClick:()=>renderProjects(period,s)
+      });
+    });
+  }
 
   svg.innerHTML=svgHtml;
   animateIn();
