@@ -6,7 +6,7 @@ const NameFX = {
     size(); new ResizeObserver(size).observe(this.name);
     this.name.addEventListener("click", () => this.fire());
     this.name.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); this.fire(); } });
-    this.name.addEventListener("mouseenter", () => { if (performance.now() - this.last > 4000) this.fire(); });
+    this.name.addEventListener("mouseenter", () => this.fire());
   },
   fire() {
     if (this.busy) return; this.busy = true; this.last = performance.now(); Sound.collide();
@@ -35,13 +35,19 @@ const NameFX = {
 };
 
 /* ===================== CURSOR: a charged particle in a magnetic field ===================== */
+/* The red head is moved straight from the pointer event (no frame of lag); the canvas only draws the curling trail. */
 const CursorFX = {
   init() {
     if (!FINE || REDUCED) return;
-    this.c = $("#cursorfx"); this.pts = []; this.x = -99; this.y = -99; this.running = false;
+    this.c = $("#cursorfx"); this.head = $("#cursorHead"); this.pts = []; this.x = -99; this.y = -99; this.running = false;
     const size = () => this.ctx = fitCanvas(this.c, innerWidth, innerHeight); size(); addEventListener("resize", size);
-    addEventListener("pointermove", e => { if (e.pointerType !== "mouse") return; const vx = e.clientX - this.x, vy = e.clientY - this.y; this.x = e.clientX; this.y = e.clientY; this.pts.push({ x: this.x, y: this.y, vx: vx * .05, vy: vy * .05, a: 1 }); if (this.pts.length > 40) this.pts.shift(); this.start(); }, { passive: true });
-    document.addEventListener("pointerleave", () => { this.x = -99; });
+    addEventListener("pointermove", e => {
+      if (e.pointerType !== "mouse") return;
+      this.head.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`; this.head.style.opacity = 1;
+      const vx = e.clientX - this.x, vy = e.clientY - this.y; this.x = e.clientX; this.y = e.clientY;
+      this.pts.push({ x: this.x, y: this.y, vx: vx * .05, vy: vy * .05, a: 1 }); if (this.pts.length > 40) this.pts.shift(); this.start();
+    }, { passive: true });
+    document.documentElement.addEventListener("pointerleave", () => this.head.style.opacity = 0);
   },
   start() { if (this.running) return; this.running = true; const loop = () => { if (this.draw()) requestAnimationFrame(loop); else this.running = false; }; requestAnimationFrame(loop); },
   draw() {
@@ -49,7 +55,6 @@ const CursorFX = {
     this.pts.forEach(p => { const s = .12, vx = p.vx * Math.cos(s) - p.vy * Math.sin(s), vy = p.vx * Math.sin(s) + p.vy * Math.cos(s); p.vx = vx * .96; p.vy = vy * .96; p.x += p.vx; p.y += p.vy; p.a -= .035; });
     this.pts = this.pts.filter(p => p.a > 0);
     for (let i = 1; i < this.pts.length; i++) { const a = this.pts[i - 1], b = this.pts[i]; c.strokeStyle = `rgba(255,90,118,${b.a * .7})`; c.lineWidth = 1.6 * b.a; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke(); }
-    if (this.x > 0) { c.fillStyle = "#ff5a76"; c.shadowColor = "#ff5a76"; c.shadowBlur = 12; c.beginPath(); c.arc(this.x, this.y, 3.5, 0, 7); c.fill(); c.shadowBlur = 0; }
     return this.pts.length > 0;
   }
 };
@@ -59,7 +64,6 @@ const Game = {
   W: 160, H: 144, state: "title", keys: {}, vis: false,
   init() {
     this.c = $("#game"); this.ctx = this.c.getContext("2d"); this.hi = store.get("dv_hi", 0); this.updHi();
-    new IntersectionObserver(es => { this.vis = es[0].isIntersecting; if (this.vis) this.run(); }, { threshold: .2 }).observe(this.c);
     const map = { ArrowLeft: "left", ArrowRight: "right", a: "left", d: "right", " ": "fire", Enter: "start" };
     addEventListener("keydown", e => { const k = map[e.key]; if (!k) return; if (k === "start" && (document.activeElement === this.c || (this.vis && this.state !== "play" && document.activeElement === document.body))) { this.begin(); e.preventDefault(); return; } if (this.capturing() && k !== "start") { this.keys[k] = true; e.preventDefault(); } });
     addEventListener("keyup", e => { const k = map[e.key]; if (k) this.keys[k] = false; });
@@ -72,6 +76,7 @@ const Game = {
     this.draw();
   },
   capturing() { return this.state === "play" && this.vis; },
+  setVis(v) { this.vis = v; if (v) this.run(); else { this.keys = {}; if (this.state === "play") this.state = "title"; } },
   updHi() { $("#hiscore").textContent = "HI " + String(this.hi).padStart(3, "0"); },
   begin() { this.state = "play"; this.score = 0; this.lives = 3; this.wave = 0; this.p = { x: 74 }; this.b = []; this.eb = []; this.fx = []; this.newWave(); Sound.click(); this.run(); },
   newWave() { this.wave++; this.en = []; for (let r = 0; r < 3; r++) for (let k = 0; k < 7; k++) this.en.push({ x: 18 + k * 18, y: 18 + r * 13, t: r, alive: true }); this.dir = 1; this.speed = .18 + this.wave * .07; this.cool = 0; },
@@ -111,53 +116,68 @@ const Game = {
 
 /* ===================== INTRO: open the book ===================== */
 const Intro = {
+  done: false,
   init() {
     this.el = $("#intro"); this.bh = miniBH($("#bookbh"), "#f1e9d6");
     $("#openBook").onclick = () => this.open(); $("#book").onclick = () => this.open(); $("#skipIntro").onclick = () => this.hide(true);
     $("#replayIntro").onclick = () => this.show();
-    addEventListener("keydown", e => { if (this.el.style.display !== "none" && !this.opening && e.key === "Enter") { e.preventDefault(); this.open(); } if (this.el.style.display !== "none" && e.key === "Escape") this.hide(true); });
-    if (store.get("dv_intro_seen", false)) this.hide(true, true); else this.show();
+    addEventListener("keydown", e => { if (!this.visible()) return; if (!this.opening && e.key === "Enter") { e.preventDefault(); this.open(); } if (e.key === "Escape") this.hide(true); });
+    if (store.get("dv_intro_seen", false)) this.hide(true); else this.show();
   },
+  visible() { return this.el.style.display !== "none"; },
   show() {
-    this.opening = false; this.el.style.display = ""; this.el.classList.remove("gone"); $("#book").classList.remove("open"); $("#scene").classList.remove("dive"); $("#introUi").style.opacity = 1;
-    document.body.style.overflow = "hidden"; this.loop(); setTimeout(() => $("#openBook").focus(), 50);
+    this.opening = false; this.done = false; Uni.clearHover(); this.el.style.display = ""; this.el.classList.remove("gone"); $("#book").classList.remove("open"); $("#scene").classList.remove("dive"); $("#introUi").style.opacity = 1;
+    requestAnimationFrame(() => CMSCover.draw()); this.loop(); setTimeout(() => $("#openBook").focus(), 50);
   },
-  loop() { const f = now => { if (this.el.style.display === "none") return; this.bh(REDUCED ? 0 : now / 1000); requestAnimationFrame(f); }; requestAnimationFrame(f); },
+  loop() { const f = now => { if (!this.visible()) return; this.bh(REDUCED ? 0 : now / 1000); requestAnimationFrame(f); }; requestAnimationFrame(f); },
   open() {
     if (this.opening) return; this.opening = true; Sound.open(); $("#introUi").style.opacity = 0; $("#book").classList.add("open");
     if (REDUCED) return this.hide(false);
     setTimeout(() => { $("#scene").classList.add("dive"); Sound.warp(); }, 1250);
     setTimeout(() => this.hide(false), 2350);
   },
-  hide(instant, silent) {
-    store.set("dv_intro_seen", true); document.body.style.overflow = "";
+  /* Every time the portfolio starts (intro or not), the particles collide on the name */
+  hide(instant) {
+    store.set("dv_intro_seen", true); this.done = true;
     if (instant) { this.el.style.display = "none"; this.el.classList.add("gone"); } else { this.el.classList.add("gone"); setTimeout(() => this.el.style.display = "none", 700); }
-    if (!silent) setTimeout(() => NameFX.fire(), instant ? 200 : 600);
+    setTimeout(() => { if (!CURVIEW && Uni.i === 0) NameFX.fire(); }, instant ? 450 : 700);
   }
 };
 
 /* ===================== START ===================== */
 function boot() {
+  $$(".contact-slot").forEach(s => s.appendChild($("#contactTpl").content.cloneNode(true)));
   captureEN();
-  drawStars(); addEventListener("resize", () => { clearTimeout(boot._r); boot._r = setTimeout(drawStars, 200); });
-  renderFilters(); renderGrid(); renderTimeline(); renderBento();
-  initStickers();
-  NameFX.init(); CursorFX.init(); Game.init(); Uni.init();
-  renderNav(); initSpy(); Intro.init();
-  langListeners.push(() => { renderFilters(); renderGrid(); renderTimeline(); renderBento(); renderNav(); Uni.ui(); if ($("#modal").classList.contains("open")) fillModal(); soundLabel(); });
+  Portal.init(); renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline();
+  NameFX.init(); CursorFX.init(); Game.init(); Uni.init(); Visited.paint();
+  const stars = () => { drawStars($("#viewStars"), 4200); drawStars($("#introStars"), 2200); };
+  stars(); addEventListener("resize", () => { clearTimeout(boot._r); boot._r = setTimeout(() => { stars(); if (Intro.visible()) CMSCover.draw(); }, 200); });
+  langListeners.push(() => { renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); Visited.paint(); if ($("#modal").classList.contains("open")) fillModal(); if (Portal.key) Portal.label(); soundLabel(); });
   $$(".seg button").forEach(b => b.onclick = () => { setLang(b.dataset.lang); Sound.click(); });
   if (LANG !== "en") setLang(LANG);
   const wantSound = store.get("dv_sound", false);
   $("#soundBtn").onclick = () => setSound(!Sound.on);
   if (wantSound) { const once = () => { setSound(true); removeEventListener("pointerdown", once); }; addEventListener("pointerdown", once); }
-  $("#copyEmail").onclick = copyEmail;
+  $$("[data-copy]").forEach(b => b.onclick = copyEmail);
+  $$("[data-back]").forEach(b => b.onclick = () => { Sound.click(); goHome(); });
+  $("#brand").onclick = $("#backBtn").onclick = () => { Sound.click(); goHome(); };
   $("#cvBtn").onclick = () => { toast(T().cvmsg); Sound.click(); };
-  $("#mClose").onclick = closeModal; $("#mPrev").onclick = () => stepModal(-1); $("#mNext").onclick = () => stepModal(1);
+  $("#mClose").onclick = () => closeModal(); $("#mPrev").onclick = () => stepModal(-1); $("#mNext").onclick = () => stepModal(1);
   $("#modal").addEventListener("click", e => { if (e.target.id === "modal") closeModal(); });
+  addEventListener("hashchange", route);
   addEventListener("keydown", e => {
-    if (!$("#modal").classList.contains("open")) return;
-    if (e.key === "Escape") closeModal(); if (e.key === "ArrowRight") stepModal(1); if (e.key === "ArrowLeft") stepModal(-1);
-    if (e.key === "Tab") { const f = $$("#mPanel button, #mPanel a"); const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); } else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); } }
+    if (Intro.visible()) return;
+    if ($("#modal").classList.contains("open")) {
+      if (e.key === "Escape") closeModal(); if (e.key === "ArrowRight") stepModal(1); if (e.key === "ArrowLeft") stepModal(-1);
+      if (e.key === "Tab") { const f = $$("#mPanel button, #mPanel a"); const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); } else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); } }
+      return;
+    }
+    if (CURVIEW) { if (e.key === "Escape") { e.preventDefault(); goHome(); } return; }
+    if (/^(INPUT|TEXTAREA|BUTTON|A)$/.test(document.activeElement.tagName) && e.key === "Enter") return;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === "PageDown") { Uni.go(Uni.i + 1); e.preventDefault(); }
+    if (e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp") { Uni.go(Uni.i - 1); e.preventDefault(); }
+    if (e.key === "Enter" && !Uni.tr) { e.preventDefault(); $("#stopcard button").click(); }
   });
+  Intro.init(); route();
 }
 boot();

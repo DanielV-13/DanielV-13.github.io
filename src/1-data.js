@@ -208,7 +208,7 @@ const PROJECTS = [
     tech: ["Unity 6", "C#", "URP 2D"],
     links: [{ t: "github", u: GH + "DanielV-13/Proyecto_Unity_1" }] },
 
-  { id: "kart", theme: "games", place: "uees", year: 2026, file: "KartRacing3D.unity", anim: "kart",
+  { id: "kart", theme: "games", place: "uees", year: 2026, file: "KartRacing3D.unity", img: "assets/projects/kart.webp", video: "assets/projects/kart.mp4",
     title: { en: "3D kart racing", es: "Carreras de karts en 3D" },
     short: { en: "Unity's Karting Microgame, extended with my own power-up, obstacle and spawner.", es: "El Karting Microgame de Unity, ampliado con mi propio power-up, obstáculo y generador." },
     desc: { en: "My first 3D game: a faster custom kart, a speed boost with cooldown, an obstacle, an extended track and a manager that spawns power-ups or obstacles at random as you approach.",
@@ -254,43 +254,56 @@ const TIMELINE = [
     text: { en: "Data Analysis in Modern Physics with Prof. Pietro Vischia, Nuclear and Particle Physics, and Intelligent Systems. Machine learning on particle-physics data, for real.", es: "Análisis de Datos en Física Moderna con el profesor Pietro Vischia, Física Nuclear y de Partículas, y Sistemas Inteligentes. Machine learning con datos de física de partículas, de verdad." } }
 ];
 
-const LOREM = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.";
-/* "My story with physics": a mosaic. size: w2 = two columns wide, h2 = two rows tall, photo = space for a picture */
-const BENTO = [
-  { size: "w2", t: { en: "Competitions & the school physics club", es: "Concursos y el club de física del colegio" }, q: { en: "Which competition hooked you first?", es: "¿Qué concurso te enganchó primero?" } },
-  { size: "", t: { en: "Why I started teaching", es: "Por qué empecé a enseñar" }, q: { en: "What did teaching show you about physics?", es: "¿Qué te enseñó enseñar sobre la física?" } },
-  { size: "h2 photo", t: { en: "Studying physics from Guayaquil", es: "Estudiar física desde Guayaquil" }, q: { en: "What was missing, and how did you work around it?", es: "¿Qué faltaba y cómo lo resolviste?" }, ph: { en: "photo · Guayaquil", es: "foto · Guayaquil" } },
-  { size: "", t: { en: "Outreach in Latin America", es: "Divulgación en Latinoamérica" }, q: { en: "What have you done to share physics, and why here?", es: "¿Qué has hecho para divulgar la física y por qué aquí?" } },
-  { size: "w2", t: { en: "When computing met physics", es: "Cuando la computación encontró a la física" }, q: { en: "When did you see how connected they are?", es: "¿Cuándo viste lo conectadas que están?" } },
-  { size: "w2 photo", t: { en: "Why Oviedo", es: "Por qué Oviedo" }, q: { en: "How did the exchange change your view?", es: "¿Cómo cambió tu mirada el intercambio?" }, ph: { en: "photo · Oviedo", es: "foto · Oviedo" } },
-  { size: "w2 quote", quote: { en: "Physics is beautiful.", es: "La física es hermosa." } }
+/* "The standard model of my story": each moment of the story is a particle.
+   g: q = quark (origins), l = lepton (sharing), b = boson (turning points), h = Higgs (why it all has mass).
+   row/col place the cell in the table; empty cells (sy: "?") are space for what comes next. */
+const STORY = [
+  { id: "cp", g: "q", row: 1, col: 2, sy: "Cp", yr: "≤2023", n: { en: "Competitions", es: "Concursos" },
+    t: { en: "Competitions & the school physics club", es: "Concursos y el club de física del colegio" },
+    q: { en: "Which competition hooked you first?", es: "¿Qué concurso te enganchó primero?" }, ph: { en: "photo · competition", es: "foto · concurso" } },
+  { id: "gy", g: "q", row: 1, col: 3, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
+    t: { en: "Studying physics from Guayaquil", es: "Estudiar física desde Guayaquil" },
+    q: { en: "What was missing, and how did you work around it?", es: "¿Qué faltaba y cómo lo resolviste?" }, ph: { en: "photo · Guayaquil", es: "foto · Guayaquil" } },
+  { id: "q3", g: "q", row: 1, col: 4, empty: true },
+  { id: "ta", g: "l", row: 2, col: 2, sy: "Ta", yr: "2024", n: { en: "Teaching", es: "Enseñar" },
+    t: { en: "Why I started teaching", es: "Por qué empecé a enseñar" },
+    q: { en: "What did teaching show you about physics?", es: "¿Qué te enseñó enseñar sobre la física?" }, ph: { en: "photo · a class", es: "foto · una clase" } },
+  { id: "ou", g: "l", row: 2, col: 3, sy: "Ou", yr: "now", n: { en: "Outreach", es: "Divulgación" },
+    t: { en: "Outreach in Latin America", es: "Divulgación en Latinoamérica" },
+    q: { en: "What have you done to share physics, and why here?", es: "¿Qué has hecho para divulgar la física y por qué aquí?" }, ph: { en: "photo · outreach", es: "foto · divulgación" } },
+  { id: "l3", g: "l", row: 2, col: 4, empty: true },
+  { id: "co", g: "b", row: 1, col: 5, sy: "Co", yr: "2025", n: { en: "Code ✕ physics", es: "Código ✕ física" },
+    t: { en: "When computing met physics", es: "Cuando la computación encontró a la física" },
+    q: { en: "When did you see how connected they are?", es: "¿Cuándo viste lo conectadas que están?" }, ph: { en: "photo · first notebook", es: "foto · primer cuaderno" } },
+  { id: "ov", g: "b", row: 2, col: 5, sy: "Ov", yr: "2026", n: { en: "Oviedo", es: "Oviedo" },
+    t: { en: "Why Oviedo", es: "Por qué Oviedo" },
+    q: { en: "How did the exchange change your view?", es: "¿Cómo cambió tu mirada el intercambio?" }, ph: { en: "photo · Oviedo", es: "foto · Oviedo" } },
+  { id: "h", g: "h", row: 1, col: 7, sy: "H", yr: "∞", n: { en: "Physics is beautiful", es: "La física es hermosa" },
+    t: { en: "The Higgs of my story", es: "El Higgs de mi historia" }, phrase: { en: "Physics is beautiful.", es: "La física es hermosa." },
+    q: { en: "The reason behind everything else in this table.", es: "La razón detrás de todo lo demás en esta tabla." }, ph: { en: "your favourite photo", es: "tu foto favorita" } }
+];
+const STORY_GROUPS = { q: { c: "var(--quark)", en: "origins", es: "orígenes" }, l: { c: "var(--mint)", en: "sharing", es: "compartir" }, b: { c: "var(--boson)", en: "turning points", es: "giros" }, h: { c: "var(--ember)", en: "the why", es: "el porqué" } };
+
+/* Stickers of the Journey page. m = monochrome logo mask (tinted with the palette) */
+const STICKERS = [
+  { id: "uees", rot: -8, bg: "#0b1230", fg: "#e8b64c", m: "assets/logos/uees.png" },
+  { id: "uniovi", rot: 6, bg: "#1d3d7a", fg: "#f4f1ea", m: "assets/logos/uniovi.png", sub: "Uniovi" },
+  { id: "wids", rot: -4, bg: "#e8b64c", fg: "#1d1203", txt: "WiDS", sub: { en: "3rd · 2026", es: "3.º · 2026" } },
+  { id: "gt", rot: 9, bg: "#f4f1ea", fg: "#0b1230", m: "assets/logos/gt.png", small: true, sub: "Grant Thornton" },
+  { id: "ec", rot: -10, bg: "linear-gradient(180deg,#ffd100 0 50%,#034ea2 50% 75%,#ef3340 75%)", fg: "#0b1230", txt: "EC", flag: true },
+  { id: "es", rot: 7, bg: "linear-gradient(180deg,#c60b1e 0 25%,#ffc400 25% 75%,#c60b1e 75%)", fg: "#0b1230", txt: "ES", flag: true }
 ];
 
-/* Inspiration shelf (books, videos, podcasts): switched off for now; set to true to bring it back later */
-const SHOW_INSPIRATION = false;
-
-/* The universe is the map of the page: each stop = one section */
+/* The universe is the main menu. Each stop zooms into one sub-page. */
 const LEVELS = [
-  { id: "bh", go: "#universe", scale: "≈ 10¹⁰ m",
-    name: { en: "Black hole", es: "Agujero negro" }, sec: { en: "Intro", es: "Intro" },
-    h: { en: "Every journey starts somewhere dense", es: "Todo viaje empieza en un lugar denso" },
-    p: { en: "Scroll over the map, or press →, to fall in. Each stop of this trip is one part of my portfolio.", es: "Haz scroll sobre el mapa o pulsa → para caer dentro. Cada parada de este viaje es una parte de mi portafolio." },
-    cta: { en: "Fall in →", es: "Déjate caer →" } },
-  { id: "cluster", go: "#work", scale: "≈ 10²³ m",
-    name: { en: "Galaxy cluster", es: "Cúmulo de galaxias" }, sec: { en: "Work", es: "Proyectos" },
-    h: { en: "My work", es: "Mi trabajo" },
-    p: { en: "Each galaxy is one area of my work. Click one to open those projects below.", es: "Cada galaxia es un área de mi trabajo. Haz clic en una para abrir esos proyectos abajo." },
-    cta: { en: "See all projects ↓", es: "Ver todos los proyectos ↓" } },
-  { id: "solar", go: "#about", scale: "≈ 10¹³ m",
-    name: { en: "Solar System", es: "Sistema Solar" }, sec: { en: "About me", es: "Sobre mí" },
-    h: { en: "About me", es: "Sobre mí" },
-    p: { en: "The Sun is me. The planets are what keeps me in orbit.", es: "El Sol soy yo. Los planetas son lo que me mantiene en órbita." },
-    cta: { en: "Read my story ↓", es: "Leer mi historia ↓" } },
-  { id: "earth", go: "#journey", scale: "≈ 10⁷ m",
-    name: { en: "Earth", es: "Tierra" }, sec: { en: "Journey", es: "Trayectoria" },
-    h: { en: "My journey", es: "Mi trayectoria" },
-    p: { en: "From Guayaquil to Oviedo: about 8,700 km so far.", es: "De Guayaquil a Oviedo: unos 8.700 km hasta ahora." },
-    cta: { en: "See my journey ↓", es: "Ver mi trayectoria ↓" } }
+  { id: "bh", view: null, scale: "10¹⁰ m", name: { en: "Black hole", es: "Agujero negro" },
+    h: { en: "Fall into the universe", es: "Cae dentro del universo" }, cta: { en: "Fall in →", es: "Déjate caer →" } },
+  { id: "cluster", view: "work", scale: "10²³ m", name: { en: "Galaxy cluster", es: "Cúmulo de galaxias" },
+    h: { en: "My work · one galaxy per area", es: "Mi trabajo · una galaxia por área" }, cta: { en: "Enter all projects", es: "Entrar a todos los proyectos" } },
+  { id: "solar", view: "about", scale: "10¹³ m", name: { en: "Solar System", es: "Sistema Solar" },
+    h: { en: "About me · I'm the Sun", es: "Sobre mí · el Sol soy yo" }, cta: { en: "Enter my story", es: "Entrar a mi historia" } },
+  { id: "earth", view: "journey", scale: "10⁷ m", name: { en: "Earth", es: "Tierra" },
+    h: { en: "My journey · and a satellite to play", es: "Mi trayectoria · y un satélite para jugar" }, cta: { en: "Enter my journey", es: "Entrar a mi trayectoria" } }
 ];
 /* Planets of the Solar System stop: things that keep me in orbit */
 const PLANETS = [
@@ -300,4 +313,5 @@ const PLANETS = [
   { en: "Software", es: "Software", color: "#ff9f5a", r: .72, size: 12, ring: true },
   { en: "Outreach", es: "Divulgación", color: "#c6b3ff", r: .92, size: 8 }
 ];
-const SHELF = { books: [150, 172, 140, 160, 180, 130], videos: 3, podcasts: 3 };
+/* Places to explore (the "Explored n/9" counter): 6 galaxies + Sun + Earth + satellite */
+const PLACES_TO_SEE = ["ml", "data", "software", "systems", "games", "design", "about", "journey", "arcade"];

@@ -211,20 +211,19 @@ const Previews = {
   io: new IntersectionObserver(es => es.forEach(e => { const it = Previews.items.get(e.target); if (it) { it.vis = e.isIntersecting; if (it.vis) Previews.start(); } }), { rootMargin: "80px" }),
   ro: new ResizeObserver(es => es.forEach(e => { const it = Previews.items.get(e.target); if (it) Previews.size(it); })),
   size(it) { const r = it.c.getBoundingClientRect(); if (!r.width) return; it.w = r.width; it.h = r.height; it.ctx = fitCanvas(it.c, r.width, r.height); this.draw(it, performance.now() / 1000); },
-  add(c, vis = false) { const it = { c, vis, fn: ANIMS[c.dataset.anim] }; if (!it.fn) return; this.items.set(c, it); this.io.observe(c); this.ro.observe(c); this.size(it); this.start(); },
+  add(c, vis = false) { const it = { c, vis, fn: ANIMS[c.dataset.anim], view: c.closest(".view") }; if (!it.fn) return; this.items.set(c, it); this.io.observe(c); this.ro.observe(c); this.size(it); this.start(); },
   remove(c) { this.io.unobserve(c); this.ro.unobserve(c); this.items.delete(c); },
   scan(root) { for (const c of [...this.items.keys()]) if (!document.contains(c)) this.remove(c); $$("canvas[data-anim]", root).forEach(c => this.add(c)); },
   draw(it, t) { if (it.ctx && it.w) { it.ctx.save(); it.fn(it.ctx, it.w, it.h, t); it.ctx.restore(); } },
   start() { if (this.running || REDUCED) return; this.running = true; let last = 0;
-    const loop = now => { let any = false; if (now - last > 33 && !document.hidden) { last = now; for (const it of this.items.values()) if (it.vis) { any = true; this.draw(it, now / 1000); } } else any = true;
+    const loop = now => { let any = false; if (now - last > 33 && !document.hidden) { last = now; for (const it of this.items.values()) if (it.vis && (!it.view || it.view.classList.contains("on"))) { any = true; this.draw(it, now / 1000); } } else any = true;
       if (any) requestAnimationFrame(loop); else this.running = false; };
     requestAnimationFrame(loop); }
 };
 
-/* ---------- Background stars (drawn once) ---------- */
-function drawStars() {
-  const c = $("#stars"), w = innerWidth, h = innerHeight, ctx = fitCanvas(c, w, h);
-  const n = Math.round(w * h / 3200);
+/* ---------- Static starfields (drawn once per resize) ---------- */
+function drawStars(c, dens = 3200) {
+  const w = innerWidth, h = innerHeight, ctx = fitCanvas(c, w, h), n = Math.round(w * h / dens);
   for (let i = 0; i < n; i++) {
     const x = Math.random() * w, y = Math.random() * h, r = Math.random() * 1.1 + .15;
     ctx.globalAlpha = Math.random() * .6 + .15; ctx.fillStyle = Math.random() < .08 ? "#ffd9a8" : Math.random() < .1 ? "#a8c8ff" : "#e8edff";
@@ -275,49 +274,76 @@ const COAST = [
 ];
 const PINS = [{ lon: -79.9, lat: -2.2, en: "Guayaquil · UEES", es: "Guayaquil · UEES" }, { lon: -5.85, lat: 43.36, en: "Oviedo · Uniovi", es: "Oviedo · Uniovi" }];
 
+/* ===================== UNIVERSE: the main menu ===================== */
+const SMC = { q: "#b18cff", l: "#62e3b5", b: "#ff9a4c", h: "#e8b64c" };
 const Uni = {
-  i: 0, tr: null, hover: null, w: 0, h: 0, vis: false, running: false, wheelAcc: 0, wheelLock: 0,
+  i: 0, tr: null, hover: null, w: 0, h: 0, running: false, wheelLock: 0, zoom: null, satA: 2.2, lastT: 0, targets: [], ptype: "mouse",
   init() {
-    this.c = $("#uni"); this.box = $("#uniBox"); this.tip = $("#uniTip");
-    this.bg = Array.from({ length: 260 }, () => [Math.random(), Math.random(), Math.random() * 1.2 + .2, Math.random()]);
+    this.c = $("#uni"); this.home = $("#home"); this.tip = $("#tip");
+    this.bg = Array.from({ length: 320 }, () => [Math.random(), Math.random(), Math.random() * 1.2 + .2, Math.random()]);
     this.gal = Array.from({ length: 70 }, () => ({ x: Math.random(), y: Math.random(), s: Math.random() * 9 + 2, a: Math.random() * 3, c: ["#ffe2b8", "#cfe0ff", "#ffd0e0", "#fff"][Math.floor(Math.random() * 4)] }));
-    this.themePos = { systems: [.1, .28], ml: [.3, .2], design: [.5, .32], software: [.14, .66], data: [.34, .55], games: [.5, .76] };
-    new ResizeObserver(() => this.resize()).observe(this.box); this.resize();
-    new IntersectionObserver(es => { this.vis = es[0].isIntersecting; if (this.vis) this.start(); }, { threshold: .02 }).observe(this.box);
-    this.ratio = 0; new IntersectionObserver(es => this.ratio = es[0].intersectionRatio, { threshold: [0, .25, .5, .6, .75, 1] }).observe(this.box);
+    addEventListener("resize", () => this.resize()); this.resize();
     $("#uniPrev").onclick = () => this.go(this.i - 1); $("#uniNext").onclick = () => this.go(this.i + 1);
-    this.c.addEventListener("pointermove", e => this.onMove(e)); this.c.addEventListener("pointerleave", () => { this.hover = null; this.tip.style.opacity = 0; });
+    this.c.addEventListener("pointerdown", e => this.ptype = e.pointerType || "mouse");
+    this.c.addEventListener("pointermove", e => { this.ptype = e.pointerType || "mouse"; this.onMove(e); });
+    this.c.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") this.clearHover(); });
     this.c.addEventListener("click", e => this.onClick(e));
-    this.box.addEventListener("wheel", e => this.onWheel(e), { passive: false });
-    addEventListener("keydown", e => { if (this.ratio < .5 || $("#modal").classList.contains("open") || Game.capturing() || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return; if (e.key === "ArrowRight") { this.go(this.i + 1); e.preventDefault(); } if (e.key === "ArrowLeft") { this.go(this.i - 1); e.preventDefault(); } });
+    this.home.addEventListener("wheel", e => this.onWheel(e), { passive: false });
+    let sx = null, sy = null;
+    this.home.addEventListener("touchstart", e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+    this.home.addEventListener("touchend", e => {
+      if (sx == null || !this.active()) return; const t = e.changedTouches[0], dx = sx - t.clientX, dy = sy - t.clientY; sx = null;
+      if (Math.max(Math.abs(dx), Math.abs(dy)) < 60) return;
+      this.go(this.i + (Math.abs(dy) > Math.abs(dx) ? Math.sign(dy) : Math.sign(dx)));
+    }, { passive: true });
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) this.start(); });
+    if (store.get("dv_hint", 0)) $("#hint").classList.add("gone");
     this.ui(); this.start();
   },
-  /* Mouse wheel travels between stops while the map is in view; at the first/last stop the page scrolls normally */
+  active() { return !CURVIEW && !$("#modal").classList.contains("open") && Intro.done; },
   onWheel(e) {
-    if (this.ratio < .6 || e.ctrlKey) return;
-    const dir = Math.sign(e.deltaY); if (!dir) return;
-    const can = dir > 0 ? this.i < LEVELS.length - 1 : this.i > 0;
-    if (!can && !this.tr) return;
-    e.preventDefault();
-    if (this.tr || performance.now() < this.wheelLock) return;
-    this.wheelAcc += e.deltaY; if (Math.abs(this.wheelAcc) < 40) return;
-    this.wheelAcc = 0; this.wheelLock = performance.now() + (REDUCED ? 300 : 1600); this.go(this.i + dir);
+    if (!this.active() || e.ctrlKey) return; e.preventDefault();
+    const dir = Math.sign(e.deltaY); if (!dir || Math.abs(e.deltaY) < 4 || this.tr || performance.now() < this.wheelLock) return;
+    const n = this.i + dir; if (n < 0 || n >= LEVELS.length) return;
+    this.wheelLock = performance.now() + (REDUCED ? 300 : 1500); this.go(n);
   },
-  resize() { const r = this.box.getBoundingClientRect(); this.w = r.width; this.h = r.height; this.ctx = fitCanvas(this.c, r.width, r.height); this.frame(performance.now()); },
-  start() { if (this.running) return; this.running = true; const loop = now => { if (!this.vis || document.hidden) { this.running = false; return; } this.frame(now); requestAnimationFrame(loop); }; requestAnimationFrame(loop); },
+  resize() { this.w = innerWidth; this.h = innerHeight; this.mobile = this.w < 760; this.ctx = fitCanvas(this.c, this.w, this.h); this.frame(performance.now()); },
+  start() {
+    if (this.running) return; this.running = true;
+    const loop = now => { if ((CURVIEW && !this.zoom) || document.hidden) { this.running = false; return; } this.frame(now); requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  },
   go(n) {
     if (n < 0 || n >= LEVELS.length || this.tr || n === this.i) return;
     const dir = n > this.i ? 1 : -1; this.tr = { from: this.i, to: n, start: performance.now(), dur: REDUCED ? 1 : 1400, dir };
-    $("#uniPort").classList.add("hidden"); this.hover = null; this.tip.style.opacity = 0;
+    this.clearHover(); $("#stopcard").classList.add("hidden"); $("#hero").classList.add("hidden");
     if (this.i === 0 && dir > 0) Sound.warp(); else Sound.open();
-    this.i = n; this.uiBottom(); setCurrent(n); this.start();
+    this.i = n; this.hoverPt = null; this.uiBottom(); this.hideHint(); this.start();
   },
-  /* Silent jump (no animation): used when you scroll to a section, so the map waits for you there */
-  jump(n) { if (n === this.i || this.tr) return; this.i = n; this.hover = null; this.tip.style.opacity = 0; this.ui(); this.frame(performance.now()); },
-  focus(id) { return id === "bh" ? [this.w * .38, this.h * .5] : id === "solar" ? [this.w * .26, this.h * .55] : id === "earth" ? [this.w * .36, this.h * .5] : [this.w * .4, this.h * .5]; },
+  /* Silent jump: used when a sub-page is opened from the top bar, so the universe waits for you there */
+  jump(n) { if (n === this.i) return; this.tr = null; this.i = n; this.hoverPt = null; this.clearHover(); this.ui(); },
+  zoomIn() { this.zf = this.hoverPt || this.focus(LEVELS[this.i].id); this.zoom = { dir: 1, start: performance.now(), dur: REDUCED ? 1 : 750 }; this.start(); },
+  zoomOut() { this.zf = this.zf || [this.w / 2, this.h / 2]; this.zoom = { dir: -1, start: performance.now(), dur: REDUCED ? 1 : 850 }; this.hoverPt = null; this.ui(); this.start(); },
+  hideHint() { if (this.hinted) return; this.hinted = true; store.set("dv_hint", 1); $("#hint").classList.add("gone"); },
+  focus(id) {
+    const w = this.w, h = this.h, m = this.mobile;
+    if (id === "bh") return m ? [w * .5, h * .52] : [w * .68, h * .5];
+    if (id === "solar") return m ? [w * .5, h * .44] : [w * .3, h * .5];
+    if (id === "earth") return m ? [w * .5, h * .44] : [w * .42, h * .52];
+    return [w * .45, h * .48];
+  },
   frame(now) {
     const c = this.ctx, w = this.w, h = this.h, t = REDUCED ? 0 : now / 1000; if (!c) return;
+    const dt = Math.min(.05, Math.max(0, (now - (this.lastT || now)) / 1000)); this.lastT = now;
+    if (this.hover !== "sat" && !REDUCED) this.satA += dt * .32;
     c.fillStyle = "#000"; c.fillRect(0, 0, w, h);
+    let Z = 1;
+    if (this.zoom) {
+      const p = clamp((now - this.zoom.start) / this.zoom.dur, 0, 1), e = ease(p), d = this.zoom.dir;
+      Z = d > 0 ? 1 + e * 5 : 6 - e * 5; if (p >= 1) { this.zoom = null; Z = d > 0 ? 6 : 1; }
+    }
+    c.save();
+    if (Z !== 1) { const [fx, fy] = this.zf; c.translate(fx, fy); c.scale(Z, Z); c.translate(-fx, -fy); }
     if (this.tr) {
       const p = clamp((now - this.tr.start) / this.tr.dur, 0, 1), e = ease(p), d = this.tr.dir;
       const A = LEVELS[this.tr.from].id, B = LEVELS[this.tr.to].id, [fx, fy] = this.focus(A);
@@ -326,6 +352,7 @@ const Uni = {
       if (A === "bh" && d > 0) this.warp(c, w, h, Math.sin(p * Math.PI));
       if (p >= 1) { this.tr = null; this.ui(); }
     } else this.scene(LEVELS[this.i].id, t, 1, 1, w / 2, h / 2);
+    c.restore();
   },
   warp(c, w, h, k) {
     c.save(); c.translate(w / 2, h / 2); c.strokeStyle = `rgba(255,220,180,${k * .8})`; c.lineWidth = 1.2;
@@ -337,49 +364,80 @@ const Uni = {
     const c = this.ctx, w = this.w, h = this.h; c.save(); c.globalAlpha = alpha; c.translate(fx, fy); c.scale(zoom, zoom); c.translate(-fx, -fy);
     this.bg.forEach(([x, y, r, a]) => { c.globalAlpha = alpha * a * .8; c.fillStyle = "#e8edff"; c.fillRect(x * w, y * h, r, r); }); c.globalAlpha = alpha;
     this.targets = [];
-    if (id === "bh") { const [x, y] = this.focus("bh"); drawBlackHole(c, x, y, Math.min(w, h) * .075, t); this.targets.push({ k: "bh", x, y, r: Math.min(w, h) * .2 }); }
+    if (id === "bh") { const [x, y] = this.focus("bh"), R = Math.min(w, h) * (this.mobile ? .06 : .075); drawBlackHole(c, x, y, R, t); this.targets.push({ k: "bh", x, y, r: R * 2.6 }); }
     if (id === "cluster") this.cluster(c, w, h, t, alpha);
     if (id === "solar") this.solar(c, w, h, t, alpha);
     if (id === "earth") this.earth(c, w, h, t, alpha);
     c.restore();
   },
+  /* unexplored places pulse; explored ones get a ✓ next to their name */
+  ring(c, x, y, r, key, t, alpha) {
+    if (Visited.has(key)) return;
+    const k = (t * .7) % 1; c.save(); c.globalAlpha = alpha * (1 - k) * .85; c.strokeStyle = "#e8b64c"; c.lineWidth = 1.6;
+    c.beginPath(); c.arc(x, y, r * (1 + k * .45), 0, 7); c.stroke(); c.restore();
+  },
+  name(c, txt, x, y, key, hot, alpha, size = 12.5) {
+    const done = key && Visited.has(key);
+    c.font = `${hot ? 700 : 500} ${size}px JetBrains Mono, monospace`; c.textAlign = "center"; c.fillStyle = hot ? "#fff" : "#c3cbea"; c.fillText(txt, x, y);
+    if (done) { const tw = c.measureText(txt).width; c.fillStyle = "#62e3b5"; c.textAlign = "left"; c.fillText(" ✓", x + tw / 2, y); }
+  },
   cluster(c, w, h, t, alpha) {
-    const gas = c.createRadialGradient(w * .4, h * .5, 10, w * .4, h * .5, Math.max(w, h) * .5); gas.addColorStop(0, "rgba(120,90,255,.18)"); gas.addColorStop(.5, "rgba(60,90,200,.07)"); gas.addColorStop(1, "rgba(0,0,0,0)");
+    const gas = c.createRadialGradient(w * .42, h * .5, 10, w * .42, h * .5, Math.max(w, h) * .5); gas.addColorStop(0, "rgba(120,90,255,.18)"); gas.addColorStop(.5, "rgba(60,90,200,.07)"); gas.addColorStop(1, "rgba(0,0,0,0)");
     c.fillStyle = gas; c.fillRect(0, 0, w, h);
     this.gal.forEach(g => { c.save(); c.translate(g.x * w, g.y * h); c.rotate(g.a); const gg = c.createRadialGradient(0, 0, 0, 0, 0, g.s); gg.addColorStop(0, g.c); gg.addColorStop(1, "rgba(0,0,0,0)"); c.fillStyle = gg; c.scale(1, .5); c.beginPath(); c.arc(0, 0, g.s, 0, 7); c.fill(); c.restore(); });
-    const S = Math.min(w, h);
-    for (const k in this.themePos) {
-      const [px, py] = this.themePos[k], x = px * w, y = py * h, rad = S * .08, col = THEMES[k].color, hot = this.hover === k;
+    const S = Math.min(w, h), P = this.mobile
+      ? { ml: [.28, .22], systems: [.72, .2], design: [.28, .4], data: [.72, .38], software: [.28, .58], games: [.72, .56] }
+      : { ml: [.18, .3], systems: [.4, .2], design: [.62, .27], data: [.26, .68], software: [.45, .5], games: [.64, .71] };
+    for (const k in P) {
+      const [px, py] = P[k], x = px * w, y = py * h, rad = S * (this.mobile ? .1 : .08), col = THEMES[k].color, hot = this.hover === k;
+      this.ring(c, x, y, rad * .85, k, t, alpha);
       c.save(); c.translate(x, y); c.rotate(.5 + px * 2); c.scale(1, .55);
       const core = c.createRadialGradient(0, 0, 0, 0, 0, rad * .5); core.addColorStop(0, "#fff"); core.addColorStop(1, "rgba(255,255,255,0)"); c.fillStyle = core; c.beginPath(); c.arc(0, 0, rad * .5, 0, 7); c.fill();
       c.fillStyle = col;
       for (let arm = 0; arm < 2; arm++) for (let i = 0; i < 70; i++) { const f = i / 70, a = f * 4.2 + arm * Math.PI + t * .15, r = f * rad * (hot ? 1.2 : 1); c.globalAlpha = alpha * (1 - f * .6); const s = 2.2 - f * 1.2; c.fillRect(Math.cos(a) * r - s / 2, Math.sin(a) * r - s / 2, s, s); }
       c.restore(); c.globalAlpha = alpha;
-      c.font = `${hot ? 700 : 500} 12.5px JetBrains Mono, monospace`; c.textAlign = "center"; c.fillStyle = hot ? "#fff" : "#c3cbea"; c.fillText(L(THEMES[k]), x, y + rad * .75 + 14);
-      const n = PROJECTS.filter(p => p.theme === k).length; c.font = "10.5px JetBrains Mono, monospace"; c.fillStyle = col; c.fillText(n + " " + (n === 1 ? T().project : T().projects), x, y + rad * .75 + 29);
-      this.targets.push({ k, x, y, r: rad * 1.15 });
+      this.name(c, L(THEMES[k]), x, y + rad * .75 + 14, k, hot, alpha, this.mobile ? 11 : 12.5);
+      const n = PROJECTS.filter(p => p.theme === k).length; c.font = "10.5px JetBrains Mono, monospace"; c.textAlign = "center"; c.fillStyle = col; c.fillText(n + " " + (n === 1 ? T().project : T().projects), x, y + rad * .75 + 29);
+      this.targets.push({ k, x, y, r: rad * 1.15, portal: true });
     }
   },
   solar(c, w, h, t, alpha) {
-    const [sx, sy] = this.focus("solar"), S = Math.min(w, h), R = S * .075, W = w * .42;
+    const [sx, sy] = this.focus("solar"), S = Math.min(w, h), R = S * .075, W = this.mobile ? w * .4 : w * .42;
+    this.ring(c, sx, sy, R * 1.5, "about", t, alpha);
     const g = c.createRadialGradient(sx, sy, R * .2, sx, sy, R * 4); g.addColorStop(0, "rgba(255,220,140,.9)"); g.addColorStop(.25, "rgba(255,170,60,.35)"); g.addColorStop(1, "rgba(0,0,0,0)"); c.fillStyle = g; c.fillRect(sx - R * 4, sy - R * 4, R * 8, R * 8);
     const sun = c.createRadialGradient(sx - R * .3, sy - R * .3, 0, sx, sy, R); sun.addColorStop(0, "#fff7d6"); sun.addColorStop(.6, "#ffcf5a"); sun.addColorStop(1, "#ff8c2a"); c.fillStyle = sun; c.beginPath(); c.arc(sx, sy, R * (this.hover === "sun" ? 1.08 : 1), 0, 7); c.fill();
-    c.font = "700 12.5px JetBrains Mono, monospace"; c.textAlign = "center"; c.fillStyle = "#fff"; c.fillText(LANG === "es" ? "yo" : "me", sx, sy + R + 20);
-    this.targets.push({ k: "sun", x: sx, y: sy, r: R * 1.15 });
+    this.name(c, T().me, sx, sy + R + 20, "about", this.hover === "sun", alpha);
+    this.targets.push({ k: "sun", x: sx, y: sy, r: R * 1.3, portal: true });
     PLANETS.forEach((p, i) => {
       const rx = R * 1.7 + p.r * W, ry = rx * .32, hot = this.hover === i;
       c.strokeStyle = hot ? "rgba(232,182,76,.7)" : "rgba(124,178,255,.18)"; c.lineWidth = 1; c.beginPath(); c.ellipse(sx, sy, rx, ry, 0, 0, 7); c.stroke();
       const a = i * 1.9 + t * (.45 / Math.sqrt(i + 1)), x = sx + Math.cos(a) * rx, y = sy + Math.sin(a) * ry, s = p.size * (S / 520) * (hot ? 1.3 : 1) + 2;
       if (p.ring) { c.strokeStyle = "rgba(230,200,150,.8)"; c.lineWidth = 1.5; c.beginPath(); c.ellipse(x, y, s * 2, s * .6, -.3, 0, 7); c.stroke(); }
       const pg = c.createRadialGradient(x - s * .4, y - s * .4, 0, x, y, s); pg.addColorStop(0, "#fff"); pg.addColorStop(.25, p.color); pg.addColorStop(1, "#111"); c.fillStyle = pg; c.beginPath(); c.arc(x, y, s, 0, 7); c.fill();
-      c.font = `${hot ? 700 : 500} 11.5px JetBrains Mono, monospace`; c.fillStyle = hot ? "#fff" : "#aab3d6"; c.fillText(L(p), x, y - s - 8);
+      c.font = `${hot ? 700 : 500} 11.5px JetBrains Mono, monospace`; c.textAlign = "center"; c.fillStyle = hot ? "#fff" : "#aab3d6"; c.fillText(L(p), x, y - s - 8);
       this.targets.push({ k: i, x, y, r: Math.max(s * 1.8, 16) });
     });
   },
+  satellite(c, x, y, s, hot) {
+    c.save(); c.translate(x, y); c.rotate(-.4);
+    c.fillStyle = "#7cb2ff"; c.fillRect(-s * 3.2, -s * .55, s * 2.2, s * 1.1); c.fillRect(s, -s * .55, s * 2.2, s * 1.1);
+    c.strokeStyle = "#0b1230"; c.lineWidth = 1; for (let k = 1; k < 3; k++) { c.beginPath(); c.moveTo(-s * 3.2 + k * s * .73, -s * .55); c.lineTo(-s * 3.2 + k * s * .73, s * .55); c.moveTo(s + k * s * .73, -s * .55); c.lineTo(s + k * s * .73, s * .55); c.stroke(); }
+    c.fillStyle = hot ? "#fff" : "#e8edff"; c.fillRect(-s, -s, s * 2, s * 2);
+    c.fillStyle = "#e8b64c"; c.fillRect(-s * .5, -s * .5, s, s);
+    if ((performance.now() / 500 | 0) % 2) { c.fillStyle = "#ff5a76"; c.beginPath(); c.arc(0, -s * 1.5, 1.8, 0, 7); c.fill(); }
+    c.restore();
+  },
   earth(c, w, h, t, alpha) {
-    const [cx, cy] = this.focus("earth"), R = Math.min(w, h) * .36, lon0 = (-42 + Math.sin(t * .15) * 6) * Math.PI / 180, lat0 = 18 * Math.PI / 180;
+    const [cx, cy] = this.focus("earth"), R = this.mobile ? w * .3 : Math.min(w, h) * .3, lon0 = (-42 + Math.sin(t * .15) * 6) * Math.PI / 180, lat0 = 18 * Math.PI / 180;
     const proj = (lon, lat) => { const l = lon * Math.PI / 180, p = lat * Math.PI / 180, cosc = Math.sin(lat0) * Math.sin(p) + Math.cos(lat0) * Math.cos(p) * Math.cos(l - lon0);
       return [cx + R * Math.cos(p) * Math.sin(l - lon0), cy - R * (Math.cos(lat0) * Math.sin(p) - Math.sin(lat0) * Math.cos(p) * Math.cos(l - lon0)), cosc]; };
+    // the satellite's orbit (the Arcade lives up there)
+    const tilt = -.32, orx = R * 1.34, ory = R * .4, a = this.satA, sx0 = Math.cos(a) * orx, sy0 = Math.sin(a) * ory;
+    const satX = cx + sx0 * Math.cos(tilt) - sy0 * Math.sin(tilt), satY = cy + sx0 * Math.sin(tilt) + sy0 * Math.cos(tilt), behind = Math.sin(a) < 0;
+    const orbit = (a0, a1) => { c.strokeStyle = "rgba(98,227,181,.35)"; c.setLineDash([3, 5]); c.lineWidth = 1; c.beginPath(); c.ellipse(cx, cy, orx, ory, tilt, a0, a1); c.stroke(); c.setLineDash([]); };
+    const sat = () => { const hot = this.hover === "sat"; this.ring(c, satX, satY, 20, "arcade", t, alpha); this.satellite(c, satX, satY, this.mobile ? 5 : 6, hot); this.name(c, T().satellite, satX, satY + 26, "arcade", hot, alpha, 11.5); };
+    orbit(Math.PI, Math.PI * 2); if (behind) sat();
+    this.ring(c, cx, cy, R * 1.05, "journey", t, alpha);
     const atm = c.createRadialGradient(cx, cy, R * .95, cx, cy, R * 1.25); atm.addColorStop(0, "rgba(124,178,255,.35)"); atm.addColorStop(1, "rgba(124,178,255,0)"); c.fillStyle = atm; c.beginPath(); c.arc(cx, cy, R * 1.25, 0, 7); c.fill();
     const sea = c.createRadialGradient(cx - R * .35, cy - R * .4, R * .1, cx, cy, R); sea.addColorStop(0, "#1f4f9c"); sea.addColorStop(1, "#071a3d"); c.fillStyle = sea; c.beginPath(); c.arc(cx, cy, R, 0, 7); c.fill();
     c.save(); c.beginPath(); c.arc(cx, cy, R, 0, 7); c.clip();
@@ -389,7 +447,6 @@ const Uni = {
     COAST.forEach(poly => { c.beginPath(); let started = false; poly.forEach(([lon, lat]) => { const [x, y, v] = proj(lon, lat); if (v > -.05) { started ? c.lineTo(x, y) : c.moveTo(x, y); started = true; } }); c.fillStyle = "rgba(98,227,181,.22)"; c.strokeStyle = "rgba(98,227,181,.7)"; c.fill(); c.stroke(); });
     c.restore();
     const shade = c.createRadialGradient(cx - R * .4, cy - R * .4, R * .2, cx, cy, R * 1.05); shade.addColorStop(0, "rgba(0,0,0,0)"); shade.addColorStop(1, "rgba(0,0,0,.55)"); c.fillStyle = shade; c.beginPath(); c.arc(cx, cy, R, 0, 7); c.fill();
-    // flight path Guayaquil → Oviedo (great circle, lifted)
     const toV = (lon, lat) => { const l = lon * Math.PI / 180, p = lat * Math.PI / 180; return [Math.cos(p) * Math.cos(l), Math.cos(p) * Math.sin(l), Math.sin(p)]; };
     const A = toV(PINS[0].lon, PINS[0].lat), B = toV(PINS[1].lon, PINS[1].lat), om = Math.acos(A[0] * B[0] + A[1] * B[1] + A[2] * B[2]);
     const pt = f => { const s1 = Math.sin((1 - f) * om) / Math.sin(om), s2 = Math.sin(f * om) / Math.sin(om), v = [A[0] * s1 + B[0] * s2, A[1] * s1 + B[1] * s2, A[2] * s1 + B[2] * s2]; const lat = Math.asin(v[2]) * 180 / Math.PI, lon = Math.atan2(v[1], v[0]) * 180 / Math.PI; const [x, y] = proj(lon, lat), lift = 1 + Math.sin(f * Math.PI) * .12; return [cx + (x - cx) * lift, cy + (y - cy) * lift]; };
@@ -399,46 +456,204 @@ const Uni = {
     PINS.forEach((p, i) => { const [x, y] = proj(p.lon, p.lat), hot = this.hover === "pin" + i;
       c.fillStyle = "#ff5a76"; c.shadowColor = "#ff5a76"; c.shadowBlur = 12; c.beginPath(); c.arc(x, y, hot ? 7 : 5, 0, 7); c.fill(); c.shadowBlur = 0;
       c.font = `${hot ? 700 : 500} 12px JetBrains Mono, monospace`; c.textAlign = i ? "left" : "right"; c.fillStyle = "#fff"; c.fillText(L(p), x + (i ? 12 : -12), y + 4);
-      this.targets.push({ k: "pin" + i, x, y, r: 20 }); });
-    this.targets.push({ k: "globe", x: cx, y: cy, r: R });
+      this.targets.push({ k: "pin" + i, x, y, r: 18 }); });
+    orbit(0, Math.PI); if (!behind) sat();
+    this.name(c, T().journeyP, cx, cy + R + 26, "journey", this.hover === "globe", alpha);
+    this.targets.push({ k: "sat", x: satX, y: satY, r: 26, portal: true });
+    this.targets.push({ k: "globe", x: cx, y: cy, r: R, portal: true });
   },
   hit(e) {
-    if (this.tr || !this.targets) return null; const r = this.c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
-    let best = null; for (const tg of this.targets) { const d = Math.hypot(x - tg.x, y - tg.y); if (d < tg.r && (!best || d < best.d)) best = { ...tg, d }; } return best;
+    if (this.tr || this.zoom || !this.targets) return null; const r = this.c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    let best = null; for (const tg of this.targets) { const d = Math.hypot(x - tg.x, y - tg.y); if (d < tg.r && (!best || d < best.d || tg.k === "sat")) { best = { ...tg, d }; if (tg.k === "sat") break; } } return best;
   },
-  label(k) {
-    const id = LEVELS[this.i].id;
-    if (id === "bh") return L(LEVELS[0].cta);
-    if (id === "cluster") return L(THEMES[k]) + " ↓";
-    if (id === "solar") return (k === "sun" ? (LANG === "es" ? "Sobre mí" : "About me") : L(PLANETS[k])) + " ↓";
-    if (id === "earth") return k === "globe" ? L(LEVELS[3].cta) : L(PINS[+String(k).slice(3)]) + " ↓";
+  label(h) {
+    if (h.k === "bh") return L(LEVELS[0].cta);
+    if (typeof h.k === "number") return L(PLANETS[h.k]) + " · " + T().aboutP;
+    if (String(h.k).startsWith("pin")) return L(PINS[+String(h.k).slice(3)]) + " · " + T().journeyP;
+    return "";
   },
-  onMove(e) {
-    const h = this.hit(e), prev = this.hover; this.hover = h ? h.k : null; this.c.style.cursor = h ? "pointer" : "crosshair";
+  onMove(e) { if (!this.active() || this.tr || e.pointerType === "touch") return; this.setHover(this.hit(e)); },
+  setHover(h) {
+    const prev = this.hover; this.hover = h ? h.k : null; this.c.style.cursor = h ? "pointer" : "crosshair";
     if (h && prev !== this.hover) Sound.hover();
-    if (h) { this.tip.textContent = this.label(h.k); this.tip.style.left = (h.k === "globe" ? e.clientX - this.c.getBoundingClientRect().left : h.x) + "px"; this.tip.style.top = (h.k === "globe" ? e.clientY - this.c.getBoundingClientRect().top : h.y) + "px"; this.tip.style.opacity = 1; } else this.tip.style.opacity = 0;
+    if (h && h.portal) { this.tip.style.opacity = 0; Portal.show(h); }
+    else { Portal.hide(); if (h) { this.tip.textContent = this.label(h); this.tip.style.left = h.x + "px"; this.tip.style.top = (h.y - 8) + "px"; this.tip.style.opacity = 1; } else this.tip.style.opacity = 0; }
     if (REDUCED) this.frame(0);
   },
+  clearHover() { this.hover = null; if (this.tip) this.tip.style.opacity = 0; Portal.hide(); if (this.c) this.c.style.cursor = "crosshair"; },
   onClick(e) {
-    const h = this.hit(e); if (!h) return; const id = LEVELS[this.i].id; Sound.click();
+    if (!this.active() || this.tr) return;
+    const h = this.hit(e); if (!h) { this.clearHover(); return; }
+    if (this.ptype === "touch" && h.portal && Portal.key !== h.k) { this.setHover(h); return; } // first tap previews, second tap enters
+    Sound.click(); this.hoverPt = [h.x, h.y];
+    const id = LEVELS[this.i].id;
     if (id === "bh") return this.go(1);
-    if (id === "cluster") return goFilter(h.k);
-    scrollToSel(LEVELS[this.i].go);
+    if (id === "cluster") location.hash = "work/" + h.k;
+    else if (id === "solar") location.hash = "about";
+    else if (id === "earth") location.hash = h.k === "sat" ? "arcade" : "journey";
   },
   ui() {
-    const l = LEVELS[this.i], t = T(), port = $("#uniPort");
-    let extra = "";
-    if (l.id === "cluster") extra = `<div class="uni-chips">${Object.keys(THEMES).map(k => `<button type="button" data-theme="${k}"><i style="background:${THEMES[k].color}"></i>${esc(L(THEMES[k]))}</button>`).join("")}</div>`;
-    port.innerHTML = `<div class="k"><span>${t.stop} 0${this.i + 1} · ${esc(L(l.name))}</span><span>${esc(L(l.sec))}</span></div><h3>${esc(L(l.h))}</h3><p>${esc(L(l.p))}</p>${extra}<button class="uni-cta" type="button">${esc(L(l.cta))}</button>`;
-    $$("[data-theme]", port).forEach(b => b.onclick = () => { Sound.click(); goFilter(b.dataset.theme); });
-    $(".uni-cta", port).onclick = () => { Sound.click(); if (l.id === "bh") this.go(1); else { if (l.id === "cluster") { FILTER = "all"; renderFilters(); renderGrid(); } scrollToSel(l.go); } };
+    const l = LEVELS[this.i], card = $("#stopcard");
+    card.innerHTML = `<div class="k">0${this.i + 1} · ${esc(L(l.name))} · ${l.scale}</div><h2>${esc(L(l.h))}</h2><button type="button">${esc(L(l.cta))}</button>`;
+    $("button", card).onclick = () => { Sound.click(); this.hoverPt = null; if (l.view) location.hash = l.view; else this.go(1); };
+    $("#hero").classList.toggle("hidden", this.i !== 0 || !!this.tr);
+    if (!this.tr) card.classList.remove("hidden");
     this.uiBottom();
-    requestAnimationFrame(() => setTimeout(() => port.classList.remove("hidden"), REDUCED ? 0 : 120));
   },
+  stopTodo(k) { const l = LEVELS[k]; if (!l) return false; if (l.id === "cluster") return Visited.galaxiesLeft() > 0; if (l.id === "solar") return !Visited.has("about"); if (l.id === "earth") return !Visited.has("journey") || !Visited.has("arcade"); return false; },
   uiBottom() {
-    const n = LEVELS.length, pct = Math.round((this.i + 1) / n * 100);
-    $("#uniStop").textContent = "0" + (this.i + 1) + " " + L(LEVELS[this.i].name).toUpperCase(); $("#uniBar").style.width = pct + "%"; $("#uniScale").textContent = LEVELS[this.i].scale;
+    const n = LEVELS.length;
+    $("#dots").innerHTML = LEVELS.map((l, k) => `<button type="button" data-k="${k}" aria-label="${esc(L(l.name))}"${k === this.i ? ' aria-current="true"' : ""}${this.stopTodo(k) ? ' class="todo"' : ""}></button>`).join("");
+    $$("#dots button").forEach(b => b.onclick = () => this.go(+b.dataset.k));
     $("#uniPrev").disabled = this.i === 0; $("#uniNext").disabled = this.i === n - 1;
-    if (typeof markNav === "function") markNav();
+    ["#uniPrev", "#uniNext"].forEach(s => { const b = $(s); b.classList.remove("beacon"); const bl = $(".bl", b); if (bl) bl.remove(); });
+    if (this.tr) return;
+    // beacon: when nothing is left to see here, it points to the closest stop that still has something new
+    let target = null;
+    if (this.i === 0) target = 1;
+    else if (!this.stopTodo(this.i)) for (let d = 1; d < n; d++) { if (this.stopTodo(this.i + d)) { target = this.i + d; break; } if (this.stopTodo(this.i - d)) { target = this.i - d; break; } }
+    if (target == null) return;
+    const b = $(target > this.i ? "#uniNext" : "#uniPrev"), near = Math.abs(target - this.i) === 1;
+    b.classList.add("beacon"); b.insertAdjacentHTML("beforeend", `<span class="bl">${esc(near ? T().next : T().unexplored)}: ${esc(L(LEVELS[target].name))}</span>`);
+  }
+};
+
+/* ===================== PORTAL: hover preview of what is inside ===================== */
+const Portal = {
+  key: null, raf: 0, vids: {}, imgs: {}, S: 360,
+  init() { this.el = $("#portal"); this.c = $("#portalC"); this.ctx = this.c.getContext("2d"); this.lab = $("#portalL"); },
+  show(h) {
+    if (this.key === h.k) return this.place(h);
+    this.key = h.k; this.h = h; this.t0 = performance.now(); this.idx = -1;
+    if (THEMES[h.k]) { this.kind = "gal"; this.items = PROJECTS.filter(p => p.theme === h.k); this.color = THEMES[h.k].color; }
+    else { this.kind = h.k; this.items = null; this.color = h.k === "sun" ? "#e8b64c" : h.k === "sat" ? "#62e3b5" : "#7cb2ff"; }
+    this.el.style.setProperty("--pc", this.color);
+    this.label(); this.place(h); this.el.classList.add("on"); document.body.classList.add("portal-on"); Sound.portal(); this.loop();
+  },
+  hide() {
+    if (!this.key) return; this.key = null; this.el.classList.remove("on"); document.body.classList.remove("portal-on"); cancelAnimationFrame(this.raf);
+    for (const s in this.vids) this.vids[s].pause();
+  },
+  place(h) {
+    const W = this.el.offsetWidth || 190, H = W + 70, uw = Uni.w, uh = Uni.h;
+    let x = h.x + h.r * .9 + 18; if (x + W > uw - 10) x = h.x - h.r * .9 - 18 - W;
+    x = clamp(x, 10, uw - W - 10); const y = clamp(h.y - W / 2, 74, uh - H - 110);
+    this.el.style.left = x + "px"; this.el.style.top = y + "px";
+  },
+  label() {
+    const t = T(), touch = Uni.ptype === "touch", enter = touch ? t.tapEnter : t.enter;
+    let h;
+    if (this.kind === "gal") { const p = this.items[Math.max(0, this.idx)], n = this.items.length;
+      h = `<b>${esc(L(THEMES[this.key]))}</b>${esc(L(p.title))}<br>${n} ${n === 1 ? t.project : t.projects} · <span>${enter}</span>`; }
+    else if (this.kind === "sun") h = `<b>${t.aboutP}</b>${t.aboutSub}<br><span>${enter}</span>`;
+    else if (this.kind === "globe") h = `<b>${t.journeyP}</b>${t.journeySub}<br><span>${enter}</span>`;
+    else h = `<b>${t.arcadeP}</b>${t.arcadeSub}<br><span>${touch ? t.tapPlay : t.play}</span>`;
+    this.lab.innerHTML = h;
+  },
+  loop() {
+    cancelAnimationFrame(this.raf); let last = 0;
+    const f = now => { if (!this.key) return; if (now - last > 33) { last = now; this.draw(now); } this.raf = requestAnimationFrame(f); };
+    this.raf = requestAnimationFrame(f);
+  },
+  vid(src) { let v = this.vids[src]; if (!v) { v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.preload = "auto"; v.src = src; this.vids[src] = v; } return v; },
+  img(src) { let im = this.imgs[src]; if (!im) { im = new Image(); im.decoding = "async"; im.src = src; this.imgs[src] = im; } return im; },
+  prep() {
+    const p = this.items[this.idx];
+    for (const s in this.vids) if (p.video !== s) this.vids[s].pause();
+    if (p.video) { const v = this.vid(p.video); try { v.currentTime = 0; } catch (e) {} const pr = v.play(); if (pr) pr.catch(() => {}); }
+    const nx = this.items[(this.idx + 1) % this.items.length]; if (nx.img) this.img(nx.img);
+  },
+  cover(src, sw, sh, plot) {
+    const c = this.ctx, S = this.S;
+    if (plot) { c.fillStyle = "#fff"; c.fillRect(0, 0, S, S); const k = Math.min(S * .8 / sw, S * .8 / sh); c.drawImage(src, (S - sw * k) / 2, (S - sh * k) / 2, sw * k, sh * k); return; }
+    const s = Math.min(sw, sh); c.drawImage(src, (sw - s) / 2, (sh - s) / 2, s, s, 0, 0, S, S);
+  },
+  draw(now) {
+    const c = this.ctx, S = this.S, t = REDUCED ? 0 : now / 1000;
+    c.setTransform(1, 0, 0, 1, 0, 0); c.fillStyle = "#050816"; c.fillRect(0, 0, S, S);
+    try {
+      if (this.kind === "gal") {
+        const k = Math.floor((now - this.t0) / 2000) % this.items.length;
+        if (k !== this.idx) { this.idx = k; this.label(); this.prep(); }
+        const p = this.items[k];
+        if (p.video && this.vid(p.video).readyState >= 2) { const v = this.vid(p.video); this.cover(v, v.videoWidth, v.videoHeight); }
+        else if (p.anim && ANIMS[p.anim]) { c.save(); c.translate(-S * .3, 0); ANIMS[p.anim](c, S * 1.6, S, t); c.restore(); }
+        else if (p.img) { const im = this.img(p.img); if (im.complete && im.naturalWidth) this.cover(im, im.naturalWidth, im.naturalHeight, p.plot); }
+      } else if (this.kind === "sun") this.drawSM(t);
+      else if (this.kind === "globe") this.drawTrip(t);
+      else this.drawGame(t);
+    } catch (e) {}
+    const g = c.createRadialGradient(S / 2, S / 2, S * .32, S / 2, S / 2, S * .5); g.addColorStop(0, "rgba(5,8,22,0)"); g.addColorStop(1, "rgba(5,8,22,.8)"); c.fillStyle = g; c.fillRect(0, 0, S, S);
+  },
+  drawSM(t) {
+    const c = this.ctx, S = this.S, cs = 58, gap = 8, x0 = (S - (5 * cs + 4 * gap)) / 2, y0 = 100, cells = STORY.filter(s => !s.empty), hi = Math.floor(t * 1.2) % cells.length;
+    const col = { 2: 0, 3: 1, 4: 2, 5: 3, 7: 4 };
+    STORY.forEach(s => {
+      const x = x0 + col[s.col] * (cs + gap), y = y0 + (s.row - 1) * (cs + gap), hh = s.g === "h" ? cs * 2 + gap : cs, on = cells[hi] === s;
+      c.globalAlpha = s.empty ? .35 : 1; c.strokeStyle = SMC[s.g]; c.lineWidth = on ? 3 : 1.5; if (s.empty) c.setLineDash([4, 4]);
+      roundRect(c, x, y, cs, hh, 8); c.fillStyle = on ? SMC[s.g] + "55" : SMC[s.g] + "1a"; c.fill(); c.stroke(); c.setLineDash([]);
+      c.fillStyle = s.empty ? "#8d97c0" : SMC[s.g]; c.font = `${s.g === "h" ? 22 : 14}px "Press Start 2P", monospace`; c.textAlign = "center"; c.fillText(s.empty ? "?" : s.sy, x + cs / 2, y + hh / 2 + 7);
+    });
+    c.globalAlpha = 1; c.fillStyle = "#e8b64c"; c.font = "700 17px JetBrains Mono, monospace"; c.fillText(L(cells[hi].n), S / 2, y0 + 2 * cs + gap + 40);
+  },
+  drawTrip(t) {
+    const c = this.ctx, S = this.S, A = [80, 235], B = [282, 150], C = [170, 60], f = (t * .25) % 1;
+    c.strokeStyle = "rgba(124,178,255,.16)"; for (let i = 1; i < 6; i++) { c.beginPath(); c.arc(S / 2, S / 2 + 220, 120 + i * 40, Math.PI * 1.2, Math.PI * 1.8); c.stroke(); }
+    c.strokeStyle = "#e8b64c"; c.setLineDash([7, 7]); c.lineWidth = 2.5; c.beginPath(); c.moveTo(...A); c.quadraticCurveTo(...C, ...B); c.stroke(); c.setLineDash([]);
+    const q = (u, i) => (1 - u) * (1 - u) * A[i] + 2 * (1 - u) * u * C[i] + u * u * B[i], px = q(f, 0), py = q(f, 1), ang = Math.atan2(q(f + .01, 1) - py, q(f + .01, 0) - px);
+    c.save(); c.translate(px, py); c.rotate(ang); c.fillStyle = "#fff"; c.beginPath(); c.moveTo(13, 0); c.lineTo(-9, -8); c.lineTo(-4, 0); c.lineTo(-9, 8); c.closePath(); c.fill(); c.restore();
+    [[A, "GYE", "2024"], [B, "OVD", "2026"]].forEach(([p, n, y]) => { c.fillStyle = "#ff5a76"; c.shadowColor = "#ff5a76"; c.shadowBlur = 14; c.beginPath(); c.arc(p[0], p[1], 8, 0, 7); c.fill(); c.shadowBlur = 0;
+      c.fillStyle = "#fff"; c.font = '15px "Press Start 2P", monospace'; c.textAlign = "center"; c.fillText(n, p[0], p[1] + 36); c.fillStyle = "#8d97c0"; c.font = "16px JetBrains Mono, monospace"; c.fillText(y, p[0], p[1] + 58); });
+  },
+  drawGame(t) {
+    const c = this.ctx; c.fillStyle = "#0b1410"; c.fillRect(0, 0, this.S, this.S); c.save(); c.scale(2.25, 2.25);
+    const off = Math.sin(t * 1.4) * 14, cols = ["#ff5a5a", "#5aff8a", "#5a9bff"];
+    for (let r = 0; r < 3; r++) for (let k = 0; k < 5; k++) { const x = 38 + k * 18 + off, y = 38 + r * 13; c.fillStyle = cols[r]; c.fillRect(x + 1, y, 5, 7); c.fillRect(x, y + 1, 7, 5); c.fillStyle = "#0b1410"; c.fillRect(x + 2, y + 2, 1, 1); c.fillRect(x + 4, y + 2, 1, 1); }
+    const sx = 80 + Math.sin(t * 1.1) * 30; c.fillStyle = "#9bd27a"; c.fillRect(sx - 6, 112, 13, 4); c.fillRect(sx - 1, 109, 3, 3);
+    c.fillStyle = "#ffd166"; c.fillRect(sx, 106 - (t * 90) % 70, 1, 4);
+    c.restore();
+  }
+};
+
+/* ===================== BOOK COVER: the CMS detector, drawn as a constellation ===================== */
+const CMSCover = {
+  draw() {
+    const cv = $("#cmscover"), r = cv.getBoundingClientRect(); if (!r.width) return;
+    const w = r.width, h = r.height, c = fitCanvas(cv, w, h);
+    let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    c.fillStyle = "#04050d"; c.fillRect(0, 0, w, h);
+    for (let i = 0; i < 160; i++) { c.globalAlpha = .15 + rnd() * .6; c.fillStyle = rnd() < .15 ? "#ffd9a8" : "#e8edff"; c.beginPath(); c.arc(rnd() * w, rnd() * h, rnd() * 1.1 + .2, 0, 7); c.fill(); }
+    const cx = w / 2, cy = h * .585, R = w * .4;
+    const dot = (x, y, s, col, a = 1) => { c.globalAlpha = a; c.fillStyle = col; c.beginPath(); c.arc(x, y, s, 0, 7); c.fill(); };
+    const star = (x, y, s, col) => { c.globalAlpha = 1; const g = c.createRadialGradient(x, y, 0, x, y, s * 4); g.addColorStop(0, col); g.addColorStop(1, "rgba(0,0,0,0)"); c.fillStyle = g; c.fillRect(x - s * 4, y - s * 4, s * 8, s * 8); dot(x, y, s, "#fff"); };
+    const P = (rr, a) => [cx + Math.cos(a) * rr, cy + Math.sin(a) * rr];
+    // muon stations in the iron return yoke: 12-sided rings with red chambers
+    for (let s = 0; s < 4; s++) {
+      const rr = R * (.66 + s * .105), pts = Array.from({ length: 12 }, (_, k) => P(rr, Math.PI / 12 + k * Math.PI / 6));
+      pts.forEach(([x1, y1], k) => {
+        const [x2, y2] = pts[(k + 1) % 12];
+        for (let f = .1; f <= .9; f += .07) dot(lerp(x1, x2, f), lerp(y1, y2, f), .75, "#c3cbea", .45);
+        c.globalAlpha = .85; c.strokeStyle = "#ff5a76"; c.lineWidth = 1.4; c.beginPath(); c.moveTo(lerp(x1, x2, .3), lerp(y1, y2, .3)); c.lineTo(lerp(x1, x2, .7), lerp(y1, y2, .7)); c.stroke();
+        if (s === 3 || s === 0) star(x1, y1, s === 3 ? 1.3 : .9, "rgba(232,182,76,.5)");
+      });
+    }
+    // superconducting solenoid
+    for (let a = 0; a < 6.283; a += .045) { const [x, y] = P(R * .575, a); dot(x, y, 1.05, "#ffffff", .9); }
+    for (let a = 0; a < 6.283; a += .07) { const [x, y] = P(R * .6, a); dot(x, y, .7, "#cfe0ff", .5); }
+    // hadron calorimeter (blue) and electromagnetic calorimeter (amber)
+    for (let k = 0; k < 36; k++) { const a = k * Math.PI / 18; for (let rr = .41; rr <= .54; rr += .043) { const [x, y] = P(R * rr, a); dot(x, y, .95, "#7cb2ff", .6); } }
+    for (let k = 0; k < 72; k++) { const a = k * Math.PI / 36; for (let rr = .31; rr <= .37; rr += .03) { const [x, y] = P(R * rr, a); dot(x, y, .7, "#e8b64c", .6); } }
+    // silicon tracker
+    [.06, .09, .125, .165, .21, .255].forEach(rr => { const n = Math.round(rr * 300); for (let k = 0; k < n; k++) { const [x, y] = P(R * rr, k / n * 6.283); dot(x, y, .55, "#a8c8ff", .5); } });
+    // tracks bending in the magnetic field; energy deposits where they stop
+    const track = (ang, curv, len, col, wd, dep) => {
+      c.globalAlpha = .95; c.strokeStyle = col; c.lineWidth = wd; c.beginPath(); let x = cx, y = cy, a = ang; c.moveTo(x, y);
+      const steps = 70, ds = len * R / steps; for (let i = 0; i < steps; i++) { a += curv; x += Math.cos(a) * ds; y += Math.sin(a) * ds; c.lineTo(x, y); } c.stroke();
+      if (dep) { for (let i = 0; i < 6; i++) dot(x + (rnd() - .5) * 7, y + (rnd() - .5) * 7, 1.3, dep, .9); star(x, y, 1.4, dep); }
+    };
+    [[.3, .012, "#e8b64c"], [1.2, -.01, "#ffffff"], [2.1, .014, "#e8b64c"], [2.8, -.008, "#ffffff"], [3.7, .011, "#e8b64c"], [4.5, -.013, "#ffffff"], [5.4, .009, "#e8b64c"]].forEach(([a, k, col]) => track(a, k, .36, col, 1.2, col === "#e8b64c" ? "#ffd166" : "#7cb2ff"));
+    track(5.9, .003, 1.02, "#ff5a76", 1.8, null); track(2.75, -.0025, 1.02, "#ff5a76", 1.8, null);
+    star(cx, cy, 2.2, "rgba(255,255,255,.9)");
+    c.globalAlpha = 1;
   }
 };

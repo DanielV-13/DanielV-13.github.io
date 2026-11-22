@@ -1,9 +1,20 @@
 # Portafolio · Daniel Vaca Velastegui
 
-Portafolio personal interactivo: un viaje por las escalas del universo donde cada parada es una sección (agujero negro → cúmulo de galaxias → sistema solar → Tierra).
+Portafolio personal interactivo. El **universo es el menú principal**: viajas por escalas (agujero negro → cúmulo de galaxias → sistema solar → Tierra) y haces zoom en cada objeto para entrar a una subpágina.
 
 🔗 **Sitio en vivo:** https://danielv-13.github.io
-🗂️ **Versión anterior (cielo estrellado por materias):** https://danielv-13.github.io/v1/
+🗂️ **Versiones anteriores:** [v2 (página con scroll)](https://danielv-13.github.io/v2/) · [v1 (cielo estrellado por materias)](https://danielv-13.github.io/v1/)
+
+## Cómo se navega
+
+| Objeto del universo | Subpágina |
+|---|---|
+| 6 galaxias (una por área) | `#work` (filtrada: `#work/ml`, `#work/games`…) |
+| El Sol | `#about` · el modelo estándar de mi historia |
+| La Tierra | `#journey` · pegatinas y trayectoria |
+| El satélite | `#arcade` · Particle Invaders |
+
+Siempre se vuelve con «← Universo», `Esc` o el botón Atrás del navegador. El contador «Explorado n/9» y los objetos que brillan muestran lo que falta por ver (se guarda en el navegador).
 
 ## Estructura
 
@@ -11,12 +22,13 @@ Portafolio personal interactivo: un viaje por las escalas del universo donde cad
 index.html        ← página final (se genera con build.py)
 build.py          ← une src/ en un solo index.html
 src/template.html ← HTML y CSS
-src/1-data.js     ← TODO el contenido: proyectos, trayectoria, historia, paradas del universo (EN/ES)
-src/2-core.js     ← idioma, sonido, navegación, proyectos y ventana de detalle
-src/3-canvas.js   ← animaciones de las tarjetas, agujero negro y el universo
-src/4-fx.js       ← colisión del nombre, cursor-partícula, Particle Invaders, intro del libro
-assets/projects/  ← imágenes y video de los proyectos
-v1/               ← versión anterior del portafolio
+src/1-data.js     ← TODO el contenido: proyectos, trayectoria, historia (tabla), pegatinas, paradas (EN/ES)
+src/2-core.js     ← idioma, sonido, rutas/subpáginas, explorados, proyectos, historia, trayectoria
+src/3-canvas.js   ← animaciones, universo-menú, portales de vista previa, portada CMS del libro
+src/4-fx.js       ← colisión del nombre, cursor-partícula, Particle Invaders, intro, arranque
+assets/projects/  ← imágenes y videos de los proyectos
+assets/logos/     ← logos monocromos (máscaras que se tiñen con la paleta)
+v1/, v2/          ← versiones anteriores (también hay una etiqueta git `v2`)
 ```
 
 ## Editar y publicar
@@ -24,5 +36,3 @@ v1/               ← versión anterior del portafolio
 1. Cambia el contenido en `src/1-data.js` (o el diseño en `src/template.html`).
 2. Ejecuta `python build.py` para regenerar `index.html`.
 3. Haz commit y push: GitHub Pages publica en un minuto.
-
-Hecho a mano con HTML, CSS y canvas, sin frameworks.
