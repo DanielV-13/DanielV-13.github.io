@@ -615,45 +615,77 @@ const Portal = {
   }
 };
 
-/* ===================== BOOK COVER: the CMS detector, drawn as a constellation ===================== */
+/* ===================== BOOK COVER: a collision inside the CMS detector, seen from the side ===================== */
+/* Original event display: the barrel as a translucent cylinder, tracks from the collision point,
+   calorimeter towers (blue/red) and two muons crossing the muon chambers. Drawn once, seeded, no images. */
 const CMSCover = {
   draw() {
     const cv = $("#cmscover"), r = cv.getBoundingClientRect(); if (!r.width) return;
     const w = r.width, h = r.height, c = fitCanvas(cv, w, h);
-    let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    let seed = 20260712; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     c.fillStyle = "#04050d"; c.fillRect(0, 0, w, h);
-    for (let i = 0; i < 160; i++) { c.globalAlpha = .15 + rnd() * .6; c.fillStyle = rnd() < .15 ? "#ffd9a8" : "#e8edff"; c.beginPath(); c.arc(rnd() * w, rnd() * h, rnd() * 1.1 + .2, 0, 7); c.fill(); }
-    const cx = w / 2, cy = h * .585, R = w * .4;
-    const dot = (x, y, s, col, a = 1) => { c.globalAlpha = a; c.fillStyle = col; c.beginPath(); c.arc(x, y, s, 0, 7); c.fill(); };
-    const star = (x, y, s, col) => { c.globalAlpha = 1; const g = c.createRadialGradient(x, y, 0, x, y, s * 4); g.addColorStop(0, col); g.addColorStop(1, "rgba(0,0,0,0)"); c.fillStyle = g; c.fillRect(x - s * 4, y - s * 4, s * 8, s * 8); dot(x, y, s, "#fff"); };
-    const P = (rr, a) => [cx + Math.cos(a) * rr, cy + Math.sin(a) * rr];
-    // muon stations in the iron return yoke: 12-sided rings with red chambers
-    for (let s = 0; s < 4; s++) {
-      const rr = R * (.66 + s * .105), pts = Array.from({ length: 12 }, (_, k) => P(rr, Math.PI / 12 + k * Math.PI / 6));
-      pts.forEach(([x1, y1], k) => {
-        const [x2, y2] = pts[(k + 1) % 12];
-        for (let f = .1; f <= .9; f += .07) dot(lerp(x1, x2, f), lerp(y1, y2, f), .75, "#c3cbea", .45);
-        c.globalAlpha = .85; c.strokeStyle = "#ff5a76"; c.lineWidth = 1.4; c.beginPath(); c.moveTo(lerp(x1, x2, .3), lerp(y1, y2, .3)); c.lineTo(lerp(x1, x2, .7), lerp(y1, y2, .7)); c.stroke();
-        if (s === 3 || s === 0) star(x1, y1, s === 3 ? 1.3 : .9, "rgba(232,182,76,.5)");
-      });
-    }
-    // superconducting solenoid
-    for (let a = 0; a < 6.283; a += .045) { const [x, y] = P(R * .575, a); dot(x, y, 1.05, "#ffffff", .9); }
-    for (let a = 0; a < 6.283; a += .07) { const [x, y] = P(R * .6, a); dot(x, y, .7, "#cfe0ff", .5); }
-    // hadron calorimeter (blue) and electromagnetic calorimeter (amber)
-    for (let k = 0; k < 36; k++) { const a = k * Math.PI / 18; for (let rr = .41; rr <= .54; rr += .043) { const [x, y] = P(R * rr, a); dot(x, y, .95, "#7cb2ff", .6); } }
-    for (let k = 0; k < 72; k++) { const a = k * Math.PI / 36; for (let rr = .31; rr <= .37; rr += .03) { const [x, y] = P(R * rr, a); dot(x, y, .7, "#e8b64c", .6); } }
-    // silicon tracker
-    [.06, .09, .125, .165, .21, .255].forEach(rr => { const n = Math.round(rr * 300); for (let k = 0; k < n; k++) { const [x, y] = P(R * rr, k / n * 6.283); dot(x, y, .55, "#a8c8ff", .5); } });
-    // tracks bending in the magnetic field; energy deposits where they stop
-    const track = (ang, curv, len, col, wd, dep) => {
-      c.globalAlpha = .95; c.strokeStyle = col; c.lineWidth = wd; c.beginPath(); let x = cx, y = cy, a = ang; c.moveTo(x, y);
-      const steps = 70, ds = len * R / steps; for (let i = 0; i < steps; i++) { a += curv; x += Math.cos(a) * ds; y += Math.sin(a) * ds; c.lineTo(x, y); } c.stroke();
-      if (dep) { for (let i = 0; i < 6; i++) dot(x + (rnd() - .5) * 7, y + (rnd() - .5) * 7, 1.3, dep, .9); star(x, y, 1.4, dep); }
+    for (let i = 0; i < 150; i++) { c.globalAlpha = .12 + rnd() * .55; c.fillStyle = rnd() < .15 ? "#ffd9a8" : "#e8edff"; c.beginPath(); c.arc(rnd() * w, rnd() * h, rnd() * 1 + .2, 0, 7); c.fill(); }
+    // 3D -> 2D: x along the beam, y up, z towards us; turned so the barrel is seen from the side and a bit from above
+    const cx = w * .5, cy = h * .585, S = w, yaw = .5, pitch = .32, cyw = Math.cos(yaw), syw = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch);
+    const P = (x, y, z) => { const x1 = x * cyw + z * syw, z1 = -x * syw + z * cyw, y1 = y * cp - z1 * sp, z2 = y * cp * 0 + y * sp + z1 * cp, k = 1 + z2 / (S * 3); return [cx + x1 * S * k, cy - y1 * S * k]; };
+    const L = .4, R = .16, Rt = .085;            // half length, calorimeter radius, tracker radius (in cover widths)
+    const ring = (x, rad, n = 48) => Array.from({ length: n + 1 }, (_, k) => { const a = k / n * 6.283; return P(x, Math.cos(a) * rad, Math.sin(a) * rad); });
+    const line = (pts, col, wd, a) => { c.globalAlpha = a; c.strokeStyle = col; c.lineWidth = wd; c.beginPath(); pts.forEach(([x, y], k) => k ? c.lineTo(x, y) : c.moveTo(x, y)); c.stroke(); };
+    // translucent barrel: convex hull of both end caps, filled with a soft blue
+    const pts = [...ring(-L, R, 64), ...ring(L, R, 64)].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+    const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+    const lo = [], up = []; for (const p of pts) { while (lo.length > 1 && cross(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop(); lo.push(p); }
+    for (const p of pts.slice().reverse()) { while (up.length > 1 && cross(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop(); up.push(p); }
+    const hull = lo.slice(0, -1).concat(up.slice(0, -1));
+    const g = c.createLinearGradient(0, cy - R * S, 0, cy + R * S); g.addColorStop(0, "rgba(124,178,255,.28)"); g.addColorStop(.5, "rgba(80,130,230,.14)"); g.addColorStop(1, "rgba(124,178,255,.24)");
+    c.globalAlpha = 1; c.fillStyle = g; c.beginPath(); hull.forEach(([x, y], k) => k ? c.lineTo(x, y) : c.moveTo(x, y)); c.closePath(); c.fill();
+    // wire frame of the barrel and the inner tracker
+    for (let k = 0; k < 18; k++) { const a = k / 18 * 6.283; line([P(-L, Math.cos(a) * R, Math.sin(a) * R), P(L, Math.cos(a) * R, Math.sin(a) * R)], "#7cb2ff", .6, .22); }
+    for (let k = 0; k <= 8; k++) line(ring(-L + k / 8 * 2 * L, R), "#7cb2ff", k % 8 ? .5 : 1.1, k % 8 ? .18 : .55);
+    line(ring(-L * .8, Rt), "#a8c8ff", .6, .25); line(ring(L * .8, Rt), "#a8c8ff", .6, .25);
+    // tracks bending in the 3.8 T field (helix around the beam axis)
+    const ends = [];
+    const track = (dir, q, maxR, col, wd, a) => {
+      let x = 0, y = 0, z = 0, [dx, dy, dz] = dir; const out = [P(0, 0, 0)], ds = .004;
+      for (let i = 0; i < 400; i++) {
+        const ca = Math.cos(q), sa = Math.sin(q), ny = dy * ca - dz * sa, nz = dy * sa + dz * ca; dy = ny; dz = nz;
+        x += dx * ds; y += dy * ds; z += dz * ds; out.push(P(x, y, z));
+        if (Math.hypot(y, z) >= maxR || Math.abs(x) >= L * .98) break;
+      }
+      line(out, col, wd, a); return [x, y, z];
     };
-    [[.3, .012, "#e8b64c"], [1.2, -.01, "#ffffff"], [2.1, .014, "#e8b64c"], [2.8, -.008, "#ffffff"], [3.7, .011, "#e8b64c"], [4.5, -.013, "#ffffff"], [5.4, .009, "#e8b64c"]].forEach(([a, k, col]) => track(a, k, .36, col, 1.2, col === "#e8b64c" ? "#ffd166" : "#7cb2ff"));
-    track(5.9, .003, 1.02, "#ff5a76", 1.8, null); track(2.75, -.0025, 1.02, "#ff5a76", 1.8, null);
-    star(cx, cy, 2.2, "rgba(255,255,255,.9)");
-    c.globalAlpha = 1;
+    const dirOf = (ct, ph) => { const st = Math.sqrt(1 - ct * ct); return [ct, st * Math.cos(ph), st * Math.sin(ph)]; };
+    const jets = [[.25, 1.2], [-.35, 4.1]];           // two jets: (cos theta, phi)
+    for (let i = 0; i < 90; i++) {
+      let ct, ph; const j = i < 50 ? jets[i % 2] : null;
+      if (j) { ct = clamp(j[0] + (rnd() - .5) * .5, -.95, .95); ph = j[1] + (rnd() - .5) * .9; } else { ct = (rnd() * 2 - 1) * .92; ph = rnd() * 6.283; }
+      const q = (rnd() - .5) * (j ? .02 : .06), hot = rnd() < .18;
+      const e = track(dirOf(ct, ph), q, R * .97, hot ? "#ffd166" : "#e8b64c", hot ? 1.1 : .7, hot ? .95 : .55 + rnd() * .3);
+      if (Math.hypot(e[1], e[2]) >= R * .9) ends.push([e, j ? 1 : 0]);
+    }
+    // calorimeter towers: red (electromagnetic) and blue (hadronic), taller in the jets
+    ends.forEach(([[x, y, z], inJet], k) => {
+      if (!inJet && rnd() < .55) return;
+      const rr = Math.hypot(y, z), uy = y / rr, uz = z / rr, len = R * (inJet ? .25 + rnd() * .9 : .08 + rnd() * .3), col = k % 3 ? "#ff5a76" : "#7cb2ff";
+      const a = P(x, uy * R, uz * R), b = P(x, uy * (R + len), uz * (R + len));
+      c.globalAlpha = .85; c.strokeStyle = col; c.lineWidth = inJet ? 5 : 3.5; c.lineCap = "butt"; c.beginPath(); c.moveTo(...a); c.lineTo(...b); c.stroke();
+      c.globalAlpha = .9; c.strokeStyle = "#ffffff"; c.lineWidth = inJet ? 5 : 3.5; c.beginPath(); c.moveTo(...b); c.lineTo(b[0] + (b[0] - a[0]) * .06, b[1] + (b[1] - a[1]) * .06); c.stroke();
+    });
+    // two muons: they cross everything and leave hits in the muon chambers outside the barrel
+    [[dirOf(.12, 1.75), .004], [dirOf(-.2, 5.0), -.003]].forEach(([d, q]) => {
+      const e = track(d, q, R * 2.15, "#62e3b5", 1.9, .95);
+      [1.35, 1.65, 1.95].forEach(f => {
+        const t = f * R / Math.hypot(e[1], e[2]), m = [e[0] * t, e[1] * t, e[2] * t], rr = Math.hypot(m[1], m[2]), uy = m[1] / rr, uz = m[2] / rr;
+        const a = P(m[0] - .025, uy * (rr - .006), uz * (rr - .006)), b = P(m[0] + .025, uy * (rr + .006), uz * (rr + .006));
+        c.globalAlpha = .75; c.strokeStyle = "#a8c8ff"; c.lineWidth = 4; c.beginPath(); c.moveTo(...a); c.lineTo(...b); c.stroke();
+      });
+    });
+    // collision point
+    const [vx, vy] = P(0, 0, 0), glow = c.createRadialGradient(vx, vy, 0, vx, vy, w * .07);
+    glow.addColorStop(0, "rgba(255,240,200,.95)"); glow.addColorStop(.25, "rgba(232,182,76,.45)"); glow.addColorStop(1, "rgba(232,182,76,0)");
+    c.globalAlpha = 1; c.fillStyle = glow; c.fillRect(vx - w * .07, vy - w * .07, w * .14, w * .14);
+    // beam line
+    line([P(-L * 1.25, 0, 0), P(L * 1.25, 0, 0)], "#ffffff", .7, .35);
+    c.globalAlpha = 1; c.lineCap = "round";
   }
 };
