@@ -21,7 +21,7 @@ function esc(s) { return String(s).replace(/[&<>"]/g, m => ({ "&": "&amp;", "<":
 let LANG = "en";   // always opens in English; ES translates for this visit
 const ES = {
   "intro.skip": "Saltar intro", "intro.chapter": "Capítulo I", "intro.pagetitle": "Hacia el horizonte de sucesos",
-  "intro.sub": "Mi Portafolio", "arc.play": "Jugar", "arc.s1": "Pulsa <kbd>Enter</kbd> o <kbd>START</kbd> para empezar", "arc.s2": "<kbd>←</kbd> <kbd>→</kbd> para mover tu detector", "arc.s3": "<kbd>Espacio</kbd> para disparar fotones", "hero.mail": "Correo", "arc.help": "← → mover · Espacio disparar · Esc salir",
+  "intro.sub": "Mi Portafolio", "arc.play": "Empezar", "hero.mail": "Correo", "arc.help": "<span><kbd>←</kbd> <kbd>→</kbd> mover</span><span><kbd>Espacio</kbd> disparar fotones</span><span><kbd>Esc</kbd> salir</span>",
   "hero.fall": "Déjate caer", "intro.subsmall": "física · IA · datos", "intro.open": "Abrir el libro", "intro.hint": "o pulsa Enter",
   "top.back": "Universo", "hero.line": "<b>Ingeniería en Computación</b> · <span class=\"c1\">Física</span> · <span class=\"c2\">IA</span> · <span class=\"c3\">Datos</span>",
   "home.hint": "haz scroll ↕ o usa las flechas para viajar",

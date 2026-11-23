@@ -422,7 +422,8 @@ body.in-view .view-bg{opacity:1}
 .gamefull .gscreen{width:min(92vw,calc((100vh - 170px) * 160 / 144));aspect-ratio:160/144;border-radius:12px;padding:10px;background:#4a4f5e;box-shadow:0 30px 90px rgba(0,0,0,.7),0 0 0 1px #6b7286}
 .gamefull canvas{width:100%!important;height:100%;border-radius:4px}
 .gamefull .gclose{position:absolute;top:18px;right:18px;width:44px;height:44px;border-radius:50%;border:1px solid #33427a;background:rgba(5,8,22,.8);cursor:pointer;font-size:18px}
-.gamefull .ghelp{font-size:12px;color:var(--muted)}
+.gamefull .ghelp{display:flex;gap:22px;flex-wrap:wrap;justify-content:center;font-size:13px;color:#c3cbea}
+.gamefull .ghelp kbd{border:1px solid #3a4880;border-bottom-width:3px;border-radius:6px;padding:2px 8px;color:var(--ink);font-family:var(--mono);font-size:12px;background:#16214a}
 .gamefull .gpad{display:none;gap:14px}
 .gamefull .gpad button{width:72px;height:56px;border-radius:14px;border:1px solid #33427a;background:rgba(124,178,255,.1);font-size:20px;touch-action:none;user-select:none}
 .gamefull .gpad button.fire{width:110px;background:rgba(232,182,76,.2);border-color:var(--ember)}
@@ -585,12 +586,7 @@ body.in-view .view-bg{opacity:1}
       <div class="pi-logo" aria-label="Particle Invaders"><span class="pi1">PARTICLE</span><span class="pi2">INVADERS</span>
         <div class="pi-row"><span class="pi3">CMS edition</span><span class="pi-q" aria-hidden="true"><i></i><i></i><i></i></span><span class="pi-det" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span></div></div>
       <p data-i18n="arc.lede">Particle Invaders: stop the incoming quarks with photons before they reach your detector.</p>
-      <button class="playbtn" type="button" data-play>▶ <span data-i18n="arc.play">Play</span> <kbd>Enter</kbd></button>
-      <ol class="howto">
-        <li><b>1</b><span data-i18n-html="arc.s1">Press <kbd>Enter</kbd> or <kbd>START</kbd> to begin</span></li>
-        <li><b>2</b><span data-i18n-html="arc.s2"><kbd>←</kbd> <kbd>→</kbd> to move your detector</span></li>
-        <li><b>3</b><span data-i18n-html="arc.s3"><kbd>Space</kbd> to fire photons</span></li>
-      </ol>
+      <button class="playbtn" type="button" data-play>▶ <span data-i18n="arc.play">Start</span> <kbd>Enter</kbd></button>
     </div>
     <div class="console idle" aria-label="Retro console">
       <div class="c-screenwrap"><div class="lbl"><span><i></i>POWER</span><span id="hiscore">HI 000</span></div><canvas id="game" width="160" height="144" tabindex="0" aria-label="Particle Invaders game"></canvas></div>
@@ -608,7 +604,7 @@ body.in-view .view-bg{opacity:1}
 <div class="gamefull" id="gameFull" role="dialog" aria-label="Particle Invaders">
   <button class="gclose" id="gameClose" aria-label="Close">✕</button>
   <div class="gscreen" id="gScreen"></div>
-  <div class="ghelp" data-i18n="arc.help">← → move · Space fire · Esc exit</div>
+  <div class="ghelp" data-i18n-html="arc.help"><span><kbd>←</kbd> <kbd>→</kbd> move</span><span><kbd>Space</kbd> fire photons</span><span><kbd>Esc</kbd> exit</span></div>
   <div class="gpad"><button data-k="left" aria-label="left">◀</button><button class="fire" data-k="fire" aria-label="fire">✦</button><button data-k="right" aria-label="right">▶</button></div>
 </div>
 
