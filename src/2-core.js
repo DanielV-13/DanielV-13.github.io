@@ -27,8 +27,8 @@ const ES = {
   "home.hint": "haz scroll ↕ o usa las flechas para viajar",
   "work.title": "Cosas que he <em>construido</em>",
   "about.title": "Cómo la física me <em>encontró</em>",
-  "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, Ecuador, una ciudad donde ninguna universidad ofrece la carrera de física, así que encontré la física por mi cuenta: divulgación y las lectures de Feynman, un club de física de cinco estudiantes en el colegio, dos <strong>medallas en olimpiadas nacionales</strong> (bronce 2022 y plata 2023) y después <strong>enseñándola</strong> en la UEES. Mi intercambio en la <strong>Universidad de Oviedo</strong> es donde la computación y la física por fin se encuentran: ahora entreno redes neuronales con datos de colisiones al estilo del CMS.",
-  "about.mission": "Inspirar a más personas en Latinoamérica a estudiar física. No esperar mi Polaris, sino convertirme en la de alguien más: una mano para avanzar y la otra para jalar a quien se queda atrás.",
+  "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, Ecuador. Desde pequeño siempre fui apasionado por la tecnología y la ciencia, en especial por la física. No pudiendo estudiar física a nivel universitario, la busqué por mi cuenta mediante libros, videos y aprovechando cualquier oportunidad para aprender más. Fui parte del club de física de mi colegio, donde obtuve <strong>2 medallas en olimpiadas nacionales de física</strong> (bronce 2022 y plata 2023).<br><br>Luego, al entrar a la universidad, he fungido como <strong>ayudante de cátedra de Física y Matemáticas</strong>, y dando clases he ayudado a decenas de estudiantes, manteniendo viva mi pasión por enseñar y aprender más. Durante mi intercambio en la <strong>Universidad de Oviedo</strong> he aprendido física desde un lado más académico, y descubrí cómo mi carrera, la ciencia de datos y la física de partículas se pueden complementar entre sí.",
+  "about.mission": "Inspirar la pasión por la física, la ciencia y la tecnología a más estudiantes en Latinoamérica. Mostrar lo maravilloso que puede ser dejarse llevar por la curiosidad y arriesgarse con todo a aprender.",
   "about.smtitle": "El modelo estándar de mi historia", "about.draftchip": "borrador · textos por escribir",
   "journey.title": "Dónde he <em>estado</em>", "journey.peel": "psst: haz clic en una pegatina",
   "arc.title": "La ciencia es mejor cuando <em>juegas</em>.", "arc.lede": "Particle Invaders: detén los quarks que se acercan con fotones antes de que lleguen a tu detector.",
@@ -292,7 +292,7 @@ function renderStory() {
   const paras = s.phrase ? L(s.phrase).split("\n\n").map(x => `<p>${esc(x)}</p>`).join("") : `<p class="draft">${esc(T().smPhrase)}</p>`;
   const items = (s.imgs || []).map(x => typeof x === "string" ? { u: x } : x);
   const media = items.length ? `<div class="ph has"><img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="thumbs">${items.map((it, k) => `<button type="button" data-k="${k}"${it.page ? ' class="pg"' : ""} aria-pressed="${!k}" aria-label="${k + 1}/${items.length}"><img src="${it.u}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}</div>` : `<div class="ph sym" aria-hidden="true">${esc(s.sy)}</div>`;
-  const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener">${esc(L(s.link.t))}</a>` : "";
+  const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(L(s.link.t))}</a>` : "";
   p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
   if (!items.length) return;
   const main = $(".ph > img", p), btns = $$(".thumbs button", p);
@@ -313,7 +313,7 @@ function swapImg(img, src, fit) {
 /* Galleries that move on their own: every few seconds, only while on screen, the tab is visible
    and the pointer is not over them; never with reduced motion. Clicking still picks a picture. */
 const Rot = {
-  set: new Set(), every: 4800,
+  set: new Set(), every: 3200,
   io: "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.target._rot) e.target._rot.vis = e.isIntersecting; })) : null,
   make(el, n, show) {
     const r = { el, n, k: 0, vis: !Rot.io, hover: false, t: performance.now() + Math.random() * 1800 };
@@ -336,6 +336,19 @@ const Rot = {
   }
 };
 setInterval(Rot.tick, 400);
+/* Journey: the moment closest to the middle of the screen comes forward as you scroll */
+const TimelineFocus = {
+  watch() {
+    const tl = $("#timeline"), items = $$(".t-item", tl);
+    if (this.io) this.io.disconnect();
+    if (REDUCED || !("IntersectionObserver" in window) || !items.length) return;
+    tl.classList.add("focus");
+    const set = el => { if (el === this.cur) return; if (this.cur) this.cur.classList.remove("on"); el.classList.add("on"); this.cur = el; };
+    this.cur = null; set(items[0]);
+    this.io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) set(e.target); }), { rootMargin: "-42% 0px -42% 0px" });
+    items.forEach(el => this.io.observe(el));
+  }
+};
 /* Simple full-size viewer for story pictures and class pages */
 function lightbox(src) {
   let lb = $("#lb");
@@ -371,6 +384,7 @@ function renderTimeline() {
       <div class="t-body">${it.imgs || it.img ? `<img class="t-img" src="${(it.imgs || [it.img])[0]}" alt="" loading="lazy">` : ""}<h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
       <p${it.draft ? ' class="draft"' : ""}>${esc(text)}</p>${action}</div></div>`;
   }).join("");
+  TimelineFocus.watch();
   $$("#timeline .t-img").forEach((im, i) => {
     const it = TIMELINE.filter(x => x.imgs || x.img)[i], list = it.imgs || [it.img];
     if (list.length > 1) Rot.make(im, list.length, k => swapImg(im, list[k]));

@@ -56,8 +56,8 @@ export function create(canvas) {
   let W = 0, H = 0, pr = 0;
   return {
     /* st: {x, y} screen position of the hole, s: zoom, a: opacity; size: base radius in px of the disk; mx,my: mouse (-.5..5) */
-    render(st, w, h, size, mx, my, time) {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    render(st, w, h, size, mx, my, time, q) {
+      const dpr = Math.min(window.devicePixelRatio || 1, q || 1.5);
       if (w !== W || h !== H || dpr !== pr) { W = w; H = h; pr = dpr; gl.setPixelRatio(dpr); gl.setSize(w, h, false); }
       const t = time, yaw = .35 + Math.sin(t * .07) * .22 + mx * .12, el = .3 + Math.sin(t * .05) * .05 - my * .06, D = 20;
       cam.position.set(Math.sin(yaw) * Math.cos(el) * D, Math.sin(el) * D, Math.cos(yaw) * Math.cos(el) * D); cam.lookAt(0, 0, 0);

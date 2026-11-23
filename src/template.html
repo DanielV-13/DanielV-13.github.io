@@ -269,14 +269,16 @@ body.in-view .view-bg{opacity:1}
 .sm-panel .thumbs{display:grid;grid-template-columns:repeat(4,1fr)}
 .sm-panel .thumbs button.pg img{object-position:top}
 .sm-panel .ph.sym{font-family:var(--display);font-size:56px;font-weight:700;color:var(--c);letter-spacing:0;text-transform:none;border:1px solid color-mix(in srgb,var(--c) 45%,transparent);background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--c) 18%,transparent),transparent 70%),#080d22;text-shadow:0 0 24px color-mix(in srgb,var(--c) 60%,transparent)}
-.sm-panel .chip-btn{display:inline-block;margin-top:4px;text-decoration:none}
+.sm-panel a.chip-btn{margin-top:6px;text-decoration:none;color:color-mix(in srgb,var(--c) 70%,#fff);border-color:color-mix(in srgb,var(--c) 60%,transparent);background:color-mix(in srgb,var(--c) 12%,transparent);font-weight:600;transition:background .2s,box-shadow .2s,border-color .2s}
+.sm-panel a.chip-btn:hover{background:color-mix(in srgb,var(--c) 22%,transparent);border-color:var(--c);box-shadow:0 0 18px color-mix(in srgb,var(--c) 35%,transparent)}
+.sm-panel a.chip-btn svg{width:15px;height:15px;flex:none}
 #lb{position:fixed;inset:0;z-index:400;background:rgba(3,5,15,.93);display:none;place-items:center;padding:4vmin;cursor:zoom-out}
 #lb.on{display:grid;animation:fade .2s}
 #lb img{max-width:100%;max-height:92vh;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.7)}
 #lb button{position:absolute;top:14px;right:18px;background:none;border:0;color:#fff;font-size:34px;cursor:pointer;line-height:1}
 .t-body{max-width:780px}
 .t-body::after{content:"";display:block;clear:both}
-.t-img{float:right;width:120px;height:90px;object-fit:cover;border-radius:10px;margin:0 0 8px 16px;border:1px solid var(--line);transition:transform .3s,opacity .23s}
+.t-img{float:right;width:120px;height:90px;object-fit:cover;object-position:50% 30%;border-radius:10px;margin:0 0 8px 16px;border:1px solid var(--line);transition:transform .3s,opacity .23s}
 .t-img:hover{transform:scale(1.8);z-index:3;position:relative;box-shadow:0 20px 40px rgba(0,0,0,.6)}
 .cell.empty{border-style:dashed;background:none;cursor:default;opacity:.45}
 .cell.empty:hover{transform:none;box-shadow:none}
@@ -318,6 +320,17 @@ body.in-view .view-bg{opacity:1}
 .t-body h3{font-size:16px;font-weight:700;margin:0 0 4px;line-height:1.4}
 .t-body h3 span{color:var(--muted);font-weight:400}
 .t-body p{margin:0 0 10px;color:#c3cbea;font-size:14px;max-width:64ch}
+@media (max-width:760px){.timeline.focus .t-item.on .t-img{transform:scale(1.3)}.timeline.focus .t-img{transform-origin:100% 0}.timeline.focus .t-item.on .t-body p{transform:none}}
+/* scroll focus: the moment in the middle of the screen comes forward, the rest steps back a little */
+.timeline.focus .t-item{transition:opacity .45s}
+.timeline.focus .t-item:not(.on){opacity:.5}
+.timeline.focus .t-item .t-year,.timeline.focus .t-body h3,.timeline.focus .t-body p{transition:transform .45s cubic-bezier(.2,.7,.2,1),color .45s;transform-origin:left center}
+.timeline.focus .t-item.on .t-body h3{transform:scale(1.06)}
+.timeline.focus .t-item.on .t-body p{transform:scale(1.03);color:#dfe4f8}
+.timeline.focus .t-item.on .t-year{color:var(--ember)}
+.timeline.focus .t-img{transform-origin:0 0}
+.timeline.focus .t-item.on .t-img{transform:scale(1.65);position:relative;z-index:2;box-shadow:0 18px 40px rgba(0,0,0,.55);border-color:color-mix(in srgb,var(--ember) 45%,var(--line))}
+.timeline.focus .t-item.on .t-img:hover{transform:scale(2.1)}
 .draft{border:1px dashed rgba(232,182,76,.5);border-radius:10px;padding:8px 12px}
 .chip-btn{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--ink);font-size:12.5px;cursor:pointer}
 .chip-btn:hover{border-color:var(--ember)}
@@ -585,8 +598,8 @@ body.in-view .view-bg{opacity:1}
 <section class="view" id="v-about" data-view="about" aria-labelledby="about-title"><div class="wrap">
   <h2 class="sec-title" id="about-title" data-i18n-html="about.title">How physics <em>found</em> me</h2>
   <div class="about-intro">
-    <p data-i18n-html="about.p">I study <strong>computer engineering</strong> in Guayaquil, Ecuador, a city where no university offers a physics degree, so I found physics on my own: popular science and Feynman's lectures, a five-student school club, two <strong>national olympiad medals</strong> (bronze 2022, silver 2023) and then <strong>teaching it</strong> at UEES. My exchange at the <strong>Universidad de Oviedo</strong> is where computing and physics finally meet: I now train neural networks on CMS-style collision data.</p>
-    <div class="txt"><span class="f">mission.txt</span><p data-i18n="about.mission">Inspire more people in Latin America to study physics. Not to wait for my Polaris, but to become one for someone else: one hand to move forward, the other to pull up whoever is falling behind.</p></div>
+    <p data-i18n-html="about.p">I study <strong>computer engineering</strong> in Guayaquil, Ecuador. Ever since I was a kid I have been passionate about technology and science, especially physics. Since I could not study physics at university, I went looking for it on my own: books, videos and every chance I got to learn more. I was part of my school's physics club, where I won <strong>two medals in national physics olympiads</strong> (bronze 2022 and silver 2023).<br><br>At university I became a <strong>Physics and Mathematics teaching assistant</strong>, and through my classes I have helped dozens of students while keeping alive my passion for teaching and for learning more. During my exchange at the <strong>Universidad de Oviedo</strong> I have been learning physics from a more academic side, and I discovered how my degree, data science and particle physics complement each other.</p>
+    <div class="txt"><span class="f">mission.txt</span><p data-i18n="about.mission">Inspire a passion for physics, science and technology in more students across Latin America. Show how wonderful it can be to follow your curiosity and go all in on learning.</p></div>
   </div>
   <div class="sm-head"><h3 data-i18n="about.smtitle">The standard model of my story</h3></div>
   <div class="sm"><div class="sm-table" id="smTable"></div><div class="sm-panel empty" id="smPanel"></div></div>

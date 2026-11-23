@@ -12,7 +12,7 @@ const NameFX = {
   },
   visible() { return !CURVIEW && Uni.i === 0 && !Uni.tr && !Uni.zoom && Intro.done && !document.hidden && !$("#modal").classList.contains("open") && !Game.full; },
   fire() {
-    if (this.busy || !this.visible()) return; this.busy = true; Sound.collide();
+    if (this.busy || !this.visible()) return; this.busy = true;
     const w = this.w, h = this.h, cx = w / 2, cy = h / 2, start = performance.now(), cols = ["#7cb2ff", "#ffb45e", "#ff5a76", "#62e3b5", "#ffd166", "#c6b3ff", "#ffffff"];
     let tracks = [];
     const spawn = () => {
@@ -26,7 +26,7 @@ const NameFX = {
         const p = el / .32; ctx.lineWidth = 2;
         [["#7cb2ff", 0], ["#ff5a76", w]].forEach(([col, x0]) => { const x = lerp(x0, cx, p); ctx.strokeStyle = col; ctx.globalAlpha = .5; ctx.beginPath(); ctx.moveTo(x0, cy); ctx.lineTo(x, cy); ctx.stroke(); ctx.globalAlpha = 1; ctx.fillStyle = col; ctx.shadowColor = col; ctx.shadowBlur = 14; ctx.beginPath(); ctx.arc(x, cy, 4, 0, 7); ctx.fill(); ctx.shadowBlur = 0; });
       } else {
-        if (!tracks.length) { spawn(); this.name.animate([{ transform: "scale(1)" }, { transform: "scale(1.05)" }, { transform: "scale(1)" }], { duration: 360 }); }
+        if (!tracks.length) { spawn(); Sound.collide(); this.name.animate([{ transform: "scale(1)" }, { transform: "scale(1.05)" }, { transform: "scale(1)" }], { duration: 360 }); }
         const k = clamp((el - .32) / 2, 0, 1);
         if (k < .22) { const f = 1 - k / .22, R = 30 + (1 - f) * 220, g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R); g.addColorStop(0, `rgba(255,250,235,${f})`); g.addColorStop(.3, `rgba(255,200,120,${f * .5})`); g.addColorStop(1, "rgba(255,160,80,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); }
         tracks.forEach(p => {

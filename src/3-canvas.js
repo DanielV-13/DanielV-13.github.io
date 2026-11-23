@@ -546,7 +546,7 @@ const Uni = {
 /* ===================== BLACK HOLE in 3D (three.js meshes, loaded after the page is visible) ===================== */
 /* The 2D black hole is drawn first; when assets/js/bh3d.js is ready the 3D one fades in. If WebGL fails, the 2D stays. */
 const BH3D = {
-  ok: false, fade: 0,
+  ok: false, fade: 0, ema: 0, q: 1.25, qMax: 1.5,
   init(cv) {
     this.cv = cv; if (REDUCED) return;
     const go = () => import("./assets/js/bh3d.js").then(m => { this.api = m.create(cv); if (this.api) { this.ok = true; this.t0 = performance.now(); Uni.start(); } }).catch(() => {});
@@ -556,8 +556,17 @@ const BH3D = {
   render(st, dt, m) {
     if (!this.api) return;
     if (!st || st.a <= .01) { this.cv.style.opacity = 0; return; }
-    this.fade = Math.min(1, (performance.now() - this.t0) / 900);
-    this.api.render({ x: st.x, y: st.y, s: st.s, a: st.a * this.fade }, Uni.w, Uni.h, this.size(m), Uni.mx || 0, Uni.my || 0, performance.now() / 1000);
+    const now = performance.now();
+    this.fade = Math.min(1, (now - this.t0) / 900);
+    /* adaptive resolution: the hole is soft and glowing, so it can drop pixels before the page drops frames
+       (a slow frame makes the cursor and everything else feel heavy) */
+    if (this.last && now - this.last < 200) { this.ema = this.ema ? this.ema * .92 + (now - this.last) * .08 : 16.7; }
+    this.last = now;
+    if (now - this.t0 > 1200 && now - (this.qT || 0) > 1500) {
+      if (this.ema > 21 && this.q > .75) { this.q = Math.max(.75, this.q - .25); this.qT = now; }
+      else if (this.ema < 15 && this.q < this.qMax) { this.q = Math.min(this.qMax, this.q + .25); this.qT = now; }
+    }
+    this.api.render({ x: st.x, y: st.y, s: st.s, a: st.a * this.fade }, Uni.w, Uni.h, this.size(m), Uni.mx || 0, Uni.my || 0, now / 1000, this.q);
   }
 };
 
