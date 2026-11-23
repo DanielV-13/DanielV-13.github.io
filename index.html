@@ -257,6 +257,17 @@ body.in-view .view-bg{opacity:1}
 .cell .sy{font-family:var(--display);font-size:20px;color:var(--c);margin:auto 0 4px;line-height:1}
 .cell .nm{font-size:10px;line-height:1.2;color:var(--ink)}
 .sm-panel .draft{color:var(--muted);font-size:13px}
+.sm-panel{grid-template-columns:220px 1fr}
+.sm-panel .ph.has{padding:0;background:#060a1c;border:0;display:block;aspect-ratio:auto}
+.sm-panel .ph.has > img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}
+.sm-panel .thumbs{display:flex;gap:6px;margin-top:8px}
+.sm-panel .thumbs button{flex:1;padding:0;border:2px solid transparent;border-radius:8px;overflow:hidden;cursor:pointer;background:none;aspect-ratio:1;opacity:.6}
+.sm-panel .thumbs button[aria-pressed="true"]{border-color:var(--c);opacity:1}
+.sm-panel .thumbs img{width:100%;height:100%;object-fit:cover}
+.t-body{max-width:780px}
+.t-body::after{content:"";display:block;clear:both}
+.t-img{float:right;width:120px;height:90px;object-fit:cover;border-radius:10px;margin:0 0 8px 16px;border:1px solid var(--line);transition:transform .3s}
+.t-img:hover{transform:scale(1.8);z-index:3;position:relative;box-shadow:0 20px 40px rgba(0,0,0,.6)}
 .cell.empty{border-style:dashed;background:none;cursor:default;opacity:.45}
 .cell.empty:hover{transform:none;box-shadow:none}
 .cell.empty .sy{color:var(--muted)}
@@ -460,6 +471,7 @@ body.in-view .view-bg{opacity:1}
   .cell{padding:5px 6px}.cell .sy{font-size:15px}.cell .nm{font-size:8.5px}.cell .yr{font-size:8px}
   .cell.higgs .sy{font-size:24px}
   .sm-panel{grid-template-columns:1fr}
+  .t-img{width:88px;height:66px}
   .sm-panel .ph{max-width:200px}
   .t-item{grid-template-columns:1px 1fr;gap:0 18px}
   .t-year{grid-column:2;text-align:left;padding:0 0 6px}
@@ -563,7 +575,7 @@ body.in-view .view-bg{opacity:1}
 <section class="view" id="v-about" data-view="about" aria-labelledby="about-title"><div class="wrap">
   <h2 class="sec-title" id="about-title" data-i18n-html="about.title">How physics <em>found</em> me</h2>
   <div class="about-intro">
-    <p data-i18n-html="about.p">I study <strong>computer engineering</strong> in Guayaquil, where there are very few places to study physics, so I found it on my own: competitions, a school physics club and later <strong>teaching it</strong> at UEES. My exchange at the <strong>Universidad de Oviedo</strong> turned that curiosity into practice: I now train neural networks on CMS-style collision data.</p>
+    <p data-i18n-html="about.p">I study <strong>computer engineering</strong> in Guayaquil, where there are very few places to study physics, so I found it on my own: a five-student school physics club, two <strong>national olympiad medals</strong> (bronze 2022, silver 2023) and later <strong>teaching it</strong> at UEES. My exchange at the <strong>Universidad de Oviedo</strong> turned that curiosity into practice: I now train neural networks on CMS-style collision data.</p>
     <div class="txt"><span class="f">mission.txt</span><p data-i18n="about.mission">Inspire more people in Latin America to study physics, and show it is possible from here.</p></div>
   </div>
   <div class="sm-head"><h3 data-i18n="about.smtitle">The standard model of my story</h3><span class="draft-chip" data-i18n="about.draftchip">draft · texts to write</span></div>
@@ -863,15 +875,42 @@ const PROJECTS = [
 ];
 
 const TIMELINE = [
-  { when: { en: "Before 2024", es: "Antes de 2024" }, mark: "?", draft: true,
-    title: { en: "Physics competitions & school physics club", es: "Concursos de física y club de física del colegio" },
-    text: { en: "DRAFT · Daniel: which competitions, which school, what you won and the moment physics clicked.", es: "BORRADOR · Daniel: qué concursos, qué colegio, qué ganaste y el momento en que la física hizo clic." } },
-  { when: { en: "2024 — now", es: "2024 — hoy" }, mark: "∂",
-    title: { en: "Teaching assistant", es: "Ayudante de cátedra" }, org: "UEES",
-    text: { en: "Mathematics I, Mathematics III and Physics I. I also teach IB mathematics and Python.", es: "Matemáticas I, Matemáticas III y Física I. También enseño matemáticas IB y Python." } },
+  { when: { en: "2014 — 2016", es: "2014 — 2016" }, img: "assets/story/robotopia.webp",
+    title: { en: "Where it started", es: "Donde empezó todo" }, org: "Interamericano",
+    text: { en: "Robotopia \u201cBuild your robot\u201d (2015), maths and spelling contests, and an honour mention. I was already reading popular-science books and watching physics videos.", es: "Robotopia \u201cArma tu robot\u201d (2015), concursos de matemáticas y ortografía y una mención de honor. Ya leía libros de divulgación y veía videos de física." } },
+  { when: { en: "Last years of school", es: "Últimos años de colegio" },
+    title: { en: "The school physics club", es: "El club de física del colegio" }, org: "Interamericano",
+    text: { en: "Barely five students, every Friday for four hours after class, solving university-level problems with a teacher who showed us physics is not hard, it is beautiful. That is where it clicked.", es: "Apenas cinco estudiantes, cada viernes cuatro horas después de clases, resolviendo ejercicios de nivel universitario con un maestro que nos mostró que la física no es difícil: es hermosa. Ahí hizo clic." } },
+  { when: { en: "Oct 2022", es: "oct. 2022" }, hl: true, img: "assets/story/apol-bronce.webp",
+    title: { en: "Bronze medal · National Physics Olympiad", es: "Medalla de bronce · Olimpiada Nacional de Física" }, org: "APOL",
+    text: { en: "3rd place in the XVII APOL Physics Olympiad among 410+ students from across Ecuador. Awarded at UEES.", es: "3.er puesto en la XVII Olimpiada de Física APOL entre más de 410 estudiantes de todo Ecuador. Premiación en la UEES." } },
+  { when: { en: "Nov 2023", es: "nov. 2023" }, hl: true, img: "assets/story/apol-plata-escenario.webp",
+    title: { en: "Silver medal · National Physics Olympiad", es: "Medalla de plata · Olimpiada Nacional de Física" }, org: "APOL",
+    text: { en: "2nd place in the XVIII edition, with 420+ students. That year I also took part in the ESPOL physics olympiad.", es: "2.º puesto en la XVIII edición, con más de 420 estudiantes. Ese año también participé en la olimpiada de física de la ESPOL." } },
+  { when: { en: "2024", es: "2024" },
+    title: { en: "Flag-bearer of Guayaquil", es: "Abanderado de la ciudad de Guayaquil" }, org: "Interamericano",
+    text: { en: "Graduated with a 9.97/10 average.", es: "Me gradué con un promedio de 9,97/10." } },
+  { when: { en: "Nov 2024", es: "nov. 2024" }, hl: true, img: "assets/story/filantropica.webp",
+    title: { en: "\u201cLa Filantrópica\u201d medal", es: "Medalla «La Filantrópica»" }, org: "Sociedad Filantrópica del Guayas",
+    text: { en: "Awarded to the city's top students for the 2023–2024 school year.", es: "Otorgada a los mejores estudiantes de la ciudad por el periodo lectivo 2023–2024." } },
   { when: { en: "Apr 2024 — 2028", es: "abr. 2024 — 2028" }, mark: "{ }",
     title: { en: "Computer Engineering", es: "Ingeniería en Computación" }, org: "UEES",
     text: { en: "Overall GPA 95.06/100 · Dean's List with 97.08 in Ordinario I 2024.", es: "Promedio general 95,06/100 · Dean's List con 97,08 en el Ordinario I 2024." } },
+  { when: { en: "2024 — now", es: "2024 — hoy" }, mark: "∂",
+    title: { en: "Teaching assistant", es: "Ayudante de cátedra" }, org: "UEES",
+    text: { en: "Mathematics I, Physics I and Mathematics III, at the board every week. I also teach IB mathematics and Python.", es: "Matemáticas I, Física I y Matemáticas III, en la pizarra cada semana. También enseño matemáticas IB y Python." }, img: "assets/story/clase-pizarra.webp" },
+  { when: { en: "2025", es: "2025" },
+    title: { en: "Chief Operating Officer", es: "Chief Operating Officer" }, org: "MIDAS",
+    text: { en: "Financial-education app (beta). I coordinate the tech, marketing, finance and strategy teams and follow the development milestones.", es: "App de educación financiera (beta). Coordino los equipos de tecnología, marketing, finanzas y estrategia y doy seguimiento a los hitos de desarrollo." } },
+  { when: { en: "2025", es: "2025" }, hl: true,
+    title: { en: "Top 10 worldwide · QS ImpACT Skills Challenge", es: "Top 10 mundial · QS ImpACT Skills Challenge" }, org: "NOVAPEAK",
+    text: { en: "Our 2.5D video game on the UN Sustainable Development Goals was among the 10 best of 210+ teams.", es: "Nuestro videojuego 2.5D sobre los Objetivos de Desarrollo Sostenible quedó entre los 10 mejores de más de 210 equipos." } },
+  { when: { en: "2025", es: "2025" }, hl: true,
+    title: { en: "2nd place · Veolia Challenge Hackathon", es: "2.º lugar · Veolia Challenge Hackathon" }, org: "UEES · NAVILOG",
+    text: { en: "Eco-efficient mycelium containers to make clinical-waste logistics safer, plus new truck-management features for the Veolia app.", es: "Contenedores ecoeficientes de micelio para una logística de desechos clínicos más segura, y nuevas funciones de gestión de camiones para la app de Veolia." } },
+  { when: { en: "2025", es: "2025" }, img: "assets/story/spacehack.webp",
+    title: { en: "SpaceHACK for Sustainability", es: "SpaceHACK for Sustainability" }, org: "UEES · Arizona State University",
+    text: { en: "A web platform to plan and monitor urban farming terraces for food-insecure communities in Arizona.", es: "Una plataforma web para planificar y monitorear terrazas de cultivo urbano para comunidades con inseguridad alimentaria en Arizona." } },
   { when: { en: "2025", es: "2025" }, mark: "↗",
     title: { en: "Entrepreneurship", es: "Emprendimiento" }, org: "EUNOIA · Eureka Factory",
     text: { en: "Member of UEES's EUNOIA entrepreneurship club and the Eureka Factory incubator.", es: "Miembro del club de emprendimiento EUNOIA de la UEES y de la incubadora Eureka Factory." } },
@@ -893,14 +932,18 @@ const TIMELINE = [
    g: q = quark (origins), l = lepton (sharing), b = boson (turning points), h = Higgs (why it all has mass).
    row/col place the cell in the table; empty cells (sy: "?") are space for what comes next. */
 const STORY = [
-  { id: "cp", g: "q", row: 1, col: 2, sy: "Cp", yr: "≤2023", n: { en: "Competitions", es: "Concursos" },
-    t: { en: "Competitions & the school physics club", es: "Concursos y el club de física del colegio" },
+  { id: "cp", g: "q", row: 1, col: 2, sy: "Cp", yr: "2022–23", n: { en: "Olympiads", es: "Olimpiadas" },
+    imgs: ["assets/story/apol-bronce.webp", "assets/story/apol-plata-escenario.webp", "assets/story/apol-medallas.webp", "assets/story/robotopia.webp"],
+    phrase: { en: "Five students, Friday afternoons and university-level problems: the school physics club is where physics clicked. Then two national olympiads: bronze in 2022, silver in 2023.", es: "Cinco estudiantes, los viernes por la tarde y ejercicios de nivel universitario: en el club de física del colegio la física hizo clic. Después, dos olimpiadas nacionales: bronce en 2022 y plata en 2023." },
+    t: { en: "The physics club & the olympiads", es: "El club de física y las olimpiadas" },
     q: { en: "Which competition hooked you first?", es: "¿Qué concurso te enganchó primero?" }, ph: { en: "photo · competition", es: "foto · concurso" } },
   { id: "gy", g: "q", row: 1, col: 3, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
     t: { en: "Studying physics from Guayaquil", es: "Estudiar física desde Guayaquil" },
     q: { en: "What was missing, and how did you work around it?", es: "¿Qué faltaba y cómo lo resolviste?" }, ph: { en: "photo · Guayaquil", es: "foto · Guayaquil" } },
   { id: "q3", g: "q", row: 1, col: 4, empty: true },
   { id: "ta", g: "l", row: 2, col: 2, sy: "Ta", yr: "2024", n: { en: "Teaching", es: "Enseñar" },
+    imgs: ["assets/story/clase-pizarra.webp", "assets/story/clase-explicando.webp", "assets/story/clase-senalando.webp"],
+    phrase: { en: "Teaching assistant at UEES for Mathematics I, Physics I and Mathematics III, at the board every week.", es: "Ayudante de cátedra en la UEES de Matemáticas I, Física I y Matemáticas III, en la pizarra cada semana." },
     t: { en: "Why I started teaching", es: "Por qué empecé a enseñar" },
     q: { en: "What did teaching show you about physics?", es: "¿Qué te enseñó enseñar sobre la física?" }, ph: { en: "photo · a class", es: "foto · una clase" } },
   { id: "ou", g: "l", row: 2, col: 3, sy: "Ou", yr: "now", n: { en: "Outreach", es: "Divulgación" },
@@ -924,6 +967,8 @@ const STICKERS = [
   { id: "uees", rot: -8, bg: "#0b1230", fg: "#e8b64c", m: "assets/logos/uees.png" },
   { id: "uniovi", rot: 6, bg: "#1d3d7a", fg: "#f4f1ea", m: "assets/logos/uniovi.png", sub: "Uniovi" },
   { id: "wids", rot: -4, bg: "#e8b64c", fg: "#1d1203", txt: "WiDS", sub: { en: "3rd · 2026", es: "3.º · 2026" } },
+  { id: "apol", rot: 5, bg: "#0b1230", fg: "#ff5a76", txt: "APOL", sub: { en: "bronze · silver", es: "bronce · plata" } },
+  { id: "qs", rot: -7, bg: "#62e3b5", fg: "#06281d", txt: "QS", sub: { en: "Top 10 world", es: "Top 10 mundial" } },
   { id: "gt", rot: 9, bg: "#f4f1ea", fg: "#0b1230", m: "assets/logos/gt.png", small: true, sub: "Grant Thornton" },
   { id: "ec", rot: -10, bg: "linear-gradient(180deg,#ffd100 0 50%,#034ea2 50% 75%,#ef3340 75%)", fg: "#0b1230", txt: "EC", flag: true },
   { id: "es", rot: 7, bg: "linear-gradient(180deg,#c60b1e 0 25%,#ffc400 25% 75%,#c60b1e 75%)", fg: "#0b1230", txt: "ES", flag: true }
@@ -980,7 +1025,7 @@ const ES = {
   "home.hint": "haz scroll ↕ o usa las flechas para viajar",
   "work.title": "Cosas que he <em>construido</em>",
   "about.title": "Cómo la física me <em>encontró</em>",
-  "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, donde hay muy pocos lugares para estudiar física, así que la encontré por mi cuenta: concursos, un club de física en el colegio y después <strong>enseñándola</strong> en la UEES. Mi intercambio en la <strong>Universidad de Oviedo</strong> convirtió esa curiosidad en práctica: ahora entreno redes neuronales con datos de colisiones al estilo del CMS.",
+  "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, donde hay muy pocos lugares para estudiar física, así que la encontré por mi cuenta: un club de física de cinco estudiantes en el colegio, dos <strong>medallas en olimpiadas nacionales</strong> (bronce 2022 y plata 2023) y después <strong>enseñándola</strong> en la UEES. Mi intercambio en la <strong>Universidad de Oviedo</strong> convirtió esa curiosidad en práctica: ahora entreno redes neuronales con datos de colisiones al estilo del CMS.",
   "about.mission": "Inspirar a más personas en Latinoamérica a estudiar física y demostrar que se puede desde aquí.",
   "about.smtitle": "El modelo estándar de mi historia", "about.draftchip": "borrador · textos por escribir",
   "journey.title": "Dónde he <em>estado</em>", "journey.peel": "psst: haz clic en una pegatina",
@@ -1243,7 +1288,9 @@ function renderStory() {
   if (!s) { p.className = "sm-panel empty"; p.innerHTML = esc(T().smEmpty); return; }
   p.className = "sm-panel"; p.style.setProperty("--c", G[s.g].c);
   const phrase = s.phrase ? `<p>${esc(L(s.phrase))}</p>` : `<p class="draft">${esc(T().smPhrase)}</p>`;
-  p.innerHTML = `<div class="ph">${esc(L(s.ph))}</div><div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${phrase}<p class="q">${esc(L(s.q))}</p></div>`;
+  const media = s.imgs ? `<div class="ph has"><img src="${s.imgs[0]}" alt="${esc(L(s.t))}" loading="lazy">${s.imgs.length > 1 ? `<div class="thumbs">${s.imgs.map((u, k) => `<button type="button" data-k="${k}"${k ? "" : ' aria-pressed="true"'} aria-label="photo ${k + 1}"><img src="${u}" alt=""></button>`).join("")}</div>` : ""}</div>` : `<div class="ph">${esc(L(s.ph))}</div>`;
+  p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${phrase}${s.imgs ? "" : `<p class="q">${esc(L(s.q))}</p>`}</div>`;
+  $$(".thumbs button", p).forEach(b => b.onclick = () => { $(".ph > img", p).src = s.imgs[+b.dataset.k]; $$(".thumbs button", p).forEach(x => x.setAttribute("aria-pressed", x === b)); Sound.click(); });
 }
 
 /* ===================== JOURNEY: stickers + timeline ===================== */
@@ -1265,7 +1312,7 @@ function renderTimeline() {
     const action = it.open ? `<button class="chip-btn" data-open="${it.open}">${T().view} ↗</button>` : it.filter ? `<button class="chip-btn" data-filter="${it.filter}">${T().view} ↗</button>` : "";
     const text = it.draft ? L(it.text).replace(/(DRAFT|BORRADOR) · Daniel:\s*/, "") : L(it.text);
     return `<div class="t-item${it.hl ? " hl" : ""}"><div class="t-year">${esc(L(it.when))}</div><div class="t-line"></div>
-      <div class="t-body"><h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
+      <div class="t-body">${it.img ? `<img class="t-img" src="${it.img}" alt="" loading="lazy">` : ""}<h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
       <p${it.draft ? ' class="draft"' : ""}>${esc(text)}</p>${action}</div></div>`;
   }).join("");
   $$("#timeline [data-open]").forEach(b => b.onclick = () => { location.hash = "work"; setTimeout(() => openModal(b.dataset.open), 450); });

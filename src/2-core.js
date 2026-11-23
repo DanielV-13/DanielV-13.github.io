@@ -27,7 +27,7 @@ const ES = {
   "home.hint": "haz scroll ↕ o usa las flechas para viajar",
   "work.title": "Cosas que he <em>construido</em>",
   "about.title": "Cómo la física me <em>encontró</em>",
-  "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, donde hay muy pocos lugares para estudiar física, así que la encontré por mi cuenta: concursos, un club de física en el colegio y después <strong>enseñándola</strong> en la UEES. Mi intercambio en la <strong>Universidad de Oviedo</strong> convirtió esa curiosidad en práctica: ahora entreno redes neuronales con datos de colisiones al estilo del CMS.",
+  "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, donde hay muy pocos lugares para estudiar física, así que la encontré por mi cuenta: un club de física de cinco estudiantes en el colegio, dos <strong>medallas en olimpiadas nacionales</strong> (bronce 2022 y plata 2023) y después <strong>enseñándola</strong> en la UEES. Mi intercambio en la <strong>Universidad de Oviedo</strong> convirtió esa curiosidad en práctica: ahora entreno redes neuronales con datos de colisiones al estilo del CMS.",
   "about.mission": "Inspirar a más personas en Latinoamérica a estudiar física y demostrar que se puede desde aquí.",
   "about.smtitle": "El modelo estándar de mi historia", "about.draftchip": "borrador · textos por escribir",
   "journey.title": "Dónde he <em>estado</em>", "journey.peel": "psst: haz clic en una pegatina",
@@ -290,7 +290,9 @@ function renderStory() {
   if (!s) { p.className = "sm-panel empty"; p.innerHTML = esc(T().smEmpty); return; }
   p.className = "sm-panel"; p.style.setProperty("--c", G[s.g].c);
   const phrase = s.phrase ? `<p>${esc(L(s.phrase))}</p>` : `<p class="draft">${esc(T().smPhrase)}</p>`;
-  p.innerHTML = `<div class="ph">${esc(L(s.ph))}</div><div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${phrase}<p class="q">${esc(L(s.q))}</p></div>`;
+  const media = s.imgs ? `<div class="ph has"><img src="${s.imgs[0]}" alt="${esc(L(s.t))}" loading="lazy">${s.imgs.length > 1 ? `<div class="thumbs">${s.imgs.map((u, k) => `<button type="button" data-k="${k}"${k ? "" : ' aria-pressed="true"'} aria-label="photo ${k + 1}"><img src="${u}" alt=""></button>`).join("")}</div>` : ""}</div>` : `<div class="ph">${esc(L(s.ph))}</div>`;
+  p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${phrase}${s.imgs ? "" : `<p class="q">${esc(L(s.q))}</p>`}</div>`;
+  $$(".thumbs button", p).forEach(b => b.onclick = () => { $(".ph > img", p).src = s.imgs[+b.dataset.k]; $$(".thumbs button", p).forEach(x => x.setAttribute("aria-pressed", x === b)); Sound.click(); });
 }
 
 /* ===================== JOURNEY: stickers + timeline ===================== */
@@ -312,7 +314,7 @@ function renderTimeline() {
     const action = it.open ? `<button class="chip-btn" data-open="${it.open}">${T().view} ↗</button>` : it.filter ? `<button class="chip-btn" data-filter="${it.filter}">${T().view} ↗</button>` : "";
     const text = it.draft ? L(it.text).replace(/(DRAFT|BORRADOR) · Daniel:\s*/, "") : L(it.text);
     return `<div class="t-item${it.hl ? " hl" : ""}"><div class="t-year">${esc(L(it.when))}</div><div class="t-line"></div>
-      <div class="t-body"><h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
+      <div class="t-body">${it.img ? `<img class="t-img" src="${it.img}" alt="" loading="lazy">` : ""}<h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
       <p${it.draft ? ' class="draft"' : ""}>${esc(text)}</p>${action}</div></div>`;
   }).join("");
   $$("#timeline [data-open]").forEach(b => b.onclick = () => { location.hash = "work"; setTimeout(() => openModal(b.dataset.open), 450); });
