@@ -27,8 +27,8 @@ const ES = {
   "home.hint": "haz scroll ↕ o usa las flechas para viajar",
   "work.title": "Cosas que he <em>construido</em>",
   "about.title": "Cómo la física me <em>encontró</em>",
-  "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, donde hay muy pocos lugares para estudiar física, así que la encontré por mi cuenta: un club de física de cinco estudiantes en el colegio, dos <strong>medallas en olimpiadas nacionales</strong> (bronce 2022 y plata 2023) y después <strong>enseñándola</strong> en la UEES. Mi intercambio en la <strong>Universidad de Oviedo</strong> convirtió esa curiosidad en práctica: ahora entreno redes neuronales con datos de colisiones al estilo del CMS.",
-  "about.mission": "Inspirar a más personas en Latinoamérica a estudiar física y demostrar que se puede desde aquí.",
+  "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, Ecuador, una ciudad donde ninguna universidad ofrece la carrera de física, así que encontré la física por mi cuenta: divulgación y las lectures de Feynman, un club de física de cinco estudiantes en el colegio, dos <strong>medallas en olimpiadas nacionales</strong> (bronce 2022 y plata 2023) y después <strong>enseñándola</strong> en la UEES. Mi intercambio en la <strong>Universidad de Oviedo</strong> es donde la computación y la física por fin se encuentran: ahora entreno redes neuronales con datos de colisiones al estilo del CMS.",
+  "about.mission": "Inspirar a más personas en Latinoamérica a estudiar física. No esperar mi Polaris, sino convertirme en la de alguien más: una mano para avanzar y la otra para jalar a quien se queda atrás.",
   "about.smtitle": "El modelo estándar de mi historia", "about.draftchip": "borrador · textos por escribir",
   "journey.title": "Dónde he <em>estado</em>", "journey.peel": "psst: haz clic en una pegatina",
   "arc.title": "La ciencia es mejor cuando <em>juegas</em>.", "arc.lede": "Particle Invaders: detén los quarks que se acercan con fotones antes de que lleguen a tu detector.",
@@ -289,10 +289,64 @@ function renderStory() {
   const p = $("#smPanel"), s = STORY.find(x => x.id === SM_SEL);
   if (!s) { p.className = "sm-panel empty"; p.innerHTML = esc(T().smEmpty); return; }
   p.className = "sm-panel"; p.style.setProperty("--c", G[s.g].c);
-  const phrase = s.phrase ? `<p>${esc(L(s.phrase))}</p>` : `<p class="draft">${esc(T().smPhrase)}</p>`;
-  const media = s.imgs ? `<div class="ph has"><img src="${s.imgs[0]}" alt="${esc(L(s.t))}" loading="lazy">${s.imgs.length > 1 ? `<div class="thumbs">${s.imgs.map((u, k) => `<button type="button" data-k="${k}"${k ? "" : ' aria-pressed="true"'} aria-label="photo ${k + 1}"><img src="${u}" alt=""></button>`).join("")}</div>` : ""}</div>` : `<div class="ph">${esc(L(s.ph))}</div>`;
-  p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${phrase}${s.imgs ? "" : `<p class="q">${esc(L(s.q))}</p>`}</div>`;
-  $$(".thumbs button", p).forEach(b => b.onclick = () => { $(".ph > img", p).src = s.imgs[+b.dataset.k]; $$(".thumbs button", p).forEach(x => x.setAttribute("aria-pressed", x === b)); Sound.click(); });
+  const paras = s.phrase ? L(s.phrase).split("\n\n").map(x => `<p>${esc(x)}</p>`).join("") : `<p class="draft">${esc(T().smPhrase)}</p>`;
+  const items = (s.imgs || []).map(x => typeof x === "string" ? { u: x } : x);
+  const media = items.length ? `<div class="ph has"><img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="thumbs">${items.map((it, k) => `<button type="button" data-k="${k}"${it.page ? ' class="pg"' : ""} aria-pressed="${!k}" aria-label="${k + 1}/${items.length}"><img src="${it.u}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}</div>` : `<div class="ph sym" aria-hidden="true">${esc(s.sy)}</div>`;
+  const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener">${esc(L(s.link.t))}</a>` : "";
+  p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
+  if (!items.length) return;
+  const main = $(".ph > img", p), btns = $$(".thumbs button", p);
+  const show = k => { swapImg(main, items[k].u, items[k].page); btns.forEach((x, j) => x.setAttribute("aria-pressed", j === k)); };
+  const r = Rot.make($(".ph", p), items.length, show);
+  btns.forEach(b => b.onclick = () => { r.go(+b.dataset.k); Sound.click(); });
+  main.onclick = () => lightbox(main.src);
+}
+
+/* Cross-fade an <img> to a new picture (decoded first, so it never flashes empty) */
+function swapImg(img, src, fit) {
+  if (img.getAttribute("src") === src) return;
+  const pre = new Image(); pre.src = src;
+  img.style.opacity = 0;
+  const done = () => setTimeout(() => { img.src = src; img.classList.toggle("fit", !!fit); img.style.opacity = 1; }, 230);
+  (pre.decode ? pre.decode() : Promise.resolve()).then(done, done);
+}
+/* Galleries that move on their own: every few seconds, only while on screen, the tab is visible
+   and the pointer is not over them; never with reduced motion. Clicking still picks a picture. */
+const Rot = {
+  set: new Set(), every: 4800,
+  io: "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.target._rot) e.target._rot.vis = e.isIntersecting; })) : null,
+  make(el, n, show) {
+    const r = { el, n, k: 0, vis: !Rot.io, hover: false, t: performance.now() + Math.random() * 1800 };
+    r.go = k => { r.k = (k + n) % n; show(r.k); r.t = performance.now(); };
+    if (n < 2) return r;
+    el.addEventListener("pointerenter", () => r.hover = true);
+    el.addEventListener("pointerleave", () => { r.hover = false; r.t = performance.now(); });
+    el._rot = r; Rot.io && Rot.io.observe(el); Rot.set.add(r);
+    return r;
+  },
+  tick() {
+    if (document.hidden || REDUCED) return;
+    const now = performance.now();
+    Rot.set.forEach(r => {
+      if (!r.el.isConnected) { Rot.set.delete(r); Rot.io && Rot.io.unobserve(r.el); return; }
+      if (r.vis && !r.hover && now - r.t > Rot.every) {
+        r.go(r.k + 1);
+      }
+    });
+  }
+};
+setInterval(Rot.tick, 400);
+/* Simple full-size viewer for story pictures and class pages */
+function lightbox(src) {
+  let lb = $("#lb");
+  if (!lb) {
+    lb = document.createElement("div"); lb.id = "lb"; lb.setAttribute("role", "dialog"); lb.setAttribute("aria-label", "image");
+    lb.innerHTML = `<img alt=""><button type="button" aria-label="close">×</button>`;
+    document.body.appendChild(lb);
+    lb.onclick = () => lb.classList.remove("on");
+    addEventListener("keydown", e => { if (e.key === "Escape" && lb.classList.contains("on")) { lb.classList.remove("on"); e.stopImmediatePropagation(); } }, true);
+  }
+  $("img", lb).src = src; lb.classList.add("on");
 }
 
 /* ===================== JOURNEY: stickers + timeline ===================== */
@@ -314,9 +368,13 @@ function renderTimeline() {
     const action = it.open ? `<button class="chip-btn" data-open="${it.open}">${T().view} ↗</button>` : it.filter ? `<button class="chip-btn" data-filter="${it.filter}">${T().view} ↗</button>` : "";
     const text = it.draft ? L(it.text).replace(/(DRAFT|BORRADOR) · Daniel:\s*/, "") : L(it.text);
     return `<div class="t-item${it.hl ? " hl" : ""}"><div class="t-year">${esc(L(it.when))}</div><div class="t-line"></div>
-      <div class="t-body">${it.img ? `<img class="t-img" src="${it.img}" alt="" loading="lazy">` : ""}<h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
+      <div class="t-body">${it.imgs || it.img ? `<img class="t-img" src="${(it.imgs || [it.img])[0]}" alt="" loading="lazy">` : ""}<h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
       <p${it.draft ? ' class="draft"' : ""}>${esc(text)}</p>${action}</div></div>`;
   }).join("");
+  $$("#timeline .t-img").forEach((im, i) => {
+    const it = TIMELINE.filter(x => x.imgs || x.img)[i], list = it.imgs || [it.img];
+    if (list.length > 1) Rot.make(im, list.length, k => swapImg(im, list[k]));
+  });
   $$("#timeline [data-open]").forEach(b => b.onclick = () => { location.hash = "work"; setTimeout(() => openModal(b.dataset.open), 450); });
   $$("#timeline [data-filter]").forEach(b => b.onclick = () => location.hash = "work/" + b.dataset.filter);
 }

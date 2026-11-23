@@ -264,9 +264,19 @@ body.in-view .view-bg{opacity:1}
 .sm-panel .thumbs button{flex:1;padding:0;border:2px solid transparent;border-radius:8px;overflow:hidden;cursor:pointer;background:none;aspect-ratio:1;opacity:.6}
 .sm-panel .thumbs button[aria-pressed="true"]{border-color:var(--c);opacity:1}
 .sm-panel .thumbs img{width:100%;height:100%;object-fit:cover}
+.sm-panel .ph.has > img{transition:opacity .23s;cursor:zoom-in}
+.sm-panel .ph.has > img.fit{object-fit:contain;background:#0c1124}
+.sm-panel .thumbs{display:grid;grid-template-columns:repeat(4,1fr)}
+.sm-panel .thumbs button.pg img{object-position:top}
+.sm-panel .ph.sym{font-family:var(--display);font-size:56px;font-weight:700;color:var(--c);letter-spacing:0;text-transform:none;border:1px solid color-mix(in srgb,var(--c) 45%,transparent);background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--c) 18%,transparent),transparent 70%),#080d22;text-shadow:0 0 24px color-mix(in srgb,var(--c) 60%,transparent)}
+.sm-panel .chip-btn{display:inline-block;margin-top:4px;text-decoration:none}
+#lb{position:fixed;inset:0;z-index:400;background:rgba(3,5,15,.93);display:none;place-items:center;padding:4vmin;cursor:zoom-out}
+#lb.on{display:grid;animation:fade .2s}
+#lb img{max-width:100%;max-height:92vh;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+#lb button{position:absolute;top:14px;right:18px;background:none;border:0;color:#fff;font-size:34px;cursor:pointer;line-height:1}
 .t-body{max-width:780px}
 .t-body::after{content:"";display:block;clear:both}
-.t-img{float:right;width:120px;height:90px;object-fit:cover;border-radius:10px;margin:0 0 8px 16px;border:1px solid var(--line);transition:transform .3s}
+.t-img{float:right;width:120px;height:90px;object-fit:cover;border-radius:10px;margin:0 0 8px 16px;border:1px solid var(--line);transition:transform .3s,opacity .23s}
 .t-img:hover{transform:scale(1.8);z-index:3;position:relative;box-shadow:0 20px 40px rgba(0,0,0,.6)}
 .cell.empty{border-style:dashed;background:none;cursor:default;opacity:.45}
 .cell.empty:hover{transform:none;box-shadow:none}
@@ -575,10 +585,10 @@ body.in-view .view-bg{opacity:1}
 <section class="view" id="v-about" data-view="about" aria-labelledby="about-title"><div class="wrap">
   <h2 class="sec-title" id="about-title" data-i18n-html="about.title">How physics <em>found</em> me</h2>
   <div class="about-intro">
-    <p data-i18n-html="about.p">I study <strong>computer engineering</strong> in Guayaquil, where there are very few places to study physics, so I found it on my own: a five-student school physics club, two <strong>national olympiad medals</strong> (bronze 2022, silver 2023) and later <strong>teaching it</strong> at UEES. My exchange at the <strong>Universidad de Oviedo</strong> turned that curiosity into practice: I now train neural networks on CMS-style collision data.</p>
-    <div class="txt"><span class="f">mission.txt</span><p data-i18n="about.mission">Inspire more people in Latin America to study physics, and show it is possible from here.</p></div>
+    <p data-i18n-html="about.p">I study <strong>computer engineering</strong> in Guayaquil, Ecuador, a city where no university offers a physics degree, so I found physics on my own: popular science and Feynman's lectures, a five-student school club, two <strong>national olympiad medals</strong> (bronze 2022, silver 2023) and then <strong>teaching it</strong> at UEES. My exchange at the <strong>Universidad de Oviedo</strong> is where computing and physics finally meet: I now train neural networks on CMS-style collision data.</p>
+    <div class="txt"><span class="f">mission.txt</span><p data-i18n="about.mission">Inspire more people in Latin America to study physics. Not to wait for my Polaris, but to become one for someone else: one hand to move forward, the other to pull up whoever is falling behind.</p></div>
   </div>
-  <div class="sm-head"><h3 data-i18n="about.smtitle">The standard model of my story</h3><span class="draft-chip" data-i18n="about.draftchip">draft · texts to write</span></div>
+  <div class="sm-head"><h3 data-i18n="about.smtitle">The standard model of my story</h3></div>
   <div class="sm"><div class="sm-table" id="smTable"></div><div class="sm-panel empty" id="smPanel"></div></div>
   <div class="contact-slot"></div>
 </div></section>
@@ -875,13 +885,13 @@ const PROJECTS = [
 ];
 
 const TIMELINE = [
-  { when: { en: "2014 — 2016", es: "2014 — 2016" }, img: "assets/story/robotopia.webp",
+  { when: { en: "2014 — 2016", es: "2014 — 2016" }, imgs: ["assets/story/robotopia.webp", "assets/story/infancia-spelling.webp", "assets/story/infancia-cebi.webp", "assets/story/infancia-mencion.webp"],
     title: { en: "Where it started", es: "Donde empezó todo" }, org: "Interamericano",
     text: { en: "Robotopia \u201cBuild your robot\u201d (2015), maths and spelling contests, and an honour mention. I was already reading popular-science books and watching physics videos.", es: "Robotopia \u201cArma tu robot\u201d (2015), concursos de matemáticas y ortografía y una mención de honor. Ya leía libros de divulgación y veía videos de física." } },
   { when: { en: "Last years of school", es: "Últimos años de colegio" },
     title: { en: "The school physics club", es: "El club de física del colegio" }, org: "Interamericano",
     text: { en: "Barely five students, every Friday for four hours after class, solving university-level problems with a teacher who showed us physics is not hard, it is beautiful. That is where it clicked.", es: "Apenas cinco estudiantes, cada viernes cuatro horas después de clases, resolviendo ejercicios de nivel universitario con un maestro que nos mostró que la física no es difícil: es hermosa. Ahí hizo clic." } },
-  { when: { en: "Oct 2022", es: "oct. 2022" }, hl: true, img: "assets/story/apol-bronce.webp",
+  { when: { en: "Oct 2022", es: "oct. 2022" }, hl: true, imgs: ["assets/story/apol-medallas.webp", "assets/story/apol-lista.webp"],
     title: { en: "Bronze medal · National Physics Olympiad", es: "Medalla de bronce · Olimpiada Nacional de Física" }, org: "APOL",
     text: { en: "3rd place in the XVII APOL Physics Olympiad among 410+ students from across Ecuador. Awarded at UEES.", es: "3.er puesto en la XVII Olimpiada de Física APOL entre más de 410 estudiantes de todo Ecuador. Premiación en la UEES." } },
   { when: { en: "Nov 2023", es: "nov. 2023" }, hl: true, img: "assets/story/apol-plata-escenario.webp",
@@ -889,7 +899,7 @@ const TIMELINE = [
     text: { en: "2nd place in the XVIII edition, with 420+ students. That year I also took part in the ESPOL physics olympiad.", es: "2.º puesto en la XVIII edición, con más de 420 estudiantes. Ese año también participé en la olimpiada de física de la ESPOL." } },
   { when: { en: "2024", es: "2024" },
     title: { en: "Flag-bearer of Guayaquil", es: "Abanderado de la ciudad de Guayaquil" }, org: "Interamericano",
-    text: { en: "Graduated with a 9.97/10 average.", es: "Me gradué con un promedio de 9,97/10." } },
+    text: { en: "Graduated with a 9.97/10 average and gave the graduation speech, in English.", es: "Me gradué con un promedio de 9,97/10 y di el discurso de graduación, en inglés." } },
   { when: { en: "Nov 2024", es: "nov. 2024" }, hl: true, img: "assets/story/filantropica.webp",
     title: { en: "\u201cLa Filantrópica\u201d medal", es: "Medalla «La Filantrópica»" }, org: "Sociedad Filantrópica del Guayas",
     text: { en: "Awarded to the city's top students for the 2023–2024 school year.", es: "Otorgada a los mejores estudiantes de la ciudad por el periodo lectivo 2023–2024." } },
@@ -898,7 +908,7 @@ const TIMELINE = [
     text: { en: "Overall GPA 95.06/100 · Dean's List with 97.08 in Ordinario I 2024.", es: "Promedio general 95,06/100 · Dean's List con 97,08 en el Ordinario I 2024." } },
   { when: { en: "2024 — now", es: "2024 — hoy" }, mark: "∂",
     title: { en: "Teaching assistant", es: "Ayudante de cátedra" }, org: "UEES",
-    text: { en: "Mathematics I, Physics I and Mathematics III, at the board every week. I also teach IB mathematics and Python.", es: "Matemáticas I, Física I y Matemáticas III, en la pizarra cada semana. También enseño matemáticas IB y Python." }, img: "assets/story/clase-pizarra.webp" },
+    text: { en: "Physics I, then Mathematics I, III and II, and back to Physics I: the professors kept asking me to return. I also teach online: Python, statistics, financial maths and IB mathematics.", es: "Física I, luego Matemáticas I, III y II, y de vuelta a Física I: los profesores me pedían volver cada semestre. También doy clases en línea: Python, estadística, matemática financiera y matemáticas IB." }, imgs: ["assets/story/clase-loop.webp", "assets/story/clase-senalando.webp", "assets/story/clase-equilibrio.webp"] },
   { when: { en: "2025", es: "2025" },
     title: { en: "Chief Operating Officer", es: "Chief Operating Officer" }, org: "MIDAS",
     text: { en: "Financial-education app (beta). I coordinate the tech, marketing, finance and strategy teams and follow the development milestones.", es: "App de educación financiera (beta). Coordino los equipos de tecnología, marketing, finanzas y estrategia y doy seguimiento a los hitos de desarrollo." } },
@@ -914,9 +924,9 @@ const TIMELINE = [
   { when: { en: "2025", es: "2025" }, mark: "↗",
     title: { en: "Entrepreneurship", es: "Emprendimiento" }, org: "EUNOIA · Eureka Factory",
     text: { en: "Member of UEES's EUNOIA entrepreneurship club and the Eureka Factory incubator.", es: "Miembro del club de emprendimiento EUNOIA de la UEES y de la incubadora Eureka Factory." } },
-  { when: { en: "2026 · dates TBC", es: "2026 · fechas por confirmar" }, mark: "IT", draft: true,
-    title: { en: "IT intern · IT audit & cybersecurity", es: "Pasante de IT · auditoría informática y ciberseguridad" }, org: "Grant Thornton Ecuador",
-    text: { en: "Compliance documentation for an international audit, IT support and infrastructure. I also built an internal search tool for tax-court rulings on top of NotebookLM.", es: "Documentación de cumplimiento para una auditoría internacional, soporte técnico e infraestructura. También construí una herramienta interna de búsqueda de sentencias tributarias sobre NotebookLM." } },
+  { when: { en: "Mar — Aug 2026", es: "mar. — ago. 2026" }, mark: "IT",
+    title: { en: "IT intern · IT audit", es: "Pasante de IT · auditoría informática" }, org: "Grant Thornton Ecuador",
+    text: { en: "Supported the IT audit team with Grant Thornton International audit controls and compliance documentation. I built an SRI invoice reader (PDF → Excel) and an internal search tool for tax-court rulings on top of NotebookLM.", es: "Apoyé al equipo de auditoría informática con controles de auditoría de Grant Thornton International y documentación de cumplimiento. Hice un lector de facturas del SRI (PDF → Excel) y una herramienta interna de búsqueda de sentencias tributarias sobre NotebookLM." } },
   { when: { en: "Jun 2026", es: "jun. 2026" }, mark: "♻",
     title: { en: "Cascos Verdes certification", es: "Certificación Cascos Verdes" }, org: "UNITAR · EKOS",
     text: { en: "Certification issued by UNITAR and EKOS. DRAFT · Daniel: one line on what it covered.", es: "Certificación otorgada por UNITAR y EKOS. BORRADOR · Daniel: una línea sobre de qué trató." }, draft: true },
@@ -933,32 +943,35 @@ const TIMELINE = [
    row/col place the cell in the table; empty cells (sy: "?") are space for what comes next. */
 const STORY = [
   { id: "cp", g: "q", row: 1, col: 2, sy: "Cp", yr: "2022–23", n: { en: "Olympiads", es: "Olimpiadas" },
-    imgs: ["assets/story/apol-bronce.webp", "assets/story/apol-plata-escenario.webp", "assets/story/apol-medallas.webp", "assets/story/robotopia.webp"],
-    phrase: { en: "Five students, Friday afternoons and university-level problems: the school physics club is where physics clicked. Then two national olympiads: bronze in 2022, silver in 2023.", es: "Cinco estudiantes, los viernes por la tarde y ejercicios de nivel universitario: en el club de física del colegio la física hizo clic. Después, dos olimpiadas nacionales: bronce en 2022 y plata en 2023." },
-    t: { en: "The physics club & the olympiads", es: "El club de física y las olimpiadas" },
-    q: { en: "Which competition hooked you first?", es: "¿Qué concurso te enganchó primero?" }, ph: { en: "photo · competition", es: "foto · concurso" } },
+    imgs: ["assets/story/apol-medallas.webp", "assets/story/apol-lista.webp", "assets/story/apol-plata-escenario.webp"],
+    phrase: { en: "Five students, Friday afternoons and university-level problems: the school physics club is where physics clicked. A passionate teacher showed us it was not hard, it was beautiful. Then two national olympiads, among 400+ students: bronze in 2022, silver in 2023.", es: "Cinco estudiantes, los viernes por la tarde y ejercicios de nivel universitario: en el club de física del colegio la física hizo clic. Un maestro apasionado nos mostró que no era difícil, sino hermosa. Después, dos olimpiadas nacionales entre más de 400 estudiantes: bronce en 2022 y plata en 2023." },
+    t: { en: "The physics club & the olympiads", es: "El club de física y las olimpiadas" } },
   { id: "gy", g: "q", row: 1, col: 3, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
-    t: { en: "Studying physics from Guayaquil", es: "Estudiar física desde Guayaquil" },
-    q: { en: "What was missing, and how did you work around it?", es: "¿Qué faltaba y cómo lo resolviste?" }, ph: { en: "photo · Guayaquil", es: "foto · Guayaquil" } },
+    phrase: { en: "In Guayaquil, my hometown, no university offers a physics degree, not even ESPOL. Physics is taught as a tool for engineering, rarely as a science of its own, and research opportunities are few.\n\nSo I chose Computer Engineering, which I also enjoy, with a plan: use code and data to get back to physics. Meanwhile I kept learning on my own: popular science, documentaries, Feynman's Lectures and long talks with my physics teacher after class.", es: "En Guayaquil, mi ciudad, ninguna universidad ofrece la carrera de física, ni siquiera la ESPOL. La física se enseña como herramienta para las ingenierías, casi nunca como una ciencia por sí misma, y las oportunidades de investigación son pocas.\n\nAsí que elegí Ingeniería en Computación, que también me gusta, con un plan: usar el código y los datos para volver a la física. Mientras tanto seguí aprendiendo por mi cuenta: divulgación, documentales, las Lectures de Feynman y largas charlas con mi maestro de física después de clases." },
+    t: { en: "Studying physics from Guayaquil", es: "Estudiar física desde Guayaquil" } },
   { id: "q3", g: "q", row: 1, col: 4, empty: true },
   { id: "ta", g: "l", row: 2, col: 2, sy: "Ta", yr: "2024", n: { en: "Teaching", es: "Enseñar" },
-    imgs: ["assets/story/clase-pizarra.webp", "assets/story/clase-explicando.webp", "assets/story/clase-senalando.webp"],
-    phrase: { en: "Teaching assistant at UEES for Mathematics I, Physics I and Mathematics III, at the board every week.", es: "Ayudante de cátedra en la UEES de Matemáticas I, Física I y Matemáticas III, en la pizarra cada semana." },
-    t: { en: "Why I started teaching", es: "Por qué empecé a enseñar" },
-    q: { en: "What did teaching show you about physics?", es: "¿Qué te enseñó enseñar sobre la física?" }, ph: { en: "photo · a class", es: "foto · una clase" } },
-  { id: "ou", g: "l", row: 2, col: 3, sy: "Ou", yr: "now", n: { en: "Outreach", es: "Divulgación" },
-    t: { en: "Outreach in Latin America", es: "Divulgación en Latinoamérica" },
-    q: { en: "What have you done to share physics, and why here?", es: "¿Qué has hecho para divulgar la física y por qué aquí?" }, ph: { en: "photo · outreach", es: "foto · divulgación" } },
-  { id: "l3", g: "l", row: 2, col: 4, empty: true },
-  { id: "co", g: "b", row: 1, col: 5, sy: "Co", yr: "2025", n: { en: "Code ✕ physics", es: "Código ✕ física" },
-    t: { en: "When computing met physics", es: "Cuando la computación encontró a la física" },
-    q: { en: "When did you see how connected they are?", es: "¿Cuándo viste lo conectadas que están?" }, ph: { en: "photo · first notebook", es: "foto · primer cuaderno" } },
+    imgs: ["assets/story/clase-loop.webp", "assets/story/clase-senalando.webp", "assets/story/clase-equilibrio.webp",
+      { u: "assets/story/ayud-otra-forma.webp", page: true }, { u: "assets/story/ayud-trabajo.webp", page: true }, { u: "assets/story/ayud-problema-proyectil.webp", page: true },
+      { u: "assets/story/ayud-ley-coseno.webp", page: true }, { u: "assets/story/ayud-mcu-mapa.webp", page: true }],
+    phrase: { en: "Physics I had the most failed students in all of engineering at UEES, and many lost their degree over it. I became a teaching assistant to change that, and to show physics with curiosity instead of fear.\n\nPhysics I, then Mathematics I, III and II, and back to Physics I: the professors kept asking me to return. Teaching makes me feel alive. The best moment is always the same: the click when something that seemed impossible finally makes sense.", es: "Física I era la materia con más reprobados de todas las ingenierías de la UEES, y muchos perdían su carrera por ella. Me hice ayudante de cátedra para cambiar eso, y para mostrar la física con curiosidad en lugar de miedo.\n\nFísica I, luego Matemáticas I, III y II, y de vuelta a Física I: los profesores me pedían volver cada semestre. Enseñar me hace sentir vivo. El mejor momento siempre es el mismo: el clic cuando algo que parecía imposible por fin tiene sentido." },
+    link: { u: "https://drive.google.com/drive/folders/1zZVa2M3M2WBlf-QhCDNZdtF8_1GZHzMG", t: { en: "Class materials · Drive ↗", es: "Material de clase · Drive ↗" } },
+    t: { en: "Why I started teaching", es: "Por qué empecé a enseñar" } },
+  { id: "ou", g: "l", row: 2, col: 3, sy: "Ou", yr: "next", n: { en: "Outreach", es: "Divulgación" },
+    phrase: { en: "Honestly, I have not done much outreach yet. In every class I try to show that physics is far more than hard exercises in a classroom: its applications, its open questions, a reason to keep reading.\n\nWhat comes next: talks, and helping change the idea that physics is difficult and only for a few.", es: "Siendo honesto, todavía no he hecho mucha divulgación. En cada clase intento mostrar que la física es mucho más que ejercicios difíciles en un aula: sus aplicaciones, sus preguntas abiertas, una razón para seguir leyendo.\n\nLo que viene: charlas, y ayudar a cambiar la idea de que la física es difícil y solo para unos pocos." },
+    t: { en: "Sharing physics beyond the classroom", es: "Compartir la física fuera del aula" } },
+  { id: "po", g: "l", row: 2, col: 4, sy: "Po", yr: "always", n: { en: "Polaris", es: "Polaris" },
+    phrase: { en: "A teacher once told me we have two hands: one to push ourselves forward and one to pull up those who fall behind.\n\nI am no expert, and I am still looking for my own Polaris. But you do not need to have it all figured out to help: you start before it is perfect, and you share the little you know. Explaining is how I understand things best, as Feynman said. Maybe the point is not to find your north star, but to become one for someone else.", es: "Un profesor me dijo una vez que tenemos dos manos: una para impulsarnos hacia adelante y otra para jalar a los que se quedan atrás.\n\nNo soy experto y sigo buscando mi propia Polaris. Pero no hace falta tenerlo todo claro para ayudar: se empieza aunque no sea perfecto, y se comparte lo poco que uno sabe. Explicar es como mejor entiendo las cosas, como decía Feynman. Quizá no se trata de encontrar tu estrella del norte, sino de convertirte en la de alguien más." },
+    t: { en: "Be someone's Polaris", es: "Ser la Polaris de alguien" } },
+  { id: "co", g: "b", row: 1, col: 5, sy: "Co", yr: "2024", n: { en: "Code ✕ physics", es: "Código ✕ física" },
+    phrase: { en: "It felt like common sense. Today physics, mathematics and chemistry go hand in hand with code and data, and AI is only making that stronger.\n\nComputing is my way into physics: data analysis and machine learning applied to real experiments.", es: "Fue sentido común. Hoy la física, la matemática y la química van de la mano con el código y los datos, y la inteligencia artificial lo hace cada vez más fuerte.\n\nLa computación es mi camino hacia la física: análisis de datos y machine learning aplicados a experimentos reales." },
+    t: { en: "When computing met physics", es: "Cuando la computación encontró a la física" } },
   { id: "ov", g: "b", row: 2, col: 5, sy: "Ov", yr: "2026", n: { en: "Oviedo", es: "Oviedo" },
-    t: { en: "Why Oviedo", es: "Por qué Oviedo" },
-    q: { en: "How did the exchange change your view?", es: "¿Cómo cambió tu mirada el intercambio?" }, ph: { en: "photo · Oviedo", es: "foto · Oviedo" } },
+    phrase: { en: "I compared many universities, courses and research groups until I found one where computer science and physics are close together and the timetables do not clash: Oviedo.\n\nHere I take Data Analysis in Modern Physics with Prof. Pietro Vischia. Plenty is still new to me and I look a lot of it up on my own, but I have seen how neural networks and data analysis drive experiments like CMS at CERN, and how much physics needs people who can program.", es: "Comparé muchas universidades, materias y grupos de investigación hasta encontrar una donde la informática y la física estuvieran cerca y los horarios no chocaran: Oviedo.\n\nAquí curso Análisis de Datos en Física Moderna con el profesor Pietro Vischia. Muchas cosas aún son nuevas para mí y las investigo por mi cuenta, pero he visto cómo las redes neuronales y el análisis de datos impulsan experimentos como el CMS del CERN, y cuánto necesita la física gente que sepa programar." },
+    t: { en: "Why Oviedo", es: "Por qué Oviedo" } },
   { id: "h", g: "h", row: 1, col: 7, sy: "H", yr: "∞", n: { en: "Physics is beautiful", es: "La física es hermosa" },
-    t: { en: "The Higgs of my story", es: "El Higgs de mi historia" }, phrase: { en: "Physics is beautiful.", es: "La física es hermosa." },
-    q: { en: "The reason behind everything else in this table.", es: "La razón detrás de todo lo demás en esta tabla." }, ph: { en: "your favourite photo", es: "tu foto favorita" } }
+    t: { en: "The Higgs of my story", es: "El Higgs de mi historia" },
+    phrase: { en: "Physics is everywhere, and we are made of it. Behind every experiment there is a story of human ingenuity, courage and creativity, and that is the side I want to show: the one that makes you look up at the sky and feel small and part of everything at once.\n\nThat is the reason behind everything else in this table.", es: "La física está en todas partes, y estamos hechos de ella. Detrás de cada experimento hay una historia de ingenio, valentía y creatividad humana, y ese es el lado que quiero mostrar: el que te hace mirar al cielo y sentirte pequeño y parte de todo a la vez.\n\nEsa es la razón detrás de todo lo demás en esta tabla." } }
 ];
 const STORY_GROUPS = { q: { c: "var(--quark)", en: "origins", es: "orígenes" }, l: { c: "var(--mint)", en: "sharing", es: "compartir" }, b: { c: "var(--boson)", en: "turning points", es: "giros" }, h: { c: "var(--ember)", en: "the why", es: "el porqué" } };
 
@@ -1025,8 +1038,8 @@ const ES = {
   "home.hint": "haz scroll ↕ o usa las flechas para viajar",
   "work.title": "Cosas que he <em>construido</em>",
   "about.title": "Cómo la física me <em>encontró</em>",
-  "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, donde hay muy pocos lugares para estudiar física, así que la encontré por mi cuenta: un club de física de cinco estudiantes en el colegio, dos <strong>medallas en olimpiadas nacionales</strong> (bronce 2022 y plata 2023) y después <strong>enseñándola</strong> en la UEES. Mi intercambio en la <strong>Universidad de Oviedo</strong> convirtió esa curiosidad en práctica: ahora entreno redes neuronales con datos de colisiones al estilo del CMS.",
-  "about.mission": "Inspirar a más personas en Latinoamérica a estudiar física y demostrar que se puede desde aquí.",
+  "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, Ecuador, una ciudad donde ninguna universidad ofrece la carrera de física, así que encontré la física por mi cuenta: divulgación y las lectures de Feynman, un club de física de cinco estudiantes en el colegio, dos <strong>medallas en olimpiadas nacionales</strong> (bronce 2022 y plata 2023) y después <strong>enseñándola</strong> en la UEES. Mi intercambio en la <strong>Universidad de Oviedo</strong> es donde la computación y la física por fin se encuentran: ahora entreno redes neuronales con datos de colisiones al estilo del CMS.",
+  "about.mission": "Inspirar a más personas en Latinoamérica a estudiar física. No esperar mi Polaris, sino convertirme en la de alguien más: una mano para avanzar y la otra para jalar a quien se queda atrás.",
   "about.smtitle": "El modelo estándar de mi historia", "about.draftchip": "borrador · textos por escribir",
   "journey.title": "Dónde he <em>estado</em>", "journey.peel": "psst: haz clic en una pegatina",
   "arc.title": "La ciencia es mejor cuando <em>juegas</em>.", "arc.lede": "Particle Invaders: detén los quarks que se acercan con fotones antes de que lleguen a tu detector.",
@@ -1287,10 +1300,64 @@ function renderStory() {
   const p = $("#smPanel"), s = STORY.find(x => x.id === SM_SEL);
   if (!s) { p.className = "sm-panel empty"; p.innerHTML = esc(T().smEmpty); return; }
   p.className = "sm-panel"; p.style.setProperty("--c", G[s.g].c);
-  const phrase = s.phrase ? `<p>${esc(L(s.phrase))}</p>` : `<p class="draft">${esc(T().smPhrase)}</p>`;
-  const media = s.imgs ? `<div class="ph has"><img src="${s.imgs[0]}" alt="${esc(L(s.t))}" loading="lazy">${s.imgs.length > 1 ? `<div class="thumbs">${s.imgs.map((u, k) => `<button type="button" data-k="${k}"${k ? "" : ' aria-pressed="true"'} aria-label="photo ${k + 1}"><img src="${u}" alt=""></button>`).join("")}</div>` : ""}</div>` : `<div class="ph">${esc(L(s.ph))}</div>`;
-  p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${phrase}${s.imgs ? "" : `<p class="q">${esc(L(s.q))}</p>`}</div>`;
-  $$(".thumbs button", p).forEach(b => b.onclick = () => { $(".ph > img", p).src = s.imgs[+b.dataset.k]; $$(".thumbs button", p).forEach(x => x.setAttribute("aria-pressed", x === b)); Sound.click(); });
+  const paras = s.phrase ? L(s.phrase).split("\n\n").map(x => `<p>${esc(x)}</p>`).join("") : `<p class="draft">${esc(T().smPhrase)}</p>`;
+  const items = (s.imgs || []).map(x => typeof x === "string" ? { u: x } : x);
+  const media = items.length ? `<div class="ph has"><img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="thumbs">${items.map((it, k) => `<button type="button" data-k="${k}"${it.page ? ' class="pg"' : ""} aria-pressed="${!k}" aria-label="${k + 1}/${items.length}"><img src="${it.u}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}</div>` : `<div class="ph sym" aria-hidden="true">${esc(s.sy)}</div>`;
+  const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener">${esc(L(s.link.t))}</a>` : "";
+  p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
+  if (!items.length) return;
+  const main = $(".ph > img", p), btns = $$(".thumbs button", p);
+  const show = k => { swapImg(main, items[k].u, items[k].page); btns.forEach((x, j) => x.setAttribute("aria-pressed", j === k)); };
+  const r = Rot.make($(".ph", p), items.length, show);
+  btns.forEach(b => b.onclick = () => { r.go(+b.dataset.k); Sound.click(); });
+  main.onclick = () => lightbox(main.src);
+}
+
+/* Cross-fade an <img> to a new picture (decoded first, so it never flashes empty) */
+function swapImg(img, src, fit) {
+  if (img.getAttribute("src") === src) return;
+  const pre = new Image(); pre.src = src;
+  img.style.opacity = 0;
+  const done = () => setTimeout(() => { img.src = src; img.classList.toggle("fit", !!fit); img.style.opacity = 1; }, 230);
+  (pre.decode ? pre.decode() : Promise.resolve()).then(done, done);
+}
+/* Galleries that move on their own: every few seconds, only while on screen, the tab is visible
+   and the pointer is not over them; never with reduced motion. Clicking still picks a picture. */
+const Rot = {
+  set: new Set(), every: 4800,
+  io: "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.target._rot) e.target._rot.vis = e.isIntersecting; })) : null,
+  make(el, n, show) {
+    const r = { el, n, k: 0, vis: !Rot.io, hover: false, t: performance.now() + Math.random() * 1800 };
+    r.go = k => { r.k = (k + n) % n; show(r.k); r.t = performance.now(); };
+    if (n < 2) return r;
+    el.addEventListener("pointerenter", () => r.hover = true);
+    el.addEventListener("pointerleave", () => { r.hover = false; r.t = performance.now(); });
+    el._rot = r; Rot.io && Rot.io.observe(el); Rot.set.add(r);
+    return r;
+  },
+  tick() {
+    if (document.hidden || REDUCED) return;
+    const now = performance.now();
+    Rot.set.forEach(r => {
+      if (!r.el.isConnected) { Rot.set.delete(r); Rot.io && Rot.io.unobserve(r.el); return; }
+      if (r.vis && !r.hover && now - r.t > Rot.every) {
+        r.go(r.k + 1);
+      }
+    });
+  }
+};
+setInterval(Rot.tick, 400);
+/* Simple full-size viewer for story pictures and class pages */
+function lightbox(src) {
+  let lb = $("#lb");
+  if (!lb) {
+    lb = document.createElement("div"); lb.id = "lb"; lb.setAttribute("role", "dialog"); lb.setAttribute("aria-label", "image");
+    lb.innerHTML = `<img alt=""><button type="button" aria-label="close">×</button>`;
+    document.body.appendChild(lb);
+    lb.onclick = () => lb.classList.remove("on");
+    addEventListener("keydown", e => { if (e.key === "Escape" && lb.classList.contains("on")) { lb.classList.remove("on"); e.stopImmediatePropagation(); } }, true);
+  }
+  $("img", lb).src = src; lb.classList.add("on");
 }
 
 /* ===================== JOURNEY: stickers + timeline ===================== */
@@ -1312,9 +1379,13 @@ function renderTimeline() {
     const action = it.open ? `<button class="chip-btn" data-open="${it.open}">${T().view} ↗</button>` : it.filter ? `<button class="chip-btn" data-filter="${it.filter}">${T().view} ↗</button>` : "";
     const text = it.draft ? L(it.text).replace(/(DRAFT|BORRADOR) · Daniel:\s*/, "") : L(it.text);
     return `<div class="t-item${it.hl ? " hl" : ""}"><div class="t-year">${esc(L(it.when))}</div><div class="t-line"></div>
-      <div class="t-body">${it.img ? `<img class="t-img" src="${it.img}" alt="" loading="lazy">` : ""}<h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
+      <div class="t-body">${it.imgs || it.img ? `<img class="t-img" src="${(it.imgs || [it.img])[0]}" alt="" loading="lazy">` : ""}<h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
       <p${it.draft ? ' class="draft"' : ""}>${esc(text)}</p>${action}</div></div>`;
   }).join("");
+  $$("#timeline .t-img").forEach((im, i) => {
+    const it = TIMELINE.filter(x => x.imgs || x.img)[i], list = it.imgs || [it.img];
+    if (list.length > 1) Rot.make(im, list.length, k => swapImg(im, list[k]));
+  });
   $$("#timeline [data-open]").forEach(b => b.onclick = () => { location.hash = "work"; setTimeout(() => openModal(b.dataset.open), 450); });
   $$("#timeline [data-filter]").forEach(b => b.onclick = () => location.hash = "work/" + b.dataset.filter);
 }
