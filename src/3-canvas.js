@@ -327,7 +327,7 @@ const Uni = {
   hideHint() { if (this.hinted) return; this.hinted = true; store.set("dv_hint", 1); $("#hint").classList.add("gone"); },
   focus(id) {
     const w = this.w, h = this.h, m = this.mobile;
-    if (id === "bh") return m ? [w * .64, h * .84] : [w * .8, h * .9];
+    if (id === "bh") return m ? [w * .62, h * .8] : [w * .77, h * .78];
     if (id === "solar") return m ? [w * .5, h * .44] : [w * .3, h * .5];
     if (id === "earth") return m ? [w * .5, h * .44] : [w * .42, h * .52];
     return [w * .45, h * .48];
@@ -378,13 +378,13 @@ const Uni = {
     this.bg.forEach(([x, y, r, a]) => { c.globalAlpha = alpha * a * .8; c.fillStyle = "#e8edff"; c.fillRect(x * w, y * h, r, r); }); c.globalAlpha = alpha;
     this.targets = [];
     if (id === "bh") {
-      const [x, y] = this.focus("bh"), R = Math.min(w, h) * (this.mobile ? .08 : .1);
+      const [x, y] = this.focus("bh"), R = BH3D.size(this.mobile) / 7.6 / 1.3;
       if (BH3D.ok) {
         const Zg = this.Zg || 1, [gx, gy] = this.zf || [w / 2, h / 2], sx = fx + (x - fx) * zoom, sy = fy + (y - fy) * zoom;
         this.bhDraw = { x: gx + (sx - gx) * Zg, y: gy + (sy - gy) * Zg, s: zoom * Zg, a: alpha };
       }
       if (!BH3D.ok || BH3D.fade < 1) { c.save(); c.globalAlpha = alpha * (1 - (BH3D.ok ? BH3D.fade : 0)); drawBlackHole(c, x, y, R, t); c.restore(); }
-      this.targets.push({ k: "bh", x, y, r: Math.min(w, h) * .3 });
+      this.targets.push({ k: "bh", x, y, r: BH3D.size(this.mobile) / 7.6 * 1.6 });
     }
 
     if (id === "cluster") this.cluster(c, w, h, t, alpha);
@@ -552,7 +552,7 @@ const BH3D = {
     const go = () => import("./assets/js/bh3d.js").then(m => { this.api = m.create(cv); if (this.api) { this.ok = true; this.t0 = performance.now(); Uni.start(); } }).catch(() => {});
     if (window.requestIdleCallback) requestIdleCallback(go, { timeout: 1500 }); else setTimeout(go, 600);
   },
-  size(m) { return m ? innerWidth * 1.05 : Math.min(innerWidth * .6, innerHeight * 1.05); },   // outer radius of the disk, px
+  size(m) { return m ? innerWidth * 1.35 : Math.min(innerWidth * .88, innerHeight * 1.5); },   // outer radius of the disk, px
   render(st, dt, m) {
     if (!this.api) return;
     if (!st || st.a <= .01) { this.cv.style.opacity = 0; return; }

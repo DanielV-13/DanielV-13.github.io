@@ -18,7 +18,7 @@ function fitCanvas(c, w, h) {
 function esc(s) { return String(s).replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m])); }
 
 /* ---------- Language ---------- */
-let LANG = store.get("dv_lang", "en");
+let LANG = "en";   // always opens in English; ES translates for this visit
 const ES = {
   "intro.skip": "Saltar intro", "intro.chapter": "Capítulo I", "intro.pagetitle": "Hacia el horizonte de sucesos",
   "intro.sub": "Mi Portafolio", "hero.mail": "Correo", "arc.help": "← → mover · Espacio disparar · Esc salir",

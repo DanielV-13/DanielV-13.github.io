@@ -16,7 +16,7 @@ void main(){
   float temp = pow(rin / r, 1.35);
   vec3 col = mix(vec3(.95, .38, .1), vec3(1., .92, .78), clamp(temp * 1.1, 0., 1.));
   vec3 tg = normalize(vec3(-wp.z, 0., wp.x)), vd = normalize(cam - wp);
-  float dop = clamp(1. + .6 * dot(tg, vd), .35, 1.7);
+  float dop = clamp(1. + .68 * dot(tg, vd), .32, 1.85);
   float edge = smoothstep(0., .06, v) * smoothstep(1., .5, v);
   float I = (.25 + 1.5 * dust) * (temp * 1.7 + .12) * dop * dop * edge;
   gl_FragColor = vec4(col * I, 1.);
@@ -25,7 +25,7 @@ const HALO_VS = `varying vec2 p; void main(){ p = position.xy; gl_Position = pro
 const HALO_FS = `uniform sampler2D tex; uniform float t; uniform float tilt; varying vec2 p;
 void main(){
   float r = length(p), a = atan(p.y, p.x);
-  float ring = exp(-pow((r - 1.09) / .035, 2.)) * 1.3 + exp(-pow((r - 1.16) / .09, 2.)) * .35;      // photon ring
+  float ring = exp(-pow((r - 1.09) / .035, 2.)) * 1.7 + exp(-pow((r - 1.17) / .1, 2.)) * .45;      // photon ring
   float band = smoothstep(1.2, 1.4, r) * smoothstep(3.1, 1.7, r);                                      // lensed far side
   float up = smoothstep(-.15, .75, p.y / r);                                                           // mostly over the top
   float low = smoothstep(.1, -.8, p.y / r) * smoothstep(1.75, 1.35, r) * .5;                           // thin image under it

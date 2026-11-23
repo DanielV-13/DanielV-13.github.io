@@ -3,7 +3,7 @@
 Portafolio personal interactivo. El **universo es el menú principal**: viajas por escalas (agujero negro → cúmulo de galaxias → sistema solar → Tierra) y haces zoom en cada objeto para entrar a una subpágina.
 
 🔗 **Sitio en vivo:** https://danielv-13.github.io
-🗂️ **Versiones anteriores:** [v4](https://danielv-13.github.io/v4/) · [v3](https://danielv-13.github.io/v3/) · [v2 (página con scroll)](https://danielv-13.github.io/v2/) · [v1 (cielo estrellado por materias)](https://danielv-13.github.io/v1/)
+🗂️ **Versiones anteriores:** [v5](https://danielv-13.github.io/v5/) · [v4](https://danielv-13.github.io/v4/) · [v3](https://danielv-13.github.io/v3/) · [v2 (página con scroll)](https://danielv-13.github.io/v2/) · [v1 (cielo estrellado por materias)](https://danielv-13.github.io/v1/)
 
 ## Cómo se navega
 
@@ -31,7 +31,7 @@ assets/logos/     ← logos monocromos (máscaras que se tiñen con la paleta)
 assets/space/     ← nebulosa de fondo y textura de polvo del disco
 assets/js/bh3d.js ← agujero negro 3D (three.js), generado desde src3d/bh3d.js
 src3d/bh3d.js     ← código del agujero negro 3D
-v1/ … v4/         ← versiones anteriores
+v1/ … v5/         ← versiones anteriores
 ```
 
 ## Editar y publicar

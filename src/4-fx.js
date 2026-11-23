@@ -1,31 +1,39 @@
 /* ===================== NAME: particle collision ===================== */
+/* Two beams meet on the name; tracks curl in the magnetic field across the whole hero, with a flash and sparks. */
 const NameFX = {
+  M: 300,
   init() {
-    this.c = $("#namefx"); this.name = $("#name"); this.busy = false; this.last = 0;
-    const size = () => { const r = this.name.getBoundingClientRect(); this.w = r.width + 120; this.h = r.height + 120; this.ctx = fitCanvas(this.c, this.w, this.h); this.c.style.width = this.w + "px"; this.c.style.height = this.h + "px"; this.c.style.left = (this.name.offsetLeft - 60) + "px"; this.c.style.top = (this.name.offsetTop - 60) + "px"; };
+    this.c = $("#namefx"); this.name = $("#name"); this.busy = false;
+    const size = () => { const r = this.name.getBoundingClientRect(), M = this.M; this.w = r.width + M * 2; this.h = r.height + M * 2; this.ctx = fitCanvas(this.c, this.w, this.h); this.c.style.width = this.w + "px"; this.c.style.height = this.h + "px"; this.c.style.left = (this.name.offsetLeft - M) + "px"; this.c.style.top = (this.name.offsetTop - M) + "px"; };
     size(); new ResizeObserver(size).observe(this.name);
     this.name.addEventListener("click", () => this.fire());
     this.name.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); this.fire(); } });
     this.name.addEventListener("mouseenter", () => this.fire());
   },
   fire() {
-    if (this.busy) return; this.busy = true; this.last = performance.now(); Sound.collide();
+    if (this.busy) return; this.busy = true; Sound.collide();
     const w = this.w, h = this.h, cx = w / 2, cy = h / 2, start = performance.now(), cols = ["#7cb2ff", "#ffb45e", "#ff5a76", "#62e3b5", "#ffd166", "#c6b3ff", "#ffffff"];
     let tracks = [];
-    const spawn = () => { tracks = Array.from({ length: 22 }, (_, i) => { const a = Math.random() * Math.PI * 2, v = 1.2 + Math.random() * 3.2; return { x: cx, y: cy, vx: Math.cos(a) * v, vy: Math.sin(a) * v, q: (Math.random() - .5) * .16, col: cols[i % cols.length], tr: [] }; }); };
+    const spawn = () => {
+      tracks = Array.from({ length: 46 }, (_, i) => { const a = Math.random() * 6.283, v = 2.2 + Math.random() * 5.5, muon = i < 3;
+        return { x: cx, y: cy, vx: Math.cos(a) * (muon ? 8 : v), vy: Math.sin(a) * (muon ? 8 : v), q: (Math.random() - .5) * (muon ? .02 : .14), col: muon ? "#e8b64c" : cols[i % cols.length], wd: muon ? 2.6 : .8 + Math.random() * 1.6, tr: [], muon }; });
+    };
     const ctx = this.ctx;
     const loop = now => {
       const el = (now - start) / 1000; ctx.clearRect(0, 0, w, h);
-      if (el < .35 && !REDUCED) {
-        const p = el / .35; ctx.fillStyle = "#7cb2ff"; ctx.shadowColor = "#7cb2ff"; ctx.shadowBlur = 10;
-        ctx.beginPath(); ctx.arc(lerp(0, cx, p), cy, 3, 0, 7); ctx.fill(); ctx.fillStyle = "#ff5a76"; ctx.shadowColor = "#ff5a76"; ctx.beginPath(); ctx.arc(lerp(w, cx, p), cy, 3, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
-        ctx.strokeStyle = "rgba(124,178,255,.4)"; ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(lerp(0, cx, p), cy); ctx.stroke(); ctx.strokeStyle = "rgba(255,90,118,.4)"; ctx.beginPath(); ctx.moveTo(w, cy); ctx.lineTo(lerp(w, cx, p), cy); ctx.stroke();
+      if (el < .32 && !REDUCED) {
+        const p = el / .32; ctx.lineWidth = 2;
+        [["#7cb2ff", 0], ["#ff5a76", w]].forEach(([col, x0]) => { const x = lerp(x0, cx, p); ctx.strokeStyle = col; ctx.globalAlpha = .5; ctx.beginPath(); ctx.moveTo(x0, cy); ctx.lineTo(x, cy); ctx.stroke(); ctx.globalAlpha = 1; ctx.fillStyle = col; ctx.shadowColor = col; ctx.shadowBlur = 14; ctx.beginPath(); ctx.arc(x, cy, 4, 0, 7); ctx.fill(); ctx.shadowBlur = 0; });
       } else {
-        if (!tracks.length) { spawn(); this.name.animate([{ transform: "scale(1)" }, { transform: "scale(1.04)" }, { transform: "scale(1)" }], { duration: 300 }); }
-        const k = clamp((el - .35) / 1.6, 0, 1);
-        if (k < .15) { const f = 1 - k / .15; const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, 60 * (1 - f) + 10); g.addColorStop(0, `rgba(255,255,255,${f})`); g.addColorStop(1, "rgba(255,255,255,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); }
-        tracks.forEach(p => { if (!REDUCED) for (let s = 0; s < 2; s++) { const a = p.q, vx = p.vx * Math.cos(a) - p.vy * Math.sin(a), vy = p.vx * Math.sin(a) + p.vy * Math.cos(a); p.vx = vx * .985; p.vy = vy * .985; p.x += p.vx; p.y += p.vy; p.tr.push([p.x, p.y]); }
-          ctx.strokeStyle = p.col; ctx.globalAlpha = 1 - k; ctx.lineWidth = 1.3; ctx.beginPath(); p.tr.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(cx, cy)); ctx.stroke(); });
+        if (!tracks.length) { spawn(); this.name.animate([{ transform: "scale(1)" }, { transform: "scale(1.05)" }, { transform: "scale(1)" }], { duration: 360 }); }
+        const k = clamp((el - .32) / 2, 0, 1);
+        if (k < .22) { const f = 1 - k / .22, R = 30 + (1 - f) * 220, g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R); g.addColorStop(0, `rgba(255,250,235,${f})`); g.addColorStop(.3, `rgba(255,200,120,${f * .5})`); g.addColorStop(1, "rgba(255,160,80,0)"); ctx.fillStyle = g; ctx.fillRect(0, 0, w, h); }
+        tracks.forEach(p => {
+          if (!REDUCED) for (let s2 = 0; s2 < 3; s2++) { const a = p.q, vx = p.vx * Math.cos(a) - p.vy * Math.sin(a), vy = p.vx * Math.sin(a) + p.vy * Math.cos(a); p.vx = vx * .988; p.vy = vy * .988; p.x += p.vx; p.y += p.vy; p.tr.push([p.x, p.y]); }
+          ctx.globalAlpha = (1 - k) * (p.muon ? 1 : .9); ctx.strokeStyle = p.col; ctx.lineWidth = p.wd; ctx.shadowColor = p.col; ctx.shadowBlur = p.muon ? 10 : 4;
+          ctx.beginPath(); ctx.moveTo(cx, cy); p.tr.forEach(([x, y]) => ctx.lineTo(x, y)); ctx.stroke(); ctx.shadowBlur = 0;
+          if (p.tr.length) { const [x, y] = p.tr[p.tr.length - 1]; ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(x, y, p.muon ? 2.4 : 1.5, 0, 7); ctx.fill(); }
+        });
         ctx.globalAlpha = 1; if (k >= 1) { ctx.clearRect(0, 0, w, h); this.busy = false; return; }
       }
       requestAnimationFrame(loop);
@@ -45,7 +53,7 @@ const CursorFX = {
       if (e.pointerType !== "mouse") return;
       this.head.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`; this.head.style.opacity = 1;
       let vx = e.clientX - this.x, vy = e.clientY - this.y; if (Math.hypot(vx, vy) > 90) { this.pts = []; vx = vy = 0; } this.x = e.clientX; this.y = e.clientY;
-      this.pts.push({ x: this.x, y: this.y, vx: vx * .05, vy: vy * .05, a: 1 }); if (this.pts.length > 40) this.pts.shift(); this.start();
+      this.pts.push({ x: this.x, y: this.y, vx: vx * .04, vy: vy * .04, a: 1 }); if (this.pts.length > 14) this.pts.shift(); this.start();
     }, { passive: true });
     document.documentElement.addEventListener("pointerleave", () => { this.head.style.opacity = 0; this.pts = []; this.x = this.y = -999; });
     addEventListener("blur", () => { this.pts = []; this.x = this.y = -999; });
@@ -53,9 +61,9 @@ const CursorFX = {
   start() { if (this.running) return; this.running = true; const loop = () => { if (this.draw()) requestAnimationFrame(loop); else this.running = false; }; requestAnimationFrame(loop); },
   draw() {
     const c = this.ctx; c.clearRect(0, 0, innerWidth, innerHeight);
-    this.pts.forEach(p => { const s = .12, vx = p.vx * Math.cos(s) - p.vy * Math.sin(s), vy = p.vx * Math.sin(s) + p.vy * Math.cos(s); p.vx = vx * .96; p.vy = vy * .96; p.x += p.vx; p.y += p.vy; p.a -= .035; });
+    this.pts.forEach(p => { const s = .12, vx = p.vx * Math.cos(s) - p.vy * Math.sin(s), vy = p.vx * Math.sin(s) + p.vy * Math.cos(s); p.vx = vx * .96; p.vy = vy * .96; p.x += p.vx; p.y += p.vy; p.a -= .075; });
     this.pts = this.pts.filter(p => p.a > 0);
-    for (let i = 1; i < this.pts.length; i++) { const a = this.pts[i - 1], b = this.pts[i]; c.strokeStyle = `rgba(255,90,118,${b.a * .7})`; c.lineWidth = 1.6 * b.a; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke(); }
+    for (let i = 1; i < this.pts.length; i++) { const a = this.pts[i - 1], b = this.pts[i]; c.strokeStyle = `rgba(255,90,118,${b.a * .55})`; c.lineWidth = 1.5 * b.a; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke(); }
     return this.pts.length > 0;
   }
 };
@@ -229,7 +237,6 @@ function boot() {
   stars(); addEventListener("resize", () => { clearTimeout(boot._r); boot._r = setTimeout(() => { stars(); if (Intro.visible()) CMSCover.draw(); }, 200); });
   langListeners.push(() => { renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext(); Visited.paint(); if ($("#modal").classList.contains("open")) fillModal(); if (Portal.key) Portal.label(); soundLabel(); });
   $$(".seg button").forEach(b => b.onclick = () => { setLang(b.dataset.lang); Sound.click(); });
-  if (LANG !== "en") setLang(LANG);
   const wantSound = store.get("dv_sound", false);
   $("#soundBtn").onclick = () => setSound(!Sound.on);
   if (wantSound) { const once = () => { setSound(true); removeEventListener("pointerdown", once); }; addEventListener("pointerdown", once); }
