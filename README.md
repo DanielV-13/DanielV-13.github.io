@@ -3,7 +3,7 @@
 Portafolio personal interactivo. El **universo es el menú principal**: viajas por escalas (agujero negro → cúmulo de galaxias → sistema solar → Tierra) y haces zoom en cada objeto para entrar a una subpágina.
 
 🔗 **Sitio en vivo:** https://danielv-13.github.io
-🗂️ **Versiones anteriores:** [v3](https://danielv-13.github.io/v3/) · [v2 (página con scroll)](https://danielv-13.github.io/v2/) · [v1 (cielo estrellado por materias)](https://danielv-13.github.io/v1/)
+🗂️ **Versiones anteriores:** [v4](https://danielv-13.github.io/v4/) · [v3](https://danielv-13.github.io/v3/) · [v2 (página con scroll)](https://danielv-13.github.io/v2/) · [v1 (cielo estrellado por materias)](https://danielv-13.github.io/v1/)
 
 ## Cómo se navega
 
@@ -28,8 +28,10 @@ src/3-canvas.js   ← animaciones, universo-menú, portales de vista previa, por
 src/4-fx.js       ← colisión del nombre, cursor-partícula, Particle Invaders, intro, arranque
 assets/projects/  ← imágenes y videos de los proyectos
 assets/logos/     ← logos monocromos (máscaras que se tiñen con la paleta)
-assets/space/     ← galaxia 3D (nube de puntos binaria) y nebulosa de fondo
-v1/, v2/, v3/     ← versiones anteriores
+assets/space/     ← nebulosa de fondo y textura de polvo del disco
+assets/js/bh3d.js ← agujero negro 3D (three.js), generado desde src3d/bh3d.js
+src3d/bh3d.js     ← código del agujero negro 3D
+v1/ … v4/         ← versiones anteriores
 ```
 
 ## Editar y publicar
@@ -38,7 +40,15 @@ v1/, v2/, v3/     ← versiones anteriores
 2. Ejecuta `python build.py` para regenerar `index.html`.
 3. Haz commit y push: GitHub Pages publica en un minuto.
 
+## Agujero negro 3D
+
+`src3d/bh3d.js` se empaqueta con three.js en `assets/js/bh3d.js` (se carga después de abrir la página; mientras tanto se ve el agujero negro 2D):
+
+```
+npm i three esbuild
+npx esbuild src3d/bh3d.js --bundle --format=esm --minify --outfile=assets/js/bh3d.js
+```
+
 ## Créditos
 
-- Nube de puntos de la galaxia («need some space») y nebulosa («Alien Space Nebula»): modelos 3D de Sketchfab con licencia libre, reducidos para la web. _Pendiente: añadir el nombre de sus autores._
-- El agujero negro se renderiza en tiempo real con un shader WebGL propio (sin librerías); si el navegador no tiene WebGL se dibuja una versión 2D.
+- Nebulosa («Alien Space Nebula») y textura de polvo del disco (del modelo «black hole»): recursos de Sketchfab con licencia libre, reducidos para la web. _Pendiente: añadir el nombre de sus autores._

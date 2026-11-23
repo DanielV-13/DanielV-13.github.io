@@ -44,10 +44,11 @@ const CursorFX = {
     addEventListener("pointermove", e => {
       if (e.pointerType !== "mouse") return;
       this.head.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`; this.head.style.opacity = 1;
-      const vx = e.clientX - this.x, vy = e.clientY - this.y; this.x = e.clientX; this.y = e.clientY;
+      let vx = e.clientX - this.x, vy = e.clientY - this.y; if (Math.hypot(vx, vy) > 90) { this.pts = []; vx = vy = 0; } this.x = e.clientX; this.y = e.clientY;
       this.pts.push({ x: this.x, y: this.y, vx: vx * .05, vy: vy * .05, a: 1 }); if (this.pts.length > 40) this.pts.shift(); this.start();
     }, { passive: true });
-    document.documentElement.addEventListener("pointerleave", () => this.head.style.opacity = 0);
+    document.documentElement.addEventListener("pointerleave", () => { this.head.style.opacity = 0; this.pts = []; this.x = this.y = -999; });
+    addEventListener("blur", () => { this.pts = []; this.x = this.y = -999; });
   },
   start() { if (this.running) return; this.running = true; const loop = () => { if (this.draw()) requestAnimationFrame(loop); else this.running = false; }; requestAnimationFrame(loop); },
   draw() {
@@ -79,7 +80,7 @@ const GAME_TXT = {
 const Game = {
   W: 160, H: 144, state: "title", keys: {}, vis: false, full: false,
   init() {
-    this.c = $("#game"); this.ctx = this.c.getContext("2d"); this.home = this.c.parentElement; this.hi = store.get("dv_hi", 0); this.updHi();
+    this.c = $("#game"); this.ctx = this.c.getContext("2d"); this.home = this.c.parentElement; this.fit(); addEventListener("resize", () => this.fit()); this.hi = store.get("dv_hi", 0); this.updHi();
     const map = { ArrowLeft: "left", ArrowRight: "right", a: "left", d: "right", " ": "fire", Enter: "start" };
     addEventListener("keydown", e => {
       const k = map[e.key]; if (!k || !this.vis) return;
@@ -97,13 +98,15 @@ const Game = {
     this.draw();
   },
   capturing() { return this.state === "play" && this.vis; },
+  /* the game thinks in 160×144 but the canvas has k× more pixels, so everything stays crisp */
+  fit() { const w = this.c.getBoundingClientRect().width || 260, k = clamp(Math.round(w * DPR / 160), 2, 10); if (this.k !== k) { this.k = k; this.c.width = 160 * k; this.c.height = 144 * k; } this.ctx.setTransform(this.k, 0, 0, this.k, 0, 0); this.draw(performance.now()); },
   setVis(v) { this.vis = v; if (v) this.run(); else { this.keys = {}; if (this.full) this.exitFull(); if (this.state === "play") this.state = "pause"; } },
   updHi() { $("#hiscore").textContent = "HI " + String(this.hi).padStart(4, "0"); },
   /* Start goes full screen; Esc or ✕ puts the console back */
-  enterFull() { if (this.full) return; this.full = true; $("#gScreen").appendChild(this.c); $("#gameFull").classList.add("on"); this.c.focus({ preventScroll: true }); },
+  enterFull() { if (this.full) return; this.full = true; $("#gScreen").appendChild(this.c); $("#gameFull").classList.add("on"); this.c.focus({ preventScroll: true }); requestAnimationFrame(() => this.fit()); },
   exitFull() {
     if (!this.full) return; this.full = false; $("#gameFull").classList.remove("on"); this.home.appendChild(this.c);
-    this.keys = {}; if (this.state === "play") this.state = "pause"; this.draw(performance.now());
+    this.keys = {}; if (this.state === "play") this.state = "pause"; requestAnimationFrame(() => this.fit());
   },
   begin() {
     this.enterFull();
@@ -232,9 +235,9 @@ function boot() {
   if (wantSound) { const once = () => { setSound(true); removeEventListener("pointerdown", once); }; addEventListener("pointerdown", once); }
   $$("[data-copy]").forEach(b => b.onclick = copyEmail);
   $$("[data-back]").forEach(b => b.onclick = () => { Sound.click(); goHome(); });
+  $$("[data-fall]").forEach(b => b.onclick = () => { Sound.click(); Uni.go(1); });
   $("#brand").onclick = $("#backBtn").onclick = () => { Sound.click(); goHome(); };
   $$("#cvBtn, [data-cv]").forEach(b => b.onclick = () => { toast(T().cvmsg); Sound.click(); });
-  setTimeout(() => { Space.load(); }, 2500);
   $("#mClose").onclick = () => closeModal(); $("#mPrev").onclick = () => stepModal(-1); $("#mNext").onclick = () => stepModal(1);
   $("#modal").addEventListener("click", e => { if (e.target.id === "modal") closeModal(); });
   addEventListener("hashchange", route);

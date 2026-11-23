@@ -58,7 +58,7 @@ body.in-view .topbar{background:linear-gradient(180deg,rgba(3,5,15,.97) 0%,rgba(
 @keyframes callHome{0%{box-shadow:0 0 0 0 rgba(232,182,76,.55)}70%,100%{box-shadow:0 0 0 12px rgba(232,182,76,0)}}
 .backbtn .bh{position:relative;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle,#000 34%,transparent 36%),conic-gradient(from 0deg,#ffcf7a,#ff8c2a,#3a1a00,#ffe2b8,#ff8c2a,#3a1a00,#ffcf7a);animation:spin 2.4s linear infinite;box-shadow:0 0 14px rgba(255,160,60,.7)}
 .backbtn .bh::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(255,207,122,.5);transform:scaleY(.35) rotate(-12deg)}
-.backbtn .left{font-size:10.5px;color:#1d1203;background:var(--ember);border-radius:999px;padding:1px 7px;margin-left:2px;font-weight:700;animation:blink 1.6s ease-in-out infinite}
+.backbtn .left{white-space:nowrap;font-size:10.5px;color:#1d1203;background:var(--ember);border-radius:999px;padding:1px 7px;margin-left:2px;font-weight:700;animation:blink 1.6s ease-in-out infinite}
 .backbtn:hover{background:rgba(232,182,76,.2);transform:scale(1.04)}
 .backbtn:hover .bh{animation-duration:.8s}
 body.in-view .backbtn{display:inline-flex}
@@ -84,15 +84,22 @@ body.in-view .backbtn{display:inline-flex}
 
 /* ---------- Home: the universe as main menu ---------- */
 #home{position:fixed;inset:0;z-index:1;transition:opacity .6s;background:#000}
-#nebula{position:absolute;inset:-4%;background:#000 center/cover no-repeat;opacity:0;will-change:opacity,transform;transition:transform 1.2s ease-out}
-#bh3d{position:absolute;left:0;top:0;pointer-events:none;transform-origin:50% 50%;opacity:0;z-index:2}
+#nebula{position:absolute;inset:-3%;background:#000 4% 40%/auto 122% no-repeat;opacity:0;will-change:opacity,transform;transition:transform 1.2s ease-out,background-position 1.6s cubic-bezier(.65,0,.35,1),opacity 1.2s}
+#bh3d{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;z-index:2}
 #uni{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:none}
 body.in-view #home{opacity:0;pointer-events:none}
 .hero{position:absolute;left:clamp(22px,6vw,90px);top:50%;transform:translateY(-40%);z-index:3;pointer-events:none;transition:opacity .5s,transform .5s}
 .hero.hidden{opacity:0;transform:translateY(-34%)}
 .hero .namewrap{position:relative;display:inline-block;pointer-events:auto}
-.hero h1{font-family:var(--dots);font-weight:900;font-size:clamp(46px,7.4vw,112px);line-height:.95;letter-spacing:2px;cursor:pointer;user-select:none;text-shadow:0 0 30px rgba(124,178,255,.3)}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,6.2vw,92px);line-height:1.02;letter-spacing:-1px;cursor:pointer;user-select:none;text-shadow:0 0 30px rgba(124,178,255,.3);animation:flicker 9s linear infinite}
+@keyframes flicker{0%,88%,100%{opacity:1;text-shadow:0 0 30px rgba(124,178,255,.3)}89%{opacity:.55}89.6%{opacity:1}90.4%{opacity:.7;text-shadow:0 0 6px rgba(124,178,255,.2)}91%{opacity:1;text-shadow:0 0 40px rgba(124,178,255,.5)}95%{opacity:.85}95.4%{opacity:1}}
+.orb{position:relative;display:inline-block}
+.orbit{position:absolute;left:50%;top:52%;width:1.25em;height:1.25em;margin:-.625em 0 0 -.625em;transform:rotate(-22deg) scaleY(.36);pointer-events:none}
+.orbit::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(232,182,76,.22)}
+.orbit b{position:absolute;left:50%;top:50%;width:0;height:0;animation:spin 2.6s linear infinite}
+.orbit b::after{content:"";position:absolute;left:.6em;top:-4px;width:8px;height:8px;border-radius:50%;background:#ffd166;box-shadow:0 0 10px #ffd166,0 0 3px #fff}
 .hero h1 span{color:var(--signal)}
+.hero h1 span.orb{color:inherit}
 #namefx{position:absolute;pointer-events:none;z-index:2}
 .hero p{margin:20px 0 0;font-size:clamp(13px,1.2vw,15.5px);color:#c3cbea;letter-spacing:.04em}
 .hero p b{font-weight:700}
@@ -102,7 +109,9 @@ body.in-view #home{opacity:0;pointer-events:none}
 .hlink:hover{border-color:var(--ember);transform:translateY(-2px);background:rgba(232,182,76,.1)}
 .hlink svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
 .hlink.main{background:var(--ember);border-color:var(--ember);color:#1d1203}
-.feyn{position:absolute;right:-190px;top:-54px;width:180px;height:96px;pointer-events:none;opacity:.9}
+.hlink.main:hover{background:#f2c35e}
+.feyn{width:150px;height:80px;flex:none;opacity:.85}
+.contact .sign{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
 .feyn path,.feyn line{fill:none;stroke-width:1.6;stroke-linecap:round}
 .feyn .f{stroke:#a8c8ff}.feyn .m{stroke:var(--mint)}
 .feyn .ph{stroke:var(--ember);stroke-dasharray:4 3;animation:phot 1.2s linear infinite}
@@ -114,7 +123,7 @@ body.in-view #home{opacity:0;pointer-events:none}
 .stopcard{position:absolute;right:clamp(18px,4vw,56px);bottom:96px;z-index:3;width:min(300px,calc(100vw - 36px));background:rgba(4,6,18,.66);backdrop-filter:blur(10px);border:1px solid rgba(232,182,76,.35);border-radius:16px;padding:16px 18px;transition:opacity .4s,transform .4s}
 .stopcard.hidden{opacity:0;transform:translateY(12px);pointer-events:none}
 body.portal-on .stopcard{opacity:0;pointer-events:none}
-@media (max-width:900px){.stopcard.bh-m{display:none}}
+.stopcard.bh-m{display:none}
 .stopcard .k{font-size:10.5px;letter-spacing:.14em;color:var(--ember);text-transform:uppercase}
 .stopcard h2{font-family:var(--display);font-size:13px;line-height:1.6;margin:8px 0 12px}
 .stopcard button{width:100%;border:0;border-radius:10px;padding:10px 12px;cursor:pointer;background:var(--ember);color:#1d1203;font-weight:700;font-size:13px}
@@ -300,7 +309,7 @@ body.in-view .view-bg{opacity:1}
 .c-screenwrap .lbl{font-size:8.5px;color:#cfd2dc;letter-spacing:.1em;margin-bottom:6px;display:flex;justify-content:space-between}
 .c-screenwrap .lbl i{width:7px;height:7px;border-radius:50%;background:#ff3b3b;display:inline-block;margin-right:4px;box-shadow:0 0 6px #ff3b3b}
 #game:focus,#game:focus-visible{outline:none}
-#game{width:100%;aspect-ratio:10/9;background:#0b1410;display:block;border-radius:2px;image-rendering:pixelated}
+#game{width:100%;aspect-ratio:10/9;background:#0b1410;display:block;border-radius:2px}
 .c-brand{font-family:var(--display);color:#2f3a7a;font-size:11px;margin:12px 4px 16px}
 .c-controls{display:flex;justify-content:space-between;align-items:center}
 .dpad{position:relative;width:96px;height:96px}
@@ -322,10 +331,16 @@ body.in-view .view-bg{opacity:1}
 .contact .acts{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:flex-end}
 .contact .mail{width:100%;font-size:12.5px;color:var(--muted);text-align:right;user-select:all}
 .contact .btn{min-width:170px}
-.contact .next{width:100%;display:flex;justify-content:center;margin-top:34px}
-.nextstop{display:flex;align-items:center;gap:18px;padding:14px 22px 14px 14px;border-radius:20px;border:1px solid rgba(232,182,76,.55);background:linear-gradient(110deg,rgba(232,182,76,.12),rgba(124,178,255,.06));cursor:pointer;text-align:left;transition:transform .25s,border-color .25s,box-shadow .25s;min-width:min(420px,100%)}
-.nextstop:hover{transform:translateY(-3px);border-color:var(--ember);box-shadow:0 14px 40px rgba(232,182,76,.18)}
-.nextstop .art{flex:none;width:70px;height:70px;border-radius:50%;position:relative;background:#04060f;overflow:hidden;box-shadow:0 0 24px rgba(124,178,255,.25)}
+.contact .next{width:100%;margin-top:30px;border-top:1px dashed rgba(30,43,88,.8);padding-top:6px}
+.nextstop{width:100%;display:flex;align-items:center;gap:14px;background:none;border:0;padding:10px 0;cursor:pointer;color:var(--muted);font-size:12.5px;text-align:left}
+.nextstop .path{flex:1;min-width:30px;height:1px;position:relative;background:linear-gradient(90deg,rgba(232,182,76,0),rgba(232,182,76,.45));transition:background .3s}
+.nextstop .path::after{content:"";position:absolute;top:-2px;left:0;width:5px;height:5px;border-radius:50%;background:var(--ember);box-shadow:0 0 8px var(--ember);opacity:0}
+.nextstop:hover .path{background:linear-gradient(90deg,rgba(232,182,76,.1),var(--ember))}
+.nextstop:hover .path::after{opacity:1;animation:ride 1.1s ease-in-out infinite}
+@keyframes ride{from{left:0}to{left:calc(100% - 5px)}}
+.nextstop .lbl{color:var(--ink);white-space:nowrap}
+.nextstop .go{color:var(--ember);transition:transform .2s}.nextstop:hover .go{transform:translateX(4px)}
+.nextstop .art{flex:none;width:22px;height:22px;border-radius:50%;position:relative;background:#04060f;overflow:hidden;box-shadow:0 0 10px rgba(232,182,76,.35)}
 .nextstop .art i{position:absolute;inset:0;border-radius:50%}
 .art.sun i{inset:22%;background:radial-gradient(circle at 35% 35%,#fff7d6,#ffcf5a 55%,#ff8c2a);box-shadow:0 0 18px #ffb347}
 .art.sun::before{content:"";position:absolute;inset:6%;border-radius:50%;border:1px dashed rgba(124,178,255,.5);animation:spin 12s linear infinite}
@@ -334,10 +349,7 @@ body.in-view .view-bg{opacity:1}
 .art.sat i{inset:30%;background:#e8edff;border-radius:3px;box-shadow:-16px 0 0 -4px #7cb2ff,16px 0 0 -4px #7cb2ff;animation:bob 2.4s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-5px) rotate(-8deg)}}
 .art.bh i{background:radial-gradient(circle,#000 30%,transparent 32%),conic-gradient(#ffcf7a,#ff8c2a,#3a1a00,#ffe2b8,#ff8c2a,#3a1a00,#ffcf7a);animation:spin 3s linear infinite;inset:18%}
-.nextstop .k{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ember)}
-.nextstop b{display:block;font-family:var(--display);font-weight:600;font-size:17px;margin:3px 0}
-.nextstop small{color:var(--muted);font-size:12px}
-.credits{width:100%;font-size:10.5px;color:#4f5a85;text-align:center;margin-top:18px}
+.nextstop .k{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ember);white-space:nowrap}
 
 /* ---------- Intro: the book on a starfield ---------- */
 #intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse 70% 60% at 50% 40%,#0c1638,#02030a 75%);transition:opacity .8s}
@@ -409,8 +421,9 @@ body.in-view .view-bg{opacity:1}
   .travel button.arw .bl::after{top:100%;right:14px;margin-top:0;border-color:transparent;border-top-color:var(--ember)}
   #uniPrev .bl{right:auto;left:0}#uniPrev .bl::after{right:auto;left:14px;border-color:transparent;border-top-color:var(--ember)}
   .hero{top:15%;transform:none}
-  .feyn{right:auto;left:calc(100% + 10px);top:-4px;width:104px;height:56px}
   .hero-links{margin-top:16px;gap:7px}.hlink{padding:7px 11px;font-size:12px}
+  .hero h1{font-size:54px}
+  .nextstop .lbl{white-space:normal}.nextstop .path{min-width:16px}
   .hero.hidden{transform:translateY(8px)}
   .portal{width:150px}.portal .ring{width:150px;height:150px}.portal canvas{width:140px;height:140px}
   .view{padding:calc(var(--top) + 16px) 16px 110px}
@@ -491,13 +504,11 @@ body.in-view .view-bg{opacity:1}
   <canvas id="uni" aria-label="Interactive universe: the main menu of this portfolio"></canvas>
   <canvas id="bh3d" aria-hidden="true"></canvas>
   <div class="hero" id="hero">
-    <div class="namewrap"><h1 id="name" tabindex="0">DANIEL<br><span>VACA</span></h1><canvas id="namefx" aria-hidden="true"></canvas>
-      <svg class="feyn" viewBox="0 0 180 96" aria-hidden="true"><line class="f" x1="8" y1="10" x2="52" y2="48"/><line class="f" x1="8" y1="86" x2="52" y2="48"/><path class="f" d="M30 29l-6-1 2 6M30 67l-6 1 2-6"/>
-        <path class="ph" d="M52 48 q4.5 -8 9 0 t9 0 t9 0 t9 0 t9 0 t9 0 t9 0"/><line class="m" x1="115" y1="48" x2="170" y2="10"/><line class="m" x1="115" y1="48" x2="170" y2="86"/><path class="m" d="M147 26l6-1-2 6M147 70l6 1-2-6"/>
-        <circle cx="52" cy="48" r="2.4"/><circle cx="115" cy="48" r="2.4"/><text x="0" y="8">e⁻</text><text x="0" y="96">e⁺</text><text x="78" y="36">γ</text><text x="168" y="8">μ⁻</text><text x="168" y="96">μ⁺</text></svg></div>
+    <div class="namewrap"><h1 id="name" tabindex="0">DAN<span class="orb">I<i class="orbit" aria-hidden="true"><b></b></i></span>EL<br><span>VACA</span></h1><canvas id="namefx" aria-hidden="true"></canvas></div>
     <p data-i18n-html="hero.line"><b>Computer Engineering</b> · <span class="c1">Physics</span> · <span class="c2">AI</span> · <span class="c3">Data</span></p>
     <div class="hero-links">
-      <a class="hlink main" href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg>LinkedIn</a>
+      <button class="hlink main" type="button" data-fall><span data-i18n="hero.fall">Fall in</span> →</button>
+      <a class="hlink" href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg>LinkedIn</a>
       <a class="hlink" href="https://github.com/DanielV-13" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M9 19c-4 1.5-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub</a>
       <button class="hlink" type="button" data-cv><svg viewBox="0 0 24 24"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></svg>CV</button>
       <button class="hlink" type="button" data-copy><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span data-i18n="hero.mail">Email</span></button>
@@ -568,14 +579,16 @@ body.in-view .view-bg{opacity:1}
 
 <template id="contactTpl">
   <div class="contact">
-    <div class="big" data-i18n-html="contact.big">Curious about the same questions? <em>Let's talk.</em></div>
+    <div class="sign"><div class="big" data-i18n-html="contact.big">Curious about the same questions? <em>Let's talk.</em></div>
+      <svg class="feyn" viewBox="0 0 180 96" aria-hidden="true"><line class="f" x1="8" y1="10" x2="52" y2="48"/><line class="f" x1="8" y1="86" x2="52" y2="48"/><path class="f" d="M30 29l-6-1 2 6M30 67l-6 1 2-6"/>
+        <path class="ph" d="M52 48 q4.5 -8 9 0 t9 0 t9 0 t9 0 t9 0 t9 0 t9 0"/><line class="m" x1="115" y1="48" x2="170" y2="10"/><line class="m" x1="115" y1="48" x2="170" y2="86"/><path class="m" d="M147 26l6-1-2 6M147 70l6 1-2-6"/>
+        <circle cx="52" cy="48" r="2.4"/><circle cx="115" cy="48" r="2.4"/><text x="0" y="8">e⁻</text><text x="0" y="96">e⁺</text><text x="78" y="36">γ</text><text x="168" y="8">μ⁻</text><text x="168" y="96">μ⁺</text></svg></div>
     <div class="acts">
       <a class="btn" href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg>LinkedIn</a>
       <button class="btn ghost" type="button" data-copy><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span data-i18n="contact.copy">Copy email</span></button>
       <span class="mail">daniel.vacavelastegui@gmail.com</span>
     </div>
     <div class="next"><button class="nextstop" type="button" data-next></button></div>
-    <div class="credits" data-i18n="contact.credits">Galaxy point cloud and nebula: 3D assets from Sketchfab (free licence) · black hole rendered in real time</div>
   </div>
 </template>
 

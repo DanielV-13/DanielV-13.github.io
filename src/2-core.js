@@ -22,7 +22,7 @@ let LANG = store.get("dv_lang", "en");
 const ES = {
   "intro.skip": "Saltar intro", "intro.chapter": "Capítulo I", "intro.pagetitle": "Hacia el horizonte de sucesos",
   "intro.sub": "Mi Portafolio", "hero.mail": "Correo", "arc.help": "← → mover · Espacio disparar · Esc salir",
-  "contact.credits": "Nube de puntos de la galaxia y nebulosa: modelos 3D de Sketchfab (licencia libre) · agujero negro renderizado en tiempo real", "intro.subsmall": "física · IA · datos", "intro.open": "Abrir el libro", "intro.hint": "o pulsa Enter",
+  "hero.fall": "Déjate caer", "intro.subsmall": "física · IA · datos", "intro.open": "Abrir el libro", "intro.hint": "o pulsa Enter",
   "top.back": "Universo", "hero.line": "<b>Ingeniería en Computación</b> · <span class=\"c1\">Física</span> · <span class=\"c2\">IA</span> · <span class=\"c3\">Datos</span>",
   "home.hint": "haz scroll ↕ o usa las flechas para viajar",
   "work.title": "Cosas que he <em>construido</em>",
@@ -159,7 +159,7 @@ const NEXT = { work: { level: 2, art: "sun", k: "nextSolar" }, about: { level: 3
 function renderNext() {
   $$(".view").forEach(v => {
     const n = NEXT[v.dataset.view], b = $("[data-next]", v); if (!n || !b) return;
-    b.innerHTML = `<span class="art ${n.art}"><i></i></span><span><span class="k">${T().nextK}</span><b>${esc(T()[n.k])}</b><small>${T().travel}</small></span>`;
+    b.innerHTML = `<span class="k">${T().nextK}</span><span class="lbl">${esc(T()[n.k])}</span><span class="path"></span><span class="art ${n.art}"><i></i></span><span class="go">→</span>`;
     b.onclick = () => { Sound.click(); Uni.pending = { level: n.level, portal: n.portal }; goHome(); };
   });
 }

@@ -58,7 +58,7 @@ body.in-view .topbar{background:linear-gradient(180deg,rgba(3,5,15,.97) 0%,rgba(
 @keyframes callHome{0%{box-shadow:0 0 0 0 rgba(232,182,76,.55)}70%,100%{box-shadow:0 0 0 12px rgba(232,182,76,0)}}
 .backbtn .bh{position:relative;width:28px;height:28px;border-radius:50%;background:radial-gradient(circle,#000 34%,transparent 36%),conic-gradient(from 0deg,#ffcf7a,#ff8c2a,#3a1a00,#ffe2b8,#ff8c2a,#3a1a00,#ffcf7a);animation:spin 2.4s linear infinite;box-shadow:0 0 14px rgba(255,160,60,.7)}
 .backbtn .bh::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(255,207,122,.5);transform:scaleY(.35) rotate(-12deg)}
-.backbtn .left{font-size:10.5px;color:#1d1203;background:var(--ember);border-radius:999px;padding:1px 7px;margin-left:2px;font-weight:700;animation:blink 1.6s ease-in-out infinite}
+.backbtn .left{white-space:nowrap;font-size:10.5px;color:#1d1203;background:var(--ember);border-radius:999px;padding:1px 7px;margin-left:2px;font-weight:700;animation:blink 1.6s ease-in-out infinite}
 .backbtn:hover{background:rgba(232,182,76,.2);transform:scale(1.04)}
 .backbtn:hover .bh{animation-duration:.8s}
 body.in-view .backbtn{display:inline-flex}
@@ -84,15 +84,22 @@ body.in-view .backbtn{display:inline-flex}
 
 /* ---------- Home: the universe as main menu ---------- */
 #home{position:fixed;inset:0;z-index:1;transition:opacity .6s;background:#000}
-#nebula{position:absolute;inset:-4%;background:#000 center/cover no-repeat;opacity:0;will-change:opacity,transform;transition:transform 1.2s ease-out}
-#bh3d{position:absolute;left:0;top:0;pointer-events:none;transform-origin:50% 50%;opacity:0;z-index:2}
+#nebula{position:absolute;inset:-3%;background:#000 4% 40%/auto 122% no-repeat;opacity:0;will-change:opacity,transform;transition:transform 1.2s ease-out,background-position 1.6s cubic-bezier(.65,0,.35,1),opacity 1.2s}
+#bh3d{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0;z-index:2}
 #uni{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:none}
 body.in-view #home{opacity:0;pointer-events:none}
 .hero{position:absolute;left:clamp(22px,6vw,90px);top:50%;transform:translateY(-40%);z-index:3;pointer-events:none;transition:opacity .5s,transform .5s}
 .hero.hidden{opacity:0;transform:translateY(-34%)}
 .hero .namewrap{position:relative;display:inline-block;pointer-events:auto}
-.hero h1{font-family:var(--dots);font-weight:900;font-size:clamp(46px,7.4vw,112px);line-height:.95;letter-spacing:2px;cursor:pointer;user-select:none;text-shadow:0 0 30px rgba(124,178,255,.3)}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,6.2vw,92px);line-height:1.02;letter-spacing:-1px;cursor:pointer;user-select:none;text-shadow:0 0 30px rgba(124,178,255,.3);animation:flicker 9s linear infinite}
+@keyframes flicker{0%,88%,100%{opacity:1;text-shadow:0 0 30px rgba(124,178,255,.3)}89%{opacity:.55}89.6%{opacity:1}90.4%{opacity:.7;text-shadow:0 0 6px rgba(124,178,255,.2)}91%{opacity:1;text-shadow:0 0 40px rgba(124,178,255,.5)}95%{opacity:.85}95.4%{opacity:1}}
+.orb{position:relative;display:inline-block}
+.orbit{position:absolute;left:50%;top:52%;width:1.25em;height:1.25em;margin:-.625em 0 0 -.625em;transform:rotate(-22deg) scaleY(.36);pointer-events:none}
+.orbit::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(232,182,76,.22)}
+.orbit b{position:absolute;left:50%;top:50%;width:0;height:0;animation:spin 2.6s linear infinite}
+.orbit b::after{content:"";position:absolute;left:.6em;top:-4px;width:8px;height:8px;border-radius:50%;background:#ffd166;box-shadow:0 0 10px #ffd166,0 0 3px #fff}
 .hero h1 span{color:var(--signal)}
+.hero h1 span.orb{color:inherit}
 #namefx{position:absolute;pointer-events:none;z-index:2}
 .hero p{margin:20px 0 0;font-size:clamp(13px,1.2vw,15.5px);color:#c3cbea;letter-spacing:.04em}
 .hero p b{font-weight:700}
@@ -102,7 +109,9 @@ body.in-view #home{opacity:0;pointer-events:none}
 .hlink:hover{border-color:var(--ember);transform:translateY(-2px);background:rgba(232,182,76,.1)}
 .hlink svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8}
 .hlink.main{background:var(--ember);border-color:var(--ember);color:#1d1203}
-.feyn{position:absolute;right:-190px;top:-54px;width:180px;height:96px;pointer-events:none;opacity:.9}
+.hlink.main:hover{background:#f2c35e}
+.feyn{width:150px;height:80px;flex:none;opacity:.85}
+.contact .sign{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
 .feyn path,.feyn line{fill:none;stroke-width:1.6;stroke-linecap:round}
 .feyn .f{stroke:#a8c8ff}.feyn .m{stroke:var(--mint)}
 .feyn .ph{stroke:var(--ember);stroke-dasharray:4 3;animation:phot 1.2s linear infinite}
@@ -114,7 +123,7 @@ body.in-view #home{opacity:0;pointer-events:none}
 .stopcard{position:absolute;right:clamp(18px,4vw,56px);bottom:96px;z-index:3;width:min(300px,calc(100vw - 36px));background:rgba(4,6,18,.66);backdrop-filter:blur(10px);border:1px solid rgba(232,182,76,.35);border-radius:16px;padding:16px 18px;transition:opacity .4s,transform .4s}
 .stopcard.hidden{opacity:0;transform:translateY(12px);pointer-events:none}
 body.portal-on .stopcard{opacity:0;pointer-events:none}
-@media (max-width:900px){.stopcard.bh-m{display:none}}
+.stopcard.bh-m{display:none}
 .stopcard .k{font-size:10.5px;letter-spacing:.14em;color:var(--ember);text-transform:uppercase}
 .stopcard h2{font-family:var(--display);font-size:13px;line-height:1.6;margin:8px 0 12px}
 .stopcard button{width:100%;border:0;border-radius:10px;padding:10px 12px;cursor:pointer;background:var(--ember);color:#1d1203;font-weight:700;font-size:13px}
@@ -300,7 +309,7 @@ body.in-view .view-bg{opacity:1}
 .c-screenwrap .lbl{font-size:8.5px;color:#cfd2dc;letter-spacing:.1em;margin-bottom:6px;display:flex;justify-content:space-between}
 .c-screenwrap .lbl i{width:7px;height:7px;border-radius:50%;background:#ff3b3b;display:inline-block;margin-right:4px;box-shadow:0 0 6px #ff3b3b}
 #game:focus,#game:focus-visible{outline:none}
-#game{width:100%;aspect-ratio:10/9;background:#0b1410;display:block;border-radius:2px;image-rendering:pixelated}
+#game{width:100%;aspect-ratio:10/9;background:#0b1410;display:block;border-radius:2px}
 .c-brand{font-family:var(--display);color:#2f3a7a;font-size:11px;margin:12px 4px 16px}
 .c-controls{display:flex;justify-content:space-between;align-items:center}
 .dpad{position:relative;width:96px;height:96px}
@@ -322,10 +331,16 @@ body.in-view .view-bg{opacity:1}
 .contact .acts{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:flex-end}
 .contact .mail{width:100%;font-size:12.5px;color:var(--muted);text-align:right;user-select:all}
 .contact .btn{min-width:170px}
-.contact .next{width:100%;display:flex;justify-content:center;margin-top:34px}
-.nextstop{display:flex;align-items:center;gap:18px;padding:14px 22px 14px 14px;border-radius:20px;border:1px solid rgba(232,182,76,.55);background:linear-gradient(110deg,rgba(232,182,76,.12),rgba(124,178,255,.06));cursor:pointer;text-align:left;transition:transform .25s,border-color .25s,box-shadow .25s;min-width:min(420px,100%)}
-.nextstop:hover{transform:translateY(-3px);border-color:var(--ember);box-shadow:0 14px 40px rgba(232,182,76,.18)}
-.nextstop .art{flex:none;width:70px;height:70px;border-radius:50%;position:relative;background:#04060f;overflow:hidden;box-shadow:0 0 24px rgba(124,178,255,.25)}
+.contact .next{width:100%;margin-top:30px;border-top:1px dashed rgba(30,43,88,.8);padding-top:6px}
+.nextstop{width:100%;display:flex;align-items:center;gap:14px;background:none;border:0;padding:10px 0;cursor:pointer;color:var(--muted);font-size:12.5px;text-align:left}
+.nextstop .path{flex:1;min-width:30px;height:1px;position:relative;background:linear-gradient(90deg,rgba(232,182,76,0),rgba(232,182,76,.45));transition:background .3s}
+.nextstop .path::after{content:"";position:absolute;top:-2px;left:0;width:5px;height:5px;border-radius:50%;background:var(--ember);box-shadow:0 0 8px var(--ember);opacity:0}
+.nextstop:hover .path{background:linear-gradient(90deg,rgba(232,182,76,.1),var(--ember))}
+.nextstop:hover .path::after{opacity:1;animation:ride 1.1s ease-in-out infinite}
+@keyframes ride{from{left:0}to{left:calc(100% - 5px)}}
+.nextstop .lbl{color:var(--ink);white-space:nowrap}
+.nextstop .go{color:var(--ember);transition:transform .2s}.nextstop:hover .go{transform:translateX(4px)}
+.nextstop .art{flex:none;width:22px;height:22px;border-radius:50%;position:relative;background:#04060f;overflow:hidden;box-shadow:0 0 10px rgba(232,182,76,.35)}
 .nextstop .art i{position:absolute;inset:0;border-radius:50%}
 .art.sun i{inset:22%;background:radial-gradient(circle at 35% 35%,#fff7d6,#ffcf5a 55%,#ff8c2a);box-shadow:0 0 18px #ffb347}
 .art.sun::before{content:"";position:absolute;inset:6%;border-radius:50%;border:1px dashed rgba(124,178,255,.5);animation:spin 12s linear infinite}
@@ -334,10 +349,7 @@ body.in-view .view-bg{opacity:1}
 .art.sat i{inset:30%;background:#e8edff;border-radius:3px;box-shadow:-16px 0 0 -4px #7cb2ff,16px 0 0 -4px #7cb2ff;animation:bob 2.4s ease-in-out infinite}
 @keyframes bob{50%{transform:translateY(-5px) rotate(-8deg)}}
 .art.bh i{background:radial-gradient(circle,#000 30%,transparent 32%),conic-gradient(#ffcf7a,#ff8c2a,#3a1a00,#ffe2b8,#ff8c2a,#3a1a00,#ffcf7a);animation:spin 3s linear infinite;inset:18%}
-.nextstop .k{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ember)}
-.nextstop b{display:block;font-family:var(--display);font-weight:600;font-size:17px;margin:3px 0}
-.nextstop small{color:var(--muted);font-size:12px}
-.credits{width:100%;font-size:10.5px;color:#4f5a85;text-align:center;margin-top:18px}
+.nextstop .k{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ember);white-space:nowrap}
 
 /* ---------- Intro: the book on a starfield ---------- */
 #intro{position:fixed;inset:0;z-index:100;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse 70% 60% at 50% 40%,#0c1638,#02030a 75%);transition:opacity .8s}
@@ -409,8 +421,9 @@ body.in-view .view-bg{opacity:1}
   .travel button.arw .bl::after{top:100%;right:14px;margin-top:0;border-color:transparent;border-top-color:var(--ember)}
   #uniPrev .bl{right:auto;left:0}#uniPrev .bl::after{right:auto;left:14px;border-color:transparent;border-top-color:var(--ember)}
   .hero{top:15%;transform:none}
-  .feyn{right:auto;left:calc(100% + 10px);top:-4px;width:104px;height:56px}
   .hero-links{margin-top:16px;gap:7px}.hlink{padding:7px 11px;font-size:12px}
+  .hero h1{font-size:54px}
+  .nextstop .lbl{white-space:normal}.nextstop .path{min-width:16px}
   .hero.hidden{transform:translateY(8px)}
   .portal{width:150px}.portal .ring{width:150px;height:150px}.portal canvas{width:140px;height:140px}
   .view{padding:calc(var(--top) + 16px) 16px 110px}
@@ -491,13 +504,11 @@ body.in-view .view-bg{opacity:1}
   <canvas id="uni" aria-label="Interactive universe: the main menu of this portfolio"></canvas>
   <canvas id="bh3d" aria-hidden="true"></canvas>
   <div class="hero" id="hero">
-    <div class="namewrap"><h1 id="name" tabindex="0">DANIEL<br><span>VACA</span></h1><canvas id="namefx" aria-hidden="true"></canvas>
-      <svg class="feyn" viewBox="0 0 180 96" aria-hidden="true"><line class="f" x1="8" y1="10" x2="52" y2="48"/><line class="f" x1="8" y1="86" x2="52" y2="48"/><path class="f" d="M30 29l-6-1 2 6M30 67l-6 1 2-6"/>
-        <path class="ph" d="M52 48 q4.5 -8 9 0 t9 0 t9 0 t9 0 t9 0 t9 0 t9 0"/><line class="m" x1="115" y1="48" x2="170" y2="10"/><line class="m" x1="115" y1="48" x2="170" y2="86"/><path class="m" d="M147 26l6-1-2 6M147 70l6 1-2-6"/>
-        <circle cx="52" cy="48" r="2.4"/><circle cx="115" cy="48" r="2.4"/><text x="0" y="8">e⁻</text><text x="0" y="96">e⁺</text><text x="78" y="36">γ</text><text x="168" y="8">μ⁻</text><text x="168" y="96">μ⁺</text></svg></div>
+    <div class="namewrap"><h1 id="name" tabindex="0">DAN<span class="orb">I<i class="orbit" aria-hidden="true"><b></b></i></span>EL<br><span>VACA</span></h1><canvas id="namefx" aria-hidden="true"></canvas></div>
     <p data-i18n-html="hero.line"><b>Computer Engineering</b> · <span class="c1">Physics</span> · <span class="c2">AI</span> · <span class="c3">Data</span></p>
     <div class="hero-links">
-      <a class="hlink main" href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg>LinkedIn</a>
+      <button class="hlink main" type="button" data-fall><span data-i18n="hero.fall">Fall in</span> →</button>
+      <a class="hlink" href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg>LinkedIn</a>
       <a class="hlink" href="https://github.com/DanielV-13" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M9 19c-4 1.5-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>GitHub</a>
       <button class="hlink" type="button" data-cv><svg viewBox="0 0 24 24"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4M9 13h6M9 17h6"/></svg>CV</button>
       <button class="hlink" type="button" data-copy><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span data-i18n="hero.mail">Email</span></button>
@@ -568,14 +579,16 @@ body.in-view .view-bg{opacity:1}
 
 <template id="contactTpl">
   <div class="contact">
-    <div class="big" data-i18n-html="contact.big">Curious about the same questions? <em>Let's talk.</em></div>
+    <div class="sign"><div class="big" data-i18n-html="contact.big">Curious about the same questions? <em>Let's talk.</em></div>
+      <svg class="feyn" viewBox="0 0 180 96" aria-hidden="true"><line class="f" x1="8" y1="10" x2="52" y2="48"/><line class="f" x1="8" y1="86" x2="52" y2="48"/><path class="f" d="M30 29l-6-1 2 6M30 67l-6 1 2-6"/>
+        <path class="ph" d="M52 48 q4.5 -8 9 0 t9 0 t9 0 t9 0 t9 0 t9 0 t9 0"/><line class="m" x1="115" y1="48" x2="170" y2="10"/><line class="m" x1="115" y1="48" x2="170" y2="86"/><path class="m" d="M147 26l6-1-2 6M147 70l6 1-2-6"/>
+        <circle cx="52" cy="48" r="2.4"/><circle cx="115" cy="48" r="2.4"/><text x="0" y="8">e⁻</text><text x="0" y="96">e⁺</text><text x="78" y="36">γ</text><text x="168" y="8">μ⁻</text><text x="168" y="96">μ⁺</text></svg></div>
     <div class="acts">
       <a class="btn" href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/></svg>LinkedIn</a>
       <button class="btn ghost" type="button" data-copy><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span data-i18n="contact.copy">Copy email</span></button>
       <span class="mail">daniel.vacavelastegui@gmail.com</span>
     </div>
     <div class="next"><button class="nextstop" type="button" data-next></button></div>
-    <div class="credits" data-i18n="contact.credits">Galaxy point cloud and nebula: 3D assets from Sketchfab (free licence) · black hole rendered in real time</div>
   </div>
 </template>
 
@@ -932,7 +945,7 @@ let LANG = store.get("dv_lang", "en");
 const ES = {
   "intro.skip": "Saltar intro", "intro.chapter": "Capítulo I", "intro.pagetitle": "Hacia el horizonte de sucesos",
   "intro.sub": "Mi Portafolio", "hero.mail": "Correo", "arc.help": "← → mover · Espacio disparar · Esc salir",
-  "contact.credits": "Nube de puntos de la galaxia y nebulosa: modelos 3D de Sketchfab (licencia libre) · agujero negro renderizado en tiempo real", "intro.subsmall": "física · IA · datos", "intro.open": "Abrir el libro", "intro.hint": "o pulsa Enter",
+  "hero.fall": "Déjate caer", "intro.subsmall": "física · IA · datos", "intro.open": "Abrir el libro", "intro.hint": "o pulsa Enter",
   "top.back": "Universo", "hero.line": "<b>Ingeniería en Computación</b> · <span class=\"c1\">Física</span> · <span class=\"c2\">IA</span> · <span class=\"c3\">Datos</span>",
   "home.hint": "haz scroll ↕ o usa las flechas para viajar",
   "work.title": "Cosas que he <em>construido</em>",
@@ -1069,7 +1082,7 @@ const NEXT = { work: { level: 2, art: "sun", k: "nextSolar" }, about: { level: 3
 function renderNext() {
   $$(".view").forEach(v => {
     const n = NEXT[v.dataset.view], b = $("[data-next]", v); if (!n || !b) return;
-    b.innerHTML = `<span class="art ${n.art}"><i></i></span><span><span class="k">${T().nextK}</span><b>${esc(T()[n.k])}</b><small>${T().travel}</small></span>`;
+    b.innerHTML = `<span class="k">${T().nextK}</span><span class="lbl">${esc(T()[n.k])}</span><span class="path"></span><span class="art ${n.art}"><i></i></span><span class="go">→</span>`;
     b.onclick = () => { Sound.click(); Uni.pending = { level: n.level, portal: n.portal }; goHome(); };
   });
 }
@@ -1510,19 +1523,12 @@ const SMC = { q: "#b18cff", l: "#62e3b5", b: "#ff9a4c", h: "#e8b64c" };
 const Uni = {
   i: 0, tr: null, hover: null, w: 0, h: 0, running: false, wheelLock: 0, zoom: null, satA: 2.2, lastT: 0, targets: [], ptype: "mouse",
   init() {
-    this.c = $("#uni"); this.home = $("#home"); this.tip = $("#tip"); this.neb = $("#nebula"); BH3D.init($("#bh3d"));
+    this.c = $("#uni"); this.home = $("#home"); this.tip = $("#tip"); this.neb = $("#nebula"); BH3D.init($("#bh3d")); setTimeout(() => { Space.nebula(); Space.stop(this.i); }, 400);
     this.bg = Array.from({ length: 320 }, () => [Math.random(), Math.random(), Math.random() * 1.2 + .2, Math.random()]);
     this.gal = Array.from({ length: 70 }, () => ({ x: Math.random(), y: Math.random(), s: Math.random() * 9 + 2, a: Math.random() * 3, c: ["#ffe2b8", "#cfe0ff", "#ffd0e0", "#fff"][Math.floor(Math.random() * 4)] }));
     addEventListener("resize", () => this.resize()); this.resize();
     $("#uniPrev").onclick = () => this.go(this.i - 1); $("#uniNext").onclick = () => this.go(this.i + 1);
-    this.c.addEventListener("pointerdown", e => {
-      this.ptype = e.pointerType || "mouse"; this.dragged = false;
-      if (!BH3D.ok || !this.active() || this.tr || LEVELS[this.i].id !== "bh") return;
-      const h = this.hit(e); if (!h || h.k !== "bh") return;
-      this.drag = { x: e.clientX, y: e.clientY, d: 0 }; try { this.c.setPointerCapture(e.pointerId); } catch (er) {}
-      this.c.style.cursor = "grabbing";
-    });
-    this.c.addEventListener("pointerup", () => { if (this.drag) { this.dragged = this.drag.d > 6; this.drag = null; this.c.style.cursor = "grab"; } });
+    this.c.addEventListener("pointerdown", e => this.ptype = e.pointerType || "mouse");
     this.c.addEventListener("pointermove", e => { this.ptype = e.pointerType || "mouse"; this.onMove(e); });
     this.c.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") this.clearHover(); });
     this.c.addEventListener("click", e => this.onClick(e));
@@ -1556,16 +1562,16 @@ const Uni = {
     const dir = n > this.i ? 1 : -1; this.tr = { from: this.i, to: n, start: performance.now(), dur: REDUCED ? 1 : 1400, dir };
     this.clearHover(); $("#stopcard").classList.add("hidden"); $("#hero").classList.add("hidden");
     if (this.i === 0 && dir > 0) Sound.warp(); else Sound.open();
-    this.i = n; this.hoverPt = null; this.uiBottom(); this.hideHint(); this.start();
+    this.i = n; this.hoverPt = null; this.uiBottom(); this.hideHint(); Space.stop(n); this.start();
   },
   /* Silent jump: used when a sub-page is opened from the top bar, so the universe waits for you there */
-  jump(n) { if (n === this.i) return; this.tr = null; this.i = n; this.hoverPt = null; this.clearHover(); this.ui(); },
+  jump(n) { if (n === this.i) return; this.tr = null; this.i = n; this.hoverPt = null; this.clearHover(); this.ui(); Space.stop(n); },
   zoomIn() { this.zf = this.hoverPt || this.focus(LEVELS[this.i].id); this.zoom = { dir: 1, start: performance.now(), dur: REDUCED ? 1 : 750 }; this.start(); },
   zoomOut() { this.zf = this.zf || [this.w / 2, this.h / 2]; this.zoom = { dir: -1, start: performance.now(), dur: REDUCED ? 1 : 850 }; this.hoverPt = null; this.ui(); this.start(); },
   hideHint() { if (this.hinted) return; this.hinted = true; store.set("dv_hint", 1); $("#hint").classList.add("gone"); },
   focus(id) {
     const w = this.w, h = this.h, m = this.mobile;
-    if (id === "bh") return m ? [w * .5, h * .64] : [w * .7, h * .5];
+    if (id === "bh") return m ? [w * .64, h * .84] : [w * .8, h * .9];
     if (id === "solar") return m ? [w * .5, h * .44] : [w * .3, h * .5];
     if (id === "earth") return m ? [w * .5, h * .44] : [w * .42, h * .52];
     return [w * .45, h * .48];
@@ -1594,7 +1600,6 @@ const Uni = {
     } else this.scene(LEVELS[this.i].id, t, 1, 1, w / 2, h / 2);
     c.restore();
     if (BH3D.ok) BH3D.render(this.bhDraw, dt, this.mobile);
-    if (this.nebA > 0) Space.nebula(); this.neb.style.opacity = (this.nebA * .32).toFixed(3);
     if (this.mx != null) this.neb.style.transform = `translate(${(-this.mx * 14).toFixed(1)}px,${(-this.my * 10).toFixed(1)}px)`;
   },
   /* back from a sub-page: continue the trip that the "next stop" card asked for */
@@ -1617,14 +1622,15 @@ const Uni = {
     this.bg.forEach(([x, y, r, a]) => { c.globalAlpha = alpha * a * .8; c.fillStyle = "#e8edff"; c.fillRect(x * w, y * h, r, r); }); c.globalAlpha = alpha;
     this.targets = [];
     if (id === "bh") {
-      const [x, y] = this.focus("bh"), R = Math.min(w, h) * (this.mobile ? .06 : .075);
+      const [x, y] = this.focus("bh"), R = Math.min(w, h) * (this.mobile ? .08 : .1);
       if (BH3D.ok) {
         const Zg = this.Zg || 1, [gx, gy] = this.zf || [w / 2, h / 2], sx = fx + (x - fx) * zoom, sy = fy + (y - fy) * zoom;
         this.bhDraw = { x: gx + (sx - gx) * Zg, y: gy + (sy - gy) * Zg, s: zoom * Zg, a: alpha };
-        this.targets.push({ k: "bh", x, y, r: BH3D.size(this.mobile) * .34 });
-      } else { drawBlackHole(c, x, y, R, t); this.targets.push({ k: "bh", x, y, r: R * 2.6 }); }
+      }
+      if (!BH3D.ok || BH3D.fade < 1) { c.save(); c.globalAlpha = alpha * (1 - (BH3D.ok ? BH3D.fade : 0)); drawBlackHole(c, x, y, R, t); c.restore(); }
+      this.targets.push({ k: "bh", x, y, r: Math.min(w, h) * .3 });
     }
-    if (id === "solar" || id === "earth") this.nebA = Math.max(this.nebA, alpha);
+
     if (id === "cluster") this.cluster(c, w, h, t, alpha);
     if (id === "solar") this.solar(c, w, h, t, alpha);
     if (id === "earth") this.earth(c, w, h, t, alpha);
@@ -1644,7 +1650,6 @@ const Uni = {
   cluster(c, w, h, t, alpha) {
     const gas = c.createRadialGradient(w * .42, h * .5, 10, w * .42, h * .5, Math.max(w, h) * .5); gas.addColorStop(0, "rgba(120,90,255,.18)"); gas.addColorStop(.5, "rgba(60,90,200,.07)"); gas.addColorStop(1, "rgba(0,0,0,0)");
     c.fillStyle = gas; c.fillRect(0, 0, w, h);
-    Space.galaxy(c, w, h, t, alpha, this.mx || 0, this.my || 0);
     this.gal.forEach(g => { c.save(); c.translate(g.x * w, g.y * h); c.rotate(g.a); const gg = c.createRadialGradient(0, 0, 0, 0, 0, g.s); gg.addColorStop(0, g.c); gg.addColorStop(1, "rgba(0,0,0,0)"); c.fillStyle = gg; c.scale(1, .5); c.beginPath(); c.arc(0, 0, g.s, 0, 7); c.fill(); c.restore(); });
     const S = Math.min(w, h), P = this.mobile
       ? { ml: [.28, .22], systems: [.72, .2], design: [.28, .4], data: [.72, .38], software: [.28, .58], games: [.72, .56] }
@@ -1696,7 +1701,7 @@ const Uni = {
     const tilt = -.32, orx = R * 1.34, ory = R * .4, a = this.satA, sx0 = Math.cos(a) * orx, sy0 = Math.sin(a) * ory;
     const satX = cx + sx0 * Math.cos(tilt) - sy0 * Math.sin(tilt), satY = cy + sx0 * Math.sin(tilt) + sy0 * Math.cos(tilt), behind = Math.sin(a) < 0;
     const orbit = (a0, a1) => { c.strokeStyle = "rgba(98,227,181,.35)"; c.setLineDash([3, 5]); c.lineWidth = 1; c.beginPath(); c.ellipse(cx, cy, orx, ory, tilt, a0, a1); c.stroke(); c.setLineDash([]); };
-    const sat = () => { const hot = this.hover === "sat"; this.ring(c, satX, satY, 20, "arcade", t, alpha); this.satellite(c, satX, satY, this.mobile ? 5 : 6, hot); this.name(c, T().satellite, satX, satY + 26, "arcade", hot, alpha, 11.5); };
+    const sat = () => { const hot = this.hover === "sat"; this.ring(c, satX, satY, 20, "arcade", t, alpha); this.satellite(c, satX, satY, this.mobile ? 5 : 6, hot); this.name(c, T().satellite, satX, satY - 16, "arcade", hot, alpha, 11.5); };
     orbit(Math.PI, Math.PI * 2); if (behind) sat();
     this.ring(c, cx, cy, R * 1.05, "journey", t, alpha);
     const atm = c.createRadialGradient(cx, cy, R * .95, cx, cy, R * 1.25); atm.addColorStop(0, "rgba(124,178,255,.35)"); atm.addColorStop(1, "rgba(124,178,255,0)"); c.fillStyle = atm; c.beginPath(); c.arc(cx, cy, R * 1.25, 0, 7); c.fill();
@@ -1728,16 +1733,14 @@ const Uni = {
     let best = null; for (const tg of this.targets) { const d = Math.hypot(x - tg.x, y - tg.y); if (d < tg.r && (!best || d < best.d || tg.k === "sat")) { best = { ...tg, d }; if (tg.k === "sat") break; } } return best;
   },
   label(h) {
-    if (h.k === "bh") return BH3D.ok ? T().bhTip : L(LEVELS[0].cta);
+    if (h.k === "bh") return L(LEVELS[0].cta);
     if (typeof h.k === "number") return L(PLANETS[h.k]) + " · " + T().aboutP;
     if (String(h.k).startsWith("pin")) return L(PINS[+String(h.k).slice(3)]) + " · " + T().journeyP;
     return "";
   },
   onMove(e) {
     this.mx = e.clientX / this.w - .5; this.my = e.clientY / this.h - .5;
-    if (this.drag) { const dx = e.clientX - this.drag.x, dy = e.clientY - this.drag.y; this.drag.x = e.clientX; this.drag.y = e.clientY; this.drag.d += Math.abs(dx) + Math.abs(dy); BH3D.spin(dx, dy); return; }
     if (!this.active() || this.tr || e.pointerType === "touch") return; this.setHover(this.hit(e));
-    if (this.hover === "bh" && BH3D.ok) this.c.style.cursor = "grab";
   },
   setHover(h) {
     const prev = this.hover; this.hover = h ? h.k : null; this.c.style.cursor = h ? "pointer" : "crosshair";
@@ -1749,7 +1752,6 @@ const Uni = {
   clearHover() { this.hover = null; if (this.tip) this.tip.style.opacity = 0; Portal.hide(); if (this.c) this.c.style.cursor = "crosshair"; },
   onClick(e) {
     if (!this.active() || this.tr) return;
-    if (this.dragged) { this.dragged = false; return; }
     const h = this.hit(e); if (!h) { this.clearHover(); return; }
     if (this.ptype === "touch" && h.portal && Portal.key !== h.k) { this.setHover(h); return; } // first tap previews, second tap enters
     Sound.click(); this.hoverPt = [h.x, h.y];
@@ -1785,103 +1787,32 @@ const Uni = {
   }
 };
 
-/* ===================== BLACK HOLE in WebGL: light bent by gravity, a glowing disk, drag to rotate ===================== */
-/* One small fragment shader (no libraries). It renders at reduced resolution and lowers it further on slow
-   machines. If WebGL is not available, the 2D black hole is drawn instead. */
+/* ===================== BLACK HOLE in 3D (three.js meshes, loaded after the page is visible) ===================== */
+/* The 2D black hole is drawn first; when assets/js/bh3d.js is ready the 3D one fades in. If WebGL fails, the 2D stays. */
 const BH3D = {
-  ok: false, yaw: .7, pit: .14, vYaw: .12, q: .75, steps: 140, frames: 0, acc: 0, last: 0,
+  ok: false, fade: 0,
   init(cv) {
-    if (REDUCED) return;
-    try {
-      const gl = cv.getContext("webgl", { premultipliedAlpha: true, antialias: false, alpha: true, powerPreference: "high-performance" });
-      if (!gl) return; this.gl = gl; this.cv = cv;
-      const hp = gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT), prec = hp && hp.precision > 0 ? "highp" : "mediump";
-      const vs = "attribute vec2 p;varying vec2 v;void main(){v=p;gl_Position=vec4(p,0.,1.);}";
-      const fs = `precision ${prec} float;varying vec2 v;uniform float uT;uniform vec2 uR;uniform float uS;
-float hash(vec3 p){p=fract(p*vec3(.1031,.1030,.0973));p+=dot(p,p.yxz+33.33);return fract((p.x+p.y)*p.z);}
-float n2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(vec3(i,1.)),hash(vec3(i+vec2(1.,0.),1.)),f.x),mix(hash(vec3(i+vec2(0.,1.),1.)),hash(vec3(i+vec2(1.,1.),1.)),f.x),f.y);}
-vec3 stars(vec3 d){vec3 p=d*110.;vec3 id=floor(p);vec3 f=fract(p)-.5;float h=hash(id);if(h<.978)return vec3(0.);float b=smoothstep(.3,0.,length(f))*(h-.978)/.022;return b*mix(vec3(1.,.82,.62),vec3(.72,.82,1.),hash(id+7.))*2.2;}
-void main(){vec2 uv=v;float yw=uR.x,pt=uR.y;vec3 ro=vec3(sin(yw)*cos(pt),sin(pt),cos(yw)*cos(pt))*20.;
-vec3 fw=normalize(-ro),rt=normalize(cross(vec3(0.,1.,0.),fw)),up=cross(fw,rt);vec3 vel=normalize(fw*1.3+uv.x*rt+uv.y*up);vec3 pos=ro;
-vec3 hv=cross(pos,vel);float h2=dot(hv,hv);vec3 col=vec3(0.);float al=0.;float hole=0.;
-for(int i=0;i<170;i++){if(float(i)>=uS)break;float r2=dot(pos,pos);float r=sqrt(r2);if(r<1.){hole=1.;break;}
-float dt=clamp(.07*r,.04,1.2);vec3 pr=pos;vel+=-1.5*h2*pos/(r2*r2*r)*dt;pos+=vel*dt;
-if(pr.y*pos.y<0.){vec3 q=mix(pr,pos,pr.y/(pr.y-pos.y));float rr=length(q.xz);
-if(rr>2.4&&rr<10.){float an=atan(q.z,q.x);float sw=an+uT*2.2/rr;float n=n2(vec2(sw*3.,rr*2.))*.6+n2(vec2(sw*9.,rr*6.))*.4;
-float tp=pow(2.4/rr,1.25);vec3 tg=normalize(vec3(-q.z,0.,q.x));float dp=clamp(1.+.6*dot(tg,-normalize(vel)),.3,1.9);
-vec3 c=mix(vec3(.95,.3,.06),vec3(1.,.88,.66),tp);float fd=smoothstep(10.,6.,rr)*smoothstep(2.4,2.95,rr);float de=fd*(.3+.9*n);
-col+=(1.-al)*c*de*(1.5*tp+.3)*dp*dp*dp;al+=(1.-al)*clamp(de*.85,0.,1.);if(al>.97)break;}}
-if(r>45.)break;}
-vec3 bg=hole>.5?vec3(0.):stars(normalize(vel));col+=(1.-al)*bg;float a=max(hole,max(al,max(bg.r,max(bg.g,bg.b))));
-float e=smoothstep(1.,.8,length(uv));col=col/(1.+col*.32);gl_FragColor=vec4(col*e,clamp(a,0.,1.)*e);}`;
-      const sh = (t, src) => { const o = gl.createShader(t); gl.shaderSource(o, src); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; };
-      const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr);
-      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error("link");
-      gl.useProgram(pr); const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-      const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-      this.u = { t: gl.getUniformLocation(pr, "uT"), r: gl.getUniformLocation(pr, "uR"), s: gl.getUniformLocation(pr, "uS") };
-      cv.addEventListener("webglcontextlost", e => { e.preventDefault(); this.ok = false; cv.style.opacity = 0; });
-      this.ok = true;
-    } catch (e) { this.ok = false; }
+    this.cv = cv; if (REDUCED) return;
+    const go = () => import("./assets/js/bh3d.js").then(m => { this.api = m.create(cv); if (this.api) { this.ok = true; this.t0 = performance.now(); Uni.start(); } }).catch(() => {});
+    if (window.requestIdleCallback) requestIdleCallback(go, { timeout: 1500 }); else setTimeout(go, 600);
   },
-  size(m) { return m ? Math.min(innerWidth * .92, innerHeight * .5) : Math.min(innerHeight * .95, innerWidth * .56); },
-  spin(dx, dy) { this.yaw -= dx * .008; this.pit = clamp(this.pit + dy * .006, -.9, 1.2); this.vYaw = -dx * .25; },
+  size(m) { return m ? innerWidth * 1.05 : Math.min(innerWidth * .6, innerHeight * 1.05); },   // outer radius of the disk, px
   render(st, dt, m) {
-    const cv = this.cv;
-    if (!st || st.a <= .01) { if (cv.style.opacity !== "0") cv.style.opacity = 0; return; }
-    const S = this.size(m), px = Math.max(64, Math.round(S * Math.min(DPR, 1.5) * this.q));
-    if (cv.width !== px) { cv.width = cv.height = px; cv.style.width = cv.style.height = S + "px"; }
-    cv.style.transform = `translate(${(st.x - S / 2).toFixed(1)}px,${(st.y - S / 2).toFixed(1)}px) scale(${st.s.toFixed(3)})`;
-    cv.style.opacity = st.a.toFixed(3); cv.style.transformOrigin = "50% 50%";
-    if (!Uni.drag) { this.vYaw += (.12 - this.vYaw) * Math.min(1, dt * 1.5); this.yaw += this.vYaw * dt; this.pit += (.14 - this.pit) * Math.min(1, dt * .25); }
-    const gl = this.gl; gl.viewport(0, 0, px, px);
-    gl.uniform1f(this.u.t, performance.now() / 1000); gl.uniform2f(this.u.r, this.yaw, this.pit); gl.uniform1f(this.u.s, this.steps);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    // adapt the resolution to the machine: keep it smooth first
-    const now = performance.now(); if (this.last) { this.acc += now - this.last; this.frames++; } this.last = now;
-    if (this.frames >= 40) { const avg = this.acc / this.frames; this.acc = 0; this.frames = 0;
-      if (avg > 24 && this.q > .38) { this.q *= .8; if (this.q < .5) this.steps = 110; }
-      else if (avg < 14 && this.q < .8) this.q = Math.min(.8, this.q * 1.1); }
+    if (!this.api) return;
+    if (!st || st.a <= .01) { this.cv.style.opacity = 0; return; }
+    this.fade = Math.min(1, (performance.now() - this.t0) / 900);
+    this.api.render({ x: st.x, y: st.y, s: st.s, a: st.a * this.fade }, Uni.w, Uni.h, this.size(m), Uni.mx || 0, Uni.my || 0, performance.now() / 1000);
   }
 };
 
-/* ===================== SPACE: 3D galaxy point cloud (cluster) and nebula backdrop (Solar System, Earth) ===================== */
+/* ===================== SPACE: the nebula behind the whole universe ===================== */
 const Space = {
-  n: 0,
-  load() {
-    if (this.loading) return; this.loading = true;
-    fetch("assets/space/galaxy.bin").then(r => r.ok ? r.arrayBuffer() : null).then(b => {
-      if (!b) return; const n = new DataView(b).getUint32(0, true); this.xyz = new Int16Array(b, 4, n * 3); this.rgb = new Uint8Array(b, 4 + n * 6, n * 3); this.n = n;
-    }).catch(() => {});
-  },
   nebula() {
     if (this.nebDone) return; this.nebDone = true;
     const im = new Image(); im.onload = () => { $("#nebula").style.backgroundImage = "url(assets/space/nebula.webp)"; }; im.src = "assets/space/nebula.webp";
   },
-  galaxy(c, w, h, t, alpha, mx, my) {
-    if (!this.n) { this.load(); return; }
-    const gw = Math.ceil(w / 2), gh = Math.ceil(h / 2);
-    if (!this.off || this.off.width !== gw || this.off.height !== gh) {
-      this.off = document.createElement("canvas"); this.off.width = gw; this.off.height = gh;
-      this.octx = this.off.getContext("2d"); this.img = this.octx.createImageData(gw, gh); this.buf = new Float32Array(gw * gh * 3);
-    }
-    const buf = this.buf, xyz = this.xyz, rgb = this.rgb; buf.fill(0);
-    const yaw = t * .035 + mx * .5, tilt = 1.12 + my * .25, cy0 = Math.cos(yaw), sy0 = Math.sin(yaw), ct = Math.cos(tilt), st = Math.sin(tilt);
-    const sc = Math.min(gw, gh) * .42 / 32000, cx = gw * .46, cy = gh * .5, k = .3;
-    for (let i = 0, j = 0; i < this.n; i++, j += 3) {
-      const x = xyz[j], y = xyz[j + 1], z = xyz[j + 2], x1 = x * cy0 - z * sy0, z1 = x * sy0 + z * cy0, y1 = y * ct - z1 * st;
-      const px = (cx + x1 * sc) | 0, py = (cy - y1 * sc) | 0; if (px < 0 || py < 0 || px >= gw || py >= gh) continue;
-      const o = (py * gw + px) * 3; buf[o] += rgb[j] * k; buf[o + 1] += rgb[j + 1] * k; buf[o + 2] += rgb[j + 2] * k;
-    }
-    const d = this.img.data;
-    for (let p = 0, o = 0, q = 0; p < gw * gh; p++, o += 3, q += 4) {
-      const r = buf[o], g = buf[o + 1], b = buf[o + 2];
-      if (r + g + b === 0) { d[q + 3] = 0; continue; }
-      d[q] = r > 255 ? 255 : r; d[q + 1] = g > 255 ? 255 : g; d[q + 2] = b > 255 ? 255 : b; d[q + 3] = 255;
-    }
-    this.octx.putImageData(this.img, 0, 0);
-    c.save(); c.globalCompositeOperation = "lighter"; c.globalAlpha = alpha * .65; c.imageSmoothingEnabled = true; c.drawImage(this.off, 0, 0, w, h); c.restore();
-  }
+  /* one 360° nebula for the whole universe: each stop looks at a different part of it, and the trip pans across */
+  stop(i) { const n = $("#nebula"); if (!n) return; n.style.backgroundPosition = ["4% 40%", "30% 55%", "52% 50%", "78% 48%"][i] + ""; n.style.opacity = [.26, .3, .34, .34][i]; }
 };
 
 /* ===================== PORTAL: hover preview of what is inside ===================== */
@@ -2102,10 +2033,11 @@ const CursorFX = {
     addEventListener("pointermove", e => {
       if (e.pointerType !== "mouse") return;
       this.head.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`; this.head.style.opacity = 1;
-      const vx = e.clientX - this.x, vy = e.clientY - this.y; this.x = e.clientX; this.y = e.clientY;
+      let vx = e.clientX - this.x, vy = e.clientY - this.y; if (Math.hypot(vx, vy) > 90) { this.pts = []; vx = vy = 0; } this.x = e.clientX; this.y = e.clientY;
       this.pts.push({ x: this.x, y: this.y, vx: vx * .05, vy: vy * .05, a: 1 }); if (this.pts.length > 40) this.pts.shift(); this.start();
     }, { passive: true });
-    document.documentElement.addEventListener("pointerleave", () => this.head.style.opacity = 0);
+    document.documentElement.addEventListener("pointerleave", () => { this.head.style.opacity = 0; this.pts = []; this.x = this.y = -999; });
+    addEventListener("blur", () => { this.pts = []; this.x = this.y = -999; });
   },
   start() { if (this.running) return; this.running = true; const loop = () => { if (this.draw()) requestAnimationFrame(loop); else this.running = false; }; requestAnimationFrame(loop); },
   draw() {
@@ -2137,7 +2069,7 @@ const GAME_TXT = {
 const Game = {
   W: 160, H: 144, state: "title", keys: {}, vis: false, full: false,
   init() {
-    this.c = $("#game"); this.ctx = this.c.getContext("2d"); this.home = this.c.parentElement; this.hi = store.get("dv_hi", 0); this.updHi();
+    this.c = $("#game"); this.ctx = this.c.getContext("2d"); this.home = this.c.parentElement; this.fit(); addEventListener("resize", () => this.fit()); this.hi = store.get("dv_hi", 0); this.updHi();
     const map = { ArrowLeft: "left", ArrowRight: "right", a: "left", d: "right", " ": "fire", Enter: "start" };
     addEventListener("keydown", e => {
       const k = map[e.key]; if (!k || !this.vis) return;
@@ -2155,13 +2087,15 @@ const Game = {
     this.draw();
   },
   capturing() { return this.state === "play" && this.vis; },
+  /* the game thinks in 160×144 but the canvas has k× more pixels, so everything stays crisp */
+  fit() { const w = this.c.getBoundingClientRect().width || 260, k = clamp(Math.round(w * DPR / 160), 2, 10); if (this.k !== k) { this.k = k; this.c.width = 160 * k; this.c.height = 144 * k; } this.ctx.setTransform(this.k, 0, 0, this.k, 0, 0); this.draw(performance.now()); },
   setVis(v) { this.vis = v; if (v) this.run(); else { this.keys = {}; if (this.full) this.exitFull(); if (this.state === "play") this.state = "pause"; } },
   updHi() { $("#hiscore").textContent = "HI " + String(this.hi).padStart(4, "0"); },
   /* Start goes full screen; Esc or ✕ puts the console back */
-  enterFull() { if (this.full) return; this.full = true; $("#gScreen").appendChild(this.c); $("#gameFull").classList.add("on"); this.c.focus({ preventScroll: true }); },
+  enterFull() { if (this.full) return; this.full = true; $("#gScreen").appendChild(this.c); $("#gameFull").classList.add("on"); this.c.focus({ preventScroll: true }); requestAnimationFrame(() => this.fit()); },
   exitFull() {
     if (!this.full) return; this.full = false; $("#gameFull").classList.remove("on"); this.home.appendChild(this.c);
-    this.keys = {}; if (this.state === "play") this.state = "pause"; this.draw(performance.now());
+    this.keys = {}; if (this.state === "play") this.state = "pause"; requestAnimationFrame(() => this.fit());
   },
   begin() {
     this.enterFull();
@@ -2290,9 +2224,9 @@ function boot() {
   if (wantSound) { const once = () => { setSound(true); removeEventListener("pointerdown", once); }; addEventListener("pointerdown", once); }
   $$("[data-copy]").forEach(b => b.onclick = copyEmail);
   $$("[data-back]").forEach(b => b.onclick = () => { Sound.click(); goHome(); });
+  $$("[data-fall]").forEach(b => b.onclick = () => { Sound.click(); Uni.go(1); });
   $("#brand").onclick = $("#backBtn").onclick = () => { Sound.click(); goHome(); };
   $$("#cvBtn, [data-cv]").forEach(b => b.onclick = () => { toast(T().cvmsg); Sound.click(); });
-  setTimeout(() => { Space.load(); }, 2500);
   $("#mClose").onclick = () => closeModal(); $("#mPrev").onclick = () => stepModal(-1); $("#mNext").onclick = () => stepModal(1);
   $("#modal").addEventListener("click", e => { if (e.target.id === "modal") closeModal(); });
   addEventListener("hashchange", route);

@@ -279,19 +279,12 @@ const SMC = { q: "#b18cff", l: "#62e3b5", b: "#ff9a4c", h: "#e8b64c" };
 const Uni = {
   i: 0, tr: null, hover: null, w: 0, h: 0, running: false, wheelLock: 0, zoom: null, satA: 2.2, lastT: 0, targets: [], ptype: "mouse",
   init() {
-    this.c = $("#uni"); this.home = $("#home"); this.tip = $("#tip"); this.neb = $("#nebula"); BH3D.init($("#bh3d"));
+    this.c = $("#uni"); this.home = $("#home"); this.tip = $("#tip"); this.neb = $("#nebula"); BH3D.init($("#bh3d")); setTimeout(() => { Space.nebula(); Space.stop(this.i); }, 400);
     this.bg = Array.from({ length: 320 }, () => [Math.random(), Math.random(), Math.random() * 1.2 + .2, Math.random()]);
     this.gal = Array.from({ length: 70 }, () => ({ x: Math.random(), y: Math.random(), s: Math.random() * 9 + 2, a: Math.random() * 3, c: ["#ffe2b8", "#cfe0ff", "#ffd0e0", "#fff"][Math.floor(Math.random() * 4)] }));
     addEventListener("resize", () => this.resize()); this.resize();
     $("#uniPrev").onclick = () => this.go(this.i - 1); $("#uniNext").onclick = () => this.go(this.i + 1);
-    this.c.addEventListener("pointerdown", e => {
-      this.ptype = e.pointerType || "mouse"; this.dragged = false;
-      if (!BH3D.ok || !this.active() || this.tr || LEVELS[this.i].id !== "bh") return;
-      const h = this.hit(e); if (!h || h.k !== "bh") return;
-      this.drag = { x: e.clientX, y: e.clientY, d: 0 }; try { this.c.setPointerCapture(e.pointerId); } catch (er) {}
-      this.c.style.cursor = "grabbing";
-    });
-    this.c.addEventListener("pointerup", () => { if (this.drag) { this.dragged = this.drag.d > 6; this.drag = null; this.c.style.cursor = "grab"; } });
+    this.c.addEventListener("pointerdown", e => this.ptype = e.pointerType || "mouse");
     this.c.addEventListener("pointermove", e => { this.ptype = e.pointerType || "mouse"; this.onMove(e); });
     this.c.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") this.clearHover(); });
     this.c.addEventListener("click", e => this.onClick(e));
@@ -325,16 +318,16 @@ const Uni = {
     const dir = n > this.i ? 1 : -1; this.tr = { from: this.i, to: n, start: performance.now(), dur: REDUCED ? 1 : 1400, dir };
     this.clearHover(); $("#stopcard").classList.add("hidden"); $("#hero").classList.add("hidden");
     if (this.i === 0 && dir > 0) Sound.warp(); else Sound.open();
-    this.i = n; this.hoverPt = null; this.uiBottom(); this.hideHint(); this.start();
+    this.i = n; this.hoverPt = null; this.uiBottom(); this.hideHint(); Space.stop(n); this.start();
   },
   /* Silent jump: used when a sub-page is opened from the top bar, so the universe waits for you there */
-  jump(n) { if (n === this.i) return; this.tr = null; this.i = n; this.hoverPt = null; this.clearHover(); this.ui(); },
+  jump(n) { if (n === this.i) return; this.tr = null; this.i = n; this.hoverPt = null; this.clearHover(); this.ui(); Space.stop(n); },
   zoomIn() { this.zf = this.hoverPt || this.focus(LEVELS[this.i].id); this.zoom = { dir: 1, start: performance.now(), dur: REDUCED ? 1 : 750 }; this.start(); },
   zoomOut() { this.zf = this.zf || [this.w / 2, this.h / 2]; this.zoom = { dir: -1, start: performance.now(), dur: REDUCED ? 1 : 850 }; this.hoverPt = null; this.ui(); this.start(); },
   hideHint() { if (this.hinted) return; this.hinted = true; store.set("dv_hint", 1); $("#hint").classList.add("gone"); },
   focus(id) {
     const w = this.w, h = this.h, m = this.mobile;
-    if (id === "bh") return m ? [w * .5, h * .64] : [w * .7, h * .5];
+    if (id === "bh") return m ? [w * .64, h * .84] : [w * .8, h * .9];
     if (id === "solar") return m ? [w * .5, h * .44] : [w * .3, h * .5];
     if (id === "earth") return m ? [w * .5, h * .44] : [w * .42, h * .52];
     return [w * .45, h * .48];
@@ -363,7 +356,6 @@ const Uni = {
     } else this.scene(LEVELS[this.i].id, t, 1, 1, w / 2, h / 2);
     c.restore();
     if (BH3D.ok) BH3D.render(this.bhDraw, dt, this.mobile);
-    if (this.nebA > 0) Space.nebula(); this.neb.style.opacity = (this.nebA * .32).toFixed(3);
     if (this.mx != null) this.neb.style.transform = `translate(${(-this.mx * 14).toFixed(1)}px,${(-this.my * 10).toFixed(1)}px)`;
   },
   /* back from a sub-page: continue the trip that the "next stop" card asked for */
@@ -386,14 +378,15 @@ const Uni = {
     this.bg.forEach(([x, y, r, a]) => { c.globalAlpha = alpha * a * .8; c.fillStyle = "#e8edff"; c.fillRect(x * w, y * h, r, r); }); c.globalAlpha = alpha;
     this.targets = [];
     if (id === "bh") {
-      const [x, y] = this.focus("bh"), R = Math.min(w, h) * (this.mobile ? .06 : .075);
+      const [x, y] = this.focus("bh"), R = Math.min(w, h) * (this.mobile ? .08 : .1);
       if (BH3D.ok) {
         const Zg = this.Zg || 1, [gx, gy] = this.zf || [w / 2, h / 2], sx = fx + (x - fx) * zoom, sy = fy + (y - fy) * zoom;
         this.bhDraw = { x: gx + (sx - gx) * Zg, y: gy + (sy - gy) * Zg, s: zoom * Zg, a: alpha };
-        this.targets.push({ k: "bh", x, y, r: BH3D.size(this.mobile) * .34 });
-      } else { drawBlackHole(c, x, y, R, t); this.targets.push({ k: "bh", x, y, r: R * 2.6 }); }
+      }
+      if (!BH3D.ok || BH3D.fade < 1) { c.save(); c.globalAlpha = alpha * (1 - (BH3D.ok ? BH3D.fade : 0)); drawBlackHole(c, x, y, R, t); c.restore(); }
+      this.targets.push({ k: "bh", x, y, r: Math.min(w, h) * .3 });
     }
-    if (id === "solar" || id === "earth") this.nebA = Math.max(this.nebA, alpha);
+
     if (id === "cluster") this.cluster(c, w, h, t, alpha);
     if (id === "solar") this.solar(c, w, h, t, alpha);
     if (id === "earth") this.earth(c, w, h, t, alpha);
@@ -413,7 +406,6 @@ const Uni = {
   cluster(c, w, h, t, alpha) {
     const gas = c.createRadialGradient(w * .42, h * .5, 10, w * .42, h * .5, Math.max(w, h) * .5); gas.addColorStop(0, "rgba(120,90,255,.18)"); gas.addColorStop(.5, "rgba(60,90,200,.07)"); gas.addColorStop(1, "rgba(0,0,0,0)");
     c.fillStyle = gas; c.fillRect(0, 0, w, h);
-    Space.galaxy(c, w, h, t, alpha, this.mx || 0, this.my || 0);
     this.gal.forEach(g => { c.save(); c.translate(g.x * w, g.y * h); c.rotate(g.a); const gg = c.createRadialGradient(0, 0, 0, 0, 0, g.s); gg.addColorStop(0, g.c); gg.addColorStop(1, "rgba(0,0,0,0)"); c.fillStyle = gg; c.scale(1, .5); c.beginPath(); c.arc(0, 0, g.s, 0, 7); c.fill(); c.restore(); });
     const S = Math.min(w, h), P = this.mobile
       ? { ml: [.28, .22], systems: [.72, .2], design: [.28, .4], data: [.72, .38], software: [.28, .58], games: [.72, .56] }
@@ -465,7 +457,7 @@ const Uni = {
     const tilt = -.32, orx = R * 1.34, ory = R * .4, a = this.satA, sx0 = Math.cos(a) * orx, sy0 = Math.sin(a) * ory;
     const satX = cx + sx0 * Math.cos(tilt) - sy0 * Math.sin(tilt), satY = cy + sx0 * Math.sin(tilt) + sy0 * Math.cos(tilt), behind = Math.sin(a) < 0;
     const orbit = (a0, a1) => { c.strokeStyle = "rgba(98,227,181,.35)"; c.setLineDash([3, 5]); c.lineWidth = 1; c.beginPath(); c.ellipse(cx, cy, orx, ory, tilt, a0, a1); c.stroke(); c.setLineDash([]); };
-    const sat = () => { const hot = this.hover === "sat"; this.ring(c, satX, satY, 20, "arcade", t, alpha); this.satellite(c, satX, satY, this.mobile ? 5 : 6, hot); this.name(c, T().satellite, satX, satY + 26, "arcade", hot, alpha, 11.5); };
+    const sat = () => { const hot = this.hover === "sat"; this.ring(c, satX, satY, 20, "arcade", t, alpha); this.satellite(c, satX, satY, this.mobile ? 5 : 6, hot); this.name(c, T().satellite, satX, satY - 16, "arcade", hot, alpha, 11.5); };
     orbit(Math.PI, Math.PI * 2); if (behind) sat();
     this.ring(c, cx, cy, R * 1.05, "journey", t, alpha);
     const atm = c.createRadialGradient(cx, cy, R * .95, cx, cy, R * 1.25); atm.addColorStop(0, "rgba(124,178,255,.35)"); atm.addColorStop(1, "rgba(124,178,255,0)"); c.fillStyle = atm; c.beginPath(); c.arc(cx, cy, R * 1.25, 0, 7); c.fill();
@@ -497,16 +489,14 @@ const Uni = {
     let best = null; for (const tg of this.targets) { const d = Math.hypot(x - tg.x, y - tg.y); if (d < tg.r && (!best || d < best.d || tg.k === "sat")) { best = { ...tg, d }; if (tg.k === "sat") break; } } return best;
   },
   label(h) {
-    if (h.k === "bh") return BH3D.ok ? T().bhTip : L(LEVELS[0].cta);
+    if (h.k === "bh") return L(LEVELS[0].cta);
     if (typeof h.k === "number") return L(PLANETS[h.k]) + " · " + T().aboutP;
     if (String(h.k).startsWith("pin")) return L(PINS[+String(h.k).slice(3)]) + " · " + T().journeyP;
     return "";
   },
   onMove(e) {
     this.mx = e.clientX / this.w - .5; this.my = e.clientY / this.h - .5;
-    if (this.drag) { const dx = e.clientX - this.drag.x, dy = e.clientY - this.drag.y; this.drag.x = e.clientX; this.drag.y = e.clientY; this.drag.d += Math.abs(dx) + Math.abs(dy); BH3D.spin(dx, dy); return; }
     if (!this.active() || this.tr || e.pointerType === "touch") return; this.setHover(this.hit(e));
-    if (this.hover === "bh" && BH3D.ok) this.c.style.cursor = "grab";
   },
   setHover(h) {
     const prev = this.hover; this.hover = h ? h.k : null; this.c.style.cursor = h ? "pointer" : "crosshair";
@@ -518,7 +508,6 @@ const Uni = {
   clearHover() { this.hover = null; if (this.tip) this.tip.style.opacity = 0; Portal.hide(); if (this.c) this.c.style.cursor = "crosshair"; },
   onClick(e) {
     if (!this.active() || this.tr) return;
-    if (this.dragged) { this.dragged = false; return; }
     const h = this.hit(e); if (!h) { this.clearHover(); return; }
     if (this.ptype === "touch" && h.portal && Portal.key !== h.k) { this.setHover(h); return; } // first tap previews, second tap enters
     Sound.click(); this.hoverPt = [h.x, h.y];
@@ -554,103 +543,32 @@ const Uni = {
   }
 };
 
-/* ===================== BLACK HOLE in WebGL: light bent by gravity, a glowing disk, drag to rotate ===================== */
-/* One small fragment shader (no libraries). It renders at reduced resolution and lowers it further on slow
-   machines. If WebGL is not available, the 2D black hole is drawn instead. */
+/* ===================== BLACK HOLE in 3D (three.js meshes, loaded after the page is visible) ===================== */
+/* The 2D black hole is drawn first; when assets/js/bh3d.js is ready the 3D one fades in. If WebGL fails, the 2D stays. */
 const BH3D = {
-  ok: false, yaw: .7, pit: .14, vYaw: .12, q: .75, steps: 140, frames: 0, acc: 0, last: 0,
+  ok: false, fade: 0,
   init(cv) {
-    if (REDUCED) return;
-    try {
-      const gl = cv.getContext("webgl", { premultipliedAlpha: true, antialias: false, alpha: true, powerPreference: "high-performance" });
-      if (!gl) return; this.gl = gl; this.cv = cv;
-      const hp = gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT), prec = hp && hp.precision > 0 ? "highp" : "mediump";
-      const vs = "attribute vec2 p;varying vec2 v;void main(){v=p;gl_Position=vec4(p,0.,1.);}";
-      const fs = `precision ${prec} float;varying vec2 v;uniform float uT;uniform vec2 uR;uniform float uS;
-float hash(vec3 p){p=fract(p*vec3(.1031,.1030,.0973));p+=dot(p,p.yxz+33.33);return fract((p.x+p.y)*p.z);}
-float n2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(vec3(i,1.)),hash(vec3(i+vec2(1.,0.),1.)),f.x),mix(hash(vec3(i+vec2(0.,1.),1.)),hash(vec3(i+vec2(1.,1.),1.)),f.x),f.y);}
-vec3 stars(vec3 d){vec3 p=d*110.;vec3 id=floor(p);vec3 f=fract(p)-.5;float h=hash(id);if(h<.978)return vec3(0.);float b=smoothstep(.3,0.,length(f))*(h-.978)/.022;return b*mix(vec3(1.,.82,.62),vec3(.72,.82,1.),hash(id+7.))*2.2;}
-void main(){vec2 uv=v;float yw=uR.x,pt=uR.y;vec3 ro=vec3(sin(yw)*cos(pt),sin(pt),cos(yw)*cos(pt))*20.;
-vec3 fw=normalize(-ro),rt=normalize(cross(vec3(0.,1.,0.),fw)),up=cross(fw,rt);vec3 vel=normalize(fw*1.3+uv.x*rt+uv.y*up);vec3 pos=ro;
-vec3 hv=cross(pos,vel);float h2=dot(hv,hv);vec3 col=vec3(0.);float al=0.;float hole=0.;
-for(int i=0;i<170;i++){if(float(i)>=uS)break;float r2=dot(pos,pos);float r=sqrt(r2);if(r<1.){hole=1.;break;}
-float dt=clamp(.07*r,.04,1.2);vec3 pr=pos;vel+=-1.5*h2*pos/(r2*r2*r)*dt;pos+=vel*dt;
-if(pr.y*pos.y<0.){vec3 q=mix(pr,pos,pr.y/(pr.y-pos.y));float rr=length(q.xz);
-if(rr>2.4&&rr<10.){float an=atan(q.z,q.x);float sw=an+uT*2.2/rr;float n=n2(vec2(sw*3.,rr*2.))*.6+n2(vec2(sw*9.,rr*6.))*.4;
-float tp=pow(2.4/rr,1.25);vec3 tg=normalize(vec3(-q.z,0.,q.x));float dp=clamp(1.+.6*dot(tg,-normalize(vel)),.3,1.9);
-vec3 c=mix(vec3(.95,.3,.06),vec3(1.,.88,.66),tp);float fd=smoothstep(10.,6.,rr)*smoothstep(2.4,2.95,rr);float de=fd*(.3+.9*n);
-col+=(1.-al)*c*de*(1.5*tp+.3)*dp*dp*dp;al+=(1.-al)*clamp(de*.85,0.,1.);if(al>.97)break;}}
-if(r>45.)break;}
-vec3 bg=hole>.5?vec3(0.):stars(normalize(vel));col+=(1.-al)*bg;float a=max(hole,max(al,max(bg.r,max(bg.g,bg.b))));
-float e=smoothstep(1.,.8,length(uv));col=col/(1.+col*.32);gl_FragColor=vec4(col*e,clamp(a,0.,1.)*e);}`;
-      const sh = (t, src) => { const o = gl.createShader(t); gl.shaderSource(o, src); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; };
-      const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr);
-      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error("link");
-      gl.useProgram(pr); const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-      const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-      this.u = { t: gl.getUniformLocation(pr, "uT"), r: gl.getUniformLocation(pr, "uR"), s: gl.getUniformLocation(pr, "uS") };
-      cv.addEventListener("webglcontextlost", e => { e.preventDefault(); this.ok = false; cv.style.opacity = 0; });
-      this.ok = true;
-    } catch (e) { this.ok = false; }
+    this.cv = cv; if (REDUCED) return;
+    const go = () => import("./assets/js/bh3d.js").then(m => { this.api = m.create(cv); if (this.api) { this.ok = true; this.t0 = performance.now(); Uni.start(); } }).catch(() => {});
+    if (window.requestIdleCallback) requestIdleCallback(go, { timeout: 1500 }); else setTimeout(go, 600);
   },
-  size(m) { return m ? Math.min(innerWidth * .92, innerHeight * .5) : Math.min(innerHeight * .95, innerWidth * .56); },
-  spin(dx, dy) { this.yaw -= dx * .008; this.pit = clamp(this.pit + dy * .006, -.9, 1.2); this.vYaw = -dx * .25; },
+  size(m) { return m ? innerWidth * 1.05 : Math.min(innerWidth * .6, innerHeight * 1.05); },   // outer radius of the disk, px
   render(st, dt, m) {
-    const cv = this.cv;
-    if (!st || st.a <= .01) { if (cv.style.opacity !== "0") cv.style.opacity = 0; return; }
-    const S = this.size(m), px = Math.max(64, Math.round(S * Math.min(DPR, 1.5) * this.q));
-    if (cv.width !== px) { cv.width = cv.height = px; cv.style.width = cv.style.height = S + "px"; }
-    cv.style.transform = `translate(${(st.x - S / 2).toFixed(1)}px,${(st.y - S / 2).toFixed(1)}px) scale(${st.s.toFixed(3)})`;
-    cv.style.opacity = st.a.toFixed(3); cv.style.transformOrigin = "50% 50%";
-    if (!Uni.drag) { this.vYaw += (.12 - this.vYaw) * Math.min(1, dt * 1.5); this.yaw += this.vYaw * dt; this.pit += (.14 - this.pit) * Math.min(1, dt * .25); }
-    const gl = this.gl; gl.viewport(0, 0, px, px);
-    gl.uniform1f(this.u.t, performance.now() / 1000); gl.uniform2f(this.u.r, this.yaw, this.pit); gl.uniform1f(this.u.s, this.steps);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    // adapt the resolution to the machine: keep it smooth first
-    const now = performance.now(); if (this.last) { this.acc += now - this.last; this.frames++; } this.last = now;
-    if (this.frames >= 40) { const avg = this.acc / this.frames; this.acc = 0; this.frames = 0;
-      if (avg > 24 && this.q > .38) { this.q *= .8; if (this.q < .5) this.steps = 110; }
-      else if (avg < 14 && this.q < .8) this.q = Math.min(.8, this.q * 1.1); }
+    if (!this.api) return;
+    if (!st || st.a <= .01) { this.cv.style.opacity = 0; return; }
+    this.fade = Math.min(1, (performance.now() - this.t0) / 900);
+    this.api.render({ x: st.x, y: st.y, s: st.s, a: st.a * this.fade }, Uni.w, Uni.h, this.size(m), Uni.mx || 0, Uni.my || 0, performance.now() / 1000);
   }
 };
 
-/* ===================== SPACE: 3D galaxy point cloud (cluster) and nebula backdrop (Solar System, Earth) ===================== */
+/* ===================== SPACE: the nebula behind the whole universe ===================== */
 const Space = {
-  n: 0,
-  load() {
-    if (this.loading) return; this.loading = true;
-    fetch("assets/space/galaxy.bin").then(r => r.ok ? r.arrayBuffer() : null).then(b => {
-      if (!b) return; const n = new DataView(b).getUint32(0, true); this.xyz = new Int16Array(b, 4, n * 3); this.rgb = new Uint8Array(b, 4 + n * 6, n * 3); this.n = n;
-    }).catch(() => {});
-  },
   nebula() {
     if (this.nebDone) return; this.nebDone = true;
     const im = new Image(); im.onload = () => { $("#nebula").style.backgroundImage = "url(assets/space/nebula.webp)"; }; im.src = "assets/space/nebula.webp";
   },
-  galaxy(c, w, h, t, alpha, mx, my) {
-    if (!this.n) { this.load(); return; }
-    const gw = Math.ceil(w / 2), gh = Math.ceil(h / 2);
-    if (!this.off || this.off.width !== gw || this.off.height !== gh) {
-      this.off = document.createElement("canvas"); this.off.width = gw; this.off.height = gh;
-      this.octx = this.off.getContext("2d"); this.img = this.octx.createImageData(gw, gh); this.buf = new Float32Array(gw * gh * 3);
-    }
-    const buf = this.buf, xyz = this.xyz, rgb = this.rgb; buf.fill(0);
-    const yaw = t * .035 + mx * .5, tilt = 1.12 + my * .25, cy0 = Math.cos(yaw), sy0 = Math.sin(yaw), ct = Math.cos(tilt), st = Math.sin(tilt);
-    const sc = Math.min(gw, gh) * .42 / 32000, cx = gw * .46, cy = gh * .5, k = .3;
-    for (let i = 0, j = 0; i < this.n; i++, j += 3) {
-      const x = xyz[j], y = xyz[j + 1], z = xyz[j + 2], x1 = x * cy0 - z * sy0, z1 = x * sy0 + z * cy0, y1 = y * ct - z1 * st;
-      const px = (cx + x1 * sc) | 0, py = (cy - y1 * sc) | 0; if (px < 0 || py < 0 || px >= gw || py >= gh) continue;
-      const o = (py * gw + px) * 3; buf[o] += rgb[j] * k; buf[o + 1] += rgb[j + 1] * k; buf[o + 2] += rgb[j + 2] * k;
-    }
-    const d = this.img.data;
-    for (let p = 0, o = 0, q = 0; p < gw * gh; p++, o += 3, q += 4) {
-      const r = buf[o], g = buf[o + 1], b = buf[o + 2];
-      if (r + g + b === 0) { d[q + 3] = 0; continue; }
-      d[q] = r > 255 ? 255 : r; d[q + 1] = g > 255 ? 255 : g; d[q + 2] = b > 255 ? 255 : b; d[q + 3] = 255;
-    }
-    this.octx.putImageData(this.img, 0, 0);
-    c.save(); c.globalCompositeOperation = "lighter"; c.globalAlpha = alpha * .65; c.imageSmoothingEnabled = true; c.drawImage(this.off, 0, 0, w, h); c.restore();
-  }
+  /* one 360° nebula for the whole universe: each stop looks at a different part of it, and the trip pans across */
+  stop(i) { const n = $("#nebula"); if (!n) return; n.style.backgroundPosition = ["4% 40%", "30% 55%", "52% 50%", "78% 48%"][i] + ""; n.style.opacity = [.26, .3, .34, .34][i]; }
 };
 
 /* ===================== PORTAL: hover preview of what is inside ===================== */
