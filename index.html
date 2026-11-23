@@ -91,6 +91,7 @@ body.in-view .backbtn{display:inline-flex}
 body.in-view #home{opacity:0;pointer-events:none}
 .hero{position:absolute;left:clamp(22px,6vw,90px);top:50%;transform:translateY(-40%);z-index:3;pointer-events:none;transition:opacity .5s,transform .5s}
 .hero.hidden{opacity:0;transform:translateY(-34%)}
+.hero.hidden .namewrap,.hero.hidden .hero-links{pointer-events:none;visibility:hidden;transition:visibility 0s .5s}
 .hero .namewrap{position:relative;display:inline-block;pointer-events:auto}
 .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,6.2vw,92px);line-height:1.02;letter-spacing:-1px;cursor:pointer;user-select:none;text-shadow:0 0 30px rgba(124,178,255,.3);animation:flicker 9s linear infinite}
 @keyframes flicker{0%,88%,100%{opacity:1;text-shadow:0 0 30px rgba(124,178,255,.3)}89%{opacity:.55}89.6%{opacity:1}90.4%{opacity:.7;text-shadow:0 0 6px rgba(124,178,255,.2)}91%{opacity:1;text-shadow:0 0 40px rgba(124,178,255,.5)}95%{opacity:.85}95.4%{opacity:1}}
@@ -202,7 +203,8 @@ body.in-view .view-bg{opacity:1}
 .m-hero img,.m-hero video{width:100%;height:100%;object-fit:cover}
 .m-hero.plot img{object-fit:contain;padding:12px}
 .m-hero canvas{width:100%;height:100%;display:block}
-.m-hero.gal{aspect-ratio:16/8.4;background:#05070f}.m-hero.gal img{object-fit:contain}
+.m-hero.gal{aspect-ratio:16/8.4;background:#05070f}
+.m-hero.vid{aspect-ratio:auto;background:#000;display:flex;justify-content:center}.m-hero.vid video{width:100%;height:auto;max-height:64vh;object-fit:contain}.m-hero.gal img{object-fit:contain}
 .g-nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;border:1px solid #2c3d78;background:rgba(5,8,22,.82);cursor:pointer;font-size:22px;line-height:1}
 .g-nav.prev{left:14px}.g-nav.next{right:14px}.g-nav:hover{border-color:var(--ember)}
 .g-dots{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;gap:6px;background:rgba(5,8,22,.7);padding:5px 8px;border-radius:999px}
@@ -303,20 +305,31 @@ body.in-view .view-bg{opacity:1}
 .arcade{display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;border:1px solid var(--line);border-radius:22px;padding:44px;background:radial-gradient(ellipse at 80% 50%,rgba(124,178,255,.08),transparent 60%)}
 .arcade p{color:var(--muted);max-width:46ch;margin:0}
 .arc-left{display:flex;flex-direction:column;gap:22px}
-.pi-logo{position:relative;display:flex;flex-direction:column;line-height:1;padding:8px 0 30px}
+.pi-logo{display:flex;flex-direction:column;line-height:1;padding:4px 0 6px}
+.pi-row{display:flex;align-items:center;gap:18px;margin-top:14px;flex-wrap:wrap}
 .pi-logo .pi1,.pi-logo .pi2{font-family:var(--display);font-weight:700;font-size:clamp(38px,5vw,72px);letter-spacing:-1px}
 .pi-logo .pi1{color:var(--ember);text-shadow:0 0 28px rgba(232,182,76,.35)}
 .pi-logo .pi2{color:var(--signal);text-shadow:0 0 28px rgba(124,178,255,.35)}
-.pi-logo .pi3{margin-top:12px;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
-.pi-q{position:absolute;right:6%;top:4px;display:flex;gap:14px}
-.pi-q i{width:18px;height:18px;border-radius:50%;box-shadow:0 0 0 5px rgba(255,255,255,.04),0 0 18px currentColor;background:currentColor;animation:qfloat 2.6s ease-in-out infinite}
+.pi-logo .pi3{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.pi-q{display:flex;gap:12px}
+.pi-q i{width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 5px rgba(255,255,255,.04),0 0 18px currentColor;background:currentColor;animation:qfloat 2.6s ease-in-out infinite}
 .pi-q i:nth-child(1){color:#ff5a76}.pi-q i:nth-child(2){color:#62e3b5;animation-delay:.3s}.pi-q i:nth-child(3){color:#7cb2ff;animation-delay:.6s}
 @keyframes qfloat{50%{transform:translateY(-8px)}}
-.pi-det{position:absolute;right:9%;bottom:0;width:92px;height:46px}
+.pi-det{position:relative;width:46px;height:23px;transform:scale(.5);transform-origin:left bottom;margin-right:-46px}
 .pi-det span{position:absolute;left:50%;bottom:0;border-radius:999px 999px 0 0;transform:translateX(-50%)}
 .pi-det span:nth-child(1){width:92px;height:46px;background:#ff5a76}.pi-det span:nth-child(2){width:72px;height:36px;background:#7cb2ff}
 .pi-det span:nth-child(3){width:52px;height:26px;background:#e8b64c}.pi-det span:nth-child(4){width:30px;height:15px;background:#0b1230}.pi-det span:nth-child(5){width:12px;height:6px;background:#fff}
 .keys{font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+.playbtn{align-self:flex-start;display:inline-flex;align-items:center;gap:12px;padding:14px 22px;border-radius:999px;border:0;cursor:pointer;background:var(--ember);color:#1d1203;font-family:var(--display);font-weight:700;font-size:16px;box-shadow:0 0 0 0 rgba(232,182,76,.6);animation:callHome 2s ease-out infinite}
+.playbtn:hover{filter:brightness(1.08);transform:translateY(-2px)}
+.playbtn kbd{font-family:var(--mono);font-size:11px;font-weight:700;border:1px solid rgba(29,18,3,.4);border-bottom-width:3px;border-radius:6px;padding:1px 7px;background:rgba(255,255,255,.25)}
+.howto{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;font-size:13px;color:#c3cbea}
+.howto li{display:flex;align-items:center;gap:10px}
+.howto b{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;background:#16214a;border:1px solid #33427a;color:var(--ember)}
+.howto kbd{border:1px solid #3a4880;border-bottom-width:3px;border-radius:6px;padding:1px 7px;color:var(--ink);font-family:var(--mono);font-size:12px}
+.console.idle .ss div:last-child button{background:var(--ember);box-shadow:0 0 14px var(--ember);animation:blink 1.2s ease-in-out infinite}
+.console.idle .ss div:last-child{position:relative}
+.console.idle .ss div:last-child::before{content:"press ↓";position:absolute;left:50%;top:-24px;transform:translateX(-50%) rotate(-12deg);font-size:10px;font-weight:700;color:#b07d10;white-space:nowrap;letter-spacing:.06em}
 .keys kbd{border:1px solid #3a4880;border-bottom-width:3px;border-radius:6px;padding:2px 7px;color:var(--ink);font-family:var(--mono)}
 .console{width:300px;background:linear-gradient(160deg,#d9d6cf,#bdb9b1);border-radius:18px 18px 60px 18px;padding:22px 20px 26px;box-shadow:0 30px 60px rgba(0,0,0,.6),inset 0 -6px 0 rgba(0,0,0,.12)}
 .c-screenwrap{background:#4a4f5e;border-radius:10px 10px 30px 10px;padding:16px 20px 12px}
@@ -569,12 +582,17 @@ body.in-view .view-bg{opacity:1}
   <h2 class="sec-title" id="arc-title" data-i18n-html="arc.title">Science is better when you <em>play</em>.</h2>
   <div class="arcade">
     <div class="arc-left">
-      <div class="pi-logo" aria-label="Particle Invaders"><span class="pi1">PARTICLE</span><span class="pi2">INVADERS</span><span class="pi3">CMS edition</span>
-        <div class="pi-q" aria-hidden="true"><i></i><i></i><i></i></div><div class="pi-det" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div></div>
+      <div class="pi-logo" aria-label="Particle Invaders"><span class="pi1">PARTICLE</span><span class="pi2">INVADERS</span>
+        <div class="pi-row"><span class="pi3">CMS edition</span><span class="pi-q" aria-hidden="true"><i></i><i></i><i></i></span><span class="pi-det" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span></div></div>
       <p data-i18n="arc.lede">Particle Invaders: stop the incoming quarks with photons before they reach your detector.</p>
-      <div class="keys"><span><kbd>←</kbd> <kbd>→</kbd> <span data-i18n="arc.move">move</span></span><span><kbd>Space</kbd> <span data-i18n="arc.fire">fire</span></span><span><kbd>Enter</kbd> <span data-i18n="arc.start">start</span></span></div>
+      <button class="playbtn" type="button" data-play>▶ <span data-i18n="arc.play">Play</span> <kbd>Enter</kbd></button>
+      <ol class="howto">
+        <li><b>1</b><span data-i18n-html="arc.s1">Press <kbd>Enter</kbd> or <kbd>START</kbd> to begin</span></li>
+        <li><b>2</b><span data-i18n-html="arc.s2"><kbd>←</kbd> <kbd>→</kbd> to move your detector</span></li>
+        <li><b>3</b><span data-i18n-html="arc.s3"><kbd>Space</kbd> to fire photons</span></li>
+      </ol>
     </div>
-    <div class="console" aria-label="Retro console">
+    <div class="console idle" aria-label="Retro console">
       <div class="c-screenwrap"><div class="lbl"><span><i></i>POWER</span><span id="hiscore">HI 000</span></div><canvas id="game" width="160" height="144" tabindex="0" aria-label="Particle Invaders game"></canvas></div>
       <div class="c-brand">DV-BOY</div>
       <div class="c-controls">
@@ -960,7 +978,7 @@ function esc(s) { return String(s).replace(/[&<>"]/g, m => ({ "&": "&amp;", "<":
 let LANG = "en";   // always opens in English; ES translates for this visit
 const ES = {
   "intro.skip": "Saltar intro", "intro.chapter": "Capítulo I", "intro.pagetitle": "Hacia el horizonte de sucesos",
-  "intro.sub": "Mi Portafolio", "hero.mail": "Correo", "arc.help": "← → mover · Espacio disparar · Esc salir",
+  "intro.sub": "Mi Portafolio", "arc.play": "Jugar", "arc.s1": "Pulsa <kbd>Enter</kbd> o <kbd>START</kbd> para empezar", "arc.s2": "<kbd>←</kbd> <kbd>→</kbd> para mover tu detector", "arc.s3": "<kbd>Espacio</kbd> para disparar fotones", "hero.mail": "Correo", "arc.help": "← → mover · Espacio disparar · Esc salir",
   "hero.fall": "Déjate caer", "intro.subsmall": "física · IA · datos", "intro.open": "Abrir el libro", "intro.hint": "o pulsa Enter",
   "top.back": "Universo", "hero.line": "<b>Ingeniería en Computación</b> · <span class=\"c1\">Física</span> · <span class=\"c2\">IA</span> · <span class=\"c3\">Datos</span>",
   "home.hint": "haz scroll ↕ o usa las flechas para viajar",
@@ -1172,7 +1190,7 @@ function fillModal() {
   Visited.mark(p.theme);
   const hero = $("#mHero");
   if (modalAnim) { Previews.remove(modalAnim); modalAnim = null; }
-  hero.className = "m-hero" + (!p.video && p.img && p.plot ? " plot" : "") + (p.gallery ? " gal" : "");
+  hero.className = "m-hero" + (!p.video && p.img && p.plot ? " plot" : "") + (p.gallery ? " gal" : "") + (p.video ? " vid" : "");
   if (p.video) hero.innerHTML = `<video src="${p.video}" poster="${p.img || ""}" autoplay muted loop playsinline aria-label="${esc(L(p.title))}"></video>`;
   else if (p.gallery) {
     let gi = 0; const show = () => { $("img", hero).src = p.gallery[gi]; $$(".g-dots i", hero).forEach((d, k) => d.classList.toggle("on", k === gi)); };
@@ -2015,8 +2033,9 @@ const NameFX = {
     this.name.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); this.fire(); } });
     this.name.addEventListener("mouseenter", () => this.fire());
   },
+  visible() { return !CURVIEW && Uni.i === 0 && !Uni.tr && !Uni.zoom && Intro.done && !document.hidden && !$("#modal").classList.contains("open") && !Game.full; },
   fire() {
-    if (this.busy) return; this.busy = true; Sound.collide();
+    if (this.busy || !this.visible()) return; this.busy = true; Sound.collide();
     const w = this.w, h = this.h, cx = w / 2, cy = h / 2, start = performance.now(), cols = ["#7cb2ff", "#ffb45e", "#ff5a76", "#62e3b5", "#ffd166", "#c6b3ff", "#ffffff"];
     let tracks = [];
     const spawn = () => {
@@ -2108,6 +2127,7 @@ const Game = {
       ["pointerup", "pointerleave", "pointercancel"].forEach(ev => b.addEventListener(ev, () => this.keys[k] = false));
     });
     $("#gameClose").onclick = () => this.exitFull();
+    $$("[data-play]").forEach(b => b.onclick = () => this.begin());
     this.draw();
   },
   capturing() { return this.state === "play" && this.vis; },
@@ -2119,10 +2139,11 @@ const Game = {
   enterFull() { if (this.full) return; this.full = true; $("#gScreen").appendChild(this.c); $("#gameFull").classList.add("on"); this.c.focus({ preventScroll: true }); requestAnimationFrame(() => this.fit()); },
   exitFull() {
     if (!this.full) return; this.full = false; $("#gameFull").classList.remove("on"); this.home.appendChild(this.c);
-    this.keys = {}; if (this.state === "play") this.state = "pause"; requestAnimationFrame(() => this.fit());
+    this.keys = {}; if (this.state === "play") this.state = "pause"; this.idle(); requestAnimationFrame(() => this.fit());
   },
+  idle() { $(".console").classList.toggle("idle", this.state !== "play"); },
   begin() {
-    this.enterFull();
+    this.enterFull(); setTimeout(() => this.idle(), 0);
     if (this.state === "pause") { this.state = "play"; Sound.click(); this.run(); return; }
     this.state = "play"; this.score = 0; this.lives = 3; this.wave = 0; this.p = { x: 80 }; this.b = []; this.eb = []; this.fx = []; this.higgs = null; this.hT = 600;
     this.newWave(); this.say(GAME_TXT.start); Sound.click(); this.run();
@@ -2158,7 +2179,7 @@ const Game = {
     this.fx.forEach(f => f.t += dt); this.fx = this.fx.filter(f => f.t < 22);
     if (this.msg) { this.msg.life -= dt; if (this.msg.life <= 0) this.msg = null; }
   },
-  over() { this.state = "over"; this.say(GAME_TXT.over); this.msg.life = 1e9; if (this.score > this.hi) { this.hi = this.score; store.set("dv_hi", this.hi); this.updHi(); } },
+  over() { this.state = "over"; this.idle(); this.say(GAME_TXT.over); this.msg.life = 1e9; if (this.score > this.hi) { this.hi = this.score; store.set("dv_hi", this.hi); this.updHi(); } },
   txt(s, x, y, col = "#e8edff", size = 7, w = 700) { const c = this.ctx; c.fillStyle = col; c.font = `${w} ${size}px "Space Mono", monospace`; c.textAlign = "center"; c.fillText(s, x, y); },
   wrap(s, x, y, maxW, size, col) {
     const c = this.ctx; c.font = `700 ${size}px "Space Mono", monospace`; const words = s.split(" "), lines = []; let ln = "";
@@ -2190,7 +2211,7 @@ const Game = {
     c.fillStyle = "rgba(6,9,21,.9)"; c.fillRect(0, 136, W, 8);
     this.txt("E " + String(this.score).padStart(4, "0") + " GeV", 34, 142.5, "#e8b64c", 6); this.txt("W" + this.wave, 80, 142.5, "#8d97c0", 6);
     for (let i = 0; i < this.lives; i++) this.detector(132 + i * 9, 142, .5);
-    if (this.msg) this.wrap(this.msg.t, 80, 74, 132, 7, "#e8edff");
+    if (this.msg && this.state !== "pause") this.wrap(this.msg.t, 80, 74, 132, 7, "#e8edff");
     if (this.state === "pause") this.wrap(L(GAME_TXT.paused) + " · " + L(GAME_TXT.press), 80, 100, 120, 7, "#ffd166");
     if (this.state === "over" && blink) this.txt(L(GAME_TXT.press), 80, 110, "#ffd166", 7);
   }

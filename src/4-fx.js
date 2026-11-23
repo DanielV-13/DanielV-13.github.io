@@ -10,8 +10,9 @@ const NameFX = {
     this.name.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); this.fire(); } });
     this.name.addEventListener("mouseenter", () => this.fire());
   },
+  visible() { return !CURVIEW && Uni.i === 0 && !Uni.tr && !Uni.zoom && Intro.done && !document.hidden && !$("#modal").classList.contains("open") && !Game.full; },
   fire() {
-    if (this.busy) return; this.busy = true; Sound.collide();
+    if (this.busy || !this.visible()) return; this.busy = true; Sound.collide();
     const w = this.w, h = this.h, cx = w / 2, cy = h / 2, start = performance.now(), cols = ["#7cb2ff", "#ffb45e", "#ff5a76", "#62e3b5", "#ffd166", "#c6b3ff", "#ffffff"];
     let tracks = [];
     const spawn = () => {
@@ -103,6 +104,7 @@ const Game = {
       ["pointerup", "pointerleave", "pointercancel"].forEach(ev => b.addEventListener(ev, () => this.keys[k] = false));
     });
     $("#gameClose").onclick = () => this.exitFull();
+    $$("[data-play]").forEach(b => b.onclick = () => this.begin());
     this.draw();
   },
   capturing() { return this.state === "play" && this.vis; },
@@ -114,10 +116,11 @@ const Game = {
   enterFull() { if (this.full) return; this.full = true; $("#gScreen").appendChild(this.c); $("#gameFull").classList.add("on"); this.c.focus({ preventScroll: true }); requestAnimationFrame(() => this.fit()); },
   exitFull() {
     if (!this.full) return; this.full = false; $("#gameFull").classList.remove("on"); this.home.appendChild(this.c);
-    this.keys = {}; if (this.state === "play") this.state = "pause"; requestAnimationFrame(() => this.fit());
+    this.keys = {}; if (this.state === "play") this.state = "pause"; this.idle(); requestAnimationFrame(() => this.fit());
   },
+  idle() { $(".console").classList.toggle("idle", this.state !== "play"); },
   begin() {
-    this.enterFull();
+    this.enterFull(); setTimeout(() => this.idle(), 0);
     if (this.state === "pause") { this.state = "play"; Sound.click(); this.run(); return; }
     this.state = "play"; this.score = 0; this.lives = 3; this.wave = 0; this.p = { x: 80 }; this.b = []; this.eb = []; this.fx = []; this.higgs = null; this.hT = 600;
     this.newWave(); this.say(GAME_TXT.start); Sound.click(); this.run();
@@ -153,7 +156,7 @@ const Game = {
     this.fx.forEach(f => f.t += dt); this.fx = this.fx.filter(f => f.t < 22);
     if (this.msg) { this.msg.life -= dt; if (this.msg.life <= 0) this.msg = null; }
   },
-  over() { this.state = "over"; this.say(GAME_TXT.over); this.msg.life = 1e9; if (this.score > this.hi) { this.hi = this.score; store.set("dv_hi", this.hi); this.updHi(); } },
+  over() { this.state = "over"; this.idle(); this.say(GAME_TXT.over); this.msg.life = 1e9; if (this.score > this.hi) { this.hi = this.score; store.set("dv_hi", this.hi); this.updHi(); } },
   txt(s, x, y, col = "#e8edff", size = 7, w = 700) { const c = this.ctx; c.fillStyle = col; c.font = `${w} ${size}px "Space Mono", monospace`; c.textAlign = "center"; c.fillText(s, x, y); },
   wrap(s, x, y, maxW, size, col) {
     const c = this.ctx; c.font = `700 ${size}px "Space Mono", monospace`; const words = s.split(" "), lines = []; let ln = "";
@@ -185,7 +188,7 @@ const Game = {
     c.fillStyle = "rgba(6,9,21,.9)"; c.fillRect(0, 136, W, 8);
     this.txt("E " + String(this.score).padStart(4, "0") + " GeV", 34, 142.5, "#e8b64c", 6); this.txt("W" + this.wave, 80, 142.5, "#8d97c0", 6);
     for (let i = 0; i < this.lives; i++) this.detector(132 + i * 9, 142, .5);
-    if (this.msg) this.wrap(this.msg.t, 80, 74, 132, 7, "#e8edff");
+    if (this.msg && this.state !== "pause") this.wrap(this.msg.t, 80, 74, 132, 7, "#e8edff");
     if (this.state === "pause") this.wrap(L(GAME_TXT.paused) + " · " + L(GAME_TXT.press), 80, 100, 120, 7, "#ffd166");
     if (this.state === "over" && blink) this.txt(L(GAME_TXT.press), 80, 110, "#ffd166", 7);
   }

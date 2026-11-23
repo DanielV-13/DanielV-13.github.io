@@ -21,7 +21,7 @@ function esc(s) { return String(s).replace(/[&<>"]/g, m => ({ "&": "&amp;", "<":
 let LANG = "en";   // always opens in English; ES translates for this visit
 const ES = {
   "intro.skip": "Saltar intro", "intro.chapter": "Capítulo I", "intro.pagetitle": "Hacia el horizonte de sucesos",
-  "intro.sub": "Mi Portafolio", "hero.mail": "Correo", "arc.help": "← → mover · Espacio disparar · Esc salir",
+  "intro.sub": "Mi Portafolio", "arc.play": "Jugar", "arc.s1": "Pulsa <kbd>Enter</kbd> o <kbd>START</kbd> para empezar", "arc.s2": "<kbd>←</kbd> <kbd>→</kbd> para mover tu detector", "arc.s3": "<kbd>Espacio</kbd> para disparar fotones", "hero.mail": "Correo", "arc.help": "← → mover · Espacio disparar · Esc salir",
   "hero.fall": "Déjate caer", "intro.subsmall": "física · IA · datos", "intro.open": "Abrir el libro", "intro.hint": "o pulsa Enter",
   "top.back": "Universo", "hero.line": "<b>Ingeniería en Computación</b> · <span class=\"c1\">Física</span> · <span class=\"c2\">IA</span> · <span class=\"c3\">Datos</span>",
   "home.hint": "haz scroll ↕ o usa las flechas para viajar",
@@ -233,7 +233,7 @@ function fillModal() {
   Visited.mark(p.theme);
   const hero = $("#mHero");
   if (modalAnim) { Previews.remove(modalAnim); modalAnim = null; }
-  hero.className = "m-hero" + (!p.video && p.img && p.plot ? " plot" : "") + (p.gallery ? " gal" : "");
+  hero.className = "m-hero" + (!p.video && p.img && p.plot ? " plot" : "") + (p.gallery ? " gal" : "") + (p.video ? " vid" : "");
   if (p.video) hero.innerHTML = `<video src="${p.video}" poster="${p.img || ""}" autoplay muted loop playsinline aria-label="${esc(L(p.title))}"></video>`;
   else if (p.gallery) {
     let gi = 0; const show = () => { $("img", hero).src = p.gallery[gi]; $$(".g-dots i", hero).forEach((d, k) => d.classList.toggle("on", k === gi)); };
