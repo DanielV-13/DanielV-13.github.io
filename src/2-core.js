@@ -103,6 +103,7 @@ const Sound = {
   shoot() { this.tone(1200, .07, "square", .02, 600); },
   boom() { this.noise(.18, .05, 500); },
   peel() { this.noise(.25, .05, 2600); },
+  stick() { this.noise(.08, .04, 1200); this.tone(320, .09, "sine", .03, 180); },
   warp() { this.tone(80, 1.1, "sine", .06, 900); this.noise(1, .03, 300); },
   portal() { this.tone(520, .25, "sine", .025, 1040); }
 };
@@ -370,11 +371,43 @@ function renderStickers() {
     return `<button type="button" class="sticker" style="--rot:${s.rot}deg" aria-label="${esc(L(s.sub) || s.txt || s.id.toUpperCase())}"><span class="shadow"></span><span class="s-rot"><span class="s-in"><span class="s-face" style="--bg:${s.bg};--fg:${s.fg}">${face}${sub}</span><span class="s-back"></span></span></span></button>`;
   }).join("");
   $$("#stickers .sticker").forEach(s => {
-    s.onclick = () => {
-      s.classList.remove("peel"); void s.offsetWidth; s.classList.add("peel"); Sound.peel();
-      clearTimeout(s._t); s._t = setTimeout(() => s.classList.remove("peel"), 1700);
-    };
+    s.onclick = () => peelSticker(s);
   });
+}
+/* A sticker peels off from one corner, drops with gravity (spinning, swaying a little) and later sticks back in its place */
+async function peelSticker(s) {
+  if (s.classList.contains("off") || !s.animate) return;
+  s.classList.add("off"); Sound.peel();
+  const inner = $(".s-in", s), sh = $(".shadow", s);
+  try {
+    if (REDUCED) {
+      await s.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: "forwards" }).finished;
+    } else {
+      inner.style.transformOrigin = "18% 18%";
+      sh.animate([{ opacity: 0, transform: "translateY(8px)" }, { opacity: .9, transform: "translate(10px,18px) scale(1.08)" }], { duration: 360, fill: "forwards" });
+      await inner.animate([{ transform: "none" }, { transform: "translateZ(10px) rotate3d(1,-1,0,26deg)", offset: .55 }, { transform: "translateZ(22px) rotate3d(1,-1,0,52deg)" }],
+        { duration: 380, easing: "cubic-bezier(.4,0,.6,1)", fill: "forwards" }).finished;
+      s.classList.add("fly");
+      const dir = Math.random() < .5 ? -1 : 1, spin = dir * (140 + Math.random() * 140), fall = Math.max(380, innerHeight * .6), sway = dir * (18 + Math.random() * 22);
+      sh.animate([{ opacity: .9 }, { opacity: 0 }], { duration: 200, fill: "forwards" });
+      await s.animate([
+        { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
+        { transform: `translate(${sway}px,${fall * .14}px) rotate(${spin * .25}deg)`, opacity: 1, offset: .25 },
+        { transform: `translate(${-sway * .6}px,${fall * .45}px) rotate(${spin * .6}deg)`, opacity: 1, offset: .55 },
+        { transform: `translate(${sway * .4}px,${fall}px) rotate(${spin}deg)`, opacity: 0 }
+      ], { duration: 950, easing: "cubic-bezier(.45,0,.9,.6)", fill: "forwards" }).finished;
+    }
+    await new Promise(r => setTimeout(r, 900));
+    s.getAnimations().forEach(a => a.cancel()); inner.getAnimations().forEach(a => a.cancel()); sh.getAnimations().forEach(a => a.cancel());
+    inner.style.transformOrigin = ""; s.classList.remove("fly");
+    Sound.stick();
+    await s.animate(REDUCED ? [{ opacity: 0 }, { opacity: 1 }] : [
+      { transform: "scale(1.18)", opacity: 0, filter: "drop-shadow(0 16px 14px rgba(0,0,0,.5))" },
+      { transform: "scale(.95)", opacity: 1, filter: "drop-shadow(0 4px 6px rgba(0,0,0,.4))", offset: .65 },
+      { transform: "scale(1)", opacity: 1, filter: "drop-shadow(0 0 0 rgba(0,0,0,0))" }
+    ], { duration: REDUCED ? 250 : 420, easing: "cubic-bezier(.2,.8,.2,1)" }).finished;
+  } catch (e) {}
+  s.classList.remove("off", "fly");
 }
 function renderTimeline() {
   $("#timeline").innerHTML = TIMELINE.map(it => {

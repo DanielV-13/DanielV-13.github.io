@@ -499,13 +499,13 @@ const Uni = {
     if (!this.active() || this.tr || e.pointerType === "touch") return; this.setHover(this.hit(e));
   },
   setHover(h) {
-    const prev = this.hover; this.hover = h ? h.k : null; this.c.style.cursor = h ? "pointer" : "crosshair";
+    const prev = this.hover; this.hover = h ? h.k : null; this.c.style.cursor = h ? "var(--cp, pointer)" : "var(--cd, crosshair)";
     if (h && prev !== this.hover) Sound.hover();
     if (h && h.portal) { this.tip.style.opacity = 0; Portal.show(h); }
     else { Portal.hide(); if (h) { this.tip.textContent = this.label(h); this.tip.style.left = h.x + "px"; this.tip.style.top = (h.y - 8) + "px"; this.tip.style.opacity = 1; } else this.tip.style.opacity = 0; }
     if (REDUCED) this.frame(0);
   },
-  clearHover() { this.hover = null; if (this.tip) this.tip.style.opacity = 0; Portal.hide(); if (this.c) this.c.style.cursor = "crosshair"; },
+  clearHover() { this.hover = null; if (this.tip) this.tip.style.opacity = 0; Portal.hide(); if (this.c) this.c.style.cursor = "var(--cd, crosshair)"; },
   onClick(e) {
     if (!this.active() || this.tr) return;
     const h = this.hit(e); if (!h) { this.clearHover(); return; }

@@ -44,19 +44,19 @@ const NameFX = {
 };
 
 /* ===================== CURSOR: a charged particle in a magnetic field ===================== */
-/* The red head is moved straight from the pointer event (no frame of lag); the canvas only draws the curling trail. */
+/* The red head is the system cursor itself (CSS, drawn by the OS: no lag at all); the canvas only draws the curling trail. */
 const CursorFX = {
   init() {
     if (!FINE || REDUCED) return;
     this.c = $("#cursorfx"); this.head = $("#cursorHead"); this.pts = []; this.x = -99; this.y = -99; this.running = false;
+    document.documentElement.classList.add("cur");
     const size = () => this.ctx = fitCanvas(this.c, innerWidth, innerHeight); size(); addEventListener("resize", size);
     addEventListener("pointermove", e => {
       if (e.pointerType !== "mouse") return;
-      this.head.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`; this.head.style.opacity = 1;
       let vx = e.clientX - this.x, vy = e.clientY - this.y; if (Math.hypot(vx, vy) > 90) { this.pts = []; vx = vy = 0; } this.x = e.clientX; this.y = e.clientY;
       this.pts.push({ x: this.x, y: this.y, vx: vx * .04, vy: vy * .04, a: 1 }); if (this.pts.length > 18) this.pts.shift(); this.start();
     }, { passive: true });
-    document.documentElement.addEventListener("pointerleave", () => { this.head.style.opacity = 0; this.pts = []; this.x = this.y = -999; });
+    document.documentElement.addEventListener("pointerleave", () => { this.pts = []; this.x = this.y = -999; });
     addEventListener("blur", () => { this.pts = []; this.x = this.y = -999; });
   },
   start() { if (this.running) return; this.running = true; const loop = () => { if (this.draw()) requestAnimationFrame(loop); else this.running = false; }; requestAnimationFrame(loop); },
