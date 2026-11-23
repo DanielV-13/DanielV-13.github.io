@@ -15,15 +15,15 @@ const ANIMS = {
       for (let s2 = 0; s2 < len; s2 += 4) { a += q * .02; x += Math.cos(a) * 4; y += Math.sin(a) * 4; c.lineTo(x, y); } c.stroke();
     }
     c.fillStyle = "#fff"; c.beginPath(); c.arc(cx, cy, 3, 0, 7); c.fill();
-    c.fillStyle = "#e8b64c"; c.font = `700 ${Math.max(10, h * .06)}px JetBrains Mono, monospace`; c.textAlign = "left"; c.fillText("ttH candidate", w * .74, h * .2);
-    c.fillStyle = "#8d97c0"; c.font = `${Math.max(9, h * .05)}px JetBrains Mono, monospace`; c.fillText("event #" + (40213 + ev), w * .74, h * .3); c.fillText("√s = 13 TeV", w * .74, h * .38);
+    c.fillStyle = "#e8b64c"; c.font = `700 ${Math.max(10, h * .06)}px Space Mono, monospace`; c.textAlign = "left"; c.fillText("ttH candidate", w * .74, h * .2);
+    c.fillStyle = "#8d97c0"; c.font = `${Math.max(9, h * .05)}px Space Mono, monospace`; c.fillText("event #" + (40213 + ev), w * .74, h * .3); c.fillText("√s = 13 TeV", w * .74, h * .38);
   },
   param(c, w, h, t) {
     c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);
     const x0 = w * .12, y0 = h * .84, ww = w * .8, hh = h * .66, X = m => x0 + (m - 450) / 600 * ww, Y = a => y0 - (a - .6) / .4 * hh;
     c.fillStyle = "rgba(232,182,76,.12)"; c.fillRect(X(720), y0 - hh, X(780) - X(720), hh);
     c.strokeStyle = "#2a3a70"; c.beginPath(); c.moveTo(x0, y0 - hh); c.lineTo(x0, y0); c.lineTo(x0 + ww, y0); c.stroke();
-    c.fillStyle = "#8d97c0"; c.font = `${Math.max(9, h * .052)}px JetBrains Mono, monospace`; c.textAlign = "left"; c.fillText("AUC", x0 + 4, y0 - hh + 2); c.textAlign = "right"; c.fillText("mass [GeV]", x0 + ww, y0 + h * .1);
+    c.fillStyle = "#8d97c0"; c.font = `${Math.max(9, h * .052)}px Space Mono, monospace`; c.textAlign = "left"; c.fillText("AUC", x0 + 4, y0 - hh + 2); c.textAlign = "right"; c.fillText("mass [GeV]", x0 + ww, y0 + h * .1);
     const f = m => .7 + .27 * (1 - Math.exp(-(m - 480) / 180));
     c.strokeStyle = "#7cb2ff"; c.lineWidth = 2; c.beginPath(); for (let m = 500; m <= 1000; m += 10) { m === 500 ? c.moveTo(X(m), Y(f(m))) : c.lineTo(X(m), Y(f(m))); } c.stroke();
     [500, 750, 1000].forEach(m => { c.fillStyle = "#ff7aa8"; c.fillRect(X(m) - 3, Y(f(m) - .004) - 3, 6, 6); });
@@ -39,7 +39,7 @@ const ANIMS = {
     c.strokeStyle = "#e8b64c"; c.setLineDash([5, 4]); c.beginPath(); c.moveTo(x0, Y(1)); c.lineTo(x0 + ww, Y(1)); c.stroke(); c.setLineDash([]);
     c.strokeStyle = "#7cb2ff"; c.lineWidth = 2.2; c.beginPath(); for (let u = 0; u <= 1; u += .01) { const v = nll(u); u === 0 ? c.moveTo(X(u), Y(Math.min(v, 4))) : c.lineTo(X(u), Y(Math.min(v, 4))); } c.stroke();
     const u = .5 + Math.sin(t * .9) * .42; c.fillStyle = "#fff"; c.beginPath(); c.arc(X(u), Y(Math.min(nll(u), 4)), 4.5, 0, 7); c.fill();
-    c.fillStyle = "#8d97c0"; c.font = `${Math.max(9, h * .052)}px JetBrains Mono, monospace`; c.textAlign = "left"; c.fillText("−2 Δln L", x0 + 4, y0 - hh + 2);
+    c.fillStyle = "#8d97c0"; c.font = `${Math.max(9, h * .052)}px Space Mono, monospace`; c.textAlign = "left"; c.fillText("−2 Δln L", x0 + 4, y0 - hh + 2);
     c.textAlign = "right"; c.fillText("signal μ", x0 + ww, y0 + h * .1); c.fillStyle = "#e8b64c"; c.fillText("1σ", x0 + ww, Y(1) - 6);
   },
   dnn(c, w, h, t) {
@@ -48,7 +48,7 @@ const ANIMS = {
     const ph = (t * .9) % (layers.length + .6);
     for (let i = 0; i < layers.length - 1; i++) pos[i].forEach(a => pos[i + 1].forEach(b => { const on = ph > i && ph < i + 1.4; c.strokeStyle = on ? "rgba(232,182,76,.5)" : "rgba(124,178,255,.13)"; c.lineWidth = 1; c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); }));
     pos.forEach((L2, i) => L2.forEach(([x, y], j) => { const lit = ph > i - .2 && ph < i + 1; c.fillStyle = lit ? "#e8b64c" : "#16214a"; c.strokeStyle = "#7cb2ff"; c.beginPath(); c.arc(x, y, Math.min(w, h) * .035, 0, 7); c.fill(); c.stroke(); }));
-    c.fillStyle = "#8d97c0"; c.font = `${Math.max(9, h * .05)}px JetBrains Mono, monospace`; c.textAlign = "center";
+    c.fillStyle = "#8d97c0"; c.font = `${Math.max(9, h * .05)}px Space Mono, monospace`; c.textAlign = "center";
     ["input", "ReLU", "ReLU", "sigmoid"].forEach((s, i) => c.fillText(s, xs[i], h * .93));
     c.fillStyle = "#62e3b5"; c.textAlign = "left"; c.fillText("loss " + (0.69 * Math.exp(-((t * .3) % 4)) + .05).toFixed(3), w * .04, h * .1);
   },
@@ -60,7 +60,7 @@ const ANIMS = {
     c.strokeStyle = "#7cb2ff"; c.lineWidth = 2; c.beginPath(); for (let x = -6; x <= 6; x += .1) x === -6 ? c.moveTo(X(x), Y(f(x))) : c.lineTo(X(x), Y(f(x))); c.stroke();
     const a = Math.sin(t * .5) * 5.2, s = df(a); c.strokeStyle = "#e8b64c"; c.lineWidth = 1.8; c.beginPath(); c.moveTo(X(a - 1.6), Y(f(a) - 1.6 * s)); c.lineTo(X(a + 1.6), Y(f(a) + 1.6 * s)); c.stroke();
     c.fillStyle = "#fff"; c.beginPath(); c.arc(X(a), Y(f(a)), 4.5, 0, 7); c.fill();
-    c.fillStyle = "#e8b64c"; c.font = `${Math.max(10, h * .058)}px JetBrains Mono, monospace`; c.textAlign = "left"; c.fillText("f(a + ε) = f(a) + f′(a)·ε", w * .06, h * .12);
+    c.fillStyle = "#e8b64c"; c.font = `${Math.max(10, h * .058)}px Space Mono, monospace`; c.textAlign = "left"; c.fillText("f(a + ε) = f(a) + f′(a)·ε", w * .06, h * .12);
     c.fillStyle = "#8d97c0"; c.fillText("f′(" + a.toFixed(2) + ") = " + s.toFixed(3), w * .06, h * .92);
   },
   data(c, w, h, t) {
@@ -81,7 +81,7 @@ const ANIMS = {
     [[1, .55, "2"], [0, .75, "1"], [2, .4, "3"]].forEach(([i, hh, n], j) => {
       const x = bx + j * (bw + 6), y = base - hh * h * .6;
       c.fillStyle = n === "3" ? "#ffb45e" : "#1c2958"; c.fillRect(x, y, bw, base - y);
-      c.fillStyle = n === "3" ? "#1d1203" : "#8d97c0"; c.font = `600 ${Math.round(h * .09)}px JetBrains Mono, monospace`; c.textAlign = "center"; c.fillText(n, x + bw / 2, base - 8);
+      c.fillStyle = n === "3" ? "#1d1203" : "#8d97c0"; c.font = `600 ${Math.round(h * .09)}px Space Mono, monospace`; c.textAlign = "center"; c.fillText(n, x + bw / 2, base - 8);
     });
     const sy = base - .4 * h * .6 - 18 - Math.abs(Math.sin(t * 3)) * 6;
     c.fillStyle = "#ffd166"; c.font = `${Math.round(h * .12)}px serif`; c.fillText("★", bx + 2 * (bw + 6) + bw / 2, sy);
@@ -90,7 +90,7 @@ const ANIMS = {
     c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);
     const x0 = w * .12, y0 = h * .84, ww = w * .8, hh = h * .66;
     c.strokeStyle = "#2a3a70"; c.lineWidth = 1; c.beginPath(); c.moveTo(x0, y0 - hh); c.lineTo(x0, y0); c.lineTo(x0 + ww, y0); c.stroke();
-    c.fillStyle = "#8d97c0"; c.font = `${Math.max(9, h * .055)}px JetBrains Mono, monospace`; c.textAlign = "left";
+    c.fillStyle = "#8d97c0"; c.font = `${Math.max(9, h * .055)}px Space Mono, monospace`; c.textAlign = "left";
     c.fillText("B/A [MeV]", x0 + 4, y0 - hh + 2); c.textAlign = "right"; c.fillText("A", x0 + ww, y0 + h * .1);
     const BA = A => { const Z = A / (2 + .0155 * Math.pow(A, 2 / 3)); return (15.8 * A - 18.3 * Math.pow(A, 2 / 3) - .714 * Z * Z / Math.pow(A, 1 / 3) - 23.2 * (A - 2 * Z) ** 2 / A) / A; };
     const X = A => x0 + (A / 250) * ww, Y = v => y0 - (clamp(v, 0, 9.5) / 9.5) * hh;
@@ -125,10 +125,10 @@ const ANIMS = {
     c.moveTo(w * .38 + tw, h * .48 + rh * 2); c.bezierCurveTo(w * .7, h * .5, w * .6, h * .4, w * .7, h * .14 + rh * 3); c.stroke();
     const scan = Math.floor(t * 2) % 5;
     tables.forEach(([x, y, name], k) => {
-      x *= w; y *= h; c.fillStyle = "#ffd166"; c.fillRect(x, y, tw, rh); c.fillStyle = "#2a1c00"; c.font = `700 ${Math.max(8, rh * .55)}px JetBrains Mono, monospace`; c.textAlign = "left"; c.fillText(name, x + 6, y + rh * .7);
+      x *= w; y *= h; c.fillStyle = "#ffd166"; c.fillRect(x, y, tw, rh); c.fillStyle = "#2a1c00"; c.font = `700 ${Math.max(8, rh * .55)}px Space Mono, monospace`; c.textAlign = "left"; c.fillText(name, x + 6, y + rh * .7);
       for (let r = 0; r < 4; r++) { c.fillStyle = r === scan % 4 && k === Math.floor(t / 2) % 3 ? "#2b3c78" : "#131c44"; c.fillRect(x, y + rh * (r + 1), tw, rh - 1); c.fillStyle = "#4a5a92"; c.fillRect(x + 6, y + rh * (r + 1) + rh * .35, tw * (.3 + ((r * 7 + k) % 5) * .1), rh * .3); }
     });
-    c.fillStyle = "#62e3b5"; c.font = `${Math.max(9, h * .06)}px JetBrains Mono, monospace`; c.textAlign = "left"; c.fillText("0FN → 1FN → 2FN → 3FN", w * .06, h * .92);
+    c.fillStyle = "#62e3b5"; c.font = `${Math.max(9, h * .06)}px Space Mono, monospace`; c.textAlign = "left"; c.fillText("0FN → 1FN → 2FN → 3FN", w * .06, h * .92);
   },
   phone(c, w, h, t) {
     c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);
@@ -144,7 +144,7 @@ const ANIMS = {
     }
     c.fillStyle = k === 5 ? "#62e3b5" : "#3d7a5c"; roundRect(c, x + 12, y + ph * .86, pw - 24, ph * .08, 8); c.fill();
     c.fillStyle = "#fff"; c.textAlign = "center"; c.font = `600 ${ph * .035}px Manrope, sans-serif`; c.fillText(k === 5 ? "Saved offline ✓" : "Save", x + pw / 2, y + ph * .913);
-    c.fillStyle = "#ff7aa8"; c.font = `${Math.max(9, h * .055)}px JetBrains Mono, monospace`; c.textAlign = "left"; c.fillText("⌀ no network", w * .06, h * .14);
+    c.fillStyle = "#ff7aa8"; c.font = `${Math.max(9, h * .055)}px Space Mono, monospace`; c.textAlign = "left"; c.fillText("⌀ no network", w * .06, h * .14);
     c.fillStyle = "#62e3b5"; c.fillText("SQLite ✓", w * .06, h * .24);
   },
   platformer(c, w, h, t) {
@@ -158,7 +158,7 @@ const ANIMS = {
       c.fillStyle = "#adb5bd"; for (let a = 0; a < 8; a++) { c.rotate(Math.PI / 4); c.fillRect(-s * .2, -s * 1.3, s * .4, s * .6); } c.beginPath(); c.arc(0, 0, s * .9, 0, 7); c.fill(); c.restore();
       const ax = (sx + w * .22) % (w * 1.35); c.fillStyle = "#e03131"; c.beginPath(); c.arc(ax, gy - s * 4, s * .55, 0, 7); c.fill();
     }
-    c.fillStyle = "#fff"; c.font = `700 ${s * 1.2}px JetBrains Mono, monospace`; c.textAlign = "left"; c.fillText("SCORE " + String(Math.floor(t * 3) % 999).padStart(3, "0"), s, s * 1.8);
+    c.fillStyle = "#fff"; c.font = `700 ${s * 1.2}px Space Mono, monospace`; c.textAlign = "left"; c.fillText("SCORE " + String(Math.floor(t * 3) % 999).padStart(3, "0"), s, s * 1.8);
   },
   kart(c, w, h, t) {
     const g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, "#1b2a5e"); g.addColorStop(.45, "#ff9f5a"); g.addColorStop(.46, "#2f5a2a"); g.addColorStop(1, "#1f3d1c"); c.fillStyle = g; c.fillRect(0, 0, w, h);
@@ -169,20 +169,20 @@ const ANIMS = {
     for (let i = 0; i < 6; i++) { const p = ((i / 6 + t * .6) % 1), y = hz + p * p * (h - hz); c.fillStyle = i % 2 ? "#e03131" : "#fff"; c.fillRect(lerp(cx - w * .03, w * .05, p) - 6 * p, y, 8 * p + 2, 4 + p * 8); c.fillRect(lerp(cx + w * .03, w * .95, p), y, 8 * p + 2, 4 + p * 8); }
     const kx = w / 2 + Math.sin(t * 1.4) * w * .12, ky = h * .8, kw = w * .14;
     c.fillStyle = "#e03131"; roundRect(c, kx - kw / 2, ky - kw * .3, kw, kw * .45, 6); c.fill(); c.fillStyle = "#111"; c.fillRect(kx - kw * .6, ky, kw * .22, kw * .2); c.fillRect(kx + kw * .38, ky, kw * .22, kw * .2);
-    if (Math.sin(t * 2) > .6) { c.fillStyle = "#ffd166"; c.font = `700 ${h * .08}px JetBrains Mono, monospace`; c.textAlign = "center"; c.fillText("BOOST ▲▲", kx, ky - kw * .5); }
+    if (Math.sin(t * 2) > .6) { c.fillStyle = "#ffd166"; c.font = `700 ${h * .08}px Space Mono, monospace`; c.textAlign = "center"; c.fillText("BOOST ▲▲", kx, ky - kw * .5); }
   },
   network(c, w, h, t) {
     c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);
     const box = (x, y, label, items, col) => {
       c.strokeStyle = col; c.lineWidth = 1.5; roundRect(c, x, y, w * .3, h * .6, 10); c.stroke();
-      c.fillStyle = col; c.font = `600 ${Math.max(9, h * .055)}px JetBrains Mono, monospace`; c.textAlign = "left"; c.fillText(label, x + 8, y + h * .08);
-      items.forEach((it, i) => { c.fillStyle = "#16214a"; roundRect(c, x + 10, y + h * (.14 + i * .14), w * .3 - 20, h * .1, 6); c.fill(); c.fillStyle = "#c3cbea"; c.font = `${Math.max(8, h * .045)}px JetBrains Mono, monospace`; c.fillText("▣ " + it, x + 16, y + h * (.205 + i * .14)); });
+      c.fillStyle = col; c.font = `600 ${Math.max(9, h * .055)}px Space Mono, monospace`; c.textAlign = "left"; c.fillText(label, x + 8, y + h * .08);
+      items.forEach((it, i) => { c.fillStyle = "#16214a"; roundRect(c, x + 10, y + h * (.14 + i * .14), w * .3 - 20, h * .1, 6); c.fill(); c.fillStyle = "#c3cbea"; c.font = `${Math.max(8, h * .045)}px Space Mono, monospace`; c.fillText("▣ " + it, x + 16, y + h * (.205 + i * .14)); });
     };
     box(w * .05, h * .2, "machine A", ["app :3000", "express", "views"], "#7cb2ff");
     box(w * .65, h * .2, "machine B", ["postgres", "reports", "volume"], "#62e3b5");
     const ax = w * .35, bx = w * .65, y = h * .5;
     c.strokeStyle = "#ffb45e"; c.setLineDash([4, 4]); c.beginPath(); c.moveTo(ax, y); c.quadraticCurveTo(w / 2, y - h * .3, bx, y); c.stroke(); c.setLineDash([]);
-    c.fillStyle = "#ffb45e"; c.font = `${Math.max(9, h * .05)}px JetBrains Mono, monospace`; c.textAlign = "center"; c.fillText("tailscale", w / 2, y - h * .2);
+    c.fillStyle = "#ffb45e"; c.font = `${Math.max(9, h * .05)}px Space Mono, monospace`; c.textAlign = "center"; c.fillText("tailscale", w / 2, y - h * .2);
     for (let i = 0; i < 4; i++) { const p = (t * .5 + i / 4) % 1, q = i % 2 ? 1 - p : p; const x = (1 - q) * (1 - q) * ax + 2 * (1 - q) * q * (w / 2) + q * q * bx, yy = (1 - q) * (1 - q) * y + 2 * (1 - q) * q * (y - h * .3) + q * q * y; c.fillStyle = i % 2 ? "#62e3b5" : "#7cb2ff"; c.fillRect(x - 3, yy - 3, 6, 6); }
   },
   invoice(c, w, h, t) {
@@ -196,7 +196,7 @@ const ANIMS = {
   pdf2xlsx(c, w, h, t) {
     c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);
     const px = w * .07, py = h * .12, pw = w * .28, ph = h * .76; c.fillStyle = "#f6f7fb"; c.fillRect(px, py, pw, ph);
-    c.fillStyle = "#e03131"; c.fillRect(px, py, pw * .35, ph * .09); c.fillStyle = "#fff"; c.font = `700 ${ph * .06}px JetBrains Mono, monospace`; c.textAlign = "left"; c.fillText("PDF", px + 5, py + ph * .068);
+    c.fillStyle = "#e03131"; c.fillRect(px, py, pw * .35, ph * .09); c.fillStyle = "#fff"; c.font = `700 ${ph * .06}px Space Mono, monospace`; c.textAlign = "left"; c.fillText("PDF", px + 5, py + ph * .068);
     for (let i = 0; i < 9; i++) { c.fillStyle = "#b5bacd"; c.fillRect(px + 8, py + ph * (.18 + i * .085), (pw - 16) * (.5 + ((i * 3) % 5) * .1), ph * .025); }
     for (let i = 0; i < 5; i++) { const p = (t * .6 + i / 5) % 1, x = lerp(px + pw + 8, w * .58, p); c.fillStyle = "#ffb45e"; c.globalAlpha = Math.sin(p * Math.PI); c.fillRect(x, h / 2 - 3 + Math.sin(p * 9) * 5, 6, 6); }
     c.globalAlpha = 1;
@@ -279,12 +279,19 @@ const SMC = { q: "#b18cff", l: "#62e3b5", b: "#ff9a4c", h: "#e8b64c" };
 const Uni = {
   i: 0, tr: null, hover: null, w: 0, h: 0, running: false, wheelLock: 0, zoom: null, satA: 2.2, lastT: 0, targets: [], ptype: "mouse",
   init() {
-    this.c = $("#uni"); this.home = $("#home"); this.tip = $("#tip");
+    this.c = $("#uni"); this.home = $("#home"); this.tip = $("#tip"); this.neb = $("#nebula"); BH3D.init($("#bh3d"));
     this.bg = Array.from({ length: 320 }, () => [Math.random(), Math.random(), Math.random() * 1.2 + .2, Math.random()]);
     this.gal = Array.from({ length: 70 }, () => ({ x: Math.random(), y: Math.random(), s: Math.random() * 9 + 2, a: Math.random() * 3, c: ["#ffe2b8", "#cfe0ff", "#ffd0e0", "#fff"][Math.floor(Math.random() * 4)] }));
     addEventListener("resize", () => this.resize()); this.resize();
     $("#uniPrev").onclick = () => this.go(this.i - 1); $("#uniNext").onclick = () => this.go(this.i + 1);
-    this.c.addEventListener("pointerdown", e => this.ptype = e.pointerType || "mouse");
+    this.c.addEventListener("pointerdown", e => {
+      this.ptype = e.pointerType || "mouse"; this.dragged = false;
+      if (!BH3D.ok || !this.active() || this.tr || LEVELS[this.i].id !== "bh") return;
+      const h = this.hit(e); if (!h || h.k !== "bh") return;
+      this.drag = { x: e.clientX, y: e.clientY, d: 0 }; try { this.c.setPointerCapture(e.pointerId); } catch (er) {}
+      this.c.style.cursor = "grabbing";
+    });
+    this.c.addEventListener("pointerup", () => { if (this.drag) { this.dragged = this.drag.d > 6; this.drag = null; this.c.style.cursor = "grab"; } });
     this.c.addEventListener("pointermove", e => { this.ptype = e.pointerType || "mouse"; this.onMove(e); });
     this.c.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") this.clearHover(); });
     this.c.addEventListener("click", e => this.onClick(e));
@@ -327,7 +334,7 @@ const Uni = {
   hideHint() { if (this.hinted) return; this.hinted = true; store.set("dv_hint", 1); $("#hint").classList.add("gone"); },
   focus(id) {
     const w = this.w, h = this.h, m = this.mobile;
-    if (id === "bh") return m ? [w * .5, h * .52] : [w * .68, h * .5];
+    if (id === "bh") return m ? [w * .5, h * .64] : [w * .7, h * .5];
     if (id === "solar") return m ? [w * .5, h * .44] : [w * .3, h * .5];
     if (id === "earth") return m ? [w * .5, h * .44] : [w * .42, h * .52];
     return [w * .45, h * .48];
@@ -336,12 +343,14 @@ const Uni = {
     const c = this.ctx, w = this.w, h = this.h, t = REDUCED ? 0 : now / 1000; if (!c) return;
     const dt = Math.min(.05, Math.max(0, (now - (this.lastT || now)) / 1000)); this.lastT = now;
     if (this.hover !== "sat" && !REDUCED) this.satA += dt * .32;
-    c.fillStyle = "#000"; c.fillRect(0, 0, w, h);
+    c.clearRect(0, 0, w, h);
     let Z = 1;
     if (this.zoom) {
       const p = clamp((now - this.zoom.start) / this.zoom.dur, 0, 1), e = ease(p), d = this.zoom.dir;
-      Z = d > 0 ? 1 + e * 5 : 6 - e * 5; if (p >= 1) { this.zoom = null; Z = d > 0 ? 6 : 1; }
+      Z = d > 0 ? 1 + e * 5 : 6 - e * 5;
+      if (p >= 1) { this.zoom = null; Z = d > 0 ? 6 : 1; if (d < 0) this.afterReturn(); }
     }
+    this.Zg = Z; this.bhDraw = null; this.nebA = 0;
     c.save();
     if (Z !== 1) { const [fx, fy] = this.zf; c.translate(fx, fy); c.scale(Z, Z); c.translate(-fx, -fy); }
     if (this.tr) {
@@ -350,10 +359,22 @@ const Uni = {
       this.scene(A, t, d > 0 ? 1 + e * 7 : 1 - e * .85, 1 - e, fx, fy);
       this.scene(B, t, d > 0 ? .15 + e * .85 : 8 - e * 7, e, w / 2, h / 2);
       if (A === "bh" && d > 0) this.warp(c, w, h, Math.sin(p * Math.PI));
-      if (p >= 1) { this.tr = null; this.ui(); }
+      if (p >= 1) { this.tr = null; this.ui(); if (this.pendingPortal) { const k = this.pendingPortal; this.pendingPortal = null; setTimeout(() => this.showPortal(k), 100); } }
     } else this.scene(LEVELS[this.i].id, t, 1, 1, w / 2, h / 2);
     c.restore();
+    if (BH3D.ok) BH3D.render(this.bhDraw, dt, this.mobile);
+    if (this.nebA > 0) Space.nebula(); this.neb.style.opacity = (this.nebA * .32).toFixed(3);
+    if (this.mx != null) this.neb.style.transform = `translate(${(-this.mx * 14).toFixed(1)}px,${(-this.my * 10).toFixed(1)}px)`;
   },
+  /* back from a sub-page: continue the trip that the "next stop" card asked for */
+  afterReturn() {
+    const p = this.pending; this.pending = null; if (!p) return;
+    setTimeout(() => {
+      if (p.level !== this.i) { this.go(p.level); if (p.portal) this.pendingPortal = p.portal; }
+      else if (p.portal) this.showPortal(p.portal);
+    }, 120);
+  },
+  showPortal(k) { const t = this.targets.find(x => x.k === k); if (t) { this.ptype = "mouse"; this.setHover(t); setTimeout(() => { if (this.hover === k) this.clearHover(); }, 3500); } },
   warp(c, w, h, k) {
     c.save(); c.translate(w / 2, h / 2); c.strokeStyle = `rgba(255,220,180,${k * .8})`; c.lineWidth = 1.2;
     for (let i = 0; i < 90; i++) { const a = i * 2.39996, r0 = (i * 37 % 100) / 100 * Math.max(w, h) * .5, len = k * 220; c.beginPath(); c.moveTo(Math.cos(a) * r0, Math.sin(a) * r0); c.lineTo(Math.cos(a) * (r0 + len), Math.sin(a) * (r0 + len)); c.stroke(); }
@@ -364,7 +385,15 @@ const Uni = {
     const c = this.ctx, w = this.w, h = this.h; c.save(); c.globalAlpha = alpha; c.translate(fx, fy); c.scale(zoom, zoom); c.translate(-fx, -fy);
     this.bg.forEach(([x, y, r, a]) => { c.globalAlpha = alpha * a * .8; c.fillStyle = "#e8edff"; c.fillRect(x * w, y * h, r, r); }); c.globalAlpha = alpha;
     this.targets = [];
-    if (id === "bh") { const [x, y] = this.focus("bh"), R = Math.min(w, h) * (this.mobile ? .06 : .075); drawBlackHole(c, x, y, R, t); this.targets.push({ k: "bh", x, y, r: R * 2.6 }); }
+    if (id === "bh") {
+      const [x, y] = this.focus("bh"), R = Math.min(w, h) * (this.mobile ? .06 : .075);
+      if (BH3D.ok) {
+        const Zg = this.Zg || 1, [gx, gy] = this.zf || [w / 2, h / 2], sx = fx + (x - fx) * zoom, sy = fy + (y - fy) * zoom;
+        this.bhDraw = { x: gx + (sx - gx) * Zg, y: gy + (sy - gy) * Zg, s: zoom * Zg, a: alpha };
+        this.targets.push({ k: "bh", x, y, r: BH3D.size(this.mobile) * .34 });
+      } else { drawBlackHole(c, x, y, R, t); this.targets.push({ k: "bh", x, y, r: R * 2.6 }); }
+    }
+    if (id === "solar" || id === "earth") this.nebA = Math.max(this.nebA, alpha);
     if (id === "cluster") this.cluster(c, w, h, t, alpha);
     if (id === "solar") this.solar(c, w, h, t, alpha);
     if (id === "earth") this.earth(c, w, h, t, alpha);
@@ -378,12 +407,13 @@ const Uni = {
   },
   name(c, txt, x, y, key, hot, alpha, size = 12.5) {
     const done = key && Visited.has(key);
-    c.font = `${hot ? 700 : 500} ${size}px JetBrains Mono, monospace`; c.textAlign = "center"; c.fillStyle = hot ? "#fff" : "#c3cbea"; c.fillText(txt, x, y);
+    c.font = `${hot ? 700 : 500} ${size}px Space Mono, monospace`; c.textAlign = "center"; c.fillStyle = hot ? "#fff" : "#c3cbea"; c.fillText(txt, x, y);
     if (done) { const tw = c.measureText(txt).width; c.fillStyle = "#62e3b5"; c.textAlign = "left"; c.fillText(" ✓", x + tw / 2, y); }
   },
   cluster(c, w, h, t, alpha) {
     const gas = c.createRadialGradient(w * .42, h * .5, 10, w * .42, h * .5, Math.max(w, h) * .5); gas.addColorStop(0, "rgba(120,90,255,.18)"); gas.addColorStop(.5, "rgba(60,90,200,.07)"); gas.addColorStop(1, "rgba(0,0,0,0)");
     c.fillStyle = gas; c.fillRect(0, 0, w, h);
+    Space.galaxy(c, w, h, t, alpha, this.mx || 0, this.my || 0);
     this.gal.forEach(g => { c.save(); c.translate(g.x * w, g.y * h); c.rotate(g.a); const gg = c.createRadialGradient(0, 0, 0, 0, 0, g.s); gg.addColorStop(0, g.c); gg.addColorStop(1, "rgba(0,0,0,0)"); c.fillStyle = gg; c.scale(1, .5); c.beginPath(); c.arc(0, 0, g.s, 0, 7); c.fill(); c.restore(); });
     const S = Math.min(w, h), P = this.mobile
       ? { ml: [.28, .22], systems: [.72, .2], design: [.28, .4], data: [.72, .38], software: [.28, .58], games: [.72, .56] }
@@ -397,7 +427,7 @@ const Uni = {
       for (let arm = 0; arm < 2; arm++) for (let i = 0; i < 70; i++) { const f = i / 70, a = f * 4.2 + arm * Math.PI + t * .15, r = f * rad * (hot ? 1.2 : 1); c.globalAlpha = alpha * (1 - f * .6); const s = 2.2 - f * 1.2; c.fillRect(Math.cos(a) * r - s / 2, Math.sin(a) * r - s / 2, s, s); }
       c.restore(); c.globalAlpha = alpha;
       this.name(c, L(THEMES[k]), x, y + rad * .75 + 14, k, hot, alpha, this.mobile ? 11 : 12.5);
-      const n = PROJECTS.filter(p => p.theme === k).length; c.font = "10.5px JetBrains Mono, monospace"; c.textAlign = "center"; c.fillStyle = col; c.fillText(n + " " + (n === 1 ? T().project : T().projects), x, y + rad * .75 + 29);
+      const n = PROJECTS.filter(p => p.theme === k).length; c.font = "10.5px Space Mono, monospace"; c.textAlign = "center"; c.fillStyle = col; c.fillText(n + " " + (n === 1 ? T().project : T().projects), x, y + rad * .75 + 29);
       this.targets.push({ k, x, y, r: rad * 1.15, portal: true });
     }
   },
@@ -414,7 +444,7 @@ const Uni = {
       const a = i * 1.9 + t * (.45 / Math.sqrt(i + 1)), x = sx + Math.cos(a) * rx, y = sy + Math.sin(a) * ry, s = p.size * (S / 520) * (hot ? 1.3 : 1) + 2;
       if (p.ring) { c.strokeStyle = "rgba(230,200,150,.8)"; c.lineWidth = 1.5; c.beginPath(); c.ellipse(x, y, s * 2, s * .6, -.3, 0, 7); c.stroke(); }
       const pg = c.createRadialGradient(x - s * .4, y - s * .4, 0, x, y, s); pg.addColorStop(0, "#fff"); pg.addColorStop(.25, p.color); pg.addColorStop(1, "#111"); c.fillStyle = pg; c.beginPath(); c.arc(x, y, s, 0, 7); c.fill();
-      c.font = `${hot ? 700 : 500} 11.5px JetBrains Mono, monospace`; c.textAlign = "center"; c.fillStyle = hot ? "#fff" : "#aab3d6"; c.fillText(L(p), x, y - s - 8);
+      c.font = `${hot ? 700 : 500} 11.5px Space Mono, monospace`; c.textAlign = "center"; c.fillStyle = hot ? "#fff" : "#aab3d6"; c.fillText(L(p), x, y - s - 8);
       this.targets.push({ k: i, x, y, r: Math.max(s * 1.8, 16) });
     });
   },
@@ -455,7 +485,7 @@ const Uni = {
     c.save(); c.translate(px, py); c.rotate(ang); c.fillStyle = "#fff"; c.beginPath(); c.moveTo(8, 0); c.lineTo(-6, -5); c.lineTo(-3, 0); c.lineTo(-6, 5); c.closePath(); c.fill(); c.restore();
     PINS.forEach((p, i) => { const [x, y] = proj(p.lon, p.lat), hot = this.hover === "pin" + i;
       c.fillStyle = "#ff5a76"; c.shadowColor = "#ff5a76"; c.shadowBlur = 12; c.beginPath(); c.arc(x, y, hot ? 7 : 5, 0, 7); c.fill(); c.shadowBlur = 0;
-      c.font = `${hot ? 700 : 500} 12px JetBrains Mono, monospace`; c.textAlign = i ? "left" : "right"; c.fillStyle = "#fff"; c.fillText(L(p), x + (i ? 12 : -12), y + 4);
+      c.font = `${hot ? 700 : 500} 12px Space Mono, monospace`; c.textAlign = i ? "left" : "right"; c.fillStyle = "#fff"; c.fillText(L(p), x + (i ? 12 : -12), y + 4);
       this.targets.push({ k: "pin" + i, x, y, r: 18 }); });
     orbit(0, Math.PI); if (!behind) sat();
     this.name(c, T().journeyP, cx, cy + R + 26, "journey", this.hover === "globe", alpha);
@@ -467,12 +497,17 @@ const Uni = {
     let best = null; for (const tg of this.targets) { const d = Math.hypot(x - tg.x, y - tg.y); if (d < tg.r && (!best || d < best.d || tg.k === "sat")) { best = { ...tg, d }; if (tg.k === "sat") break; } } return best;
   },
   label(h) {
-    if (h.k === "bh") return L(LEVELS[0].cta);
+    if (h.k === "bh") return BH3D.ok ? T().bhTip : L(LEVELS[0].cta);
     if (typeof h.k === "number") return L(PLANETS[h.k]) + " · " + T().aboutP;
     if (String(h.k).startsWith("pin")) return L(PINS[+String(h.k).slice(3)]) + " · " + T().journeyP;
     return "";
   },
-  onMove(e) { if (!this.active() || this.tr || e.pointerType === "touch") return; this.setHover(this.hit(e)); },
+  onMove(e) {
+    this.mx = e.clientX / this.w - .5; this.my = e.clientY / this.h - .5;
+    if (this.drag) { const dx = e.clientX - this.drag.x, dy = e.clientY - this.drag.y; this.drag.x = e.clientX; this.drag.y = e.clientY; this.drag.d += Math.abs(dx) + Math.abs(dy); BH3D.spin(dx, dy); return; }
+    if (!this.active() || this.tr || e.pointerType === "touch") return; this.setHover(this.hit(e));
+    if (this.hover === "bh" && BH3D.ok) this.c.style.cursor = "grab";
+  },
   setHover(h) {
     const prev = this.hover; this.hover = h ? h.k : null; this.c.style.cursor = h ? "pointer" : "crosshair";
     if (h && prev !== this.hover) Sound.hover();
@@ -483,6 +518,7 @@ const Uni = {
   clearHover() { this.hover = null; if (this.tip) this.tip.style.opacity = 0; Portal.hide(); if (this.c) this.c.style.cursor = "crosshair"; },
   onClick(e) {
     if (!this.active() || this.tr) return;
+    if (this.dragged) { this.dragged = false; return; }
     const h = this.hit(e); if (!h) { this.clearHover(); return; }
     if (this.ptype === "touch" && h.portal && Portal.key !== h.k) { this.setHover(h); return; } // first tap previews, second tap enters
     Sound.click(); this.hoverPt = [h.x, h.y];
@@ -496,7 +532,7 @@ const Uni = {
     const l = LEVELS[this.i], card = $("#stopcard");
     card.innerHTML = `<div class="k">0${this.i + 1} · ${esc(L(l.name))} · ${l.scale}</div><h2>${esc(L(l.h))}</h2><button type="button">${esc(L(l.cta))}</button>`;
     $("button", card).onclick = () => { Sound.click(); this.hoverPt = null; if (l.view) location.hash = l.view; else this.go(1); };
-    $("#hero").classList.toggle("hidden", this.i !== 0 || !!this.tr);
+    $("#hero").classList.toggle("hidden", this.i !== 0 || !!this.tr); card.classList.toggle("bh-m", this.i === 0);
     if (!this.tr) card.classList.remove("hidden");
     this.uiBottom();
   },
@@ -515,6 +551,105 @@ const Uni = {
     if (target == null) return;
     const b = $(target > this.i ? "#uniNext" : "#uniPrev"), near = Math.abs(target - this.i) === 1;
     b.classList.add("beacon"); b.insertAdjacentHTML("beforeend", `<span class="bl">${esc(near ? T().next : T().unexplored)}: ${esc(L(LEVELS[target].name))}</span>`);
+  }
+};
+
+/* ===================== BLACK HOLE in WebGL: light bent by gravity, a glowing disk, drag to rotate ===================== */
+/* One small fragment shader (no libraries). It renders at reduced resolution and lowers it further on slow
+   machines. If WebGL is not available, the 2D black hole is drawn instead. */
+const BH3D = {
+  ok: false, yaw: .7, pit: .14, vYaw: .12, q: .75, steps: 140, frames: 0, acc: 0, last: 0,
+  init(cv) {
+    if (REDUCED) return;
+    try {
+      const gl = cv.getContext("webgl", { premultipliedAlpha: true, antialias: false, alpha: true, powerPreference: "high-performance" });
+      if (!gl) return; this.gl = gl; this.cv = cv;
+      const hp = gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT), prec = hp && hp.precision > 0 ? "highp" : "mediump";
+      const vs = "attribute vec2 p;varying vec2 v;void main(){v=p;gl_Position=vec4(p,0.,1.);}";
+      const fs = `precision ${prec} float;varying vec2 v;uniform float uT;uniform vec2 uR;uniform float uS;
+float hash(vec3 p){p=fract(p*vec3(.1031,.1030,.0973));p+=dot(p,p.yxz+33.33);return fract((p.x+p.y)*p.z);}
+float n2(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(vec3(i,1.)),hash(vec3(i+vec2(1.,0.),1.)),f.x),mix(hash(vec3(i+vec2(0.,1.),1.)),hash(vec3(i+vec2(1.,1.),1.)),f.x),f.y);}
+vec3 stars(vec3 d){vec3 p=d*110.;vec3 id=floor(p);vec3 f=fract(p)-.5;float h=hash(id);if(h<.978)return vec3(0.);float b=smoothstep(.3,0.,length(f))*(h-.978)/.022;return b*mix(vec3(1.,.82,.62),vec3(.72,.82,1.),hash(id+7.))*2.2;}
+void main(){vec2 uv=v;float yw=uR.x,pt=uR.y;vec3 ro=vec3(sin(yw)*cos(pt),sin(pt),cos(yw)*cos(pt))*20.;
+vec3 fw=normalize(-ro),rt=normalize(cross(vec3(0.,1.,0.),fw)),up=cross(fw,rt);vec3 vel=normalize(fw*1.3+uv.x*rt+uv.y*up);vec3 pos=ro;
+vec3 hv=cross(pos,vel);float h2=dot(hv,hv);vec3 col=vec3(0.);float al=0.;float hole=0.;
+for(int i=0;i<170;i++){if(float(i)>=uS)break;float r2=dot(pos,pos);float r=sqrt(r2);if(r<1.){hole=1.;break;}
+float dt=clamp(.07*r,.04,1.2);vec3 pr=pos;vel+=-1.5*h2*pos/(r2*r2*r)*dt;pos+=vel*dt;
+if(pr.y*pos.y<0.){vec3 q=mix(pr,pos,pr.y/(pr.y-pos.y));float rr=length(q.xz);
+if(rr>2.4&&rr<10.){float an=atan(q.z,q.x);float sw=an+uT*2.2/rr;float n=n2(vec2(sw*3.,rr*2.))*.6+n2(vec2(sw*9.,rr*6.))*.4;
+float tp=pow(2.4/rr,1.25);vec3 tg=normalize(vec3(-q.z,0.,q.x));float dp=clamp(1.+.6*dot(tg,-normalize(vel)),.3,1.9);
+vec3 c=mix(vec3(.95,.3,.06),vec3(1.,.88,.66),tp);float fd=smoothstep(10.,6.,rr)*smoothstep(2.4,2.95,rr);float de=fd*(.3+.9*n);
+col+=(1.-al)*c*de*(1.5*tp+.3)*dp*dp*dp;al+=(1.-al)*clamp(de*.85,0.,1.);if(al>.97)break;}}
+if(r>45.)break;}
+vec3 bg=hole>.5?vec3(0.):stars(normalize(vel));col+=(1.-al)*bg;float a=max(hole,max(al,max(bg.r,max(bg.g,bg.b))));
+float e=smoothstep(1.,.8,length(uv));col=col/(1.+col*.32);gl_FragColor=vec4(col*e,clamp(a,0.,1.)*e);}`;
+      const sh = (t, src) => { const o = gl.createShader(t); gl.shaderSource(o, src); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; };
+      const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr);
+      if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error("link");
+      gl.useProgram(pr); const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      this.u = { t: gl.getUniformLocation(pr, "uT"), r: gl.getUniformLocation(pr, "uR"), s: gl.getUniformLocation(pr, "uS") };
+      cv.addEventListener("webglcontextlost", e => { e.preventDefault(); this.ok = false; cv.style.opacity = 0; });
+      this.ok = true;
+    } catch (e) { this.ok = false; }
+  },
+  size(m) { return m ? Math.min(innerWidth * .92, innerHeight * .5) : Math.min(innerHeight * .95, innerWidth * .56); },
+  spin(dx, dy) { this.yaw -= dx * .008; this.pit = clamp(this.pit + dy * .006, -.9, 1.2); this.vYaw = -dx * .25; },
+  render(st, dt, m) {
+    const cv = this.cv;
+    if (!st || st.a <= .01) { if (cv.style.opacity !== "0") cv.style.opacity = 0; return; }
+    const S = this.size(m), px = Math.max(64, Math.round(S * Math.min(DPR, 1.5) * this.q));
+    if (cv.width !== px) { cv.width = cv.height = px; cv.style.width = cv.style.height = S + "px"; }
+    cv.style.transform = `translate(${(st.x - S / 2).toFixed(1)}px,${(st.y - S / 2).toFixed(1)}px) scale(${st.s.toFixed(3)})`;
+    cv.style.opacity = st.a.toFixed(3); cv.style.transformOrigin = "50% 50%";
+    if (!Uni.drag) { this.vYaw += (.12 - this.vYaw) * Math.min(1, dt * 1.5); this.yaw += this.vYaw * dt; this.pit += (.14 - this.pit) * Math.min(1, dt * .25); }
+    const gl = this.gl; gl.viewport(0, 0, px, px);
+    gl.uniform1f(this.u.t, performance.now() / 1000); gl.uniform2f(this.u.r, this.yaw, this.pit); gl.uniform1f(this.u.s, this.steps);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    // adapt the resolution to the machine: keep it smooth first
+    const now = performance.now(); if (this.last) { this.acc += now - this.last; this.frames++; } this.last = now;
+    if (this.frames >= 40) { const avg = this.acc / this.frames; this.acc = 0; this.frames = 0;
+      if (avg > 24 && this.q > .38) { this.q *= .8; if (this.q < .5) this.steps = 110; }
+      else if (avg < 14 && this.q < .8) this.q = Math.min(.8, this.q * 1.1); }
+  }
+};
+
+/* ===================== SPACE: 3D galaxy point cloud (cluster) and nebula backdrop (Solar System, Earth) ===================== */
+const Space = {
+  n: 0,
+  load() {
+    if (this.loading) return; this.loading = true;
+    fetch("assets/space/galaxy.bin").then(r => r.ok ? r.arrayBuffer() : null).then(b => {
+      if (!b) return; const n = new DataView(b).getUint32(0, true); this.xyz = new Int16Array(b, 4, n * 3); this.rgb = new Uint8Array(b, 4 + n * 6, n * 3); this.n = n;
+    }).catch(() => {});
+  },
+  nebula() {
+    if (this.nebDone) return; this.nebDone = true;
+    const im = new Image(); im.onload = () => { $("#nebula").style.backgroundImage = "url(assets/space/nebula.webp)"; }; im.src = "assets/space/nebula.webp";
+  },
+  galaxy(c, w, h, t, alpha, mx, my) {
+    if (!this.n) { this.load(); return; }
+    const gw = Math.ceil(w / 2), gh = Math.ceil(h / 2);
+    if (!this.off || this.off.width !== gw || this.off.height !== gh) {
+      this.off = document.createElement("canvas"); this.off.width = gw; this.off.height = gh;
+      this.octx = this.off.getContext("2d"); this.img = this.octx.createImageData(gw, gh); this.buf = new Float32Array(gw * gh * 3);
+    }
+    const buf = this.buf, xyz = this.xyz, rgb = this.rgb; buf.fill(0);
+    const yaw = t * .035 + mx * .5, tilt = 1.12 + my * .25, cy0 = Math.cos(yaw), sy0 = Math.sin(yaw), ct = Math.cos(tilt), st = Math.sin(tilt);
+    const sc = Math.min(gw, gh) * .42 / 32000, cx = gw * .46, cy = gh * .5, k = .3;
+    for (let i = 0, j = 0; i < this.n; i++, j += 3) {
+      const x = xyz[j], y = xyz[j + 1], z = xyz[j + 2], x1 = x * cy0 - z * sy0, z1 = x * sy0 + z * cy0, y1 = y * ct - z1 * st;
+      const px = (cx + x1 * sc) | 0, py = (cy - y1 * sc) | 0; if (px < 0 || py < 0 || px >= gw || py >= gh) continue;
+      const o = (py * gw + px) * 3; buf[o] += rgb[j] * k; buf[o + 1] += rgb[j + 1] * k; buf[o + 2] += rgb[j + 2] * k;
+    }
+    const d = this.img.data;
+    for (let p = 0, o = 0, q = 0; p < gw * gh; p++, o += 3, q += 4) {
+      const r = buf[o], g = buf[o + 1], b = buf[o + 2];
+      if (r + g + b === 0) { d[q + 3] = 0; continue; }
+      d[q] = r > 255 ? 255 : r; d[q + 1] = g > 255 ? 255 : g; d[q + 2] = b > 255 ? 255 : b; d[q + 3] = 255;
+    }
+    this.octx.putImageData(this.img, 0, 0);
+    c.save(); c.globalCompositeOperation = "lighter"; c.globalAlpha = alpha * .65; c.imageSmoothingEnabled = true; c.drawImage(this.off, 0, 0, w, h); c.restore();
   }
 };
 
@@ -592,9 +727,9 @@ const Portal = {
       const x = x0 + col[s.col] * (cs + gap), y = y0 + (s.row - 1) * (cs + gap), hh = s.g === "h" ? cs * 2 + gap : cs, on = cells[hi] === s;
       c.globalAlpha = s.empty ? .35 : 1; c.strokeStyle = SMC[s.g]; c.lineWidth = on ? 3 : 1.5; if (s.empty) c.setLineDash([4, 4]);
       roundRect(c, x, y, cs, hh, 8); c.fillStyle = on ? SMC[s.g] + "55" : SMC[s.g] + "1a"; c.fill(); c.stroke(); c.setLineDash([]);
-      c.fillStyle = s.empty ? "#8d97c0" : SMC[s.g]; c.font = `${s.g === "h" ? 22 : 14}px "Press Start 2P", monospace`; c.textAlign = "center"; c.fillText(s.empty ? "?" : s.sy, x + cs / 2, y + hh / 2 + 7);
+      c.fillStyle = s.empty ? "#8d97c0" : SMC[s.g]; c.font = `${s.g === "h" ? 22 : 14}px Unbounded, sans-serif`; c.textAlign = "center"; c.fillText(s.empty ? "?" : s.sy, x + cs / 2, y + hh / 2 + 7);
     });
-    c.globalAlpha = 1; c.fillStyle = "#e8b64c"; c.font = "700 17px JetBrains Mono, monospace"; c.fillText(L(cells[hi].n), S / 2, y0 + 2 * cs + gap + 40);
+    c.globalAlpha = 1; c.fillStyle = "#e8b64c"; c.font = "700 17px Space Mono, monospace"; c.fillText(L(cells[hi].n), S / 2, y0 + 2 * cs + gap + 40);
   },
   drawTrip(t) {
     const c = this.ctx, S = this.S, A = [80, 235], B = [282, 150], C = [170, 60], f = (t * .25) % 1;
@@ -603,7 +738,7 @@ const Portal = {
     const q = (u, i) => (1 - u) * (1 - u) * A[i] + 2 * (1 - u) * u * C[i] + u * u * B[i], px = q(f, 0), py = q(f, 1), ang = Math.atan2(q(f + .01, 1) - py, q(f + .01, 0) - px);
     c.save(); c.translate(px, py); c.rotate(ang); c.fillStyle = "#fff"; c.beginPath(); c.moveTo(13, 0); c.lineTo(-9, -8); c.lineTo(-4, 0); c.lineTo(-9, 8); c.closePath(); c.fill(); c.restore();
     [[A, "GYE", "2024"], [B, "OVD", "2026"]].forEach(([p, n, y]) => { c.fillStyle = "#ff5a76"; c.shadowColor = "#ff5a76"; c.shadowBlur = 14; c.beginPath(); c.arc(p[0], p[1], 8, 0, 7); c.fill(); c.shadowBlur = 0;
-      c.fillStyle = "#fff"; c.font = '15px "Press Start 2P", monospace'; c.textAlign = "center"; c.fillText(n, p[0], p[1] + 36); c.fillStyle = "#8d97c0"; c.font = "16px JetBrains Mono, monospace"; c.fillText(y, p[0], p[1] + 58); });
+      c.fillStyle = "#fff"; c.font = '15px Unbounded, sans-serif'; c.textAlign = "center"; c.fillText(n, p[0], p[1] + 36); c.fillStyle = "#8d97c0"; c.font = "16px Space Mono, monospace"; c.fillText(y, p[0], p[1] + 58); });
   },
   drawGame(t) {
     const c = this.ctx; c.fillStyle = "#0b1410"; c.fillRect(0, 0, this.S, this.S); c.save(); c.scale(2.25, 2.25);

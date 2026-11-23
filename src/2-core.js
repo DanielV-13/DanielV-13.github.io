@@ -21,7 +21,8 @@ function esc(s) { return String(s).replace(/[&<>"]/g, m => ({ "&": "&amp;", "<":
 let LANG = store.get("dv_lang", "en");
 const ES = {
   "intro.skip": "Saltar intro", "intro.chapter": "Capítulo I", "intro.pagetitle": "Hacia el horizonte de sucesos",
-  "intro.sub": "Mi Portafolio", "intro.subsmall": "física · IA · datos", "intro.open": "Abrir el libro", "intro.hint": "o pulsa Enter",
+  "intro.sub": "Mi Portafolio", "hero.mail": "Correo", "arc.help": "← → mover · Espacio disparar · Esc salir",
+  "contact.credits": "Nube de puntos de la galaxia y nebulosa: modelos 3D de Sketchfab (licencia libre) · agujero negro renderizado en tiempo real", "intro.subsmall": "física · IA · datos", "intro.open": "Abrir el libro", "intro.hint": "o pulsa Enter",
   "top.back": "Universo", "hero.line": "<b>Ingeniería en Computación</b> · <span class=\"c1\">Física</span> · <span class=\"c2\">IA</span> · <span class=\"c3\">Datos</span>",
   "home.hint": "haz scroll ↕ o usa las flechas para viajar",
   "work.title": "Cosas que he <em>construido</em>",
@@ -42,14 +43,16 @@ const UI = {
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
         enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored",
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
-        aboutP: "About me", aboutSub: "my story as a standard model", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
+        aboutP: "About me", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
+        nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
   es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", figma: "Prototipo en Figma", video: "Video de presentación",
         company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
         soundOn: "Sonido activado", soundOff: "Sonido apagado", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · España" }, view: "Ver",
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
         enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar",
         smEmpty: "Haz clic en una partícula para leer esa parte de la historia.", smPhrase: "Frase corta por escribir aquí.", smFuture: "Espacio para lo que viene.",
-        aboutP: "Sobre mí", aboutSub: "mi historia como un modelo estándar", journeyP: "Mi trayectoria", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "yo", satellite: "Arcade" }
+        aboutP: "Sobre mí", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
+        nextK: "Siguiente parada", travel: "Viajar allí →", nextSolar: "Sistema Solar · sobre mí", nextEarth: "Tierra · mi trayectoria", nextSat: "El satélite · arcade", nextBh: "Volver al agujero negro", journeyP: "Mi trayectoria", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "yo", satellite: "Arcade" }
 };
 const T = () => UI[LANG];
 const L = o => (o && typeof o === "object" && !Array.isArray(o)) ? (o[LANG] ?? o.en) : o;
@@ -134,6 +137,7 @@ const Visited = {
   paint() {
     const n = this.set.size, N = PLACES_TO_SEE.length;
     $("#explored").innerHTML = `${T().explored} <b>${n}/${N}</b>${n === N ? " ✓" : ""}`;
+    const left = N - n, ln = $("#leftN"); ln.textContent = left ? `${left} ${T().left}` : ""; ln.style.display = left ? "" : "none";
     renderNav();
     if (typeof Uni !== "undefined" && Uni.c) Uni.ui();
   }
@@ -149,6 +153,15 @@ function renderNav() {
     return todo ? '<span class="nv" aria-hidden="true"></span>' : "";
   };
   $("#tnav").innerHTML = ["universe", ...VIEWS].map(v => `<a href="#${v}" data-v="${v}"${(CURVIEW || "universe") === v ? ' class="active" aria-current="page"' : ""}>${t.nav[v]}${dot(v)}</a>`).join("");
+}
+/* "Next stop" card at the end of each sub-page: goes back to the universe and travels on from there */
+const NEXT = { work: { level: 2, art: "sun", k: "nextSolar" }, about: { level: 3, art: "earth", k: "nextEarth" }, journey: { level: 3, art: "sat", k: "nextSat", portal: "sat" }, arcade: { level: 0, art: "bh", k: "nextBh" } };
+function renderNext() {
+  $$(".view").forEach(v => {
+    const n = NEXT[v.dataset.view], b = $("[data-next]", v); if (!n || !b) return;
+    b.innerHTML = `<span class="art ${n.art}"><i></i></span><span><span class="k">${T().nextK}</span><b>${esc(T()[n.k])}</b><small>${T().travel}</small></span>`;
+    b.onclick = () => { Sound.click(); Uni.pending = { level: n.level, portal: n.portal }; goHome(); };
+  });
 }
 function goHome() { if (location.hash && location.hash !== "#universe") location.hash = "universe"; else route(); }
 function route() {
@@ -220,8 +233,15 @@ function fillModal() {
   Visited.mark(p.theme);
   const hero = $("#mHero");
   if (modalAnim) { Previews.remove(modalAnim); modalAnim = null; }
-  hero.className = "m-hero" + (!p.video && p.img && p.plot ? " plot" : "");
+  hero.className = "m-hero" + (!p.video && p.img && p.plot ? " plot" : "") + (p.gallery ? " gal" : "");
   if (p.video) hero.innerHTML = `<video src="${p.video}" poster="${p.img || ""}" autoplay muted loop playsinline aria-label="${esc(L(p.title))}"></video>`;
+  else if (p.gallery) {
+    let gi = 0; const show = () => { $("img", hero).src = p.gallery[gi]; $$(".g-dots i", hero).forEach((d, k) => d.classList.toggle("on", k === gi)); };
+    hero.innerHTML = `<img src="${p.gallery[0]}" alt="${esc(L(p.title))}"><button class="g-nav prev" aria-label="previous image">‹</button><button class="g-nav next" aria-label="next image">›</button><div class="g-dots">${p.gallery.map(() => "<i></i>").join("")}</div>`;
+    $(".g-nav.prev", hero).onclick = () => { gi = (gi - 1 + p.gallery.length) % p.gallery.length; show(); Sound.click(); };
+    $(".g-nav.next", hero).onclick = () => { gi = (gi + 1) % p.gallery.length; show(); Sound.click(); };
+    show();
+  }
   else if (p.img) hero.innerHTML = `<img src="${p.img}" alt="${esc(L(p.title))}">`;
   else { hero.innerHTML = `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>`; modalAnim = $("canvas", hero); Previews.add(modalAnim, true); }
   const linkBtn = l => {

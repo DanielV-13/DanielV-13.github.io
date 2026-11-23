@@ -59,58 +59,124 @@ const CursorFX = {
   }
 };
 
-/* ===================== ARCADE: Particle Invaders ===================== */
+/* ===================== ARCADE: Particle Invaders (CMS edition) ===================== */
+/* You are a slice of the CMS detector. Quarks (in their three colour charges) come down; you fire photons.
+   Sometimes a Higgs boson crosses the top: catch it. Between waves, a short physics fact. */
+const GAME_TXT = {
+  start: { en: "Run 3 · √s = 13.6 TeV · go!", es: "Run 3 · √s = 13,6 TeV · ¡vamos!" },
+  higgs: { en: "Higgs boson found! m = 125 GeV · 5σ", es: "¡Bosón de Higgs encontrado! m = 125 GeV · 5σ" },
+  over: { en: "Detector saturated! The trigger couldn't keep up", es: "¡Detector saturado! El trigger no dio abasto" },
+  paused: { en: "PAUSED", es: "PAUSA" }, press: { en: "PRESS START", es: "PULSA START" },
+  waves: [
+    { en: "Quarks never travel alone: colour confinement", es: "Los quarks nunca viajan solos: confinamiento de color" },
+    { en: "Photons carry the electromagnetic force", es: "Los fotones transmiten la fuerza electromagnética" },
+    { en: "The LHC collides protons 40 million times a second", es: "El LHC hace chocar protones 40 millones de veces por segundo" },
+    { en: "Six quarks: up, down, strange, charm, bottom, top", es: "Seis quarks: arriba, abajo, extraño, encanto, fondo, cima" },
+    { en: "CMS weighs about 14,000 tonnes", es: "CMS pesa unas 14 000 toneladas" },
+    { en: "Its magnet: 3.8 tesla, 100,000 times Earth's field", es: "Su imán: 3,8 teslas, 100 000 veces el campo terrestre" }
+  ]
+};
 const Game = {
-  W: 160, H: 144, state: "title", keys: {}, vis: false,
+  W: 160, H: 144, state: "title", keys: {}, vis: false, full: false,
   init() {
-    this.c = $("#game"); this.ctx = this.c.getContext("2d"); this.hi = store.get("dv_hi", 0); this.updHi();
+    this.c = $("#game"); this.ctx = this.c.getContext("2d"); this.home = this.c.parentElement; this.hi = store.get("dv_hi", 0); this.updHi();
     const map = { ArrowLeft: "left", ArrowRight: "right", a: "left", d: "right", " ": "fire", Enter: "start" };
-    addEventListener("keydown", e => { const k = map[e.key]; if (!k) return; if (k === "start" && (document.activeElement === this.c || (this.vis && this.state !== "play" && document.activeElement === document.body))) { this.begin(); e.preventDefault(); return; } if (this.capturing() && k !== "start") { this.keys[k] = true; e.preventDefault(); } });
+    addEventListener("keydown", e => {
+      const k = map[e.key]; if (!k || !this.vis) return;
+      if (k === "start" && this.state !== "play" && (this.full || document.activeElement === this.c || document.activeElement === document.body)) { this.begin(); e.preventDefault(); return; }
+      if (this.capturing() && k !== "start") { this.keys[k] = true; e.preventDefault(); }
+    });
     addEventListener("keyup", e => { const k = map[e.key]; if (k) this.keys[k] = false; });
     this.c.addEventListener("click", () => { this.c.focus(); if (this.state !== "play") this.begin(); });
-    $$(".console [data-k]").forEach(b => {
+    $$(".console [data-k], .gamefull [data-k]").forEach(b => {
       const k = b.dataset.k;
-      b.addEventListener("pointerdown", e => { e.preventDefault(); if (k === "start") this.begin(); else { this.keys[k] = true; if (this.state !== "play") this.begin(); } });
+      b.addEventListener("pointerdown", e => { e.preventDefault(); if (k === "start" || this.state !== "play") this.begin(); if (k !== "start") this.keys[k] = true; });
       ["pointerup", "pointerleave", "pointercancel"].forEach(ev => b.addEventListener(ev, () => this.keys[k] = false));
     });
+    $("#gameClose").onclick = () => this.exitFull();
     this.draw();
   },
   capturing() { return this.state === "play" && this.vis; },
-  setVis(v) { this.vis = v; if (v) this.run(); else { this.keys = {}; if (this.state === "play") this.state = "title"; } },
-  updHi() { $("#hiscore").textContent = "HI " + String(this.hi).padStart(3, "0"); },
-  begin() { this.state = "play"; this.score = 0; this.lives = 3; this.wave = 0; this.p = { x: 74 }; this.b = []; this.eb = []; this.fx = []; this.newWave(); Sound.click(); this.run(); },
-  newWave() { this.wave++; this.en = []; for (let r = 0; r < 3; r++) for (let k = 0; k < 7; k++) this.en.push({ x: 18 + k * 18, y: 18 + r * 13, t: r, alive: true }); this.dir = 1; this.speed = .18 + this.wave * .07; this.cool = 0; },
-  run() { if (this.running) return; this.running = true; let last = performance.now(); const loop = now => { if (!this.vis || document.hidden) { this.running = false; return; } const dt = Math.min(50, now - last) / 16.67; last = now; if (this.state === "play") this.step(dt); this.draw(now); requestAnimationFrame(loop); }; requestAnimationFrame(loop); },
-  step(dt) {
-    const k = this.keys; if (k.left) this.p.x -= 1.6 * dt; if (k.right) this.p.x += 1.6 * dt; this.p.x = clamp(this.p.x, 2, this.W - 14);
-    this.cool -= dt; if (k.fire && this.cool <= 0) { this.b.push({ x: this.p.x + 6, y: 124 }); this.cool = 14; Sound.shoot(); }
-    this.b.forEach(b => b.y -= 3.2 * dt); this.b = this.b.filter(b => b.y > -4);
-    let edge = false; const alive = this.en.filter(e => e.alive);
-    alive.forEach(e => { e.x += this.dir * this.speed * dt; if (e.x < 4 || e.x > this.W - 10) edge = true; });
-    if (edge) { this.dir *= -1; alive.forEach(e => e.y += 4); }
-    if (Math.random() < .012 * dt * (1 + this.wave * .3) && alive.length) { const s = alive[Math.floor(Math.random() * alive.length)]; this.eb.push({ x: s.x + 3, y: s.y + 6 }); }
-    this.eb.forEach(b => b.y += 1.4 * dt); this.eb = this.eb.filter(b => b.y < this.H);
-    this.b.forEach(b => alive.forEach(e => { if (e.alive && b.y < e.y + 7 && b.y > e.y - 2 && b.x > e.x - 1 && b.x < e.x + 8) { e.alive = false; b.y = -10; this.score += 10; this.fx.push({ x: e.x + 3, y: e.y + 3, t: 0 }); Sound.boom(); } }));
-    this.eb.forEach(b => { if (b.y > 124 && b.y < 134 && b.x > this.p.x - 1 && b.x < this.p.x + 13) { b.y = this.H + 9; this.lives--; this.fx.push({ x: this.p.x + 6, y: 128, t: 0 }); Sound.collide(); if (this.lives <= 0) this.over(); } });
-    if (alive.some(e => e.y > 116)) this.over();
-    if (!this.en.some(e => e.alive)) this.newWave();
-    this.fx.forEach(f => f.t += dt); this.fx = this.fx.filter(f => f.t < 18);
+  setVis(v) { this.vis = v; if (v) this.run(); else { this.keys = {}; if (this.full) this.exitFull(); if (this.state === "play") this.state = "pause"; } },
+  updHi() { $("#hiscore").textContent = "HI " + String(this.hi).padStart(4, "0"); },
+  /* Start goes full screen; Esc or ✕ puts the console back */
+  enterFull() { if (this.full) return; this.full = true; $("#gScreen").appendChild(this.c); $("#gameFull").classList.add("on"); this.c.focus({ preventScroll: true }); },
+  exitFull() {
+    if (!this.full) return; this.full = false; $("#gameFull").classList.remove("on"); this.home.appendChild(this.c);
+    this.keys = {}; if (this.state === "play") this.state = "pause"; this.draw(performance.now());
   },
-  over() { this.state = "over"; if (this.score > this.hi) { this.hi = this.score; store.set("dv_hi", this.hi); this.updHi(); } },
-  txt(s, x, y, col = "#9bd27a", size = 8) { const c = this.ctx; c.fillStyle = col; c.font = `${size}px "JetBrains Mono", monospace`; c.textAlign = "center"; c.fillText(s, x, y); },
+  begin() {
+    this.enterFull();
+    if (this.state === "pause") { this.state = "play"; Sound.click(); this.run(); return; }
+    this.state = "play"; this.score = 0; this.lives = 3; this.wave = 0; this.p = { x: 80 }; this.b = []; this.eb = []; this.fx = []; this.higgs = null; this.hT = 600;
+    this.newWave(); this.say(GAME_TXT.start); Sound.click(); this.run();
+  },
+  say(t) { this.msg = { t: L(t), life: 150 }; },
+  newWave() {
+    this.wave++; this.en = []; for (let r = 0; r < 3; r++) for (let k = 0; k < 7; k++) this.en.push({ x: 20 + k * 18, y: 22 + r * 14, t: r, alive: true });
+    this.dir = 1; this.speed = .16 + this.wave * .06; this.cool = 0;
+    if (this.wave > 1) { const f = GAME_TXT.waves[(this.wave - 2) % GAME_TXT.waves.length]; this.say({ en: `Wave ${this.wave} · ${f.en}`, es: `Oleada ${this.wave} · ${f.es}` }); }
+  },
+  run() { if (this.running) return; this.running = true; let last = performance.now(); const loop = now => { if (!this.vis || document.hidden) { this.running = false; return; } const dt = Math.min(50, now - last) / 16.67; last = now; if (this.state === "play") this.step(dt); this.draw(now); requestAnimationFrame(loop); }; requestAnimationFrame(loop); },
+  burst(x, y, cols) { for (let i = 0; i < 7; i++) this.fx.push({ x, y, a: i / 7 * 6.283 + Math.random() * .5, q: (Math.random() - .5) * .35, t: 0, col: cols[i % cols.length] }); },
+  step(dt) {
+    const k = this.keys; if (k.left) this.p.x -= 1.7 * dt; if (k.right) this.p.x += 1.7 * dt; this.p.x = clamp(this.p.x, 9, this.W - 9);
+    this.cool -= dt; if (k.fire && this.cool <= 0) { this.b.push({ x: this.p.x, y: 122, t: 0 }); this.cool = 13; Sound.shoot(); }
+    this.b.forEach(b => { b.y -= 3.2 * dt; b.t += dt; }); this.b = this.b.filter(b => b.y > -6);
+    let edge = false; const alive = this.en.filter(e => e.alive);
+    alive.forEach(e => { e.x += this.dir * this.speed * dt; if (e.x < 6 || e.x > this.W - 6) edge = true; });
+    if (edge) { this.dir *= -1; alive.forEach(e => e.y += 4); }
+    if (Math.random() < .012 * dt * (1 + this.wave * .3) && alive.length) { const s = alive[Math.floor(Math.random() * alive.length)]; this.eb.push({ x: s.x, y: s.y + 4 }); }
+    this.eb.forEach(b => b.y += 1.4 * dt); this.eb = this.eb.filter(b => b.y < this.H);
+    // the Higgs boson crosses the top now and then
+    this.hT -= dt; if (!this.higgs && this.hT <= 0) { this.higgs = { x: -8, d: 1 }; if (Math.random() < .5) { this.higgs.x = this.W + 8; this.higgs.d = -1; } }
+    if (this.higgs) { this.higgs.x += this.higgs.d * .7 * dt; if (this.higgs.x < -12 || this.higgs.x > this.W + 12) { this.higgs = null; this.hT = 700 + Math.random() * 500; } }
+    const cols = ["#ff5a76", "#62e3b5", "#7cb2ff"];
+    this.b.forEach(b => {
+      alive.forEach(e => { if (e.alive && Math.abs(b.x - e.x) < 5 && Math.abs(b.y - e.y) < 5) { e.alive = false; b.y = -20; this.score += 10; this.burst(e.x, e.y, [cols[e.t], "#ffd166"]); Sound.boom(); } });
+      if (this.higgs && Math.abs(b.x - this.higgs.x) < 7 && Math.abs(b.y - 10) < 6) { b.y = -20; this.score += 125; this.burst(this.higgs.x, 10, ["#e8b64c", "#fff", "#ffd166"]); this.higgs = null; this.hT = 900; this.say(GAME_TXT.higgs); Sound.collide(); }
+    });
+    this.eb.forEach(b => { if (b.y > 121 && b.y < 134 && Math.abs(b.x - this.p.x) < 8) { b.y = this.H + 9; this.lives--; this.burst(this.p.x, 128, ["#ff5a76", "#fff"]); Sound.collide(); if (this.lives <= 0) this.over(); } });
+    if (alive.some(e => e.y > 114)) this.over();
+    if (!this.en.some(e => e.alive)) this.newWave();
+    this.fx.forEach(f => f.t += dt); this.fx = this.fx.filter(f => f.t < 22);
+    if (this.msg) { this.msg.life -= dt; if (this.msg.life <= 0) this.msg = null; }
+  },
+  over() { this.state = "over"; this.say(GAME_TXT.over); this.msg.life = 1e9; if (this.score > this.hi) { this.hi = this.score; store.set("dv_hi", this.hi); this.updHi(); } },
+  txt(s, x, y, col = "#e8edff", size = 7, w = 700) { const c = this.ctx; c.fillStyle = col; c.font = `${w} ${size}px "Space Mono", monospace`; c.textAlign = "center"; c.fillText(s, x, y); },
+  wrap(s, x, y, maxW, size, col) {
+    const c = this.ctx; c.font = `700 ${size}px "Space Mono", monospace`; const words = s.split(" "), lines = []; let ln = "";
+    words.forEach(wd => { const tt = ln ? ln + " " + wd : wd; if (c.measureText(tt).width > maxW && ln) { lines.push(ln); ln = wd; } else ln = tt; }); if (ln) lines.push(ln);
+    const lh = size + 2, bh = lines.length * lh + 6, y0 = y - bh / 2, top = y0 + 3 + size;
+    c.fillStyle = "rgba(4,6,18,.88)"; c.fillRect(x - maxW / 2 - 5, y0, maxW + 10, bh);
+    c.strokeStyle = "#e8b64c"; c.lineWidth = .5; c.strokeRect(x - maxW / 2 - 5, y0, maxW + 10, bh);
+    lines.forEach((l, i) => this.txt(l, x, top + i * lh, col, size));
+  },
+  detector(x, y, s = 1) { // a tiny CMS cross-section
+    const c = this.ctx; [[7, "#ff5a76"], [5.4, "#7cb2ff"], [3.8, "#e8b64c"], [2.2, "#0b1230"], [1.1, "#fff"]].forEach(([r, col]) => { c.fillStyle = col; c.beginPath(); c.arc(x, y, r * s, Math.PI, 0); c.closePath(); c.fill(); });
+  },
   draw(now = 0) {
-    const c = this.ctx, W = this.W, H = this.H; c.fillStyle = "#0b1410"; c.fillRect(0, 0, W, H);
-    for (let i = 0; i < 30; i++) { c.fillStyle = "#1e3324"; c.fillRect((i * 53) % W, (i * 31 + now / 60) % H, 1, 1); }
-    const blink = Math.floor(now / 500) % 2;
-    if (this.state === "title") { this.txt("PARTICLE", 80, 48, "#9bd27a", 13); this.txt("INVADERS", 80, 64, "#ffd166", 13); const q = ["#ff5a5a", "#5aff8a", "#5a9bff"]; q.forEach((col, i) => { c.fillStyle = col; c.fillRect(62 + i * 14, 80, 7, 7); }); if (blink || REDUCED) this.txt("PRESS START", 80, 112, "#e8edff", 8); return; }
-    const cols = ["#ff5a5a", "#5aff8a", "#5a9bff"];
-    this.en.forEach(e => { if (!e.alive) return; c.fillStyle = cols[e.t]; c.fillRect(e.x + 1, e.y, 5, 7); c.fillRect(e.x, e.y + 1, 7, 5); c.fillStyle = "#0b1410"; c.fillRect(e.x + 2, e.y + 2, 1, 1); c.fillRect(e.x + 4, e.y + 2, 1, 1); });
-    c.fillStyle = "#ffd166"; this.b.forEach(b => c.fillRect(b.x, b.y, 1, 4));
-    c.fillStyle = "#ff7aa8"; this.eb.forEach(b => { c.fillRect(b.x, b.y, 1, 1); c.fillRect(b.x + 1, b.y + 1, 1, 1); c.fillRect(b.x, b.y + 2, 1, 1); });
-    c.fillStyle = "#9bd27a"; c.fillRect(this.p.x, 128, 13, 4); c.fillRect(this.p.x + 5, 125, 3, 3); c.fillRect(this.p.x + 2, 132, 9, 2);
-    this.fx.forEach(f => { c.fillStyle = `rgba(255,220,120,${1 - f.t / 18})`; for (let a = 0; a < 8; a++) c.fillRect(f.x + Math.cos(a) * f.t * .6, f.y + Math.sin(a) * f.t * .6, 1, 1); });
-    c.fillStyle = "#1e3324"; c.fillRect(0, 136, W, 8); this.txt("SCORE " + String(this.score).padStart(4, "0"), 40, 143, "#9bd27a", 7); this.txt("♥".repeat(Math.max(0, this.lives)), 136, 143, "#ff5a76", 7);
-    if (this.state === "over") { c.fillStyle = "rgba(0,0,0,.6)"; c.fillRect(0, 40, W, 60); this.txt("GAME OVER", 80, 64, "#ff5a76", 12); if (blink) this.txt("PRESS START", 80, 84, "#e8edff", 8); }
+    const c = this.ctx, W = this.W, H = this.H; c.fillStyle = "#060915"; c.fillRect(0, 0, W, H);
+    for (let i = 0; i < 34; i++) { c.fillStyle = i % 5 ? "#1b2550" : "#3a4a85"; c.fillRect((i * 53) % W, (i * 31 + now / 70) % H, 1, 1); }
+    c.strokeStyle = "rgba(124,178,255,.08)"; for (let r = 30; r < 170; r += 22) { c.beginPath(); c.arc(W / 2, H + 20, r, Math.PI, 0); c.stroke(); }
+    const blink = Math.floor(now / 500) % 2, cols = ["#ff5a76", "#62e3b5", "#7cb2ff"];
+    if (this.state === "title") {
+      this.txt("PARTICLE", 80, 40, "#e8b64c", 12); this.txt("INVADERS", 80, 55, "#7cb2ff", 12); this.txt("CMS edition", 80, 67, "#8d97c0", 6, 400);
+      cols.forEach((col, i) => { c.fillStyle = col; c.beginPath(); c.arc(62 + i * 18, 84 + Math.sin(now / 300 + i) * 2, 3.5, 0, 7); c.fill(); });
+      this.detector(80, 118, 1.3); if (blink || REDUCED) this.txt(L(GAME_TXT.press), 80, 136, "#e8edff", 7); return;
+    }
+    this.en.forEach(e => { if (!e.alive) return; c.fillStyle = cols[e.t]; c.beginPath(); c.arc(e.x, e.y, 3.6, 0, 7); c.fill(); c.fillStyle = "rgba(255,255,255,.85)"; c.fillRect(e.x - 1, e.y - 1, 1.5, 1.5); c.strokeStyle = cols[e.t]; c.globalAlpha = .35; c.beginPath(); c.arc(e.x, e.y, 5.5, 0, 7); c.stroke(); c.globalAlpha = 1; });
+    if (this.higgs) { const x = this.higgs.x; c.fillStyle = "#e8b64c"; c.shadowColor = "#e8b64c"; c.shadowBlur = 6; c.beginPath(); c.arc(x, 10, 5, 0, 7); c.fill(); c.shadowBlur = 0; this.txt("H", x, 12.5, "#1d1203", 7); }
+    c.strokeStyle = "#ffd166"; c.lineWidth = 1; this.b.forEach(b => { c.beginPath(); for (let k = 0; k <= 6; k++) { const yy = b.y + k, xx = b.x + Math.sin((yy + b.t * 3) * 1.4) * 1.3; k ? c.lineTo(xx, yy) : c.moveTo(xx, yy); } c.stroke(); });
+    c.fillStyle = "#ff7aa8"; this.eb.forEach(b => { c.beginPath(); c.arc(b.x, b.y, 1.3, 0, 7); c.fill(); });
+    this.detector(this.p.x, 132);
+    this.fx.forEach(f => { c.strokeStyle = f.col; c.globalAlpha = 1 - f.t / 22; c.beginPath(); let x = f.x, y = f.y, a = f.a; c.moveTo(x, y); for (let s2 = 0; s2 < f.t * .7; s2++) { a += f.q; x += Math.cos(a); y += Math.sin(a); c.lineTo(x, y); } c.stroke(); c.globalAlpha = 1; });
+    c.fillStyle = "rgba(6,9,21,.9)"; c.fillRect(0, 136, W, 8);
+    this.txt("E " + String(this.score).padStart(4, "0") + " GeV", 34, 142.5, "#e8b64c", 6); this.txt("W" + this.wave, 80, 142.5, "#8d97c0", 6);
+    for (let i = 0; i < this.lives; i++) this.detector(132 + i * 9, 142, .5);
+    if (this.msg) this.wrap(this.msg.t, 80, 74, 132, 7, "#e8edff");
+    if (this.state === "pause") this.wrap(L(GAME_TXT.paused) + " · " + L(GAME_TXT.press), 80, 100, 120, 7, "#ffd166");
+    if (this.state === "over" && blink) this.txt(L(GAME_TXT.press), 80, 110, "#ffd166", 7);
   }
 };
 
@@ -118,7 +184,7 @@ const Game = {
 const Intro = {
   done: false,
   init() {
-    this.el = $("#intro"); this.bh = miniBH($("#bookbh"), "#f1e9d6");
+    this.el = $("#intro"); this.bh = miniBH($("#bookbh"), "#0b1230");
     $("#openBook").onclick = () => this.open(); $("#book").onclick = () => this.open(); $("#skipIntro").onclick = () => this.hide(true);
     $("#replayIntro").onclick = () => this.show();
     addEventListener("keydown", e => { if (!this.visible()) return; if (!this.opening && e.key === "Enter") { e.preventDefault(); this.open(); } if (e.key === "Escape") this.hide(true); });
@@ -126,15 +192,21 @@ const Intro = {
   },
   visible() { return this.el.style.display !== "none"; },
   show() {
-    this.opening = false; this.done = false; Uni.clearHover(); this.el.style.display = ""; this.el.classList.remove("gone"); $("#book").classList.remove("open"); $("#scene").classList.remove("dive"); $("#introUi").style.opacity = 1;
+    this.opening = false; this.done = false; Uni.clearHover(); this.el.style.display = ""; this.el.classList.remove("gone"); const sc = $("#scene"); sc.classList.remove("open", "dive"); sc.style.transformOrigin = ""; $("#introUi").style.opacity = 1;
     requestAnimationFrame(() => CMSCover.draw()); this.loop(); setTimeout(() => $("#openBook").focus(), 50);
   },
   loop() { const f = now => { if (!this.visible()) return; this.bh(REDUCED ? 0 : now / 1000); requestAnimationFrame(f); }; requestAnimationFrame(f); },
   open() {
-    if (this.opening) return; this.opening = true; Sound.open(); $("#introUi").style.opacity = 0; $("#book").classList.add("open");
+    if (this.opening) return; this.opening = true; Sound.open(); $("#introUi").style.opacity = 0;
+    const sc = $("#scene"); sc.classList.add("open");
     if (REDUCED) return this.hide(false);
-    setTimeout(() => { $("#scene").classList.add("dive"); Sound.warp(); }, 1250);
-    setTimeout(() => this.hide(false), 2350);
+    // after the cover has turned, dive into the black hole drawn on the first page
+    setTimeout(() => {
+      const r = sc.getBoundingClientRect(), b = $("#bookbh").getBoundingClientRect();
+      sc.style.transformOrigin = `${b.left + b.width / 2 - r.left}px ${b.top + b.height / 2 - r.top}px`;
+      sc.classList.add("dive"); Sound.warp();
+    }, 1500);
+    setTimeout(() => this.hide(false), 2650);
   },
   /* Every time the portfolio starts (intro or not), the particles collide on the name */
   hide(instant) {
@@ -148,11 +220,11 @@ const Intro = {
 function boot() {
   $$(".contact-slot").forEach(s => s.appendChild($("#contactTpl").content.cloneNode(true)));
   captureEN();
-  Portal.init(); renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline();
+  Portal.init(); renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext();
   NameFX.init(); CursorFX.init(); Game.init(); Uni.init(); Visited.paint();
   const stars = () => { drawStars($("#viewStars"), 4200); drawStars($("#introStars"), 2200); };
   stars(); addEventListener("resize", () => { clearTimeout(boot._r); boot._r = setTimeout(() => { stars(); if (Intro.visible()) CMSCover.draw(); }, 200); });
-  langListeners.push(() => { renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); Visited.paint(); if ($("#modal").classList.contains("open")) fillModal(); if (Portal.key) Portal.label(); soundLabel(); });
+  langListeners.push(() => { renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext(); Visited.paint(); if ($("#modal").classList.contains("open")) fillModal(); if (Portal.key) Portal.label(); soundLabel(); });
   $$(".seg button").forEach(b => b.onclick = () => { setLang(b.dataset.lang); Sound.click(); });
   if (LANG !== "en") setLang(LANG);
   const wantSound = store.get("dv_sound", false);
@@ -161,12 +233,14 @@ function boot() {
   $$("[data-copy]").forEach(b => b.onclick = copyEmail);
   $$("[data-back]").forEach(b => b.onclick = () => { Sound.click(); goHome(); });
   $("#brand").onclick = $("#backBtn").onclick = () => { Sound.click(); goHome(); };
-  $("#cvBtn").onclick = () => { toast(T().cvmsg); Sound.click(); };
+  $$("#cvBtn, [data-cv]").forEach(b => b.onclick = () => { toast(T().cvmsg); Sound.click(); });
+  setTimeout(() => { Space.load(); }, 2500);
   $("#mClose").onclick = () => closeModal(); $("#mPrev").onclick = () => stepModal(-1); $("#mNext").onclick = () => stepModal(1);
   $("#modal").addEventListener("click", e => { if (e.target.id === "modal") closeModal(); });
   addEventListener("hashchange", route);
   addEventListener("keydown", e => {
     if (Intro.visible()) return;
+    if (Game.full) { if (e.key === "Escape") { e.preventDefault(); Game.exitFull(); } return; }
     if ($("#modal").classList.contains("open")) {
       if (e.key === "Escape") closeModal(); if (e.key === "ArrowRight") stepModal(1); if (e.key === "ArrowLeft") stepModal(-1);
       if (e.key === "Tab") { const f = $$("#mPanel button, #mPanel a"); const first = f[0], last = f[f.length - 1]; if (e.shiftKey && document.activeElement === first) { last.focus(); e.preventDefault(); } else if (!e.shiftKey && document.activeElement === last) { first.focus(); e.preventDefault(); } }

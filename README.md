@@ -3,7 +3,7 @@
 Portafolio personal interactivo. El **universo es el menú principal**: viajas por escalas (agujero negro → cúmulo de galaxias → sistema solar → Tierra) y haces zoom en cada objeto para entrar a una subpágina.
 
 🔗 **Sitio en vivo:** https://danielv-13.github.io
-🗂️ **Versiones anteriores:** [v2 (página con scroll)](https://danielv-13.github.io/v2/) · [v1 (cielo estrellado por materias)](https://danielv-13.github.io/v1/)
+🗂️ **Versiones anteriores:** [v3](https://danielv-13.github.io/v3/) · [v2 (página con scroll)](https://danielv-13.github.io/v2/) · [v1 (cielo estrellado por materias)](https://danielv-13.github.io/v1/)
 
 ## Cómo se navega
 
@@ -28,7 +28,8 @@ src/3-canvas.js   ← animaciones, universo-menú, portales de vista previa, por
 src/4-fx.js       ← colisión del nombre, cursor-partícula, Particle Invaders, intro, arranque
 assets/projects/  ← imágenes y videos de los proyectos
 assets/logos/     ← logos monocromos (máscaras que se tiñen con la paleta)
-v1/, v2/          ← versiones anteriores (también hay una etiqueta git `v2`)
+assets/space/     ← galaxia 3D (nube de puntos binaria) y nebulosa de fondo
+v1/, v2/, v3/     ← versiones anteriores
 ```
 
 ## Editar y publicar
@@ -36,3 +37,8 @@ v1/, v2/          ← versiones anteriores (también hay una etiqueta git `v2`)
 1. Cambia el contenido en `src/1-data.js` (o el diseño en `src/template.html`).
 2. Ejecuta `python build.py` para regenerar `index.html`.
 3. Haz commit y push: GitHub Pages publica en un minuto.
+
+## Créditos
+
+- Nube de puntos de la galaxia («need some space») y nebulosa («Alien Space Nebula»): modelos 3D de Sketchfab con licencia libre, reducidos para la web. _Pendiente: añadir el nombre de sus autores._
+- El agujero negro se renderiza en tiempo real con un shader WebGL propio (sin librerías); si el navegador no tiene WebGL se dibuja una versión 2D.
