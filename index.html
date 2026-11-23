@@ -2073,7 +2073,7 @@ const CursorFX = {
       if (e.pointerType !== "mouse") return;
       this.head.style.transform = `translate3d(${e.clientX}px,${e.clientY}px,0)`; this.head.style.opacity = 1;
       let vx = e.clientX - this.x, vy = e.clientY - this.y; if (Math.hypot(vx, vy) > 90) { this.pts = []; vx = vy = 0; } this.x = e.clientX; this.y = e.clientY;
-      this.pts.push({ x: this.x, y: this.y, vx: vx * .04, vy: vy * .04, a: 1 }); if (this.pts.length > 14) this.pts.shift(); this.start();
+      this.pts.push({ x: this.x, y: this.y, vx: vx * .04, vy: vy * .04, a: 1 }); if (this.pts.length > 18) this.pts.shift(); this.start();
     }, { passive: true });
     document.documentElement.addEventListener("pointerleave", () => { this.head.style.opacity = 0; this.pts = []; this.x = this.y = -999; });
     addEventListener("blur", () => { this.pts = []; this.x = this.y = -999; });
@@ -2081,9 +2081,11 @@ const CursorFX = {
   start() { if (this.running) return; this.running = true; const loop = () => { if (this.draw()) requestAnimationFrame(loop); else this.running = false; }; requestAnimationFrame(loop); },
   draw() {
     const c = this.ctx; c.clearRect(0, 0, innerWidth, innerHeight);
-    this.pts.forEach(p => { const s = .12, vx = p.vx * Math.cos(s) - p.vy * Math.sin(s), vy = p.vx * Math.sin(s) + p.vy * Math.cos(s); p.vx = vx * .96; p.vy = vy * .96; p.x += p.vx; p.y += p.vy; p.a -= .075; });
+    this.pts.forEach(p => { const s = .12, vx = p.vx * Math.cos(s) - p.vy * Math.sin(s), vy = p.vx * Math.sin(s) + p.vy * Math.cos(s); p.vx = vx * .96; p.vy = vy * .96; p.x += p.vx; p.y += p.vy; p.a -= .06; });
     this.pts = this.pts.filter(p => p.a > 0);
-    for (let i = 1; i < this.pts.length; i++) { const a = this.pts[i - 1], b = this.pts[i]; c.strokeStyle = `rgba(255,90,118,${b.a * .55})`; c.lineWidth = 1.5 * b.a; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke(); }
+    c.lineCap = "round"; c.shadowColor = "rgba(255,90,118,.8)"; c.shadowBlur = 8;
+    for (let i = 1; i < this.pts.length; i++) { const a = this.pts[i - 1], b = this.pts[i]; c.strokeStyle = `rgba(255,110,134,${b.a * .9})`; c.lineWidth = .6 + 2.6 * b.a; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke(); }
+    c.shadowBlur = 0;
     return this.pts.length > 0;
   }
 };
