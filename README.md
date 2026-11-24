@@ -3,7 +3,7 @@
 Portafolio personal interactivo. El **universo es el menú principal**: viajas por escalas (agujero negro → cúmulo de galaxias → sistema solar → Tierra) y haces zoom en cada objeto para entrar a una subpágina.
 
 🔗 **Sitio en vivo:** https://danielv-13.github.io
-🗂️ **Versiones anteriores:** [v17](https://danielv-13.github.io/v17/) · [v16](https://danielv-13.github.io/v16/) · [v15](https://danielv-13.github.io/v15/) · [v14](https://danielv-13.github.io/v14/) · [v13](https://danielv-13.github.io/v13/) · [v12](https://danielv-13.github.io/v12/) · [v11](https://danielv-13.github.io/v11/) · [v10](https://danielv-13.github.io/v10/) · [v9](https://danielv-13.github.io/v9/) · [v8](https://danielv-13.github.io/v8/) · [v7](https://danielv-13.github.io/v7/) · [v6](https://danielv-13.github.io/v6/) · [v5](https://danielv-13.github.io/v5/) · [v4](https://danielv-13.github.io/v4/) · [v3](https://danielv-13.github.io/v3/) · [v2 (página con scroll)](https://danielv-13.github.io/v2/) · [v1 (cielo estrellado por materias)](https://danielv-13.github.io/v1/)
+🗂️ **Versiones anteriores:** [v18](https://danielv-13.github.io/v18/) · [v17](https://danielv-13.github.io/v17/) · [v16](https://danielv-13.github.io/v16/) · [v15](https://danielv-13.github.io/v15/) · [v14](https://danielv-13.github.io/v14/) · [v13](https://danielv-13.github.io/v13/) · [v12](https://danielv-13.github.io/v12/) · [v11](https://danielv-13.github.io/v11/) · [v10](https://danielv-13.github.io/v10/) · [v9](https://danielv-13.github.io/v9/) · [v8](https://danielv-13.github.io/v8/) · [v7](https://danielv-13.github.io/v7/) · [v6](https://danielv-13.github.io/v6/) · [v5](https://danielv-13.github.io/v5/) · [v4](https://danielv-13.github.io/v4/) · [v3](https://danielv-13.github.io/v3/) · [v2 (página con scroll)](https://danielv-13.github.io/v2/) · [v1 (cielo estrellado por materias)](https://danielv-13.github.io/v1/)
 
 ## Cómo se navega
 
@@ -31,7 +31,7 @@ assets/logos/     ← logos monocromos (máscaras que se tiñen con la paleta)
 assets/space/     ← nebulosa de fondo y textura de polvo del disco
 assets/js/bh3d.js ← agujero negro 3D (three.js), generado desde src3d/bh3d.js
 src3d/bh3d.js     ← código del agujero negro 3D
-v1/ … v17/        ← versiones anteriores
+v1/ … v18/        ← versiones anteriores
 ```
 
 ## Editar y publicar

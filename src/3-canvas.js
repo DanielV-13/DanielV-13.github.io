@@ -307,7 +307,7 @@ const Uni = {
     const n = this.i + dir; if (n < 0 || n >= LEVELS.length) return;
     this.wheelLock = performance.now() + (REDUCED ? 300 : 1500); this.go(n);
   },
-  resize() { this.w = innerWidth; this.h = innerHeight; this.mobile = this.w < 760; this.ctx = fitCanvas(this.c, this.w, this.h); this.frame(performance.now()); },
+  resize() { this.w = innerWidth; this.h = innerHeight; this.mobile = this.w < 760 || (this.w < 1100 && this.h > this.w * 1.2); this.ctx = fitCanvas(this.c, this.w, this.h); this.frame(performance.now()); },
   start() {
     if (this.running) return; this.running = true;
     const loop = now => { if ((CURVIEW && !this.zoom) || document.hidden) { this.running = false; return; } this.frame(now); requestAnimationFrame(loop); };
@@ -463,7 +463,7 @@ const Uni = {
   },
   solar(c, w, h, t, alpha) {
     const [sx, sy] = this.focus("solar"), S = Math.min(w, h), R = S * .075, W = this.mobile ? w * .4 : w * .42;
-    const lab = (txt, x, y, hot, size = 11.5, col) => { c.font = `${hot ? 700 : 500} ${size}px Space Mono, monospace`; c.textAlign = "center"; c.lineJoin = "round"; c.lineWidth = 4; c.strokeStyle = "rgba(4,6,18,.85)"; c.strokeText(txt, x, y); c.fillStyle = col || (hot ? "#fff" : "#c3cbea"); c.fillText(txt, x, y); };
+    const lab = (txt, x, y, hot, size = 11.5, col) => { c.font = `${hot ? 700 : 500} ${size}px Space Mono, monospace`; c.textAlign = "center"; { const hw = c.measureText(txt).width / 2 + 6; x = Math.min(Math.max(x, hw), this.w - hw); } c.lineJoin = "round"; c.lineWidth = 4; c.strokeStyle = "rgba(4,6,18,.85)"; c.strokeText(txt, x, y); c.fillStyle = col || (hot ? "#fff" : "#c3cbea"); c.fillText(txt, x, y); };
     const ps = PLANETS.map((p, i) => {
       const rx = R * 1.7 + p.r * W, ry = rx * .32, hot = this.hover === i;
       const a = i * 1.9 + t * (.45 / Math.sqrt(i + 1)), x = sx + Math.cos(a) * rx, y = sy + Math.sin(a) * ry, s = p.size * (S / 520) * (hot ? 1.3 : 1) + 2;
@@ -523,7 +523,7 @@ const Uni = {
     c.save(); c.translate(px, py); c.rotate(ang); c.fillStyle = "#fff"; c.beginPath(); c.moveTo(8, 0); c.lineTo(-6, -5); c.lineTo(-3, 0); c.lineTo(-6, 5); c.closePath(); c.fill(); c.restore();
     PINS.forEach((p, i) => { const [x, y] = proj(p.lon, p.lat), hot = this.hover === "pin" + i;
       c.fillStyle = "#ff5a76"; c.shadowColor = "#ff5a76"; c.shadowBlur = 12; c.beginPath(); c.arc(x, y, hot ? 7 : 5, 0, 7); c.fill(); c.shadowBlur = 0;
-      c.font = `${hot ? 700 : 500} 12px Space Mono, monospace`; c.textAlign = i ? "left" : "right"; c.fillStyle = "#fff"; c.fillText(L(p), x + (i ? 12 : -12), y + 4);
+      c.font = `${hot ? 700 : 500} 12px Space Mono, monospace`; c.fillStyle = "#fff"; { const lt = L(p), tw = c.measureText(lt).width; if (i ? x + 12 + tw > this.w - 6 : x - 12 - tw < 6) { c.textAlign = "center"; c.fillText(lt, Math.min(Math.max(x, tw / 2 + 6), this.w - tw / 2 - 6), y + 24); } else { c.textAlign = i ? "left" : "right"; c.fillText(lt, x + (i ? 12 : -12), y + 4); } }
       this.targets.push({ k: "pin" + i, x, y, r: 18 }); });
     orbit(0, Math.PI); if (!behind) sat();
     this.name(c, T().journeyP, cx, cy + R + 26, "journey", this.hover === "globe", alpha);
