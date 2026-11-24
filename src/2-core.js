@@ -28,7 +28,7 @@ const ES = {
   "work.title": "Cosas que he <em>construido</em>",
   "about.title": "Cómo la física me <em>encontró</em>",
   "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, Ecuador. Desde pequeño siempre fui apasionado por la tecnología y la ciencia, en especial por la física. No pudiendo estudiar física a nivel universitario, la busqué por mi cuenta mediante libros, videos y aprovechando cualquier oportunidad para aprender más. Fui parte del club de física de mi colegio, donde obtuve <strong>2 medallas en olimpiadas nacionales de física</strong> (bronce 2022 y plata 2023).<br><br>Luego, al entrar a la universidad, he fungido como <strong>ayudante de cátedra de Física y Matemáticas</strong>, y dando clases he ayudado a decenas de estudiantes, manteniendo viva mi pasión por enseñar y aprender más. Durante mi intercambio en la <strong>Universidad de Oviedo</strong> he aprendido física desde un lado más académico, y descubrí cómo mi carrera, la ciencia de datos y la física de partículas se pueden complementar entre sí.",
-  "about.pass": "PASE DE ACCESO", "about.passrole": "Ingeniería en Computación · UEES → Universidad de Oviedo", "about.passscan": "escanea · LinkedIn",
+  "about.pass": "PASE DE ACCESO", "about.passrole": "Ingeniería en Computación · UEES → Universidad de Oviedo", "about.passscan": "escanea · LinkedIn", "about.passmission": "MISIÓN",
   "about.mission": "Inspirar la pasión por la física, la ciencia y la tecnología a más estudiantes en Latinoamérica. Mostrar lo maravilloso que puede ser dejarse llevar por la curiosidad y arriesgarse con todo a aprender.",
   "about.smtitle": "El modelo estándar de mi historia", "about.draftchip": "borrador · textos por escribir",
   "journey.title": "Dónde he <em>estado</em>", "journey.peel": "psst: haz clic en una pegatina",
@@ -407,6 +407,22 @@ const Rot = {
   }
 };
 setInterval(Rot.tick, 400);
+/* About: the mission sheet is tucked inside the pass; it slides out by itself once per visit, then goes back */
+const Pass = {
+  init() {
+    const p = $(".pass"), tab = $(".pass-tab"); if (!p || !tab) return;
+    this.p = p; this.tab = tab;
+    tab.onclick = () => { this.user = true; clearTimeout(this.t); this.set(!p.classList.contains("open")); Sound.click(); };
+    p.addEventListener("pointerenter", () => clearTimeout(this.t));
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting || this.shown || CURVIEW !== "about") return;
+      this.shown = true; io.disconnect();
+      setTimeout(() => { if (this.user) return; this.set(true); this.t = setTimeout(() => { if (!this.user && !p.matches(":hover")) this.set(false); }, 5200); }, REDUCED ? 0 : 900);
+    }), { threshold: .6 });
+    io.observe(p);
+  },
+  set(open) { this.p.classList.toggle("open", open); this.tab.setAttribute("aria-expanded", open); }
+};
 /* Journey: the moment closest to the middle of the screen comes forward as you scroll */
 const TimelineFocus = {
   watch() {
