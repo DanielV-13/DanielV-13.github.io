@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark only">
+<meta name="theme-color" content="#04060f">
 <title>Daniel Vaca Velastegui · Portfolio</title>
 <meta name="description" content="Computer Engineering student (UEES, Ecuador · exchange at Universidad de Oviedo). Machine learning and data science for particle physics.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,7 +29,7 @@
   --dots:"Doto", "Space Mono", monospace;
   --mono:"Space Mono", ui-monospace, Consolas, monospace;
   --top:64px;
-  color-scheme:dark;
+  color-scheme:only dark;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -2188,7 +2190,7 @@ function drawStars(c, dens = 3200) {
 }
 
 /* ---------- The black hole (used by the book, the board and the universe) ---------- */
-function drawBlackHole(c, cx, cy, R, t) {
+function drawBlackHole(c, cx, cy, R, t, still) {
   const glow = c.createRadialGradient(cx, cy, R * .8, cx, cy, R * 5.5); glow.addColorStop(0, "rgba(255,150,60,.35)"); glow.addColorStop(.4, "rgba(255,90,40,.08)"); glow.addColorStop(1, "rgba(0,0,0,0)");
   c.fillStyle = glow; c.fillRect(cx - R * 6, cy - R * 6, R * 12, R * 12);
   const disk = (a0, a1, alphaMul) => {
@@ -2206,11 +2208,37 @@ function drawBlackHole(c, cx, cy, R, t) {
   c.fillStyle = "#000"; c.beginPath(); c.arc(cx, cy, R * 1.22, 0, 7); c.fill();
   c.strokeStyle = "rgba(255,240,210,.9)"; c.lineWidth = Math.max(1, R * .04); c.beginPath(); c.arc(cx, cy, R * 1.24, 0, 7); c.stroke();
   disk(0, Math.PI, 1);
+  if (still) return;
   for (let i = 0; i < 40; i++) {
     const rr = R * (1.7 + ((i * 53) % 100) / 100 * 1.9), a = i * 2.1 + t * (2.4 / (rr / R));
     const x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr * .2; if (Math.sin(a) < 0 && Math.hypot(x - cx, (y - cy) * 5) < R * 1.3) continue;
     c.fillStyle = Math.cos(a) < 0 ? "rgba(255,245,220,.9)" : "rgba(255,170,90,.6)"; c.fillRect(x, y, 1.6, 1.6);
   }
+}
+/* Phones: no WebGL. The static part of the 2D hole is painted once into a sprite and only the
+   orbiting sparks and a soft breathing glow are drawn each frame, so it stays smooth and light. */
+const BH_LITE = matchMedia("(pointer:coarse)").matches || innerWidth < 760;
+const BHSprite = { R: 0, cv: null,
+  get(R) {
+    if (this.cv && Math.abs(this.R - R) < 1) return this.cv;
+    const S = Math.ceil(R * 12), d = Math.min(2, devicePixelRatio || 1), cv = document.createElement("canvas");
+    cv.width = S * d; cv.height = S * d; const x = cv.getContext("2d"); x.scale(d, d);
+    drawBlackHole(x, S / 2, S / 2, R, 0, true);
+    this.R = R; this.cv = cv; return cv;
+  }
+};
+function drawBlackHoleLite(c, cx, cy, R, t) {
+  const sp = BHSprite.get(R), S = R * 12, pulse = .5 + .5 * Math.sin(t * 1.3), a0 = c.globalAlpha;
+  const g = c.createRadialGradient(cx, cy, R * 1.2, cx, cy, R * 4); g.addColorStop(0, `rgba(255,170,90,${.12 + .1 * pulse})`); g.addColorStop(1, "rgba(255,120,50,0)");
+  c.fillStyle = g; c.fillRect(cx - R * 4, cy - R * 4, R * 8, R * 8);
+  c.drawImage(sp, cx - S / 2, cy - S / 2, S, S);
+  for (let i = 0; i < 90; i++) {
+    const rr = R * (1.6 + ((i * 53) % 100) / 100 * 2.1), a = i * 2.1 + t * (2.6 / (rr / R));
+    const x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr * .2; if (Math.sin(a) < 0 && Math.hypot(x - cx, y - cy) < R * 1.32) continue;
+    const near = Math.cos(a) < 0, sz = i % 7 ? 1.5 : 2.4;
+    c.globalAlpha = a0 * (i % 3 ? .9 : .6); c.fillStyle = near ? "#fff3dc" : "#ffad5c"; c.fillRect(x - sz / 2, y - sz / 2, sz, sz);
+  }
+  c.globalAlpha = a0;
 }
 function miniBH(canvas, bg = "#000") {
   const r = canvas.getBoundingClientRect(), w = r.width || canvas.width, h = r.height || canvas.height, ctx = fitCanvas(canvas, w, h);
@@ -2376,7 +2404,7 @@ const Uni = {
         const Zg = this.Zg || 1, [gx, gy] = this.zf || [w / 2, h / 2], sx = fx + (x - fx) * zoom, sy = fy + (y - fy) * zoom;
         this.bhDraw = { x: gx + (sx - gx) * Zg, y: gy + (sy - gy) * Zg, s: zoom * Zg, a: alpha };
       }
-      if (!BH3D.ok || BH3D.fade < 1) { c.save(); c.globalAlpha = alpha * (1 - (BH3D.ok ? BH3D.fade : 0)); drawBlackHole(c, x, y, R, t); c.restore(); }
+      if (!BH3D.ok || BH3D.fade < 1) { c.save(); c.globalAlpha = alpha * (1 - (BH3D.ok ? BH3D.fade : 0)); (BH_LITE ? drawBlackHoleLite : drawBlackHole)(c, x, y, R, t); c.restore(); }
       this.targets.push({ k: "bh", x, y, r: BH3D.size(this.mobile) / 7.6 * 1.6 });
     }
 
@@ -2555,7 +2583,7 @@ const Uni = {
 const BH3D = {
   ok: false, fade: 0, ema: 0, q: 1.25, qMax: 1.5,
   init(cv) {
-    this.cv = cv; if (REDUCED) return;
+    this.cv = cv; if (REDUCED || BH_LITE) return;
     const go = () => import("./assets/js/bh3d.js").then(m => { this.api = m.create(cv); if (this.api) { this.ok = true; this.t0 = performance.now(); Uni.start(); } }).catch(() => {});
     if (window.requestIdleCallback) requestIdleCallback(go, { timeout: 1500 }); else setTimeout(go, 600);
   },
