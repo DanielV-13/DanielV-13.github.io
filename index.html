@@ -245,10 +245,36 @@ body.in-view .view-bg{opacity:1}
 .about-intro{display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:start;margin-bottom:50px}
 .about-intro p{margin:0;font-size:15.5px;color:#d3daf5}
 .about-intro p strong{color:var(--ember);font-weight:500}
-.about-side{display:flex;flex-direction:column;align-items:center;gap:22px}
-.about-side .txt{width:100%}
-.me{margin:0;width:168px;height:168px;border-radius:50%;padding:4px;background:conic-gradient(from 210deg,var(--ember),#ff5a76,#7cb2ff,var(--ember));box-shadow:0 0 40px rgba(232,182,76,.25)}
-.me img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;border:3px solid var(--night)}
+.about-side{display:flex;justify-content:center}
+.pass-wrap{position:relative;padding-top:54px;perspective:900px}
+.lanyard{position:absolute;top:-30px;left:50%;width:120px;height:92px;transform:translateX(-50%);background:linear-gradient(115deg,transparent 46%,#ff5a76 46% 54%,transparent 54%),linear-gradient(65deg,transparent 46%,#ff5a76 46% 54%,transparent 54%);opacity:.85;-webkit-mask:linear-gradient(#0000,#000 30%);mask:linear-gradient(#0000,#000 30%)}
+.pass{position:relative;width:290px;border-radius:18px;padding:16px 16px 14px;background:linear-gradient(160deg,#121b44,#0b1230 55%,#0a1028);border:1px solid #2b3a78;box-shadow:0 30px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.06);transform-origin:50% -40px;transform:rotate(-3deg);animation:sway 7s ease-in-out infinite;overflow:hidden;transition:box-shadow .3s}
+.pass:hover{animation-play-state:paused;box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 0 1px var(--ember),0 0 40px rgba(232,182,76,.18)}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(1.5deg)}}
+.pass .clip{position:absolute;top:8px;left:50%;width:46px;height:9px;margin-left:-23px;border-radius:6px;background:#060a1c;box-shadow:inset 0 1px 2px rgba(0,0,0,.8)}
+.pass-top{display:flex;align-items:center;gap:8px;margin:12px 0 12px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;color:#9fb0e6}
+.pass-top b{color:var(--ember);font-weight:700}
+.pass-id{margin-left:auto;color:#5f6fa8;letter-spacing:.08em}
+.pass-atom{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--ember);position:relative}
+.pass-atom::before,.pass-atom::after{content:"";position:absolute;inset:-1px 4px;border:1.5px solid #7cb2ff;border-radius:50%;transform:rotate(60deg)}
+.pass-atom::after{transform:rotate(-60deg);border-color:#ff5a76}
+.pass-photo{position:relative;margin:0;border-radius:12px;overflow:hidden;aspect-ratio:3/4;border:1px solid #2b3a78}
+.pass-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.pass-photo .hud{position:absolute;width:16px;height:16px;border:2px solid rgba(232,182,76,.85)}
+.hud.tl{top:8px;left:8px;border-right:0;border-bottom:0}.hud.tr{top:8px;right:8px;border-left:0;border-bottom:0}.hud.bl{bottom:8px;left:8px;border-right:0;border-top:0}.hud.br{bottom:8px;right:8px;border-left:0;border-top:0}
+.pass-name{margin:14px 0 2px;font-family:var(--display);font-size:22px;letter-spacing:.02em;color:#fff}
+.pass-role{margin:0 0 12px!important;font-size:11.5px!important;color:#9fb0e6!important;line-height:1.5}
+.pass-field{border-top:1px dashed #2b3a78;padding-top:10px}
+.pass-k{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--mint);margin-bottom:4px}
+.pass .mis{margin:0!important;font-size:13px!important;line-height:1.55;color:#dfe4f8!important}
+.pass-foot{display:flex;align-items:center;gap:12px;margin-top:14px}
+.pass-qr{flex:none;width:58px;height:58px;padding:5px;border-radius:8px;background:#f4f1ea;display:block}
+.pass-qr .qr{width:100%;height:100%;display:block}
+.pass-bar{flex:1;height:30px;background:repeating-linear-gradient(90deg,#9fb0e6 0 2px,transparent 2px 4px,#9fb0e6 4px 5px,transparent 5px 8px,#9fb0e6 8px 11px,transparent 11px 13px);opacity:.35;border-radius:2px}
+.pass-scan{position:absolute;right:16px;bottom:8px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:#5f6fa8}
+.pass-shine{position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.08) 45%,transparent 55%);transform:translateX(-100%);pointer-events:none}
+.pass:hover .pass-shine{transition:transform .9s;transform:translateX(100%)}
+@media (prefers-reduced-motion:reduce){.pass{animation:none}}
 .txt{background:var(--night);border:1px solid var(--line);border-radius:12px;padding:12px 15px}
 .txt .f{font-size:11.5px;color:var(--signal)}
 .txt p{margin:4px 0 0;font-size:14px}
@@ -318,6 +344,15 @@ body.in-view .view-bg{opacity:1}
 .tcat{color:var(--muted);padding-top:3px}
 .tch{display:inline-block;margin:0 6px 6px 0;padding:3px 9px;border-radius:8px;border:0;font:inherit;font-size:12px;background:color-mix(in srgb,var(--c) 14%,transparent);color:color-mix(in srgb,var(--c) 75%,#fff);cursor:var(--cp,pointer)}
 .tch:hover{background:color-mix(in srgb,var(--c) 26%,transparent)}
+.tpsst{margin:-2px 0 12px!important;font-size:11.5px!important;color:var(--mint)!important;opacity:.85}
+.tch[data-cnt]{position:relative}
+.tk[data-cnt]:hover .nm,.tk[data-cnt]:focus-visible .nm{display:none}
+.tk[data-cnt]:hover::after,.tk[data-cnt]:focus-visible::after{content:attr(data-cnt);color:var(--h)}
+.tch[data-cnt]:hover::after{content:attr(data-cnt);position:absolute;left:50%;bottom:calc(100% + 6px);transform:translateX(-50%);white-space:nowrap;padding:3px 8px;border-radius:6px;background:#060a1c;border:1px solid var(--mint);color:var(--mint);font-size:11px;pointer-events:none;z-index:5}
+.tch.hint{animation:hint 1.6s ease-out .6s 2}
+@keyframes hint{0%,100%{box-shadow:0 0 0 0 transparent}40%{box-shadow:0 0 0 4px color-mix(in srgb,var(--mint) 45%,transparent),0 0 18px color-mix(in srgb,var(--mint) 60%,transparent)}}
+#techToast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,20px);opacity:0;z-index:120;padding:9px 16px;border-radius:999px;background:#0b1233;border:1px solid var(--mint);color:var(--mint);font-size:13px;box-shadow:0 12px 30px rgba(0,0,0,.5);transition:opacity .3s,transform .3s;pointer-events:none}
+#techToast.on{opacity:1;transform:translate(-50%,0)}
 .win.tech-hit{outline:2px solid var(--mint);outline-offset:3px;box-shadow:0 0 28px color-mix(in srgb,var(--mint) 40%,transparent)}
 @media (max-width:760px){.ttab{grid-template-columns:1fr}.tcat{padding-top:6px}}
 @media (prefers-reduced-motion:reduce){.ttr{animation:none;flex-wrap:wrap;width:auto}}
@@ -634,8 +669,19 @@ body.in-view .view-bg{opacity:1}
   <div class="about-intro">
     <p data-i18n-html="about.p">I study <strong>computer engineering</strong> in Guayaquil, Ecuador. Ever since I was a kid I have been passionate about technology and science, especially physics. Since I could not study physics at university, I went looking for it on my own: books, videos and every chance I got to learn more. I was part of my school's physics club, where I won <strong>two medals in national physics olympiads</strong> (bronze 2022 and silver 2023).<br><br>At university I became a <strong>Physics and Mathematics teaching assistant</strong>, and through my classes I have helped dozens of students while keeping alive my passion for teaching and for learning more. During my exchange at the <strong>Universidad de Oviedo</strong> I have been learning physics from a more academic side, and I discovered how my degree, data science and particle physics complement each other.</p>
     <div class="about-side">
-      <figure class="me"><img src="assets/story/perfil.webp" alt="Daniel Vaca" width="168" height="168" loading="lazy"></figure>
-      <div class="txt"><span class="f">mission.txt</span><p data-i18n="about.mission">Inspire a passion for physics, science and technology in more students across Latin America. Show how wonderful it can be to follow your curiosity and go all in on learning.</p></div>
+      <div class="pass-wrap">
+        <span class="lanyard" aria-hidden="true"></span>
+        <article class="pass" aria-label="Daniel Vaca">
+          <span class="clip" aria-hidden="true"></span>
+          <header class="pass-top"><span class="pass-atom" aria-hidden="true"></span><b data-i18n="about.pass">ACCESS PASS</b><span class="pass-id">DV-2026</span></header>
+          <figure class="pass-photo"><img src="assets/story/perfil-3x4.webp" alt="Daniel Vaca" width="480" height="640" loading="lazy"><i class="hud tl"></i><i class="hud tr"></i><i class="hud bl"></i><i class="hud br"></i></figure>
+          <h3 class="pass-name">DANIEL VACA</h3>
+          <p class="pass-role" data-i18n="about.passrole">Computer Engineering · UEES → Universidad de Oviedo</p>
+          <div class="pass-field"><span class="pass-k">MISSION</span><p class="mis" data-i18n="about.mission">Inspire a passion for physics, science and technology in more students across Latin America. Show how wonderful it can be to follow your curiosity and go all in on learning.</p></div>
+          <footer class="pass-foot"><a href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener" class="pass-qr" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="qr" aria-hidden="true"><path stroke="#0b1230" d="M0 0.5h7m2 0h3m4 0h1m1 0h4m1 0h1m2 0h7m-33 1h1m5 0h1m2 0h4m2 0h1m2 0h1m5 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h2m2 0h4m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m1 0h4m1 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h1m3 0h1m2 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h5m2 0h4m1 0h2m4 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m5 0h2m3 0h1m1 0h2m1 0h1m-25 1h1m1 0h5m3 0h2m1 0h2m2 0h1m4 0h1m1 0h1m1 0h5m-31 1h1m1 0h1m4 0h1m2 0h2m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h1m4 0h3m3 0h6m1 0h1m2 0h2m1 0h1m3 0h1m1 0h2m-31 1h2m1 0h2m2 0h6m2 0h1m2 0h3m1 0h1m1 0h1m2 0h4m-29 1h2m1 0h1m2 0h3m2 0h1m1 0h5m1 0h3m2 0h3m1 0h1m-31 1h3m3 0h2m2 0h3m3 0h1m1 0h1m3 0h1m2 0h1m2 0h1m1 0h2m-33 1h2m4 0h1m1 0h5m1 0h4m2 0h1m1 0h1m1 0h3m1 0h1m1 0h2m-32 1h3m1 0h1m2 0h2m4 0h1m6 0h2m3 0h3m2 0h1m-30 1h1m1 0h1m1 0h2m1 0h2m2 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-31 1h2m3 0h2m1 0h2m6 0h4m1 0h5m1 0h2m1 0h1m-32 1h2m3 0h4m1 0h2m1 0h2m4 0h3m2 0h4m1 0h2m-32 1h2m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m1 0h1m4 0h3m1 0h1m1 0h5m-31 1h2m3 0h2m2 0h2m1 0h2m1 0h2m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-33 1h1m4 0h1m1 0h3m1 0h2m4 0h3m3 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h4m1 0h3m3 0h3m3 0h1m4 0h1m3 0h3m-32 1h1m1 0h1m5 0h1m4 0h2m6 0h2m2 0h3m1 0h2m-31 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h3m2 0h1m1 0h6m1 0h2m-25 1h2m1 0h1m1 0h2m1 0h1m1 0h4m1 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h2m1 0h2m1 0h4m3 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h5m1 0h2m2 0h1m1 0h5m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m1 0h3m3 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h5m1 0h1m2 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h8m-28 1h1m5 0h1m2 0h1m6 0h1m3 0h3m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h1m2 0h2m1 0h1m4 0h3m1 0h2m3 0h1"/></svg></a><span class="pass-bar" aria-hidden="true"></span><span class="pass-scan" data-i18n="about.passscan">scan · LinkedIn</span></footer>
+          <span class="pass-shine" aria-hidden="true"></span>
+        </article>
+      </div>
     </div>
   </div>
   <div class="sm-head"><h3 data-i18n="about.smtitle">The standard model of my story</h3></div>
@@ -935,31 +981,23 @@ const PROJECTS = [
 ];
 
 const TIMELINE = [
-  { when: { en: "Last years of school", es: "Últimos años de colegio" }, imgs: ["assets/story/club-premiacion.webp", "assets/story/club-pizarra.webp"],
-    title: { en: "The school physics club", es: "El club de física del colegio" }, org: "Interamericano",
-    text: { en: "Fridays after class, five students and university-level problems. That is where physics clicked.", es: "Los viernes después de clases, cinco estudiantes y ejercicios de nivel universitario. Ahí la física hizo clic." } },
-  { when: { en: "Oct 2022", es: "oct. 2022" }, hl: true, imgs: ["assets/story/apol-medallas.webp", "assets/story/apol22-410.webp"],
-    title: { en: "Bronze medal · National Physics Olympiad", es: "Medalla de bronce · Olimpiada Nacional de Física" }, org: "APOL",
-    text: { en: "3rd place among 410+ students from across Ecuador.", es: "3.er lugar entre más de 410 estudiantes de todo Ecuador." } },
-  { when: { en: "Nov 2023", es: "nov. 2023" }, hl: true, img: "assets/story/apol-plata-escenario.webp",
-    title: { en: "Silver medal · National Physics Olympiad", es: "Medalla de plata · Olimpiada Nacional de Física" }, org: "APOL",
-    text: { en: "2nd place among 420+ students.", es: "2.º lugar entre más de 420 estudiantes." } },
-  { when: { en: "2024", es: "2024" }, imgs: ["assets/story/abanderado.webp", "assets/story/grad-discurso.webp", "assets/story/grad-padres.webp", "assets/story/grad-titulo.webp"],
-    title: { en: "Flag-bearer of Guayaquil", es: "Abanderado de la ciudad de Guayaquil" }, org: "Interamericano",
-    text: { en: "A 9.97/10 average, and I gave the graduation speech in English.", es: "Promedio de 9,97/10 y el discurso de graduación, en inglés." } },
-  { when: { en: "Nov 2024", es: "nov. 2024" }, hl: true, imgs: ["assets/story/fil-escenario.webp", "assets/story/fil-mama.webp", "assets/story/fil-papa.webp", "assets/story/fil-medalla.webp", "assets/story/fil-diploma.webp"],
-    title: { en: "“La Filantrópica” medal", es: "Medalla «La Filantrópica»" }, org: "Sociedad Filantrópica del Guayas",
-    text: { en: "For the city's top students of 2023–2024.", es: "Para los mejores estudiantes de la ciudad, periodo 2023–2024." } },
-  { when: { en: "Apr 2024 — 2028", es: "abr. 2024 — 2028" }, mark: "{ }",
-    title: { en: "Computer Engineering", es: "Ingeniería en Computación" }, org: "UEES",
-    text: { en: "Overall GPA 95.06/100.", es: "Promedio general 95,06/100." } },
-  { when: { en: "2024", es: "2024" }, hl: true, imgs: ["assets/story/dean-placa.webp", "assets/story/dean-padres.webp", "assets/story/dean-diploma.webp", "assets/story/dean-mama.webp"],
+  { when: { en: "Sep 2026 — Jan 2027", es: "sep. 2026 — ene. 2027" }, hl: true, filter: "ml", img: "assets/story/oviedo-becario.webp",
+    title: { en: "Exchange semester · international scholar", es: "Semestre de intercambio · becario internacional" }, org: "Universidad de Oviedo",
+    text: { en: "Data Analysis in Modern Physics, Nuclear and Particle Physics, and Intelligent Systems.", es: "Análisis de Datos en Física Moderna, Física Nuclear y de Partículas, y Sistemas Inteligentes." } },
+  { when: { en: "Jul 2026", es: "jul. 2026" }, hl: true, open: "wids", imgs: ["assets/story/wids-badge.webp", "assets/story/wids-credencial.webp"],
+    title: { en: "3rd place · WiDS Datathon", es: "3.er lugar · Datathon WiDS" }, org: "ESPOL",
+    text: { en: "Team Artemis on the podium of the Women in Data Science Datathon.", es: "El equipo Artemis en el podio del Datathon Women in Data Science." },
+    links: [{ t: { en: "Verify credential", es: "Verificar credencial" }, u: "https://verified.sertifier.com/en/verify/08910752588849/" }] },
+  { when: { en: "Apr 2026", es: "abr. 2026" }, hl: true, imgs: ["assets/story/dean-placa.webp", "assets/story/dean-padres.webp", "assets/story/dean-diploma.webp", "assets/story/dean-mama.webp"],
     title: { en: "Dean's List", es: "Dean's List · Lista del Decano" }, org: "UEES",
     text: { en: "97.08 average in Ordinario I 2024, awarded at the April 2026 ceremony.", es: "Promedio de 97,08 en el Ordinario I 2024, entregado en la ceremonia de abril de 2026." },
     links: [{ t: { en: "Official list", es: "Lista oficial" }, u: "https://uees.edu.ec/distinciones-academicas-deans-list/" }] },
-  { when: { en: "2024 — now", es: "2024 — hoy" }, mark: "∂", imgs: ["assets/story/clase-loop.webp", "assets/story/clase-senalando.webp", "assets/story/clase-equilibrio.webp"],
+  { when: { en: "2024 — Aug 2026", es: "2024 — ago. 2026" }, mark: "∂", imgs: ["assets/story/clase-loop.webp", "assets/story/clase-senalando.webp", "assets/story/clase-equilibrio.webp"],
     title: { en: "Teaching assistant", es: "Ayudante de cátedra" }, org: "UEES",
     text: { en: "Five semesters of Physics I and Mathematics I–III. Professors and students kept asking me back.", es: "Cinco semestres de Física I y Matemáticas I–III. Profesores y estudiantes me pedían volver." } },
+  { when: { en: "Mar — Aug 2026", es: "mar. — ago. 2026" }, imgs: ["assets/story/gt-logo.webp", "assets/story/cascos.webp"],
+    title: { en: "IT intern · IT audit", es: "Pasante de IT · auditoría informática" }, org: "Grant Thornton Ecuador",
+    text: { en: "IT audit support, an SRI invoice reader and a NotebookLM search tool. Plus UNITAR's Green Helmets certificate in climate leadership.", es: "Apoyo en auditoría informática, un lector de facturas del SRI y un buscador con NotebookLM. Además, la certificación Cascos Verdes de UNITAR en liderazgo climático." } },
   { when: { en: "2025", es: "2025" }, imgs: ["assets/story/midas-logo.webp", "assets/story/midas-web.webp"],
     title: { en: "Chief Operating Officer", es: "Chief Operating Officer" }, org: "MIDAS",
     text: { en: "A financial-education app. I coordinate tech, marketing, finance and strategy.", es: "App de educación financiera. Coordino tecnología, marketing, finanzas y estrategia." },
@@ -973,16 +1011,24 @@ const TIMELINE = [
   { when: { en: "2025", es: "2025" }, img: "assets/story/eureka.webp",
     title: { en: "Entrepreneurship", es: "Emprendimiento" }, org: "EUNOIA · Eureka Factory",
     text: { en: "UEES's EUNOIA club and the Eureka Factory incubator (50 hours).", es: "Club EUNOIA de la UEES y la incubadora Eureka Factory (50 horas)." } },
-  { when: { en: "Mar — Aug 2026", es: "mar. — ago. 2026" }, imgs: ["assets/story/gt-logo.webp", "assets/story/cascos.webp"],
-    title: { en: "IT intern · IT audit", es: "Pasante de IT · auditoría informática" }, org: "Grant Thornton Ecuador",
-    text: { en: "IT audit support, an SRI invoice reader and a NotebookLM search tool. Plus UNITAR's Green Helmets certificate in climate leadership.", es: "Apoyo en auditoría informática, un lector de facturas del SRI y un buscador con NotebookLM. Además, la certificación Cascos Verdes de UNITAR en liderazgo climático." } },
-  { when: { en: "Jul 2026", es: "jul. 2026" }, hl: true, open: "wids", imgs: ["assets/story/wids-badge.webp", "assets/story/wids-credencial.webp"],
-    title: { en: "3rd place · WiDS Datathon", es: "3.er lugar · Datathon WiDS" }, org: "ESPOL",
-    text: { en: "Team Artemis on the podium of the Women in Data Science Datathon.", es: "El equipo Artemis en el podio del Datathon Women in Data Science." },
-    links: [{ t: { en: "Verify credential", es: "Verificar credencial" }, u: "https://verified.sertifier.com/en/verify/08910752588849/" }] },
-  { when: { en: "Sep 2026 — Jan 2027", es: "sep. 2026 — ene. 2027" }, hl: true, filter: "ml", img: "assets/story/oviedo-becario.webp",
-    title: { en: "Exchange semester · international scholar", es: "Semestre de intercambio · becario internacional" }, org: "Universidad de Oviedo",
-    text: { en: "Data Analysis in Modern Physics, Nuclear and Particle Physics, and Intelligent Systems.", es: "Análisis de Datos en Física Moderna, Física Nuclear y de Partículas, y Sistemas Inteligentes." } }
+  { when: { en: "Nov 2024", es: "nov. 2024" }, hl: true, imgs: ["assets/story/fil-escenario.webp", "assets/story/fil-mama.webp", "assets/story/fil-papa.webp", "assets/story/fil-medalla.webp", "assets/story/fil-diploma.webp"],
+    title: { en: "“La Filantrópica” medal", es: "Medalla «La Filantrópica»" }, org: "Sociedad Filantrópica del Guayas",
+    text: { en: "For the city's top students of 2023–2024.", es: "Para los mejores estudiantes de la ciudad, periodo 2023–2024." } },
+  { when: { en: "Apr 2024 — 2028", es: "abr. 2024 — 2028" }, mark: "{ }",
+    title: { en: "Computer Engineering", es: "Ingeniería en Computación" }, org: "UEES",
+    text: { en: "Overall GPA 95.06/100.", es: "Promedio general 95,06/100." } },
+  { when: { en: "2024", es: "2024" }, imgs: ["assets/story/abanderado.webp", "assets/story/grad-discurso.webp", "assets/story/grad-padres.webp", "assets/story/grad-titulo.webp"],
+    title: { en: "Flag-bearer of Guayaquil", es: "Abanderado de la ciudad de Guayaquil" }, org: "Interamericano",
+    text: { en: "A 9.97/10 average, and I gave the graduation speech in English.", es: "Promedio de 9,97/10 y el discurso de graduación, en inglés." } },
+  { when: { en: "Nov 2023", es: "nov. 2023" }, hl: true, img: "assets/story/apol-plata-escenario.webp",
+    title: { en: "Silver medal · National Physics Olympiad", es: "Medalla de plata · Olimpiada Nacional de Física" }, org: "APOL",
+    text: { en: "2nd place among 420+ students.", es: "2.º lugar entre más de 420 estudiantes." } },
+  { when: { en: "Oct 2022", es: "oct. 2022" }, hl: true, imgs: ["assets/story/apol-medallas.webp", "assets/story/apol22-410.webp"],
+    title: { en: "Bronze medal · National Physics Olympiad", es: "Medalla de bronce · Olimpiada Nacional de Física" }, org: "APOL",
+    text: { en: "3rd place among 410+ students from across Ecuador.", es: "3.er lugar entre más de 410 estudiantes de todo Ecuador." } },
+  { when: { en: "Last years of school", es: "Últimos años de colegio" }, imgs: ["assets/story/club-premiacion.webp", "assets/story/club-pizarra.webp"],
+    title: { en: "The school physics club", es: "El club de física del colegio" }, org: "Interamericano",
+    text: { en: "Where it all began…", es: "Donde empezó todo…" } }
 ];
 
 /* Tech stack (the Tc particle): logos are Simple Icons (CC0) saved in assets/tech; items without a logo show as text */
@@ -1031,7 +1077,6 @@ const STICKERS = [
   { id: "wids", rot: -4, bg: "#e8b64c", fg: "#1d1203", txt: "WiDS", sub: { en: "3rd · 2026", es: "3.º · 2026" } },
   { id: "apol", rot: 5, bg: "#0b1230", fg: "#ff5a76", txt: "APOL", sub: { en: "bronze · silver", es: "bronce · plata" } },
   { id: "dean", rot: -5, bg: "#7a1f2b", fg: "#f4e3c0", txt: "Dean's", sub: { en: "List · 97.08", es: "List · 97,08" } },
-  { id: "qs", rot: -7, bg: "#62e3b5", fg: "#06281d", txt: "QS", sub: { en: "Top 10 world", es: "Top 10 mundial" } },
   { id: "gt", rot: 9, bg: "#f4f1ea", fg: "#4f2d7f", m: "assets/logos/gt.png", small: true, sub: "Grant Thornton" },
   { id: "ec", rot: -10, bg: "linear-gradient(180deg,#ffd100 0 50%,#034ea2 50% 75%,#ef3340 75%)", fg: "#0b1230", txt: "EC", flag: true },
   { id: "es", rot: 7, bg: "linear-gradient(180deg,#c60b1e 0 25%,#ffc400 25% 75%,#c60b1e 75%)", fg: "#0b1230", txt: "ES", flag: true }
@@ -1089,6 +1134,7 @@ const ES = {
   "work.title": "Cosas que he <em>construido</em>",
   "about.title": "Cómo la física me <em>encontró</em>",
   "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, Ecuador. Desde pequeño siempre fui apasionado por la tecnología y la ciencia, en especial por la física. No pudiendo estudiar física a nivel universitario, la busqué por mi cuenta mediante libros, videos y aprovechando cualquier oportunidad para aprender más. Fui parte del club de física de mi colegio, donde obtuve <strong>2 medallas en olimpiadas nacionales de física</strong> (bronce 2022 y plata 2023).<br><br>Luego, al entrar a la universidad, he fungido como <strong>ayudante de cátedra de Física y Matemáticas</strong>, y dando clases he ayudado a decenas de estudiantes, manteniendo viva mi pasión por enseñar y aprender más. Durante mi intercambio en la <strong>Universidad de Oviedo</strong> he aprendido física desde un lado más académico, y descubrí cómo mi carrera, la ciencia de datos y la física de partículas se pueden complementar entre sí.",
+  "about.pass": "PASE DE ACCESO", "about.passrole": "Ingeniería en Computación · UEES → Universidad de Oviedo", "about.passscan": "escanea · LinkedIn",
   "about.mission": "Inspirar la pasión por la física, la ciencia y la tecnología a más estudiantes en Latinoamérica. Mostrar lo maravilloso que puede ser dejarse llevar por la curiosidad y arriesgarse con todo a aprender.",
   "about.smtitle": "El modelo estándar de mi historia", "about.draftchip": "borrador · textos por escribir",
   "journey.title": "Dónde he <em>estado</em>", "journey.peel": "psst: haz clic en una pegatina",
@@ -1104,7 +1150,7 @@ const UI = {
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
         enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored",
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
-        aboutP: "About me", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
+        aboutP: "About me", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
   es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", figma: "Prototipo en Figma", video: "Video de presentación",
         company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
@@ -1112,7 +1158,7 @@ const UI = {
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
         enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar",
         smEmpty: "Haz clic en una partícula para leer esa parte de la historia.", smPhrase: "Frase corta por escribir aquí.", smFuture: "Espacio para lo que viene.",
-        aboutP: "Sobre mí", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
+        aboutP: "Sobre mí", projOne: "proyecto", projMany: "proyectos", techHint: "psst: haz clic en cualquier tecnología para ver los proyectos donde la usé ↗", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
         nextK: "Siguiente parada", travel: "Viajar allí →", nextSolar: "Sistema Solar · sobre mí", nextEarth: "Tierra · mi trayectoria", nextSat: "El satélite · arcade", nextBh: "Volver al agujero negro", journeyP: "Mi trayectoria", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "yo", satellite: "Arcade" }
 };
 const T = () => UI[LANG];
@@ -1373,7 +1419,15 @@ function renderStory() {
   const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(L(s.link.t))}</a>` : "";
   p.classList.toggle("tech", !!s.tech);
   p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
-  if (s.tech) { $$("[data-q]", p).forEach(b => b.onclick = () => { Sound.click(); location.hash = "work"; setTimeout(() => techFilter(b.dataset.q), 450); }); return; }
+  if (s.tech) {
+    $$("[data-q]", p).forEach(b => b.onclick = () => {
+      Sound.click(); const u = TECH_URL[b.dataset.q.toLowerCase()];
+      if (u) { window.open(u, "_blank", "noopener"); return; }
+      location.hash = "work"; setTimeout(() => techFilter(b.dataset.q), 450);
+    });
+    if (!store.get("dv_tech_hint", false)) { store.set("dv_tech_hint", true); const c = $(".tch", p); if (c) c.classList.add("hint"); }
+    return;
+  }
   if (!items.length) return;
   const main = $(".ph > img", p), btns = $$(".thumbs button", p);
   const show = k => { swapImg(main, items[k].u, items[k].page); btns.forEach((x, j) => x.setAttribute("aria-pressed", j === k)); };
@@ -1395,21 +1449,35 @@ function richText(t) {
 function techPanel() {
   const all = TECH.flatMap(c => c.items), logos = all.filter(i => i.s);
   const lum = h => { const n = parseInt(h.slice(1), 16), r = n >> 16, g = n >> 8 & 255, b = n & 255; return (r * .3 + g * .59 + b * .11) / 255; };
-  const chip = i => `<button type="button" class="tk" data-q="${esc(i.n)}" title="${esc(i.n)}" style="--h:${lum(i.hex) < .28 ? "#f4f1ea" : i.hex}"><span class="ic" style="--m:url(assets/tech/${i.s}.svg)"></span><span class="nm">${esc(i.n)}</span></button>`;
+  const tip = i => { const u = TECH_URL[i.n.toLowerCase()], n = techProjects(i.n).length; return u ? "GitHub ↗" : `${n} ${n === 1 ? T().projOne : T().projMany} →`; };
+  const chip = i => `<button type="button" class="tk" data-q="${esc(i.n)}" data-cnt="${esc(tip(i))}" style="--h:${lum(i.hex) < .28 ? "#f4f1ea" : i.hex}"><span class="ic" style="--m:url(assets/tech/${i.s}.svg)"></span><span class="nm">${esc(i.n)}</span></button>`;
   const half = Math.ceil(logos.length / 2), rows = [logos.slice(0, half), logos.slice(half)];
   const strip = rows.map((r, k) => `<div class="tmq"><div class="ttr${k ? " rv" : ""}">${r.map(chip).join("")}${r.map(chip).join("").replace(/<button /g, '<button tabindex="-1" aria-hidden="true" ')}</div></div>`).join("");
-  const table = `<div class="ttab">${TECH.map(c => `<span class="tcat">${esc(L(c.n))}</span><span class="tval">${c.items.map(i => `<button type="button" class="tch" data-q="${esc(i.n)}">${esc(i.n)}</button>`).join("")}</span>`).join("")}</div>`;
-  return strip + table;
+  const table = `<div class="ttab">${TECH.map(c => `<span class="tcat">${esc(L(c.n))}</span><span class="tval">${c.items.map(i => `<button type="button" class="tch" data-q="${esc(i.n)}" data-cnt="${esc(tip(i))}">${esc(i.n)}</button>`).join("")}</span>`).join("")}</div>`;
+  return `<p class="tpsst">${esc(T().techHint)}</p>` + strip + table;
 }
-/* From the tech stack: open My work showing the projects that use that technology */
+/* Which projects use a technology (chip name → project ids) */
+function techProjects(q) {
+  const key = q.split(" /")[0].toLowerCase();
+  if (key === "jupyter") return PROJECTS.filter(p => /\.ipynb$/.test(p.file || "")).map(p => p.id);
+  const tok = t => t.toLowerCase().split(/[^a-z0-9#+.]+/).filter(Boolean);
+  return PROJECTS.filter(p => (p.tech || []).some(t => t.toLowerCase() === key || tok(t).includes(key))).map(p => p.id);
+}
+const TECH_URL = { git: "https://github.com/DanielV-13", github: "https://github.com/DanielV-13" };
+/* From the tech stack: open My work and light up the projects that use that technology */
 function techFilter(q) {
-  const key = q.split(" /")[0].toLowerCase().replace("c# / .net", "c#");
-  const tok = t => t.toLowerCase().split(/[^a-z0-9#+.\-]+/).filter(Boolean);
-  const ids = PROJECTS.filter(p => (p.tech || []).some(t => t.toLowerCase() === key || tok(t).includes(key))).map(p => p.id);
+  const ids = techProjects(q);
   if (!ids.length) return;
   $$("#grid [data-id]").forEach(c => c.classList.toggle("tech-hit", ids.includes(c.dataset.id)));
   const first = $(`#grid [data-id="${ids[0]}"]`); if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
-  clearTimeout(techFilter.t); techFilter.t = setTimeout(() => $$("#grid .tech-hit").forEach(c => c.classList.remove("tech-hit")), 4000);
+  techToast(`${ids.length} ${ids.length === 1 ? T().projOne : T().projMany} · ${q}`);
+  clearTimeout(techFilter.t); techFilter.t = setTimeout(() => $$("#grid .tech-hit").forEach(c => c.classList.remove("tech-hit")), 4500);
+}
+function techToast(msg) {
+  let t = $("#techToast");
+  if (!t) { t = document.createElement("div"); t.id = "techToast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+  t.textContent = msg; t.classList.remove("on"); void t.offsetWidth; t.classList.add("on");
+  clearTimeout(techToast.t); techToast.t = setTimeout(() => t.classList.remove("on"), 3200);
 }
 /* Cross-fade an <img> to a new picture (decoded first, so it never flashes empty) */
 function swapImg(img, src, fit) {

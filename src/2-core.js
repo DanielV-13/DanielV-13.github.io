@@ -28,6 +28,7 @@ const ES = {
   "work.title": "Cosas que he <em>construido</em>",
   "about.title": "Cómo la física me <em>encontró</em>",
   "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, Ecuador. Desde pequeño siempre fui apasionado por la tecnología y la ciencia, en especial por la física. No pudiendo estudiar física a nivel universitario, la busqué por mi cuenta mediante libros, videos y aprovechando cualquier oportunidad para aprender más. Fui parte del club de física de mi colegio, donde obtuve <strong>2 medallas en olimpiadas nacionales de física</strong> (bronce 2022 y plata 2023).<br><br>Luego, al entrar a la universidad, he fungido como <strong>ayudante de cátedra de Física y Matemáticas</strong>, y dando clases he ayudado a decenas de estudiantes, manteniendo viva mi pasión por enseñar y aprender más. Durante mi intercambio en la <strong>Universidad de Oviedo</strong> he aprendido física desde un lado más académico, y descubrí cómo mi carrera, la ciencia de datos y la física de partículas se pueden complementar entre sí.",
+  "about.pass": "PASE DE ACCESO", "about.passrole": "Ingeniería en Computación · UEES → Universidad de Oviedo", "about.passscan": "escanea · LinkedIn",
   "about.mission": "Inspirar la pasión por la física, la ciencia y la tecnología a más estudiantes en Latinoamérica. Mostrar lo maravilloso que puede ser dejarse llevar por la curiosidad y arriesgarse con todo a aprender.",
   "about.smtitle": "El modelo estándar de mi historia", "about.draftchip": "borrador · textos por escribir",
   "journey.title": "Dónde he <em>estado</em>", "journey.peel": "psst: haz clic en una pegatina",
@@ -43,7 +44,7 @@ const UI = {
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
         enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored",
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
-        aboutP: "About me", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
+        aboutP: "About me", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
   es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", figma: "Prototipo en Figma", video: "Video de presentación",
         company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
@@ -51,7 +52,7 @@ const UI = {
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
         enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar",
         smEmpty: "Haz clic en una partícula para leer esa parte de la historia.", smPhrase: "Frase corta por escribir aquí.", smFuture: "Espacio para lo que viene.",
-        aboutP: "Sobre mí", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
+        aboutP: "Sobre mí", projOne: "proyecto", projMany: "proyectos", techHint: "psst: haz clic en cualquier tecnología para ver los proyectos donde la usé ↗", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
         nextK: "Siguiente parada", travel: "Viajar allí →", nextSolar: "Sistema Solar · sobre mí", nextEarth: "Tierra · mi trayectoria", nextSat: "El satélite · arcade", nextBh: "Volver al agujero negro", journeyP: "Mi trayectoria", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "yo", satellite: "Arcade" }
 };
 const T = () => UI[LANG];
@@ -312,7 +313,15 @@ function renderStory() {
   const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(L(s.link.t))}</a>` : "";
   p.classList.toggle("tech", !!s.tech);
   p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
-  if (s.tech) { $$("[data-q]", p).forEach(b => b.onclick = () => { Sound.click(); location.hash = "work"; setTimeout(() => techFilter(b.dataset.q), 450); }); return; }
+  if (s.tech) {
+    $$("[data-q]", p).forEach(b => b.onclick = () => {
+      Sound.click(); const u = TECH_URL[b.dataset.q.toLowerCase()];
+      if (u) { window.open(u, "_blank", "noopener"); return; }
+      location.hash = "work"; setTimeout(() => techFilter(b.dataset.q), 450);
+    });
+    if (!store.get("dv_tech_hint", false)) { store.set("dv_tech_hint", true); const c = $(".tch", p); if (c) c.classList.add("hint"); }
+    return;
+  }
   if (!items.length) return;
   const main = $(".ph > img", p), btns = $$(".thumbs button", p);
   const show = k => { swapImg(main, items[k].u, items[k].page); btns.forEach((x, j) => x.setAttribute("aria-pressed", j === k)); };
@@ -334,21 +343,35 @@ function richText(t) {
 function techPanel() {
   const all = TECH.flatMap(c => c.items), logos = all.filter(i => i.s);
   const lum = h => { const n = parseInt(h.slice(1), 16), r = n >> 16, g = n >> 8 & 255, b = n & 255; return (r * .3 + g * .59 + b * .11) / 255; };
-  const chip = i => `<button type="button" class="tk" data-q="${esc(i.n)}" title="${esc(i.n)}" style="--h:${lum(i.hex) < .28 ? "#f4f1ea" : i.hex}"><span class="ic" style="--m:url(assets/tech/${i.s}.svg)"></span><span class="nm">${esc(i.n)}</span></button>`;
+  const tip = i => { const u = TECH_URL[i.n.toLowerCase()], n = techProjects(i.n).length; return u ? "GitHub ↗" : `${n} ${n === 1 ? T().projOne : T().projMany} →`; };
+  const chip = i => `<button type="button" class="tk" data-q="${esc(i.n)}" data-cnt="${esc(tip(i))}" style="--h:${lum(i.hex) < .28 ? "#f4f1ea" : i.hex}"><span class="ic" style="--m:url(assets/tech/${i.s}.svg)"></span><span class="nm">${esc(i.n)}</span></button>`;
   const half = Math.ceil(logos.length / 2), rows = [logos.slice(0, half), logos.slice(half)];
   const strip = rows.map((r, k) => `<div class="tmq"><div class="ttr${k ? " rv" : ""}">${r.map(chip).join("")}${r.map(chip).join("").replace(/<button /g, '<button tabindex="-1" aria-hidden="true" ')}</div></div>`).join("");
-  const table = `<div class="ttab">${TECH.map(c => `<span class="tcat">${esc(L(c.n))}</span><span class="tval">${c.items.map(i => `<button type="button" class="tch" data-q="${esc(i.n)}">${esc(i.n)}</button>`).join("")}</span>`).join("")}</div>`;
-  return strip + table;
+  const table = `<div class="ttab">${TECH.map(c => `<span class="tcat">${esc(L(c.n))}</span><span class="tval">${c.items.map(i => `<button type="button" class="tch" data-q="${esc(i.n)}" data-cnt="${esc(tip(i))}">${esc(i.n)}</button>`).join("")}</span>`).join("")}</div>`;
+  return `<p class="tpsst">${esc(T().techHint)}</p>` + strip + table;
 }
-/* From the tech stack: open My work showing the projects that use that technology */
+/* Which projects use a technology (chip name → project ids) */
+function techProjects(q) {
+  const key = q.split(" /")[0].toLowerCase();
+  if (key === "jupyter") return PROJECTS.filter(p => /\.ipynb$/.test(p.file || "")).map(p => p.id);
+  const tok = t => t.toLowerCase().split(/[^a-z0-9#+.]+/).filter(Boolean);
+  return PROJECTS.filter(p => (p.tech || []).some(t => t.toLowerCase() === key || tok(t).includes(key))).map(p => p.id);
+}
+const TECH_URL = { git: "https://github.com/DanielV-13", github: "https://github.com/DanielV-13" };
+/* From the tech stack: open My work and light up the projects that use that technology */
 function techFilter(q) {
-  const key = q.split(" /")[0].toLowerCase().replace("c# / .net", "c#");
-  const tok = t => t.toLowerCase().split(/[^a-z0-9#+.\-]+/).filter(Boolean);
-  const ids = PROJECTS.filter(p => (p.tech || []).some(t => t.toLowerCase() === key || tok(t).includes(key))).map(p => p.id);
+  const ids = techProjects(q);
   if (!ids.length) return;
   $$("#grid [data-id]").forEach(c => c.classList.toggle("tech-hit", ids.includes(c.dataset.id)));
   const first = $(`#grid [data-id="${ids[0]}"]`); if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
-  clearTimeout(techFilter.t); techFilter.t = setTimeout(() => $$("#grid .tech-hit").forEach(c => c.classList.remove("tech-hit")), 4000);
+  techToast(`${ids.length} ${ids.length === 1 ? T().projOne : T().projMany} · ${q}`);
+  clearTimeout(techFilter.t); techFilter.t = setTimeout(() => $$("#grid .tech-hit").forEach(c => c.classList.remove("tech-hit")), 4500);
+}
+function techToast(msg) {
+  let t = $("#techToast");
+  if (!t) { t = document.createElement("div"); t.id = "techToast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+  t.textContent = msg; t.classList.remove("on"); void t.offsetWidth; t.classList.add("on");
+  clearTimeout(techToast.t); techToast.t = setTimeout(() => t.classList.remove("on"), 3200);
 }
 /* Cross-fade an <img> to a new picture (decoded first, so it never flashes empty) */
 function swapImg(img, src, fit) {
