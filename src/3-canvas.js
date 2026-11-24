@@ -283,7 +283,7 @@ const Uni = {
     this.bg = Array.from({ length: 320 }, () => [Math.random(), Math.random(), Math.random() * 1.2 + .2, Math.random()]);
     this.gal = Array.from({ length: 70 }, () => ({ x: Math.random(), y: Math.random(), s: Math.random() * 9 + 2, a: Math.random() * 3, c: ["#ffe2b8", "#cfe0ff", "#ffd0e0", "#fff"][Math.floor(Math.random() * 4)] }));
     addEventListener("resize", () => this.resize()); this.resize();
-    $("#uniPrev").onclick = () => this.go(this.i - 1); $("#uniNext").onclick = () => this.go(this.i + 1);
+    $("#uniPrev").onclick = () => this.go(this.i - 1); $("#uniNext").onclick = () => this.go(this.i === LEVELS.length - 1 ? 0 : this.i + 1);
     this.c.addEventListener("pointerdown", e => this.ptype = e.pointerType || "mouse");
     this.c.addEventListener("pointermove", e => { this.ptype = e.pointerType || "mouse"; this.onMove(e); });
     this.c.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") this.clearHover(); });
@@ -315,7 +315,7 @@ const Uni = {
   },
   go(n) {
     if (n < 0 || n >= LEVELS.length || this.tr || n === this.i) return;
-    const dir = n > this.i ? 1 : -1; this.tr = { from: this.i, to: n, start: performance.now(), dur: REDUCED ? 1 : 1400, dir };
+    const dir = n > this.i ? 1 : -1; this.tr = { from: this.i, to: n, start: performance.now(), dur: REDUCED ? 1 : 1400, dir, f: n === this.i + 1 ? this.teaserPos(LEVELS[this.i].id) : null };
     this.clearHover(); $("#stopcard").classList.add("hidden"); $("#hero").classList.add("hidden");
     if (this.i === 0 && dir > 0) Sound.warp(); else Sound.open();
     this.i = n; this.hoverPt = null; this.uiBottom(); this.hideHint(); Space.stop(n); this.start();
@@ -331,6 +331,43 @@ const Uni = {
     if (id === "solar") return m ? [w * .5, h * .44] : [w * .3, h * .5];
     if (id === "earth") return m ? [w * .5, h * .44] : [w * .42, h * .52];
     return [w * .45, h * .48];
+  },
+  /* Each stop shows, small and glowing in the background, the next one: hover to see it, click to go deeper.
+     The trip then zooms into that little object (not into the sun or the galaxy in the middle). */
+  teaserPos(id) {
+    const w = this.w, h = this.h, m = this.mobile;
+    if (id === "cluster") return m ? [w * .5, h * .74] : [w * .86, h * .38];
+    if (id === "solar") return m ? [w * .8, h * .2] : [w * .87, h * .3];
+    if (id === "earth") return m ? [w * .85, h * .16] : [w * .87, h * .26];
+    return null;
+  },
+  teaser(c, id, t, alpha) {
+    const pos = this.teaserPos(id); if (!pos) return;
+    const [x, y] = pos, hot = this.hover === "next", k = REDUCED ? .5 : (t * .33) % 1, S = hot ? 1.35 : 1;
+    const kind = id === "cluster" ? "solar" : id === "solar" ? "earth" : "bh";
+    c.save(); c.globalAlpha = alpha;
+    const halo = c.createRadialGradient(x, y, 0, x, y, 34 * S); halo.addColorStop(0, kind === "earth" ? "rgba(98,180,255,.35)" : "rgba(255,200,110,.32)"); halo.addColorStop(1, "rgba(0,0,0,0)");
+    c.fillStyle = halo; c.fillRect(x - 40 * S, y - 40 * S, 80 * S, 80 * S);
+    c.globalAlpha = alpha * (1 - k) * .8; c.strokeStyle = "#e8b64c"; c.lineWidth = 1.2; c.beginPath(); c.arc(x, y, (14 + k * 16) * S, 0, 7); c.stroke(); c.globalAlpha = alpha;
+    if (kind === "solar") {
+      c.strokeStyle = "rgba(124,178,255,.45)"; c.lineWidth = .8;
+      [13, 20].forEach((r, j) => { c.beginPath(); c.ellipse(x, y, r * S, r * .38 * S, 0, 0, 7); c.stroke(); const a = t * (.8 - j * .3) + j * 2; c.fillStyle = j ? "#ff9f5a" : "#62e3b5"; c.beginPath(); c.arc(x + Math.cos(a) * r * S, y + Math.sin(a) * r * .38 * S, 1.8, 0, 7); c.fill(); });
+      const sg = c.createRadialGradient(x - 1, y - 1, 0, x, y, 5.5 * S); sg.addColorStop(0, "#fff7d6"); sg.addColorStop(1, "#ff9a30"); c.fillStyle = sg; c.beginPath(); c.arc(x, y, 5 * S, 0, 7); c.fill();
+    } else if (kind === "earth") {
+      const R = 8 * S, eg = c.createRadialGradient(x - R * .4, y - R * .4, 0, x, y, R); eg.addColorStop(0, "#bfe6ff"); eg.addColorStop(.45, "#2f7fd6"); eg.addColorStop(1, "#0b2a5a");
+      c.fillStyle = eg; c.beginPath(); c.arc(x, y, R, 0, 7); c.fill();
+      c.fillStyle = "rgba(98,227,181,.8)"; c.beginPath(); c.ellipse(x - R * .2, y - R * .15, R * .35, R * .25, .4, 0, 7); c.fill();
+      c.strokeStyle = "rgba(140,200,255,.6)"; c.lineWidth = 1.5; c.beginPath(); c.arc(x, y, R + 1.5, 0, 7); c.stroke();
+      const a = t * .9; c.fillStyle = "#d9dbe6"; c.beginPath(); c.arc(x + Math.cos(a) * R * 2, y + Math.sin(a) * R * .8, 2, 0, 7); c.fill();
+    } else {
+      const R = 7 * S; c.strokeStyle = "#ffb45e"; c.lineWidth = 2.5; c.beginPath(); c.ellipse(x, y, R * 1.9, R * .55, -.25, 0, 7); c.stroke();
+      c.fillStyle = "#000"; c.beginPath(); c.arc(x, y, R, 0, 7); c.fill(); c.strokeStyle = "rgba(255,210,140,.8)"; c.lineWidth = 1; c.beginPath(); c.arc(x, y, R + 1, 0, 7); c.stroke();
+    }
+    const lab = id === "earth" ? T().backStart : T().deeper;
+    c.font = `${hot ? 700 : 500} 10.5px Space Mono, monospace`; c.textAlign = "center"; c.fillStyle = hot ? "#ffd58a" : "rgba(232,182,76,.75)";
+    c.fillText(lab, x, y + 36 * S);
+    c.restore();
+    this.targets.push({ k: "next", x, y, r: 34 });
   },
   frame(now) {
     const c = this.ctx, w = this.w, h = this.h, t = REDUCED ? 0 : now / 1000; if (!c) return;
@@ -348,7 +385,7 @@ const Uni = {
     if (Z !== 1) { const [fx, fy] = this.zf; c.translate(fx, fy); c.scale(Z, Z); c.translate(-fx, -fy); }
     if (this.tr) {
       const p = clamp((now - this.tr.start) / this.tr.dur, 0, 1), e = ease(p), d = this.tr.dir;
-      const A = LEVELS[this.tr.from].id, B = LEVELS[this.tr.to].id, [fx, fy] = this.focus(A);
+      const A = LEVELS[this.tr.from].id, B = LEVELS[this.tr.to].id, [fx, fy] = this.tr.f || this.focus(A);
       this.scene(A, t, d > 0 ? 1 + e * 7 : 1 - e * .85, 1 - e, fx, fy);
       this.scene(B, t, d > 0 ? .15 + e * .85 : 8 - e * 7, e, w / 2, h / 2);
       if (A === "bh" && d > 0) this.warp(c, w, h, Math.sin(p * Math.PI));
@@ -390,6 +427,7 @@ const Uni = {
     if (id === "cluster") this.cluster(c, w, h, t, alpha);
     if (id === "solar") this.solar(c, w, h, t, alpha);
     if (id === "earth") this.earth(c, w, h, t, alpha);
+    this.teaser(c, id, t, alpha);
     c.restore();
   },
   /* unexplored places pulse; explored ones get a ✓ next to their name */
@@ -425,20 +463,28 @@ const Uni = {
   },
   solar(c, w, h, t, alpha) {
     const [sx, sy] = this.focus("solar"), S = Math.min(w, h), R = S * .075, W = this.mobile ? w * .4 : w * .42;
+    const lab = (txt, x, y, hot, size = 11.5, col) => { c.font = `${hot ? 700 : 500} ${size}px Space Mono, monospace`; c.textAlign = "center"; c.lineJoin = "round"; c.lineWidth = 4; c.strokeStyle = "rgba(4,6,18,.85)"; c.strokeText(txt, x, y); c.fillStyle = col || (hot ? "#fff" : "#c3cbea"); c.fillText(txt, x, y); };
+    const ps = PLANETS.map((p, i) => {
+      const rx = R * 1.7 + p.r * W, ry = rx * .32, hot = this.hover === i;
+      const a = i * 1.9 + t * (.45 / Math.sqrt(i + 1)), x = sx + Math.cos(a) * rx, y = sy + Math.sin(a) * ry, s = p.size * (S / 520) * (hot ? 1.3 : 1) + 2;
+      return { p, i, rx, ry, hot, x, y, s, back: Math.sin(a) < 0 };
+    });
+    ps.forEach(q => { c.strokeStyle = q.hot ? "rgba(232,182,76,.7)" : "rgba(124,178,255,.18)"; c.lineWidth = 1; c.beginPath(); c.ellipse(sx, sy, q.rx, q.ry, 0, 0, 7); c.stroke(); });
+    const planet = q => {
+      if (q.p.ring) { c.strokeStyle = "rgba(230,200,150,.8)"; c.lineWidth = 1.5; c.beginPath(); c.ellipse(q.x, q.y, q.s * 2, q.s * .6, -.3, 0, 7); c.stroke(); }
+      const pg = c.createRadialGradient(q.x - q.s * .4, q.y - q.s * .4, 0, q.x, q.y, q.s); pg.addColorStop(0, "#fff"); pg.addColorStop(.25, q.p.color); pg.addColorStop(1, "#111"); c.fillStyle = pg; c.beginPath(); c.arc(q.x, q.y, q.s, 0, 7); c.fill();
+    };
+    ps.filter(q => q.back).forEach(planet);
     this.ring(c, sx, sy, R * 1.5, "about", t, alpha);
     const g = c.createRadialGradient(sx, sy, R * .2, sx, sy, R * 4); g.addColorStop(0, "rgba(255,220,140,.9)"); g.addColorStop(.25, "rgba(255,170,60,.35)"); g.addColorStop(1, "rgba(0,0,0,0)"); c.fillStyle = g; c.fillRect(sx - R * 4, sy - R * 4, R * 8, R * 8);
     const sun = c.createRadialGradient(sx - R * .3, sy - R * .3, 0, sx, sy, R); sun.addColorStop(0, "#fff7d6"); sun.addColorStop(.6, "#ffcf5a"); sun.addColorStop(1, "#ff8c2a"); c.fillStyle = sun; c.beginPath(); c.arc(sx, sy, R * (this.hover === "sun" ? 1.08 : 1), 0, 7); c.fill();
-    this.name(c, T().me, sx, sy + R + 20, "about", this.hover === "sun", alpha);
+    ps.filter(q => !q.back).forEach(planet);
+    // labels last, with a dark outline, so they never get lost on the sun
+    ps.forEach(q => lab(L(q.p), q.x, q.y - q.s - 8, q.hot));
+    const meY = sy + R + 22; lab(T().me, sx, meY, this.hover === "sun", 12.5);
+    if (Visited.has("about")) { c.font = "500 12.5px Space Mono, monospace"; const tw = c.measureText(T().me).width; c.textAlign = "left"; c.fillStyle = "#62e3b5"; c.fillText(" ✓", sx + tw / 2, meY); }
     this.targets.push({ k: "sun", x: sx, y: sy, r: R * 1.3, portal: true });
-    PLANETS.forEach((p, i) => {
-      const rx = R * 1.7 + p.r * W, ry = rx * .32, hot = this.hover === i;
-      c.strokeStyle = hot ? "rgba(232,182,76,.7)" : "rgba(124,178,255,.18)"; c.lineWidth = 1; c.beginPath(); c.ellipse(sx, sy, rx, ry, 0, 0, 7); c.stroke();
-      const a = i * 1.9 + t * (.45 / Math.sqrt(i + 1)), x = sx + Math.cos(a) * rx, y = sy + Math.sin(a) * ry, s = p.size * (S / 520) * (hot ? 1.3 : 1) + 2;
-      if (p.ring) { c.strokeStyle = "rgba(230,200,150,.8)"; c.lineWidth = 1.5; c.beginPath(); c.ellipse(x, y, s * 2, s * .6, -.3, 0, 7); c.stroke(); }
-      const pg = c.createRadialGradient(x - s * .4, y - s * .4, 0, x, y, s); pg.addColorStop(0, "#fff"); pg.addColorStop(.25, p.color); pg.addColorStop(1, "#111"); c.fillStyle = pg; c.beginPath(); c.arc(x, y, s, 0, 7); c.fill();
-      c.font = `${hot ? 700 : 500} 11.5px Space Mono, monospace`; c.textAlign = "center"; c.fillStyle = hot ? "#fff" : "#aab3d6"; c.fillText(L(p), x, y - s - 8);
-      this.targets.push({ k: i, x, y, r: Math.max(s * 1.8, 16) });
-    });
+    ps.forEach(q => this.targets.push({ k: q.i, x: q.x, y: q.y, r: Math.max(q.s * 1.8, 16) }));
   },
   satellite(c, x, y, s, hot) {
     c.save(); c.translate(x, y); c.rotate(-.4);
@@ -490,6 +536,7 @@ const Uni = {
   },
   label(h) {
     if (h.k === "bh") return L(LEVELS[0].cta);
+    if (h.k === "next") { const n = this.i === LEVELS.length - 1 ? 0 : this.i + 1; return (n ? T().next : T().backStart.replace(/ ?[↺→]$/, "")) + " · " + L(LEVELS[n].name) + (LEVELS[n].view ? " · " + L(LEVELS[n].h).split(" · ")[0] : "") + " →"; }
     if (typeof h.k === "number") return L(PLANETS[h.k]) + " · " + T().aboutP;
     if (String(h.k).startsWith("pin")) return L(PINS[+String(h.k).slice(3)]) + " · " + T().journeyP;
     return "";
@@ -512,6 +559,7 @@ const Uni = {
     if (this.ptype === "touch" && h.portal && Portal.key !== h.k) { this.setHover(h); return; } // first tap previews, second tap enters
     Sound.click(); this.hoverPt = [h.x, h.y];
     const id = LEVELS[this.i].id;
+    if (h.k === "next") { this.clearHover(); return this.go(this.i === LEVELS.length - 1 ? 0 : this.i + 1); }
     if (id === "bh") return this.go(1);
     if (id === "cluster") location.hash = "work/" + h.k;
     else if (id === "solar") location.hash = "about";
@@ -530,8 +578,11 @@ const Uni = {
     const n = LEVELS.length;
     $("#dots").innerHTML = LEVELS.map((l, k) => `<button type="button" data-k="${k}" aria-label="${esc(L(l.name))}"${k === this.i ? ' aria-current="true"' : ""}${this.stopTodo(k) ? ' class="todo"' : ""}></button>`).join("");
     $$("#dots button").forEach(b => b.onclick = () => this.go(+b.dataset.k));
-    $("#uniPrev").disabled = this.i === 0; $("#uniNext").disabled = this.i === n - 1;
+    $("#uniPrev").disabled = this.i === 0; $("#uniNext").disabled = false;
     ["#uniPrev", "#uniNext"].forEach(s => { const b = $(s); b.classList.remove("beacon"); const bl = $(".bl", b); if (bl) bl.remove(); });
+    const nx = this.i === n - 1 ? 0 : this.i + 1, ico = ["◉", "✦", "☉", "◍"];
+    $("#nlNext").innerHTML = `<b>${esc(this.i === n - 1 ? T().backStart.replace(/ ?[↺→]$/, "") : T().next)}</b> ${ico[nx]} ${esc(L(LEVELS[nx].name))}`;
+    $("#nlPrev").innerHTML = this.i ? `${ico[this.i - 1]} ${esc(L(LEVELS[this.i - 1].name))}` : "";
     if (this.tr) return;
     // beacon: when nothing is left to see here, it points to the closest stop that still has something new
     let target = null;
@@ -539,7 +590,7 @@ const Uni = {
     else if (!this.stopTodo(this.i)) for (let d = 1; d < n; d++) { if (this.stopTodo(this.i + d)) { target = this.i + d; break; } if (this.stopTodo(this.i - d)) { target = this.i - d; break; } }
     if (target == null) return;
     const b = $(target > this.i ? "#uniNext" : "#uniPrev"), near = Math.abs(target - this.i) === 1;
-    b.classList.add("beacon"); b.insertAdjacentHTML("beforeend", `<span class="bl">${esc(near ? T().next : T().unexplored)}: ${esc(L(LEVELS[target].name))}</span>`);
+    b.classList.add("beacon"); if (!near) $("#nlNext").innerHTML = `<b>${esc(T().unexplored)}</b> ${esc(L(LEVELS[target].name))}`;
   }
 };
 

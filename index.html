@@ -144,6 +144,11 @@ body.portal-on .stopcard{opacity:0;pointer-events:none}
 .travel button.arw .bl::after{content:"";position:absolute;top:50%;right:100%;margin-top:-5px;border:5px solid transparent;border-right-color:var(--ember)}
 #uniPrev .bl{left:auto;right:calc(100% + 12px)}#uniPrev .bl::after{right:auto;left:100%;border-right-color:transparent;border-left-color:var(--ember)}
 @keyframes blink{50%{opacity:.55}}
+.travel .nl{font-size:11px;letter-spacing:.04em;color:#9fb0e6;white-space:nowrap;min-width:150px}
+.travel .nl.prev{text-align:right;opacity:.6}
+.travel .nl.next{color:#ffd58a}
+.travel .nl b{font-weight:700;color:var(--ember);text-transform:uppercase;letter-spacing:.12em;font-size:9.5px;margin-right:4px}
+@media (max-width:760px){.travel .nl.prev{display:none}.travel .nl{min-width:0;font-size:10px}.travel .nl.next{max-width:110px;overflow:hidden;text-overflow:ellipsis}}
 .dots button.todo:not([aria-current="true"]){background:#6b5426;box-shadow:0 0 8px rgba(232,182,76,.6)}
 .dots{display:flex;gap:10px;align-items:center}
 .dots button{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:#2a3768;cursor:var(--cp,pointer);transition:width .3s,background .3s}
@@ -267,22 +272,27 @@ body.in-view .view-bg{opacity:1}
 .pass-role{margin:0!important;font-size:11.5px!important;color:#9fb0e6!important;line-height:1.5}
 .pass-k{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--mint);margin-bottom:4px}
 .pass .mis{margin:0!important;font-size:13px!important;line-height:1.55;color:#dfe4f8!important}
-.pass-foot{display:flex;align-items:center;gap:10px;margin-top:12px}
-.pass-qr{flex:none;width:46px;height:46px;padding:4px;border-radius:7px;background:#f4f1ea;display:block;transition:transform .2s}
-.pass-qr:hover{transform:scale(1.08)}
+.pass-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:12px}
+.pass-li{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-decoration:none;color:#9fb0e6}
+.pass-qr{position:relative;flex:none;width:50px;height:50px;padding:4px;border-radius:8px;background:#f4f1ea;display:block;transition:transform .2s,box-shadow .2s}
 .pass-qr .qr{width:100%;height:100%;display:block}
-.pass-bar{flex:1;height:24px;background:repeating-linear-gradient(90deg,#9fb0e6 0 2px,transparent 2px 4px,#9fb0e6 4px 5px,transparent 5px 8px,#9fb0e6 8px 11px,transparent 11px 13px);opacity:.3;border-radius:2px}
-.pass-tab{flex:none;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;border:1px solid color-mix(in srgb,var(--mint) 55%,transparent);background:color-mix(in srgb,var(--mint) 12%,transparent);color:var(--mint);font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;cursor:var(--cp,pointer);transition:background .2s}
-.pass-tab.nudge{animation:tabglow 2.4s ease-in-out infinite}
-.pass-tab.nudge i{animation:tabarrow 1.2s ease-in-out infinite}
-@keyframes tabglow{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--mint) 0%,transparent)}50%{box-shadow:0 0 0 4px color-mix(in srgb,var(--mint) 28%,transparent),0 0 16px color-mix(in srgb,var(--mint) 45%,transparent)}}
-@keyframes tabarrow{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
-.tab-hint{position:absolute;right:0;bottom:calc(100% + 5px);font-size:9.5px;letter-spacing:.06em;color:var(--mint);opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
-.pass-tab.nudge .tab-hint{opacity:.85}
-.pass-tab{position:relative}
-.pass-tab:hover{background:color-mix(in srgb,var(--mint) 22%,transparent)}
+.qr-in{position:absolute;right:-5px;bottom:-5px;width:18px;height:18px;border-radius:4px;background:#0a66c2;color:#fff;display:grid;place-items:center;box-shadow:0 0 0 2px var(--night)}
+.qr-in .in{width:11px;height:11px}
+.li-lab{display:flex;align-items:center;gap:4px;font-size:10.5px;letter-spacing:.04em;line-height:1.2;white-space:nowrap;transition:color .2s}
+.li-lab .in{width:13px;height:13px;color:#4f9be6}
+.pass-li:hover .pass-qr,.pass-li:focus-visible .pass-qr{transform:scale(1.1);box-shadow:0 0 0 2px #0a66c2,0 0 18px rgba(10,102,194,.55)}
+.pass-li:hover .li-lab{color:#fff}
+.pass-mbox{position:relative;display:flex;flex-direction:column;align-items:flex-end}
+.tab-hint{font-size:9.5px;letter-spacing:.06em;color:var(--mint);opacity:.85;margin-bottom:4px;white-space:nowrap}
+.pass-tab{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:9px;border:1px solid var(--mint);background:linear-gradient(180deg,color-mix(in srgb,var(--mint) 32%,transparent),color-mix(in srgb,var(--mint) 18%,transparent));color:#d9fff1;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.14em;cursor:var(--cp,pointer);box-shadow:0 3px 0 color-mix(in srgb,var(--mint) 35%,#06281d),0 6px 14px rgba(0,0,0,.35);transition:transform .15s,box-shadow .15s,background .2s;animation:tabglow 6s ease-in-out infinite}
+.pass-tab:hover{transform:translateY(-2px);box-shadow:0 5px 0 color-mix(in srgb,var(--mint) 35%,#06281d),0 10px 20px rgba(0,0,0,.4),0 0 18px color-mix(in srgb,var(--mint) 45%,transparent)}
+.pass-tab:active{transform:translateY(2px);box-shadow:0 1px 0 color-mix(in srgb,var(--mint) 35%,#06281d)}
+.pass-tab .doc{width:14px;height:14px}
 .pass-tab i{font-style:normal;transition:transform .35s}
+.pass.open .pass-tab{animation:none}
 .pass.open .pass-tab i{transform:rotate(180deg)}
+.pass.open .tab-hint{opacity:0}
+@keyframes tabglow{0%,80%,100%{filter:none}88%{filter:drop-shadow(0 0 8px var(--mint)) brightness(1.15)}}
 .pass-sheet{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s cubic-bezier(.3,.7,.2,1)}
 .pass.open .pass-sheet{grid-template-rows:1fr}
 .pass-sheet-in{overflow:hidden;min-height:0;position:relative}
@@ -298,7 +308,7 @@ body.in-view .view-bg{opacity:1}
 .sm-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .sm-head h3{font-family:var(--display);font-size:13px;line-height:1.6}
 .draft-chip{font-size:10px;letter-spacing:.12em;color:var(--ember);border:1px dashed rgba(232,182,76,.6);border-radius:999px;padding:2px 9px;text-transform:uppercase}
-.sm{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:start}
+.sm{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:start}
 .sm-table{--cs:92px;display:grid;grid-template-columns:14px repeat(4,var(--cs)) 4px var(--cs);grid-template-rows:var(--cs) var(--cs) auto;gap:8px}
 .sm-table .gl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--c);writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;align-self:center;opacity:.85}
 .sm-table .gb2{font-size:9px;letter-spacing:.1em;text-transform:uppercase;text-align:center;color:var(--c);border-top:1px solid var(--c);padding-top:5px;line-height:1.3}
@@ -330,7 +340,33 @@ body.in-view .view-bg{opacity:1}
 .t-body{max-width:780px}
 .t-body::after{content:"";display:block;clear:both}
 .t-img{float:right;width:120px;height:90px;object-fit:cover;object-position:50% 30%;border-radius:10px;margin:0 0 8px 16px;border:1px solid var(--line);transition:transform .3s,opacity .23s}
-.t-img:hover{transform:scale(1.8);z-index:3;position:relative;box-shadow:0 20px 40px rgba(0,0,0,.6)}
+.t-img{cursor:zoom-in}
+.t-img:hover{transform:scale(1.6);z-index:3;position:relative;box-shadow:0 20px 40px rgba(0,0,0,.6)}
+.cell .mt{position:absolute;left:8px;top:6px;font-size:8.5px;letter-spacing:.04em;color:color-mix(in srgb,var(--c) 70%,#fff);opacity:.75}
+.cell .prog{position:absolute;left:8px;right:8px;bottom:4px;height:2px;border-radius:2px;background:var(--c);transform:scaleX(0);transform-origin:left;opacity:.9}
+.cell.run .prog{animation:prog var(--dur,6.5s) linear forwards}
+@keyframes prog{to{transform:scaleX(1)}}
+.cell[aria-pressed="true"]{box-shadow:0 0 0 2px var(--c),0 0 26px color-mix(in srgb,var(--c) 55%,transparent);transform:translateY(-3px)}
+.cell.empty[data-tipq]{cursor:help}
+.cell.empty[data-tipq]::after{content:attr(data-tipq);position:absolute;left:50%;top:calc(100% + 6px);transform:translateX(-50%);white-space:nowrap;font-size:10px;color:var(--muted);background:#060a1c;border:1px solid var(--line);padding:3px 8px;border-radius:6px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:5}
+.cell.empty[data-tipq]:hover::after,.cell.empty[data-tipq]:focus::after{opacity:1}
+.cell.empty .nm{font-size:9px;color:var(--muted);font-style:italic}
+.sm-panel:not(.empty){border-color:color-mix(in srgb,var(--c) 55%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--c) 18%,transparent),0 20px 50px rgba(0,0,0,.35)}
+.sm-nav{display:flex;align-items:center;gap:8px;margin:-4px 0 10px;font-size:11px;color:var(--muted)}
+.sm-arw{background:none;border:1px solid var(--line);color:var(--ink);border-radius:6px;width:24px;height:22px;font-size:9px;cursor:var(--cp,pointer);display:grid;place-items:center;padding:0}
+.sm-arw:hover{border-color:var(--c);color:var(--c)}
+.sm-n{font-family:var(--mono);min-width:38px;text-align:center}
+.sm-dots{display:flex;gap:5px;margin-left:6px}
+.sm-dots button{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:color-mix(in srgb,var(--c) 35%,transparent);cursor:var(--cp,pointer)}
+.sm-dots button.on{background:var(--c);box-shadow:0 0 8px var(--c);width:18px;border-radius:4px}
+.sm-trace{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:0}
+.sm-table,.sm-panel{position:relative;z-index:1}
+.sm-trace path{fill:none}
+.sm-trace .tr-glow{stroke:var(--c);stroke-width:5;opacity:.18;filter:blur(2px)}
+.sm-trace .tr-core{stroke:var(--c);stroke-width:1.5;stroke-dasharray:4 6;animation:trflow 1s linear infinite;opacity:.9}
+.sm-trace circle{fill:var(--c);filter:drop-shadow(0 0 6px var(--c))}
+@keyframes trflow{to{stroke-dashoffset:-20}}
+@media (prefers-reduced-motion:reduce){.sm-trace .tr-core{animation:none}}
 .cell.empty{border-style:dashed;background:none;cursor:var(--cd,default);opacity:.45}
 .cell.empty:hover{transform:none;box-shadow:none}
 .cell.empty .sy{color:var(--muted)}
@@ -376,8 +412,8 @@ body.in-view .view-bg{opacity:1}
 .sm-panel.empty{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center}
 
 /* Journey */
-.stickers{display:flex;flex-wrap:wrap;gap:22px;margin:4px 0 14px;align-items:center}
-.sticker{position:relative;width:96px;height:96px;padding:0;border:0;background:none;cursor:var(--cp,pointer);perspective:500px}
+.stickers{display:flex;flex-wrap:wrap;gap:18px;margin:0 0 10px;align-items:center}
+.sticker{position:relative;width:82px;height:82px;padding:0;border:0;background:none;cursor:var(--cp,pointer);perspective:500px}
 .sticker .s-in{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:0% 50%;transition:transform .2s}
 .sticker .s-rot{position:absolute;inset:0;transform:rotate(var(--rot,0deg));transform-style:preserve-3d}
 .sticker .s-face,.sticker .s-back{position:absolute;inset:0;border-radius:50%;-webkit-backface-visibility:hidden;backface-visibility:hidden;border:3px solid #f4f1ea;display:grid;place-items:center;text-align:center;overflow:hidden}
@@ -393,10 +429,10 @@ body.in-view .view-bg{opacity:1}
 .sticker.off{pointer-events:none}
 .sticker.off .s-in{transform:none}
 .sticker.fly{z-index:60}
-.sticker-note{font-size:11.5px;color:var(--muted);margin:0 0 40px}
-.timeline{display:flex;flex-direction:column}
-.t-item{display:grid;grid-template-columns:150px 1px 1fr;gap:0 28px;padding-bottom:40px}
-.t-year{font-size:12px;letter-spacing:.1em;color:var(--muted);text-align:right;padding-top:4px}
+.sticker-note{font-size:11.5px;color:var(--muted);margin:0 0 22px}
+.timeline{display:flex;flex-direction:column;position:relative}
+.t-item{display:grid;grid-template-columns:170px 1px 1fr;gap:0 28px;padding-bottom:28px}
+.t-year{font-size:12px;letter-spacing:.06em;color:var(--muted);text-align:right;padding-top:4px;white-space:nowrap}
 .t-line{background:var(--line);position:relative}
 .t-line::before{content:"";position:absolute;top:8px;left:-5px;width:11px;height:11px;border-radius:50%;background:var(--void);border:2px solid var(--signal)}
 .t-item.hl .t-line::before{border-color:var(--ember);background:var(--ember);box-shadow:0 0 12px var(--ember)}
@@ -407,6 +443,19 @@ body.in-view .view-bg{opacity:1}
 .t-act a.chip-btn{text-decoration:none}
 .t-act a.chip-btn.ext{border-color:color-mix(in srgb,var(--ember) 45%,var(--line));color:color-mix(in srgb,var(--ember) 70%,#fff)}
 @media (max-width:760px){.timeline.focus .t-item.on .t-img{transform:scale(1.3)}.timeline.focus .t-img{transform-origin:100% 0}.timeline.focus .t-item.on .t-body p{transform:none}}
+/* reveal: each moment fades in once; a gold line fills down the timeline as you scroll */
+.timeline.reveal .t-item,.timeline.reveal .t-stage{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.timeline.reveal .t-item.in,.timeline.reveal .t-stage.in{opacity:1;transform:none}
+.tl-fill{position:absolute;top:0;width:1px;height:0;background:linear-gradient(180deg,rgba(232,182,76,.2),var(--ember));box-shadow:0 0 8px var(--ember);pointer-events:none;transition:height .12s linear}
+.tl-fill::after{content:"";position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#fff3cf;box-shadow:0 0 10px var(--ember),0 0 3px #fff}
+.t-item.past .t-line::before{border-color:var(--ember)}
+.t-item.past .t-year{color:#d9c28a}
+.t-stage{display:grid;grid-template-columns:170px 1px 1fr;gap:0 28px;padding:6px 0 18px}
+.t-stage .nod::before{display:none}
+.t-stage span{grid-column:3;font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--signal);display:flex;align-items:center;gap:10px}
+.t-stage span::after{content:"";flex:1;max-width:260px;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.t-stage:not(.first){padding-top:12px}
+@media (max-width:760px){.t-stage{grid-template-columns:1px 1fr;gap:0 18px}.t-stage i{display:none}.t-stage b{grid-column:1}.t-stage span{grid-column:2}}
 /* scroll focus: the moment in the middle of the screen comes forward, the rest steps back a little */
 .timeline.focus .t-item{transition:opacity .45s}
 .timeline.focus .t-item:not(.on){opacity:.5}
@@ -668,7 +717,7 @@ body.in-view .view-bg{opacity:1}
   <div class="tip" id="tip"></div>
   <div class="portal" id="portal" aria-hidden="true"><div class="ring"><canvas id="portalC" width="360" height="360"></canvas></div><div class="pl" id="portalL"></div></div>
   <div class="hint" id="hint" data-i18n="home.hint">scroll ↕ or use the arrows to travel</div>
-  <div class="travel"><button class="arw" type="button" id="uniPrev" aria-label="Previous stop">←</button><div class="dots" id="dots"></div><button class="arw" type="button" id="uniNext" aria-label="Next stop">→</button></div>
+  <div class="travel"><span class="nl prev" id="nlPrev" aria-hidden="true"></span><button class="arw" type="button" id="uniPrev" aria-label="Previous stop">←</button><div class="dots" id="dots"></div><button class="arw" type="button" id="uniNext" aria-label="Next stop">→</button><span class="nl next" id="nlNext" aria-hidden="true"></span></div>
 </div>
 
 <!-- ================= SUB-PAGES ================= -->
@@ -694,8 +743,11 @@ body.in-view .view-bg{opacity:1}
           <figure class="pass-photo"><img src="assets/story/perfil-3x4.webp" alt="Daniel Vaca" width="480" height="640" loading="lazy"><i class="hud tl"></i><i class="hud tr"></i><i class="hud bl"></i><i class="hud br"></i></figure>
           <h3 class="pass-name">DANIEL VACA</h3>
           <p class="pass-role" data-i18n="about.passrole">Computer Engineering · UEES → Universidad de Oviedo</p>
-          <footer class="pass-foot"><a href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener" class="pass-qr" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="qr" aria-hidden="true"><path stroke="#0b1230" d="M0 0.5h7m2 0h3m4 0h1m1 0h4m1 0h1m2 0h7m-33 1h1m5 0h1m2 0h4m2 0h1m2 0h1m5 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h2m2 0h4m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m1 0h4m1 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h1m3 0h1m2 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h5m2 0h4m1 0h2m4 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m5 0h2m3 0h1m1 0h2m1 0h1m-25 1h1m1 0h5m3 0h2m1 0h2m2 0h1m4 0h1m1 0h1m1 0h5m-31 1h1m1 0h1m4 0h1m2 0h2m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h1m4 0h3m3 0h6m1 0h1m2 0h2m1 0h1m3 0h1m1 0h2m-31 1h2m1 0h2m2 0h6m2 0h1m2 0h3m1 0h1m1 0h1m2 0h4m-29 1h2m1 0h1m2 0h3m2 0h1m1 0h5m1 0h3m2 0h3m1 0h1m-31 1h3m3 0h2m2 0h3m3 0h1m1 0h1m3 0h1m2 0h1m2 0h1m1 0h2m-33 1h2m4 0h1m1 0h5m1 0h4m2 0h1m1 0h1m1 0h3m1 0h1m1 0h2m-32 1h3m1 0h1m2 0h2m4 0h1m6 0h2m3 0h3m2 0h1m-30 1h1m1 0h1m1 0h2m1 0h2m2 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-31 1h2m3 0h2m1 0h2m6 0h4m1 0h5m1 0h2m1 0h1m-32 1h2m3 0h4m1 0h2m1 0h2m4 0h3m2 0h4m1 0h2m-32 1h2m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m1 0h1m4 0h3m1 0h1m1 0h5m-31 1h2m3 0h2m2 0h2m1 0h2m1 0h2m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-33 1h1m4 0h1m1 0h3m1 0h2m4 0h3m3 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h4m1 0h3m3 0h3m3 0h1m4 0h1m3 0h3m-32 1h1m1 0h1m5 0h1m4 0h2m6 0h2m2 0h3m1 0h2m-31 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h3m2 0h1m1 0h6m1 0h2m-25 1h2m1 0h1m1 0h2m1 0h1m1 0h4m1 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h2m1 0h2m1 0h4m3 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h5m1 0h2m2 0h1m1 0h5m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m1 0h3m3 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h5m1 0h1m2 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h8m-28 1h1m5 0h1m2 0h1m6 0h1m3 0h3m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h1m2 0h2m1 0h1m4 0h3m1 0h2m3 0h1"/></svg></a><span class="pass-bar" aria-hidden="true"></span><button type="button" class="pass-tab" aria-expanded="false" aria-controls="passSheet"><span class="tab-hint" data-i18n="about.passhint">click to open</span><span data-i18n="about.passmission">MISSION</span> <i aria-hidden="true">▾</i></button></footer>
-          <div class="pass-sheet" id="passSheet"><div class="pass-sheet-in"><span class="pass-k">MISSION</span><p class="mis" data-i18n="about.mission">Inspire a passion for physics, science and technology in more students across Latin America. Show how wonderful it can be to follow your curiosity and go all in on learning.</p><span class="pass-scan" data-i18n="about.passscan">scan · LinkedIn</span></div></div>
+          <footer class="pass-foot">
+            <a href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener" class="pass-li" aria-label="LinkedIn"><span class="pass-qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="qr" aria-hidden="true"><path stroke="#0b1230" d="M0 0.5h7m2 0h3m4 0h1m1 0h4m1 0h1m2 0h7m-33 1h1m5 0h1m2 0h4m2 0h1m2 0h1m5 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h2m2 0h4m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m1 0h4m1 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h1m3 0h1m2 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h5m2 0h4m1 0h2m4 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m5 0h2m3 0h1m1 0h2m1 0h1m-25 1h1m1 0h5m3 0h2m1 0h2m2 0h1m4 0h1m1 0h1m1 0h5m-31 1h1m1 0h1m4 0h1m2 0h2m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h1m4 0h3m3 0h6m1 0h1m2 0h2m1 0h1m3 0h1m1 0h2m-31 1h2m1 0h2m2 0h6m2 0h1m2 0h3m1 0h1m1 0h1m2 0h4m-29 1h2m1 0h1m2 0h3m2 0h1m1 0h5m1 0h3m2 0h3m1 0h1m-31 1h3m3 0h2m2 0h3m3 0h1m1 0h1m3 0h1m2 0h1m2 0h1m1 0h2m-33 1h2m4 0h1m1 0h5m1 0h4m2 0h1m1 0h1m1 0h3m1 0h1m1 0h2m-32 1h3m1 0h1m2 0h2m4 0h1m6 0h2m3 0h3m2 0h1m-30 1h1m1 0h1m1 0h2m1 0h2m2 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-31 1h2m3 0h2m1 0h2m6 0h4m1 0h5m1 0h2m1 0h1m-32 1h2m3 0h4m1 0h2m1 0h2m4 0h3m2 0h4m1 0h2m-32 1h2m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m1 0h1m4 0h3m1 0h1m1 0h5m-31 1h2m3 0h2m2 0h2m1 0h2m1 0h2m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-33 1h1m4 0h1m1 0h3m1 0h2m4 0h3m3 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h4m1 0h3m3 0h3m3 0h1m4 0h1m3 0h3m-32 1h1m1 0h1m5 0h1m4 0h2m6 0h2m2 0h3m1 0h2m-31 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h3m2 0h1m1 0h6m1 0h2m-25 1h2m1 0h1m1 0h2m1 0h1m1 0h4m1 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h2m1 0h2m1 0h4m3 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h5m1 0h2m2 0h1m1 0h5m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m1 0h3m3 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h5m1 0h1m2 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h8m-28 1h1m5 0h1m2 0h1m6 0h1m3 0h3m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h1m2 0h2m1 0h1m4 0h3m1 0h2m3 0h1"/></svg><b class="qr-in"><svg class="in" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></b></span><span class="li-lab"><svg class="in" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg><span data-i18n="about.passli">LinkedIn ↗</span></span></a>
+            <div class="pass-mbox"><span class="tab-hint" data-i18n="about.passhint">tap to read</span><button type="button" class="pass-tab" aria-expanded="false" aria-controls="passSheet"><svg class="doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg><span data-i18n="about.passmission">MISSION</span> <i aria-hidden="true">▾</i></button></div>
+          </footer>
+          <div class="pass-sheet" id="passSheet"><div class="pass-sheet-in"><span class="pass-k">MISSION</span><p class="mis" data-i18n="about.mission">Inspire a passion for physics, science and technology in more students across Latin America. Show how wonderful it can be to follow your curiosity and go all in on learning.</p></div></div>
           <span class="pass-shine" aria-hidden="true"></span>
         </article>
       </div>
@@ -1007,7 +1059,7 @@ const TIMELINE = [
     links: [{ t: { en: "Verify credential", es: "Verificar credencial" }, u: "https://verified.sertifier.com/en/verify/08910752588849/" }] },
   { when: { en: "Apr 2026", es: "abr. 2026" }, hl: true, imgs: ["assets/story/dean-placa.webp", "assets/story/dean-padres.webp", "assets/story/dean-diploma.webp", "assets/story/dean-mama.webp"],
     title: { en: "Dean's List", es: "Dean's List · Lista del Decano" }, org: "UEES",
-    text: { en: "97.08 average in Ordinario I 2024, awarded at the April 2026 ceremony.", es: "Promedio de 97,08 en el Ordinario I 2024, entregado en la ceremonia de abril de 2026." },
+    text: { en: "Computer Engineering, overall GPA 95.06/100. Dean's List for a 97.08 in Ordinario I 2024, awarded in April 2026.", es: "Ingeniería en Computación con promedio general de 95,06/100. Dean's List por un 97,08 en el Ordinario I 2024, entregado en abril de 2026." },
     links: [{ t: { en: "Official list", es: "Lista oficial" }, u: "https://uees.edu.ec/distinciones-academicas-deans-list/" }] },
   { when: { en: "2024 — Aug 2026", es: "2024 — ago. 2026" }, mark: "∂", imgs: ["assets/story/clase-loop.webp", "assets/story/clase-senalando.webp", "assets/story/clase-equilibrio.webp"],
     title: { en: "Teaching assistant", es: "Ayudante de cátedra" }, org: "UEES",
@@ -1022,30 +1074,18 @@ const TIMELINE = [
   { when: { en: "2025", es: "2025" }, hl: true, imgs: ["assets/story/qs-certificado.webp", "assets/story/novapeak-1.webp", "assets/story/novapeak-2.webp"],
     title: { en: "Top 10 worldwide · QS ImpACT Skills Challenge", es: "Top 10 mundial · QS ImpACT Skills Challenge" }, org: "NOVAPEAK",
     text: { en: "Our 2.5D game on the UN Sustainable Development Goals, top 10 of 210+ teams.", es: "Nuestro videojuego 2.5D sobre los ODS, entre los 10 mejores de más de 210 equipos." } },
-  { when: { en: "2025", es: "2025" }, img: "assets/story/spacehack-equipo.webp",
-    title: { en: "SpaceHACK for Sustainability", es: "SpaceHACK for Sustainability" }, org: "UEES · Arizona State University",
-    text: { en: "A web platform to plan urban farming terraces in Arizona.", es: "Plataforma web para planificar terrazas de cultivo urbano en Arizona." } },
+  { when: { en: "2025", es: "2025" }, hl: true, img: "assets/story/spacehack-equipo.webp",
+    title: { en: "2nd place · SpaceHACK for Sustainability", es: "2.º lugar · SpaceHACK for Sustainability" }, org: "UEES · Arizona State University",
+    text: { en: "2nd place at UEES with a web platform to plan urban farming terraces in Arizona.", es: "2.º lugar en la UEES con una plataforma web para planificar terrazas de cultivo urbano en Arizona." } },
   { when: { en: "2025", es: "2025" }, img: "assets/story/eureka.webp",
     title: { en: "Entrepreneurship", es: "Emprendimiento" }, org: "EUNOIA · Eureka Factory",
     text: { en: "UEES's EUNOIA club and the Eureka Factory incubator (50 hours).", es: "Club EUNOIA de la UEES y la incubadora Eureka Factory (50 horas)." } },
-  { when: { en: "Nov 2024", es: "nov. 2024" }, hl: true, imgs: ["assets/story/fil-escenario.webp", "assets/story/fil-mama.webp", "assets/story/fil-papa.webp", "assets/story/fil-medalla.webp", "assets/story/fil-diploma.webp"],
-    title: { en: "“La Filantrópica” medal", es: "Medalla «La Filantrópica»" }, org: "Sociedad Filantrópica del Guayas",
-    text: { en: "For the city's top students of 2023–2024.", es: "Para los mejores estudiantes de la ciudad, periodo 2023–2024." } },
-  { when: { en: "Apr 2024 — 2028", es: "abr. 2024 — 2028" }, mark: "{ }",
-    title: { en: "Computer Engineering", es: "Ingeniería en Computación" }, org: "UEES",
-    text: { en: "Overall GPA 95.06/100.", es: "Promedio general 95,06/100." } },
-  { when: { en: "2024", es: "2024" }, imgs: ["assets/story/abanderado.webp", "assets/story/grad-discurso.webp", "assets/story/grad-padres.webp", "assets/story/grad-titulo.webp"],
-    title: { en: "Flag-bearer of Guayaquil", es: "Abanderado de la ciudad de Guayaquil" }, org: "Interamericano",
-    text: { en: "A 9.97/10 average, and I gave the graduation speech in English.", es: "Promedio de 9,97/10 y el discurso de graduación, en inglés." } },
-  { when: { en: "Nov 2023", es: "nov. 2023" }, hl: true, img: "assets/story/apol-plata-escenario.webp",
-    title: { en: "Silver medal · National Physics Olympiad", es: "Medalla de plata · Olimpiada Nacional de Física" }, org: "APOL",
-    text: { en: "2nd place among 420+ students.", es: "2.º lugar entre más de 420 estudiantes." } },
-  { when: { en: "Oct 2022", es: "oct. 2022" }, hl: true, imgs: ["assets/story/apol-medallas.webp", "assets/story/apol22-410.webp"],
-    title: { en: "Bronze medal · National Physics Olympiad", es: "Medalla de bronce · Olimpiada Nacional de Física" }, org: "APOL",
-    text: { en: "3rd place among 410+ students from across Ecuador.", es: "3.er lugar entre más de 410 estudiantes de todo Ecuador." } },
-  { when: { en: "Last years of school", es: "Últimos años de colegio" }, imgs: ["assets/story/club-premiacion.webp", "assets/story/club-pizarra.webp"],
-    title: { en: "The school physics club", es: "El club de física del colegio" }, org: "Interamericano",
-    text: { en: "Where it all began…", es: "Donde empezó todo…" } }
+  { stage: "school", when: { en: "2024", es: "2024" }, hl: true, imgs: ["assets/story/abanderado.webp", "assets/story/fil-escenario.webp", "assets/story/grad-discurso.webp", "assets/story/grad-padres.webp", "assets/story/fil-mama.webp", "assets/story/fil-papa.webp", "assets/story/fil-medalla.webp", "assets/story/grad-titulo.webp"],
+    title: { en: "Flag-bearer & \u201cLa Filantrópica\u201d medal", es: "Abanderado y Medalla «La Filantrópica»" }, org: "Interamericano · Sociedad Filantrópica del Guayas",
+    text: { en: "9.97/10 average, graduation speech in English, and the medal for the city's top students (2023–2024).", es: "Promedio de 9,97/10, discurso de graduación en inglés y la medalla a los mejores estudiantes de la ciudad (2023–2024)." } },
+  { when: { en: "2022 — 2023", es: "2022 — 2023" }, hl: true, imgs: ["assets/story/apol-medallas.webp", "assets/story/apol-plata-escenario.webp", "assets/story/apol22-410.webp", "assets/story/club-premiacion.webp", "assets/story/club-pizarra.webp"],
+    title: { en: "National Physics Olympiads", es: "Olimpiadas Nacionales de Física" }, org: "APOL",
+    text: { en: "Bronze 2022 (410+ students) and silver 2023 (420+), with my school physics club. Where it all began…", es: "Bronce 2022 (entre más de 410) y plata 2023 (entre más de 420), con el club de física del colegio. Donde empezó todo…" } }
 ];
 
 /* Tech stack (the Tc particle): logos are Simple Icons (CC0) saved in assets/tech; items without a logo show as text */
@@ -1055,33 +1095,33 @@ const TECH = [{"c": "data", "n": {"en": "Data & ML", "es": "Datos y ML"}, "items
    g: q = quark (origins), l = lepton (sharing), b = boson (turning points), h = Higgs (why it all has mass).
    row/col place the cell in the table; empty cells (sy: "?") are space for what comes next. */
 const STORY = [
-  { id: "cp", g: "q", row: 1, col: 2, sy: "Cp", yr: "2022–23", n: { en: "Olympiads", es: "Olimpiadas" },
+  { id: "cp", g: "q", row: 1, col: 2, mt: { en: "×2", es: "×2" }, sy: "Cp", yr: "2022–23", n: { en: "Olympiads", es: "Olimpiadas" },
     imgs: ["assets/story/apol-medallas.webp", "assets/story/apol-plata-escenario.webp", "assets/story/apol-lista.webp", "assets/story/apol22-410.webp", "assets/story/club-premiacion.webp"],
     phrase: { en: "Extra classes on Friday afternoons, solving harder problems and widening my view of the world of physics. A passionate teacher showed us that physics was not difficult, but inherently wonderful. All that effort led to two medals in national physics olympiads among 400+ students: bronze in 2022 and silver in 2023.", es: "Clases extra los viernes por la tarde, resolver ejercicios de mayor complejidad y expandir mi panorama del mundo de la física. Un maestro apasionado nos mostró que la física no era difícil, sino inherentemente maravillosa. Todo el esfuerzo concluyó en 2 medallas en olimpiadas nacionales de física entre más de 400 estudiantes: bronce en 2022 y plata en 2023." },
     t: { en: "The physics club & the olympiads", es: "El club de física y las olimpiadas" } },
-  { id: "gy", g: "q", row: 1, col: 3, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
+  { id: "gy", g: "q", row: 1, col: 3, mt: { en: "EC", es: "EC" }, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
     phrase: { en: "In Guayaquil, my city, no university offers a physics degree. Physics is taught as a tool for engineering, almost never as a science of its own, and research opportunities are few.\n\nI chose Computer Engineering with a clear conviction: to use code and data to one day find my way into physics and seek opportunities abroad.", es: "En Guayaquil, mi ciudad, ninguna universidad ofrece la carrera de física. La física se enseña como herramienta para las ingenierías, casi nunca como una ciencia por sí misma, y las oportunidades de investigación son pocas.\n\nElegí Ingeniería en Computación, con la convicción clara de usar el código y los datos para en un futuro encaminarme al mundo de la física y buscar oportunidades a nivel internacional." },
     t: { en: "Studying physics from Guayaquil", es: "Estudiar física desde Guayaquil" } },
   { id: "q3", g: "q", row: 1, col: 4, empty: true },
-  { id: "ta", g: "l", row: 2, col: 2, sy: "Ta", yr: "2024", n: { en: "Teaching", es: "Enseñar" },
+  { id: "ta", g: "l", row: 2, col: 2, mt: { en: "×5", es: "×5" }, sy: "Ta", yr: "2024", n: { en: "Teaching", es: "Enseñar" },
     imgs: ["assets/story/clase-loop.webp", "assets/story/clase-senalando.webp", "assets/story/clase-equilibrio.webp",
       { u: "assets/story/ayud-otra-forma.webp", page: true }, { u: "assets/story/ayud-trabajo.webp", page: true }, { u: "assets/story/ayud-problema-proyectil.webp", page: true },
       { u: "assets/story/ayud-ley-coseno.webp", page: true }, { u: "assets/story/ayud-mcu-mapa.webp", page: true }],
     phrase: { en: "Physics I had the most failed students of all the engineering degrees at my university (UEES), and many lost their degree because of it. I became a teaching assistant to change that, and to show physics through a lens of curiosity instead of fear.\n\nI was a teaching assistant for Physics I, Mathematics I, III and II over 5 semesters. Professors and students asked me to come back every semester. Teaching makes me feel alive and gives me purpose. Nothing compares to helping others while learning more every day.", es: "Física I era la materia con más reprobados de todas las ingenierías en mi universidad (UEES), y muchos perdían su carrera por ella. Me hice ayudante de cátedra para cambiar eso, y para mostrar la física desde un lente de curiosidad en lugar de miedo.\n\nFungí como ayudante de Física I, Matemáticas I, Matemáticas III y II durante 5 semestres. Los profesores y estudiantes me pedían volver cada semestre. Enseñar me hace sentir vivo y con propósito. No hay nada comparable con ayudar a otros mientras se aprende más cada día." },
     link: { u: "https://drive.google.com/drive/folders/1zZVa2M3M2WBlf-QhCDNZdtF8_1GZHzMG", t: { en: "Class materials · Drive ↗", es: "Material de clase · Drive ↗" } },
     t: { en: "Why I started teaching", es: "Por qué empecé a enseñar" } },
-  { id: "tc", g: "l", row: 2, col: 3, sy: "Tc", yr: "30+", n: { en: "Tech stack", es: "Tecnologías" }, tech: true,
+  { id: "tc", g: "l", row: 2, col: 3, mt: { en: "30+", es: "30+" }, sy: "Tc", yr: "now", n: { en: "Tech stack", es: "Tecnologías" }, tech: true,
     t: { en: "Tech stack", es: "Tecnologías" } },
-  { id: "pr", g: "l", row: 2, col: 4, sy: "Pr", yr: "always", n: { en: "Purpose", es: "Propósito" },
+  { id: "pr", g: "l", row: 2, col: 4, mt: { en: "×2", es: "×2" }, sy: "Pr", yr: "always", n: { en: "Purpose", es: "Propósito" },
     phrase: { en: "A teacher once told me that we have two hands: one to push ourselves forward and one to pull up those who fall behind.\n\nI am no expert, and I am still finding my own way. But you do not need to have it all figured out to help: you start even if you are not perfect, and you share the little you know. Explaining things to others is how I understand them best. That is why I have found purpose in teaching.", es: "Un profesor me dijo una vez que tenemos dos manos: una para impulsarnos hacia adelante y otra para jalar a los que se quedan atrás.\n\nNo soy experto y sigo buscando mi propio camino. Pero no hace falta tenerlo o saberlo todo claro para ayudar; se empieza aunque no se sea perfecto, y se comparte lo poco que uno sabe. Explicar a otros es como mejor entiendo las cosas. Por eso he encontrado propósito en dar clases y enseñar." },
     t: { en: "Two hands and a purpose", es: "Dos manos y un propósito" } },
-  { id: "co", g: "b", row: 1, col: 5, sy: "Co", yr: "2024", n: { en: "Code ✕ physics", es: "Código ✕ física" },
+  { id: "co", g: "b", row: 1, col: 5, mt: { en: "ML", es: "ML" }, sy: "Co", yr: "2024", n: { en: "Code ✕ physics", es: "Código ✕ física" },
     phrase: { en: "It was common sense. Today physics and mathematics go hand in hand with technology, data analysis and artificial intelligence. Computing is my path into physics, through data science and machine learning applied to real experiments. I want to bring together everything I have learned in my degree and apply it to the world of science.", es: "Fue sentido común. Hoy la física y la matemática van de la mano con la tecnología, el análisis de datos y la inteligencia artificial. La computación es mi camino hacia la física a través del data science y el machine learning aplicados a experimentos reales. Busco juntar los conocimientos adquiridos durante mi carrera para poder aplicarlos al mundo de la ciencia." },
     t: { en: "When computing met physics", es: "Cuando la computación encontró a la física" } },
-  { id: "ov", g: "b", row: 2, col: 5, sy: "Ov", yr: "2026", n: { en: "Oviedo", es: "Oviedo" },
+  { id: "ov", g: "b", row: 2, col: 5, mt: { en: "ES", es: "ES" }, sy: "Ov", yr: "2026", n: { en: "Oviedo", es: "Oviedo" },
     phrase: { en: "I compared many universities, courses and research groups until I found one where I could combine computer science and physics, and where the timetables between faculties did not clash.\n\nHere, at the Faculty of Science, I take **Data Analysis in Modern Physics** and **Nuclear and Elementary Particle Physics**. Many things are still new to me and I look into them on my own, but I have seen how neural networks and data analysis drive experiments like CMS at CERN, and how much physics needs people coming from computing.", es: "Comparé muchas universidades, materias y grupos de investigación hasta encontrar una donde pudiera mezclar la informática y la física, y donde los horarios entre facultades no chocaran.\n\nAquí curso en la Facultad de Ciencias **Análisis de Datos en Física Moderna** y **Física Nuclear y de Partículas Elementales**. Muchas cosas aún son nuevas para mí y las investigo por mi cuenta, pero he visto cómo las redes neuronales y el análisis de datos impulsan experimentos como el CMS del CERN, y cuánto necesita la física gente que venga del sector de la computación." },
     t: { en: "Why Oviedo", es: "Por qué Oviedo" } },
-  { id: "h", g: "h", row: 1, col: 7, sy: "H", yr: "∞", n: { en: "Physics is beautiful", es: "La física es hermosa" },
+  { id: "h", g: "h", row: 1, col: 7, mt: { en: "125 GeV", es: "125 GeV" }, sy: "H", yr: "∞", n: { en: "Physics is beautiful", es: "La física es hermosa" },
     t: { en: "The Higgs of my story", es: "El Higgs de mi historia" },
     phrase: { en: "> \"Because physics is wonderful. Because we are nothing but physics.\"\n— Javier Santaolalla, particle physicist (translated)\n\nPhysics is everywhere, and we are made of it. Behind every experiment there is a story of human ingenuity, courage and creativity. That living side is what I want to show: the one that makes you dream, look up at the sky and feel small and, at the same time, part of everything.\n\nThat is the reason behind everything else in this table.", es: "> «Porque la física es maravillosa. Porque no somos sino física.»\n— Javier Santaolalla, físico de partículas\n\nLa física está en todas partes, y estamos hechos de ella. Detrás de cada experimento hay una historia de ingenio, valentía y creatividad humana. Ese es el lado vivo que quiero mostrar: el que te hace soñar, mirar al cielo y sentirte pequeño y, a la vez, parte de un todo.\n\nEsa es la razón detrás de todo lo demás en esta tabla." } }
 ];
@@ -1151,7 +1191,7 @@ const ES = {
   "work.title": "Cosas que he <em>construido</em>",
   "about.title": "Cómo la física me <em>encontró</em>",
   "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, Ecuador. Desde pequeño siempre fui apasionado por la tecnología y la ciencia, en especial por la física. No pudiendo estudiar física a nivel universitario, la busqué por mi cuenta mediante libros, videos y aprovechando cualquier oportunidad para aprender más. Fui parte del club de física de mi colegio, donde obtuve <strong>2 medallas en olimpiadas nacionales de física</strong> (bronce 2022 y plata 2023).<br><br>Luego, al entrar a la universidad, he fungido como <strong>ayudante de cátedra de Física y Matemáticas</strong>, y dando clases he ayudado a decenas de estudiantes, manteniendo viva mi pasión por enseñar y aprender más. Durante mi intercambio en la <strong>Universidad de Oviedo</strong> he aprendido física desde un lado más académico, y descubrí cómo mi carrera, la ciencia de datos y la física de partículas se pueden complementar entre sí.",
-  "about.pass": "PASE DE ACCESO", "about.passrole": "Ingeniería en Computación · UEES → Universidad de Oviedo", "about.passscan": "escanea · LinkedIn", "about.passmission": "MISIÓN", "about.passhint": "clic para abrir",
+  "about.pass": "PASE DE ACCESO", "about.passrole": "Ingeniería en Computación · UEES → Universidad de Oviedo", "about.passscan": "escanea · LinkedIn", "about.passmission": "MISIÓN", "about.passhint": "toca para leer", "about.passli": "LinkedIn ↗",
   "about.mission": "Inspirar la pasión por la física, la ciencia y la tecnología a más estudiantes en Latinoamérica. Mostrar lo maravilloso que puede ser dejarse llevar por la curiosidad y arriesgarse con todo a aprender.",
   "about.smtitle": "El modelo estándar de mi historia", "about.draftchip": "borrador · textos por escribir",
   "journey.title": "Dónde he <em>estado</em>", "journey.peel": "psst: haz clic en una pegatina",
@@ -1165,17 +1205,17 @@ const UI = {
         company: "This code was built for a company, so I can't share it.", teamnote: "The repository belongs to the competition organisation.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
         soundOn: "Sound on", soundOff: "Sound off", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · Spain" }, view: "View",
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
-        enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored",
+        enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored", deeper: "deeper →", backStart: "back to start ↺",
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
-        aboutP: "About me", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
+        aboutP: "About me", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
   es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", figma: "Prototipo en Figma", video: "Video de presentación",
         company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
         soundOn: "Sonido activado", soundOff: "Sonido apagado", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · España" }, view: "Ver",
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
-        enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar",
+        enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar", deeper: "más profundo →", backStart: "volver al inicio ↺",
         smEmpty: "Haz clic en una partícula para leer esa parte de la historia.", smPhrase: "Frase corta por escribir aquí.", smFuture: "Espacio para lo que viene.",
-        aboutP: "Sobre mí", projOne: "proyecto", projMany: "proyectos", techHint: "psst: haz clic en cualquier tecnología para ver los proyectos donde la usé ↗", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
+        aboutP: "Sobre mí", smWip: "en proceso…", smPred: "Predicha, aún no observada.", stUni: "Universidad", stSchool: "Colegio", projOne: "proyecto", projMany: "proyectos", techHint: "psst: haz clic en cualquier tecnología para ver los proyectos donde la usé ↗", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
         nextK: "Siguiente parada", travel: "Viajar allí →", nextSolar: "Sistema Solar · sobre mí", nextEarth: "Tierra · mi trayectoria", nextSat: "El satélite · arcade", nextBh: "Volver al agujero negro", journeyP: "Mi trayectoria", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "yo", satellite: "Arcade" }
 };
 const T = () => UI[LANG];
@@ -1324,6 +1364,8 @@ function enterView(v, sub) {
   Game.setVis(v === "arcade");
   renderNav(); Sound.open();
   setTimeout(() => { const h = $("h2", el); h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }, 50);
+  if (v === "about") [350, 900].forEach(t => setTimeout(() => { StoryTrace.draw(); StoryTour.kick(); }, t));
+  if (v === "journey") [120, 700, 1300].forEach(t => setTimeout(() => TimelineReveal.on && TimelineReveal.on(), t));
 }
 function enterHome() {
   if (CURVIEW) { $("#v-" + CURVIEW).classList.remove("on"); CURVIEW = null; document.body.classList.remove("in-view"); Uni.zoomOut(); Sound.open(); }
@@ -1416,26 +1458,47 @@ function stepModal(d) { MODAL_I = (MODAL_I + d + MODAL_LIST.length) % MODAL_LIST
 
 /* ===================== ABOUT: the standard model of my story ===================== */
 let SM_SEL = null;
+const CHAPTERS = ["tc", "cp", "gy", "ta", "pr", "co", "ov", "h"];
 function renderStory() {
   const G = STORY_GROUPS;
+  if (!SM_SEL) SM_SEL = CHAPTERS[0];
   let h = `<span class="gl" style="--c:${G.q.c};grid-row:1;grid-column:1">${esc(L(G.q))}</span><span class="gl" style="--c:${G.l.c};grid-row:2;grid-column:1">${esc(L(G.l))}</span>`;
   h += STORY.map(s => {
     const pos = s.g === "h" ? "grid-row:1/3;grid-column:7" : `grid-row:${s.row};grid-column:${s.col}`;
-    if (s.empty) return `<div class="cell empty" style="--c:${G[s.g].c};${pos}" aria-hidden="true"><span class="yr">20··</span><span class="sy">?</span><span class="nm">…</span></div>`;
-    return `<button type="button" class="cell${s.g === "h" ? " higgs" : ""}" data-s="${s.id}" style="--c:${G[s.g].c};${pos}" aria-pressed="${SM_SEL === s.id}"><span class="yr">${esc(s.yr)}</span><span class="sy">${esc(s.sy)}</span><span class="nm">${esc(L(s.n))}</span></button>`;
+    if (s.empty) return `<div class="cell empty" style="--c:${G[s.g].c};${pos}" tabindex="0" data-tipq="${esc(T().smPred)}"><span class="yr">20··</span><span class="sy">?</span><span class="nm">${esc(T().smWip)}</span></div>`;
+    return `<button type="button" class="cell${s.g === "h" ? " higgs" : ""}" data-s="${s.id}" style="--c:${G[s.g].c};${pos}" aria-pressed="${SM_SEL === s.id}">${s.mt ? `<span class="mt">${esc(L(s.mt))}</span>` : ""}<span class="yr">${esc(s.yr)}</span><span class="sy">${esc(s.sy)}</span><span class="nm">${esc(L(s.n))}</span><i class="prog" aria-hidden="true"></i></button>`;
   }).join("");
   h += `<span class="gb2" style="grid-row:3;grid-column:5;--c:${G.b.c}">${esc(L(G.b))}</span><span class="gb2" style="grid-row:3;grid-column:7;--c:${G.h.c}">${esc(L(G.h))}</span>`;
   $("#smTable").innerHTML = h;
-  $$("#smTable [data-s]").forEach(b => { b.onclick = () => { SM_SEL = b.dataset.s; Sound.click(); renderStory(); }; b.onmouseenter = () => Sound.hover(); });
-  const p = $("#smPanel"), s = STORY.find(x => x.id === SM_SEL);
-  if (!s) { p.className = "sm-panel empty"; p.innerHTML = esc(T().smEmpty); return; }
-  p.className = "sm-panel"; p.style.setProperty("--c", G[s.g].c);
+  $$("#smTable [data-s]").forEach(b => {
+    b.onclick = () => { StoryTour.stop(); SM_SEL = b.dataset.s; Sound.click(); showStory(SM_SEL); };
+    b.onmouseenter = () => {
+      Sound.hover(); if (!FINE) return; clearTimeout(StoryTour.hv);
+      StoryTour.hv = setTimeout(() => { StoryTour.pause(); if (b.dataset.s !== StoryTour.cur) showStory(b.dataset.s, true); }, 120);
+    };
+    b.onmouseleave = () => clearTimeout(StoryTour.hv);
+  });
+  showStory(SM_SEL);
+  StoryTour.watch();
+}
+/* Show one particle in the panel (hover = preview, otherwise also the selection) */
+function showStory(id, preview) {
+  const G = STORY_GROUPS, p = $("#smPanel"), s = STORY.find(x => x.id === id);
+  if (!s) return;
+  StoryTour.cur = id;
+  $$("#smTable [data-s]").forEach(b => { b.setAttribute("aria-pressed", b.dataset.s === id); b.classList.remove("run"); });
+  p.className = "sm-panel"; p.style.setProperty("--c", G[s.g].c); $(".sm").style.setProperty("--c", G[s.g].c);
+  const k = CHAPTERS.indexOf(id);
+  const nav = `<nav class="sm-nav" aria-label="chapters"><button type="button" class="sm-arw" data-d="-1" aria-label="previous">◀</button><span class="sm-n">${k + 1} / ${CHAPTERS.length}</span><button type="button" class="sm-arw" data-d="1" aria-label="next">▶</button><span class="sm-dots">${CHAPTERS.map((c, j) => `<button type="button" data-c="${c}" style="--c:${G[STORY.find(x => x.id === c).g].c}" aria-label="${esc(STORY.find(x => x.id === c).sy)}"${j === k ? ' class="on"' : ""}></button>`).join("")}</span></nav>`;
   const paras = s.tech ? techPanel() : s.phrase ? richText(L(s.phrase)) : `<p class="draft">${esc(T().smPhrase)}</p>`;
   const items = (s.imgs || []).map(x => typeof x === "string" ? { u: x } : x);
   const media = s.tech ? "" : items.length ? `<div class="ph has"><img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="thumbs">${items.map((it, k) => `<button type="button" data-k="${k}"${it.page ? ' class="pg"' : ""} aria-pressed="${!k}" aria-label="${k + 1}/${items.length}"><img src="${it.u}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}</div>` : `<div class="ph sym" aria-hidden="true">${esc(s.sy)}</div>`;
   const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(L(s.link.t))}</a>` : "";
   p.classList.toggle("tech", !!s.tech);
-  p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
+  p.innerHTML = `${media}<div>${nav}<h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
+  $$(".sm-arw", p).forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = CHAPTERS[(k + +b.dataset.d + CHAPTERS.length) % CHAPTERS.length]; showStory(SM_SEL); });
+  $$(".sm-dots button", p).forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = b.dataset.c; showStory(SM_SEL); });
+  StoryTrace.draw();
   if (s.tech) {
     $$("[data-q]", p).forEach(b => b.onclick = () => {
       Sound.click(); const u = TECH_URL[b.dataset.q.toLowerCase()];
@@ -1453,6 +1516,45 @@ function renderStory() {
   main.onclick = () => lightbox(main.src);
 }
 
+/* The table tells itself: every ~6.5 s it moves to the next chapter, with a progress bar on the active particle.
+   Pauses while the pointer is over the table or panel, stops for good after a click; only runs while on screen. */
+const StoryTour = {
+  every: 6500, on: false, stopped: false, vis: false, paused: false,
+  watch() {
+    if (REDUCED || this.stopped) return;
+    const sm = $(".sm"); if (!sm || this.io) { this.kick(); return; }
+    this.io = new IntersectionObserver(es => es.forEach(e => { this.vis = e.isIntersecting; this.kick(); }), { threshold: .35 });
+    this.io.observe(sm);
+    sm.addEventListener("pointerenter", () => this.pause());
+    sm.addEventListener("pointerleave", () => { this.paused = false; this.kick(); });
+    document.addEventListener("visibilitychange", () => this.kick());
+  },
+  pause() { this.paused = true; clearTimeout(this.t); const c = $(`#smTable [data-s="${this.cur}"]`); if (c) c.classList.remove("run"); },
+  stop() { this.stopped = true; this.pause(); },
+  kick() {
+    clearTimeout(this.t);
+    const c = $(`#smTable [data-s="${this.cur}"]`);
+    if (c) c.classList.remove("run");
+    if (this.stopped || this.paused || !this.vis || document.hidden || CURVIEW !== "about") return;
+    if (c) { void c.offsetWidth; c.style.setProperty("--dur", this.every + "ms"); c.classList.add("run"); }
+    this.t = setTimeout(() => { const k = CHAPTERS.indexOf(this.cur); SM_SEL = CHAPTERS[(k + 1) % CHAPTERS.length]; showStory(SM_SEL); this.kick(); }, this.every);
+  }
+};
+/* A glowing particle track from the active cell to the panel */
+const StoryTrace = {
+  draw() {
+    const sm = $(".sm"), cell = $(`#smTable [data-s="${StoryTour.cur}"]`), p = $("#smPanel"); if (!sm || !cell || !p) return;
+    let svg = $(".sm-trace", sm);
+    if (!svg) { svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "sm-trace"); svg.setAttribute("aria-hidden", "true"); svg.innerHTML = '<path class="tr-glow"/><path class="tr-core"/><circle r="3"/>'; sm.appendChild(svg); addEventListener("resize", () => this.draw()); }
+    const R = sm.getBoundingClientRect(), c = cell.getBoundingClientRect(), q = p.getBoundingClientRect();
+    svg.setAttribute("width", R.width); svg.setAttribute("height", R.height);
+    let d, x1, y1;
+    if (q.left > c.right) { const x0 = c.right - R.left, y0 = c.top + c.height / 2 - R.top; x1 = q.left - R.left; y1 = Math.min(Math.max(y0, q.top - R.top + 28), q.bottom - R.top - 28); const mx = (x0 + x1) / 2; d = `M${x0},${y0} C${mx},${y0} ${mx},${y1} ${x1},${y1}`; }
+    else { const x0 = c.left + c.width / 2 - R.left, y0 = c.bottom - R.top; x1 = Math.min(Math.max(x0, q.left - R.left + 28), q.right - R.left - 28); y1 = q.top - R.top; const my = (y0 + y1) / 2; d = `M${x0},${y0} C${x0},${my} ${x1},${my} ${x1},${y1}`; }
+    $$("path", svg).forEach(e => { e.setAttribute("d", d); e.style.animation = "none"; void e.getBBox; e.style.animation = ""; });
+    const dot = $("circle", svg); dot.setAttribute("cx", x1); dot.setAttribute("cy", y1);
+  }
+};
 /* Story text: blank line = new paragraph, **x** = highlighted in the particle colour,
    a paragraph that starts with "> " is a quote (its "— author" line becomes the citation) */
 function richText(t) {
@@ -1535,10 +1637,34 @@ const Pass = {
   init() {
     const p = $(".pass"), tab = $(".pass-tab"); if (!p || !tab) return;
     this.p = p; this.tab = tab;
-    if (!store.get("dv_pass_open", false)) tab.classList.add("nudge");
-    tab.onclick = () => { tab.classList.remove("nudge"); store.set("dv_pass_open", true); this.set(!p.classList.contains("open")); Sound.click(); };
+    tab.onclick = () => { this.set(!p.classList.contains("open")); Sound.click(); };
   },
   set(open) { this.p.classList.toggle("open", open); this.tab.setAttribute("aria-expanded", open); }
+};
+/* Journey effect: "reveal" (each moment fades in once + the line fills with gold as you scroll) or the older "focus" */
+const TL_MODE = "reveal";
+const TimelineReveal = {
+  watch() {
+    const tl = $("#timeline"), items = $$(".t-item, .t-stage", tl), sc = $("#v-journey"), fill = $(".tl-fill", tl);
+    if (this.io) this.io.disconnect();
+    tl.classList.add("reveal");
+    if (REDUCED || !("IntersectionObserver" in window)) { items.forEach(el => el.classList.add("in")); }
+    else {
+      this.io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); this.io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
+      items.forEach(el => this.io.observe(el));
+    }
+    const dots = $$(".t-item", tl);
+    const upd = () => {
+      this.raf = 0; const line = $(".t-line", tl); if (!line || !fill) return;
+      const r = tl.getBoundingClientRect(), x = line.getBoundingClientRect().left - r.left;
+      const target = innerHeight * .62 - r.top, h = clamp(target, 0, r.height - 30);
+      fill.style.left = x + "px"; fill.style.height = h + "px";
+      dots.forEach(d => d.classList.toggle("past", d.offsetTop + 12 <= h));
+    };
+    const on = () => { if (!this.raf) this.raf = requestAnimationFrame(upd); };
+    if (sc && !sc._tlScroll) { sc._tlScroll = true; sc.addEventListener("scroll", on, { passive: true }); addEventListener("resize", on); }
+    this.on = on; [50, 500, 1100].forEach(t => setTimeout(on, t));
+  }
 };
 /* Journey: the moment closest to the middle of the screen comes forward as you scroll */
 const TimelineFocus = {
@@ -1628,15 +1754,18 @@ async function peelSticker(s) {
   s.classList.remove("off", "fly");
 }
 function renderTimeline() {
-  $("#timeline").innerHTML = TIMELINE.map(it => {
+  let seenSchool = false;
+  $("#timeline").innerHTML = `<div class="t-stage first"><i></i><b></b><span>${esc(T().stUni)}</span></div>` + TIMELINE.map(it => {
     const action = (it.open ? `<button class="chip-btn" data-open="${it.open}">${T().view} ↗</button>` : it.filter ? `<button class="chip-btn" data-filter="${it.filter}">${T().view} ↗</button>` : "")
       + (it.links || []).map(l => `<a class="chip-btn ext" href="${l.u}" target="_blank" rel="noopener">${esc(L(l.t))} ↗</a>`).join("");
     const text = it.draft ? L(it.text).replace(/(DRAFT|BORRADOR) · Daniel:\s*/, "") : L(it.text);
-    return `<div class="t-item${it.hl ? " hl" : ""}"><div class="t-year">${esc(L(it.when))}</div><div class="t-line"></div>
+    const stage = it.stage === "school" && !seenSchool ? (seenSchool = true, `<div class="t-stage"><i></i><b class="t-line nod"></b><span>${esc(T().stSchool)}</span></div>`) : "";
+    return `${stage}<div class="t-item${it.hl ? " hl" : ""}"><div class="t-year">${esc(L(it.when))}</div><div class="t-line"></div>
       <div class="t-body">${it.imgs || it.img ? `<img class="t-img" src="${(it.imgs || [it.img])[0]}" alt="" loading="lazy">` : ""}<h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
       <p${it.draft ? ' class="draft"' : ""}>${esc(text)}</p>${action ? `<div class="t-act">${action}</div>` : ""}</div></div>`;
-  }).join("");
-  TimelineFocus.watch();
+  }).join("") + `<div class="tl-fill" aria-hidden="true"></div>`;
+  if (TL_MODE === "focus") TimelineFocus.watch(); else TimelineReveal.watch();
+  $$("#timeline .t-img").forEach(im => im.onclick = () => lightbox(im.src));
   $$("#timeline .t-img").forEach((im, i) => {
     const it = TIMELINE.filter(x => x.imgs || x.img)[i], list = it.imgs || [it.img];
     if (list.length > 1) Rot.make(im, list.length, k => swapImg(im, list[k]));
@@ -1930,7 +2059,7 @@ const Uni = {
     this.bg = Array.from({ length: 320 }, () => [Math.random(), Math.random(), Math.random() * 1.2 + .2, Math.random()]);
     this.gal = Array.from({ length: 70 }, () => ({ x: Math.random(), y: Math.random(), s: Math.random() * 9 + 2, a: Math.random() * 3, c: ["#ffe2b8", "#cfe0ff", "#ffd0e0", "#fff"][Math.floor(Math.random() * 4)] }));
     addEventListener("resize", () => this.resize()); this.resize();
-    $("#uniPrev").onclick = () => this.go(this.i - 1); $("#uniNext").onclick = () => this.go(this.i + 1);
+    $("#uniPrev").onclick = () => this.go(this.i - 1); $("#uniNext").onclick = () => this.go(this.i === LEVELS.length - 1 ? 0 : this.i + 1);
     this.c.addEventListener("pointerdown", e => this.ptype = e.pointerType || "mouse");
     this.c.addEventListener("pointermove", e => { this.ptype = e.pointerType || "mouse"; this.onMove(e); });
     this.c.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") this.clearHover(); });
@@ -1962,7 +2091,7 @@ const Uni = {
   },
   go(n) {
     if (n < 0 || n >= LEVELS.length || this.tr || n === this.i) return;
-    const dir = n > this.i ? 1 : -1; this.tr = { from: this.i, to: n, start: performance.now(), dur: REDUCED ? 1 : 1400, dir };
+    const dir = n > this.i ? 1 : -1; this.tr = { from: this.i, to: n, start: performance.now(), dur: REDUCED ? 1 : 1400, dir, f: n === this.i + 1 ? this.teaserPos(LEVELS[this.i].id) : null };
     this.clearHover(); $("#stopcard").classList.add("hidden"); $("#hero").classList.add("hidden");
     if (this.i === 0 && dir > 0) Sound.warp(); else Sound.open();
     this.i = n; this.hoverPt = null; this.uiBottom(); this.hideHint(); Space.stop(n); this.start();
@@ -1978,6 +2107,43 @@ const Uni = {
     if (id === "solar") return m ? [w * .5, h * .44] : [w * .3, h * .5];
     if (id === "earth") return m ? [w * .5, h * .44] : [w * .42, h * .52];
     return [w * .45, h * .48];
+  },
+  /* Each stop shows, small and glowing in the background, the next one: hover to see it, click to go deeper.
+     The trip then zooms into that little object (not into the sun or the galaxy in the middle). */
+  teaserPos(id) {
+    const w = this.w, h = this.h, m = this.mobile;
+    if (id === "cluster") return m ? [w * .5, h * .74] : [w * .86, h * .38];
+    if (id === "solar") return m ? [w * .8, h * .2] : [w * .87, h * .3];
+    if (id === "earth") return m ? [w * .85, h * .16] : [w * .87, h * .26];
+    return null;
+  },
+  teaser(c, id, t, alpha) {
+    const pos = this.teaserPos(id); if (!pos) return;
+    const [x, y] = pos, hot = this.hover === "next", k = REDUCED ? .5 : (t * .33) % 1, S = hot ? 1.35 : 1;
+    const kind = id === "cluster" ? "solar" : id === "solar" ? "earth" : "bh";
+    c.save(); c.globalAlpha = alpha;
+    const halo = c.createRadialGradient(x, y, 0, x, y, 34 * S); halo.addColorStop(0, kind === "earth" ? "rgba(98,180,255,.35)" : "rgba(255,200,110,.32)"); halo.addColorStop(1, "rgba(0,0,0,0)");
+    c.fillStyle = halo; c.fillRect(x - 40 * S, y - 40 * S, 80 * S, 80 * S);
+    c.globalAlpha = alpha * (1 - k) * .8; c.strokeStyle = "#e8b64c"; c.lineWidth = 1.2; c.beginPath(); c.arc(x, y, (14 + k * 16) * S, 0, 7); c.stroke(); c.globalAlpha = alpha;
+    if (kind === "solar") {
+      c.strokeStyle = "rgba(124,178,255,.45)"; c.lineWidth = .8;
+      [13, 20].forEach((r, j) => { c.beginPath(); c.ellipse(x, y, r * S, r * .38 * S, 0, 0, 7); c.stroke(); const a = t * (.8 - j * .3) + j * 2; c.fillStyle = j ? "#ff9f5a" : "#62e3b5"; c.beginPath(); c.arc(x + Math.cos(a) * r * S, y + Math.sin(a) * r * .38 * S, 1.8, 0, 7); c.fill(); });
+      const sg = c.createRadialGradient(x - 1, y - 1, 0, x, y, 5.5 * S); sg.addColorStop(0, "#fff7d6"); sg.addColorStop(1, "#ff9a30"); c.fillStyle = sg; c.beginPath(); c.arc(x, y, 5 * S, 0, 7); c.fill();
+    } else if (kind === "earth") {
+      const R = 8 * S, eg = c.createRadialGradient(x - R * .4, y - R * .4, 0, x, y, R); eg.addColorStop(0, "#bfe6ff"); eg.addColorStop(.45, "#2f7fd6"); eg.addColorStop(1, "#0b2a5a");
+      c.fillStyle = eg; c.beginPath(); c.arc(x, y, R, 0, 7); c.fill();
+      c.fillStyle = "rgba(98,227,181,.8)"; c.beginPath(); c.ellipse(x - R * .2, y - R * .15, R * .35, R * .25, .4, 0, 7); c.fill();
+      c.strokeStyle = "rgba(140,200,255,.6)"; c.lineWidth = 1.5; c.beginPath(); c.arc(x, y, R + 1.5, 0, 7); c.stroke();
+      const a = t * .9; c.fillStyle = "#d9dbe6"; c.beginPath(); c.arc(x + Math.cos(a) * R * 2, y + Math.sin(a) * R * .8, 2, 0, 7); c.fill();
+    } else {
+      const R = 7 * S; c.strokeStyle = "#ffb45e"; c.lineWidth = 2.5; c.beginPath(); c.ellipse(x, y, R * 1.9, R * .55, -.25, 0, 7); c.stroke();
+      c.fillStyle = "#000"; c.beginPath(); c.arc(x, y, R, 0, 7); c.fill(); c.strokeStyle = "rgba(255,210,140,.8)"; c.lineWidth = 1; c.beginPath(); c.arc(x, y, R + 1, 0, 7); c.stroke();
+    }
+    const lab = id === "earth" ? T().backStart : T().deeper;
+    c.font = `${hot ? 700 : 500} 10.5px Space Mono, monospace`; c.textAlign = "center"; c.fillStyle = hot ? "#ffd58a" : "rgba(232,182,76,.75)";
+    c.fillText(lab, x, y + 36 * S);
+    c.restore();
+    this.targets.push({ k: "next", x, y, r: 34 });
   },
   frame(now) {
     const c = this.ctx, w = this.w, h = this.h, t = REDUCED ? 0 : now / 1000; if (!c) return;
@@ -1995,7 +2161,7 @@ const Uni = {
     if (Z !== 1) { const [fx, fy] = this.zf; c.translate(fx, fy); c.scale(Z, Z); c.translate(-fx, -fy); }
     if (this.tr) {
       const p = clamp((now - this.tr.start) / this.tr.dur, 0, 1), e = ease(p), d = this.tr.dir;
-      const A = LEVELS[this.tr.from].id, B = LEVELS[this.tr.to].id, [fx, fy] = this.focus(A);
+      const A = LEVELS[this.tr.from].id, B = LEVELS[this.tr.to].id, [fx, fy] = this.tr.f || this.focus(A);
       this.scene(A, t, d > 0 ? 1 + e * 7 : 1 - e * .85, 1 - e, fx, fy);
       this.scene(B, t, d > 0 ? .15 + e * .85 : 8 - e * 7, e, w / 2, h / 2);
       if (A === "bh" && d > 0) this.warp(c, w, h, Math.sin(p * Math.PI));
@@ -2037,6 +2203,7 @@ const Uni = {
     if (id === "cluster") this.cluster(c, w, h, t, alpha);
     if (id === "solar") this.solar(c, w, h, t, alpha);
     if (id === "earth") this.earth(c, w, h, t, alpha);
+    this.teaser(c, id, t, alpha);
     c.restore();
   },
   /* unexplored places pulse; explored ones get a ✓ next to their name */
@@ -2072,20 +2239,28 @@ const Uni = {
   },
   solar(c, w, h, t, alpha) {
     const [sx, sy] = this.focus("solar"), S = Math.min(w, h), R = S * .075, W = this.mobile ? w * .4 : w * .42;
+    const lab = (txt, x, y, hot, size = 11.5, col) => { c.font = `${hot ? 700 : 500} ${size}px Space Mono, monospace`; c.textAlign = "center"; c.lineJoin = "round"; c.lineWidth = 4; c.strokeStyle = "rgba(4,6,18,.85)"; c.strokeText(txt, x, y); c.fillStyle = col || (hot ? "#fff" : "#c3cbea"); c.fillText(txt, x, y); };
+    const ps = PLANETS.map((p, i) => {
+      const rx = R * 1.7 + p.r * W, ry = rx * .32, hot = this.hover === i;
+      const a = i * 1.9 + t * (.45 / Math.sqrt(i + 1)), x = sx + Math.cos(a) * rx, y = sy + Math.sin(a) * ry, s = p.size * (S / 520) * (hot ? 1.3 : 1) + 2;
+      return { p, i, rx, ry, hot, x, y, s, back: Math.sin(a) < 0 };
+    });
+    ps.forEach(q => { c.strokeStyle = q.hot ? "rgba(232,182,76,.7)" : "rgba(124,178,255,.18)"; c.lineWidth = 1; c.beginPath(); c.ellipse(sx, sy, q.rx, q.ry, 0, 0, 7); c.stroke(); });
+    const planet = q => {
+      if (q.p.ring) { c.strokeStyle = "rgba(230,200,150,.8)"; c.lineWidth = 1.5; c.beginPath(); c.ellipse(q.x, q.y, q.s * 2, q.s * .6, -.3, 0, 7); c.stroke(); }
+      const pg = c.createRadialGradient(q.x - q.s * .4, q.y - q.s * .4, 0, q.x, q.y, q.s); pg.addColorStop(0, "#fff"); pg.addColorStop(.25, q.p.color); pg.addColorStop(1, "#111"); c.fillStyle = pg; c.beginPath(); c.arc(q.x, q.y, q.s, 0, 7); c.fill();
+    };
+    ps.filter(q => q.back).forEach(planet);
     this.ring(c, sx, sy, R * 1.5, "about", t, alpha);
     const g = c.createRadialGradient(sx, sy, R * .2, sx, sy, R * 4); g.addColorStop(0, "rgba(255,220,140,.9)"); g.addColorStop(.25, "rgba(255,170,60,.35)"); g.addColorStop(1, "rgba(0,0,0,0)"); c.fillStyle = g; c.fillRect(sx - R * 4, sy - R * 4, R * 8, R * 8);
     const sun = c.createRadialGradient(sx - R * .3, sy - R * .3, 0, sx, sy, R); sun.addColorStop(0, "#fff7d6"); sun.addColorStop(.6, "#ffcf5a"); sun.addColorStop(1, "#ff8c2a"); c.fillStyle = sun; c.beginPath(); c.arc(sx, sy, R * (this.hover === "sun" ? 1.08 : 1), 0, 7); c.fill();
-    this.name(c, T().me, sx, sy + R + 20, "about", this.hover === "sun", alpha);
+    ps.filter(q => !q.back).forEach(planet);
+    // labels last, with a dark outline, so they never get lost on the sun
+    ps.forEach(q => lab(L(q.p), q.x, q.y - q.s - 8, q.hot));
+    const meY = sy + R + 22; lab(T().me, sx, meY, this.hover === "sun", 12.5);
+    if (Visited.has("about")) { c.font = "500 12.5px Space Mono, monospace"; const tw = c.measureText(T().me).width; c.textAlign = "left"; c.fillStyle = "#62e3b5"; c.fillText(" ✓", sx + tw / 2, meY); }
     this.targets.push({ k: "sun", x: sx, y: sy, r: R * 1.3, portal: true });
-    PLANETS.forEach((p, i) => {
-      const rx = R * 1.7 + p.r * W, ry = rx * .32, hot = this.hover === i;
-      c.strokeStyle = hot ? "rgba(232,182,76,.7)" : "rgba(124,178,255,.18)"; c.lineWidth = 1; c.beginPath(); c.ellipse(sx, sy, rx, ry, 0, 0, 7); c.stroke();
-      const a = i * 1.9 + t * (.45 / Math.sqrt(i + 1)), x = sx + Math.cos(a) * rx, y = sy + Math.sin(a) * ry, s = p.size * (S / 520) * (hot ? 1.3 : 1) + 2;
-      if (p.ring) { c.strokeStyle = "rgba(230,200,150,.8)"; c.lineWidth = 1.5; c.beginPath(); c.ellipse(x, y, s * 2, s * .6, -.3, 0, 7); c.stroke(); }
-      const pg = c.createRadialGradient(x - s * .4, y - s * .4, 0, x, y, s); pg.addColorStop(0, "#fff"); pg.addColorStop(.25, p.color); pg.addColorStop(1, "#111"); c.fillStyle = pg; c.beginPath(); c.arc(x, y, s, 0, 7); c.fill();
-      c.font = `${hot ? 700 : 500} 11.5px Space Mono, monospace`; c.textAlign = "center"; c.fillStyle = hot ? "#fff" : "#aab3d6"; c.fillText(L(p), x, y - s - 8);
-      this.targets.push({ k: i, x, y, r: Math.max(s * 1.8, 16) });
-    });
+    ps.forEach(q => this.targets.push({ k: q.i, x: q.x, y: q.y, r: Math.max(q.s * 1.8, 16) }));
   },
   satellite(c, x, y, s, hot) {
     c.save(); c.translate(x, y); c.rotate(-.4);
@@ -2137,6 +2312,7 @@ const Uni = {
   },
   label(h) {
     if (h.k === "bh") return L(LEVELS[0].cta);
+    if (h.k === "next") { const n = this.i === LEVELS.length - 1 ? 0 : this.i + 1; return (n ? T().next : T().backStart.replace(/ ?[↺→]$/, "")) + " · " + L(LEVELS[n].name) + (LEVELS[n].view ? " · " + L(LEVELS[n].h).split(" · ")[0] : "") + " →"; }
     if (typeof h.k === "number") return L(PLANETS[h.k]) + " · " + T().aboutP;
     if (String(h.k).startsWith("pin")) return L(PINS[+String(h.k).slice(3)]) + " · " + T().journeyP;
     return "";
@@ -2159,6 +2335,7 @@ const Uni = {
     if (this.ptype === "touch" && h.portal && Portal.key !== h.k) { this.setHover(h); return; } // first tap previews, second tap enters
     Sound.click(); this.hoverPt = [h.x, h.y];
     const id = LEVELS[this.i].id;
+    if (h.k === "next") { this.clearHover(); return this.go(this.i === LEVELS.length - 1 ? 0 : this.i + 1); }
     if (id === "bh") return this.go(1);
     if (id === "cluster") location.hash = "work/" + h.k;
     else if (id === "solar") location.hash = "about";
@@ -2177,8 +2354,11 @@ const Uni = {
     const n = LEVELS.length;
     $("#dots").innerHTML = LEVELS.map((l, k) => `<button type="button" data-k="${k}" aria-label="${esc(L(l.name))}"${k === this.i ? ' aria-current="true"' : ""}${this.stopTodo(k) ? ' class="todo"' : ""}></button>`).join("");
     $$("#dots button").forEach(b => b.onclick = () => this.go(+b.dataset.k));
-    $("#uniPrev").disabled = this.i === 0; $("#uniNext").disabled = this.i === n - 1;
+    $("#uniPrev").disabled = this.i === 0; $("#uniNext").disabled = false;
     ["#uniPrev", "#uniNext"].forEach(s => { const b = $(s); b.classList.remove("beacon"); const bl = $(".bl", b); if (bl) bl.remove(); });
+    const nx = this.i === n - 1 ? 0 : this.i + 1, ico = ["◉", "✦", "☉", "◍"];
+    $("#nlNext").innerHTML = `<b>${esc(this.i === n - 1 ? T().backStart.replace(/ ?[↺→]$/, "") : T().next)}</b> ${ico[nx]} ${esc(L(LEVELS[nx].name))}`;
+    $("#nlPrev").innerHTML = this.i ? `${ico[this.i - 1]} ${esc(L(LEVELS[this.i - 1].name))}` : "";
     if (this.tr) return;
     // beacon: when nothing is left to see here, it points to the closest stop that still has something new
     let target = null;
@@ -2186,7 +2366,7 @@ const Uni = {
     else if (!this.stopTodo(this.i)) for (let d = 1; d < n; d++) { if (this.stopTodo(this.i + d)) { target = this.i + d; break; } if (this.stopTodo(this.i - d)) { target = this.i - d; break; } }
     if (target == null) return;
     const b = $(target > this.i ? "#uniNext" : "#uniPrev"), near = Math.abs(target - this.i) === 1;
-    b.classList.add("beacon"); b.insertAdjacentHTML("beforeend", `<span class="bl">${esc(near ? T().next : T().unexplored)}: ${esc(L(LEVELS[target].name))}</span>`);
+    b.classList.add("beacon"); if (!near) $("#nlNext").innerHTML = `<b>${esc(T().unexplored)}</b> ${esc(L(LEVELS[target].name))}`;
   }
 };
 

@@ -144,6 +144,11 @@ body.portal-on .stopcard{opacity:0;pointer-events:none}
 .travel button.arw .bl::after{content:"";position:absolute;top:50%;right:100%;margin-top:-5px;border:5px solid transparent;border-right-color:var(--ember)}
 #uniPrev .bl{left:auto;right:calc(100% + 12px)}#uniPrev .bl::after{right:auto;left:100%;border-right-color:transparent;border-left-color:var(--ember)}
 @keyframes blink{50%{opacity:.55}}
+.travel .nl{font-size:11px;letter-spacing:.04em;color:#9fb0e6;white-space:nowrap;min-width:150px}
+.travel .nl.prev{text-align:right;opacity:.6}
+.travel .nl.next{color:#ffd58a}
+.travel .nl b{font-weight:700;color:var(--ember);text-transform:uppercase;letter-spacing:.12em;font-size:9.5px;margin-right:4px}
+@media (max-width:760px){.travel .nl.prev{display:none}.travel .nl{min-width:0;font-size:10px}.travel .nl.next{max-width:110px;overflow:hidden;text-overflow:ellipsis}}
 .dots button.todo:not([aria-current="true"]){background:#6b5426;box-shadow:0 0 8px rgba(232,182,76,.6)}
 .dots{display:flex;gap:10px;align-items:center}
 .dots button{width:10px;height:10px;border-radius:50%;border:0;padding:0;background:#2a3768;cursor:var(--cp,pointer);transition:width .3s,background .3s}
@@ -267,22 +272,27 @@ body.in-view .view-bg{opacity:1}
 .pass-role{margin:0!important;font-size:11.5px!important;color:#9fb0e6!important;line-height:1.5}
 .pass-k{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--mint);margin-bottom:4px}
 .pass .mis{margin:0!important;font-size:13px!important;line-height:1.55;color:#dfe4f8!important}
-.pass-foot{display:flex;align-items:center;gap:10px;margin-top:12px}
-.pass-qr{flex:none;width:46px;height:46px;padding:4px;border-radius:7px;background:#f4f1ea;display:block;transition:transform .2s}
-.pass-qr:hover{transform:scale(1.08)}
+.pass-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-top:12px}
+.pass-li{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-decoration:none;color:#9fb0e6}
+.pass-qr{position:relative;flex:none;width:50px;height:50px;padding:4px;border-radius:8px;background:#f4f1ea;display:block;transition:transform .2s,box-shadow .2s}
 .pass-qr .qr{width:100%;height:100%;display:block}
-.pass-bar{flex:1;height:24px;background:repeating-linear-gradient(90deg,#9fb0e6 0 2px,transparent 2px 4px,#9fb0e6 4px 5px,transparent 5px 8px,#9fb0e6 8px 11px,transparent 11px 13px);opacity:.3;border-radius:2px}
-.pass-tab{flex:none;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;border:1px solid color-mix(in srgb,var(--mint) 55%,transparent);background:color-mix(in srgb,var(--mint) 12%,transparent);color:var(--mint);font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;cursor:var(--cp,pointer);transition:background .2s}
-.pass-tab.nudge{animation:tabglow 2.4s ease-in-out infinite}
-.pass-tab.nudge i{animation:tabarrow 1.2s ease-in-out infinite}
-@keyframes tabglow{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--mint) 0%,transparent)}50%{box-shadow:0 0 0 4px color-mix(in srgb,var(--mint) 28%,transparent),0 0 16px color-mix(in srgb,var(--mint) 45%,transparent)}}
-@keyframes tabarrow{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
-.tab-hint{position:absolute;right:0;bottom:calc(100% + 5px);font-size:9.5px;letter-spacing:.06em;color:var(--mint);opacity:0;transition:opacity .3s;white-space:nowrap;pointer-events:none}
-.pass-tab.nudge .tab-hint{opacity:.85}
-.pass-tab{position:relative}
-.pass-tab:hover{background:color-mix(in srgb,var(--mint) 22%,transparent)}
+.qr-in{position:absolute;right:-5px;bottom:-5px;width:18px;height:18px;border-radius:4px;background:#0a66c2;color:#fff;display:grid;place-items:center;box-shadow:0 0 0 2px var(--night)}
+.qr-in .in{width:11px;height:11px}
+.li-lab{display:flex;align-items:center;gap:4px;font-size:10.5px;letter-spacing:.04em;line-height:1.2;white-space:nowrap;transition:color .2s}
+.li-lab .in{width:13px;height:13px;color:#4f9be6}
+.pass-li:hover .pass-qr,.pass-li:focus-visible .pass-qr{transform:scale(1.1);box-shadow:0 0 0 2px #0a66c2,0 0 18px rgba(10,102,194,.55)}
+.pass-li:hover .li-lab{color:#fff}
+.pass-mbox{position:relative;display:flex;flex-direction:column;align-items:flex-end}
+.tab-hint{font-size:9.5px;letter-spacing:.06em;color:var(--mint);opacity:.85;margin-bottom:4px;white-space:nowrap}
+.pass-tab{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:9px;border:1px solid var(--mint);background:linear-gradient(180deg,color-mix(in srgb,var(--mint) 32%,transparent),color-mix(in srgb,var(--mint) 18%,transparent));color:#d9fff1;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.14em;cursor:var(--cp,pointer);box-shadow:0 3px 0 color-mix(in srgb,var(--mint) 35%,#06281d),0 6px 14px rgba(0,0,0,.35);transition:transform .15s,box-shadow .15s,background .2s;animation:tabglow 6s ease-in-out infinite}
+.pass-tab:hover{transform:translateY(-2px);box-shadow:0 5px 0 color-mix(in srgb,var(--mint) 35%,#06281d),0 10px 20px rgba(0,0,0,.4),0 0 18px color-mix(in srgb,var(--mint) 45%,transparent)}
+.pass-tab:active{transform:translateY(2px);box-shadow:0 1px 0 color-mix(in srgb,var(--mint) 35%,#06281d)}
+.pass-tab .doc{width:14px;height:14px}
 .pass-tab i{font-style:normal;transition:transform .35s}
+.pass.open .pass-tab{animation:none}
 .pass.open .pass-tab i{transform:rotate(180deg)}
+.pass.open .tab-hint{opacity:0}
+@keyframes tabglow{0%,80%,100%{filter:none}88%{filter:drop-shadow(0 0 8px var(--mint)) brightness(1.15)}}
 .pass-sheet{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s cubic-bezier(.3,.7,.2,1)}
 .pass.open .pass-sheet{grid-template-rows:1fr}
 .pass-sheet-in{overflow:hidden;min-height:0;position:relative}
@@ -298,7 +308,7 @@ body.in-view .view-bg{opacity:1}
 .sm-head{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .sm-head h3{font-family:var(--display);font-size:13px;line-height:1.6}
 .draft-chip{font-size:10px;letter-spacing:.12em;color:var(--ember);border:1px dashed rgba(232,182,76,.6);border-radius:999px;padding:2px 9px;text-transform:uppercase}
-.sm{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:start}
+.sm{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:start}
 .sm-table{--cs:92px;display:grid;grid-template-columns:14px repeat(4,var(--cs)) 4px var(--cs);grid-template-rows:var(--cs) var(--cs) auto;gap:8px}
 .sm-table .gl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--c);writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;align-self:center;opacity:.85}
 .sm-table .gb2{font-size:9px;letter-spacing:.1em;text-transform:uppercase;text-align:center;color:var(--c);border-top:1px solid var(--c);padding-top:5px;line-height:1.3}
@@ -330,7 +340,33 @@ body.in-view .view-bg{opacity:1}
 .t-body{max-width:780px}
 .t-body::after{content:"";display:block;clear:both}
 .t-img{float:right;width:120px;height:90px;object-fit:cover;object-position:50% 30%;border-radius:10px;margin:0 0 8px 16px;border:1px solid var(--line);transition:transform .3s,opacity .23s}
-.t-img:hover{transform:scale(1.8);z-index:3;position:relative;box-shadow:0 20px 40px rgba(0,0,0,.6)}
+.t-img{cursor:zoom-in}
+.t-img:hover{transform:scale(1.6);z-index:3;position:relative;box-shadow:0 20px 40px rgba(0,0,0,.6)}
+.cell .mt{position:absolute;left:8px;top:6px;font-size:8.5px;letter-spacing:.04em;color:color-mix(in srgb,var(--c) 70%,#fff);opacity:.75}
+.cell .prog{position:absolute;left:8px;right:8px;bottom:4px;height:2px;border-radius:2px;background:var(--c);transform:scaleX(0);transform-origin:left;opacity:.9}
+.cell.run .prog{animation:prog var(--dur,6.5s) linear forwards}
+@keyframes prog{to{transform:scaleX(1)}}
+.cell[aria-pressed="true"]{box-shadow:0 0 0 2px var(--c),0 0 26px color-mix(in srgb,var(--c) 55%,transparent);transform:translateY(-3px)}
+.cell.empty[data-tipq]{cursor:help}
+.cell.empty[data-tipq]::after{content:attr(data-tipq);position:absolute;left:50%;top:calc(100% + 6px);transform:translateX(-50%);white-space:nowrap;font-size:10px;color:var(--muted);background:#060a1c;border:1px solid var(--line);padding:3px 8px;border-radius:6px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:5}
+.cell.empty[data-tipq]:hover::after,.cell.empty[data-tipq]:focus::after{opacity:1}
+.cell.empty .nm{font-size:9px;color:var(--muted);font-style:italic}
+.sm-panel:not(.empty){border-color:color-mix(in srgb,var(--c) 55%,var(--line));box-shadow:0 0 0 1px color-mix(in srgb,var(--c) 18%,transparent),0 20px 50px rgba(0,0,0,.35)}
+.sm-nav{display:flex;align-items:center;gap:8px;margin:-4px 0 10px;font-size:11px;color:var(--muted)}
+.sm-arw{background:none;border:1px solid var(--line);color:var(--ink);border-radius:6px;width:24px;height:22px;font-size:9px;cursor:var(--cp,pointer);display:grid;place-items:center;padding:0}
+.sm-arw:hover{border-color:var(--c);color:var(--c)}
+.sm-n{font-family:var(--mono);min-width:38px;text-align:center}
+.sm-dots{display:flex;gap:5px;margin-left:6px}
+.sm-dots button{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:color-mix(in srgb,var(--c) 35%,transparent);cursor:var(--cp,pointer)}
+.sm-dots button.on{background:var(--c);box-shadow:0 0 8px var(--c);width:18px;border-radius:4px}
+.sm-trace{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:0}
+.sm-table,.sm-panel{position:relative;z-index:1}
+.sm-trace path{fill:none}
+.sm-trace .tr-glow{stroke:var(--c);stroke-width:5;opacity:.18;filter:blur(2px)}
+.sm-trace .tr-core{stroke:var(--c);stroke-width:1.5;stroke-dasharray:4 6;animation:trflow 1s linear infinite;opacity:.9}
+.sm-trace circle{fill:var(--c);filter:drop-shadow(0 0 6px var(--c))}
+@keyframes trflow{to{stroke-dashoffset:-20}}
+@media (prefers-reduced-motion:reduce){.sm-trace .tr-core{animation:none}}
 .cell.empty{border-style:dashed;background:none;cursor:var(--cd,default);opacity:.45}
 .cell.empty:hover{transform:none;box-shadow:none}
 .cell.empty .sy{color:var(--muted)}
@@ -376,8 +412,8 @@ body.in-view .view-bg{opacity:1}
 .sm-panel.empty{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center}
 
 /* Journey */
-.stickers{display:flex;flex-wrap:wrap;gap:22px;margin:4px 0 14px;align-items:center}
-.sticker{position:relative;width:96px;height:96px;padding:0;border:0;background:none;cursor:var(--cp,pointer);perspective:500px}
+.stickers{display:flex;flex-wrap:wrap;gap:18px;margin:0 0 10px;align-items:center}
+.sticker{position:relative;width:82px;height:82px;padding:0;border:0;background:none;cursor:var(--cp,pointer);perspective:500px}
 .sticker .s-in{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:0% 50%;transition:transform .2s}
 .sticker .s-rot{position:absolute;inset:0;transform:rotate(var(--rot,0deg));transform-style:preserve-3d}
 .sticker .s-face,.sticker .s-back{position:absolute;inset:0;border-radius:50%;-webkit-backface-visibility:hidden;backface-visibility:hidden;border:3px solid #f4f1ea;display:grid;place-items:center;text-align:center;overflow:hidden}
@@ -393,10 +429,10 @@ body.in-view .view-bg{opacity:1}
 .sticker.off{pointer-events:none}
 .sticker.off .s-in{transform:none}
 .sticker.fly{z-index:60}
-.sticker-note{font-size:11.5px;color:var(--muted);margin:0 0 40px}
-.timeline{display:flex;flex-direction:column}
-.t-item{display:grid;grid-template-columns:150px 1px 1fr;gap:0 28px;padding-bottom:40px}
-.t-year{font-size:12px;letter-spacing:.1em;color:var(--muted);text-align:right;padding-top:4px}
+.sticker-note{font-size:11.5px;color:var(--muted);margin:0 0 22px}
+.timeline{display:flex;flex-direction:column;position:relative}
+.t-item{display:grid;grid-template-columns:170px 1px 1fr;gap:0 28px;padding-bottom:28px}
+.t-year{font-size:12px;letter-spacing:.06em;color:var(--muted);text-align:right;padding-top:4px;white-space:nowrap}
 .t-line{background:var(--line);position:relative}
 .t-line::before{content:"";position:absolute;top:8px;left:-5px;width:11px;height:11px;border-radius:50%;background:var(--void);border:2px solid var(--signal)}
 .t-item.hl .t-line::before{border-color:var(--ember);background:var(--ember);box-shadow:0 0 12px var(--ember)}
@@ -407,6 +443,19 @@ body.in-view .view-bg{opacity:1}
 .t-act a.chip-btn{text-decoration:none}
 .t-act a.chip-btn.ext{border-color:color-mix(in srgb,var(--ember) 45%,var(--line));color:color-mix(in srgb,var(--ember) 70%,#fff)}
 @media (max-width:760px){.timeline.focus .t-item.on .t-img{transform:scale(1.3)}.timeline.focus .t-img{transform-origin:100% 0}.timeline.focus .t-item.on .t-body p{transform:none}}
+/* reveal: each moment fades in once; a gold line fills down the timeline as you scroll */
+.timeline.reveal .t-item,.timeline.reveal .t-stage{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.timeline.reveal .t-item.in,.timeline.reveal .t-stage.in{opacity:1;transform:none}
+.tl-fill{position:absolute;top:0;width:1px;height:0;background:linear-gradient(180deg,rgba(232,182,76,.2),var(--ember));box-shadow:0 0 8px var(--ember);pointer-events:none;transition:height .12s linear}
+.tl-fill::after{content:"";position:absolute;bottom:-4px;left:-3px;width:7px;height:7px;border-radius:50%;background:#fff3cf;box-shadow:0 0 10px var(--ember),0 0 3px #fff}
+.t-item.past .t-line::before{border-color:var(--ember)}
+.t-item.past .t-year{color:#d9c28a}
+.t-stage{display:grid;grid-template-columns:170px 1px 1fr;gap:0 28px;padding:6px 0 18px}
+.t-stage .nod::before{display:none}
+.t-stage span{grid-column:3;font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--signal);display:flex;align-items:center;gap:10px}
+.t-stage span::after{content:"";flex:1;max-width:260px;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.t-stage:not(.first){padding-top:12px}
+@media (max-width:760px){.t-stage{grid-template-columns:1px 1fr;gap:0 18px}.t-stage i{display:none}.t-stage b{grid-column:1}.t-stage span{grid-column:2}}
 /* scroll focus: the moment in the middle of the screen comes forward, the rest steps back a little */
 .timeline.focus .t-item{transition:opacity .45s}
 .timeline.focus .t-item:not(.on){opacity:.5}
@@ -668,7 +717,7 @@ body.in-view .view-bg{opacity:1}
   <div class="tip" id="tip"></div>
   <div class="portal" id="portal" aria-hidden="true"><div class="ring"><canvas id="portalC" width="360" height="360"></canvas></div><div class="pl" id="portalL"></div></div>
   <div class="hint" id="hint" data-i18n="home.hint">scroll ↕ or use the arrows to travel</div>
-  <div class="travel"><button class="arw" type="button" id="uniPrev" aria-label="Previous stop">←</button><div class="dots" id="dots"></div><button class="arw" type="button" id="uniNext" aria-label="Next stop">→</button></div>
+  <div class="travel"><span class="nl prev" id="nlPrev" aria-hidden="true"></span><button class="arw" type="button" id="uniPrev" aria-label="Previous stop">←</button><div class="dots" id="dots"></div><button class="arw" type="button" id="uniNext" aria-label="Next stop">→</button><span class="nl next" id="nlNext" aria-hidden="true"></span></div>
 </div>
 
 <!-- ================= SUB-PAGES ================= -->
@@ -694,8 +743,11 @@ body.in-view .view-bg{opacity:1}
           <figure class="pass-photo"><img src="assets/story/perfil-3x4.webp" alt="Daniel Vaca" width="480" height="640" loading="lazy"><i class="hud tl"></i><i class="hud tr"></i><i class="hud bl"></i><i class="hud br"></i></figure>
           <h3 class="pass-name">DANIEL VACA</h3>
           <p class="pass-role" data-i18n="about.passrole">Computer Engineering · UEES → Universidad de Oviedo</p>
-          <footer class="pass-foot"><a href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener" class="pass-qr" aria-label="LinkedIn"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="qr" aria-hidden="true"><path stroke="#0b1230" d="M0 0.5h7m2 0h3m4 0h1m1 0h4m1 0h1m2 0h7m-33 1h1m5 0h1m2 0h4m2 0h1m2 0h1m5 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h2m2 0h4m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m1 0h4m1 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h1m3 0h1m2 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h5m2 0h4m1 0h2m4 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m5 0h2m3 0h1m1 0h2m1 0h1m-25 1h1m1 0h5m3 0h2m1 0h2m2 0h1m4 0h1m1 0h1m1 0h5m-31 1h1m1 0h1m4 0h1m2 0h2m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h1m4 0h3m3 0h6m1 0h1m2 0h2m1 0h1m3 0h1m1 0h2m-31 1h2m1 0h2m2 0h6m2 0h1m2 0h3m1 0h1m1 0h1m2 0h4m-29 1h2m1 0h1m2 0h3m2 0h1m1 0h5m1 0h3m2 0h3m1 0h1m-31 1h3m3 0h2m2 0h3m3 0h1m1 0h1m3 0h1m2 0h1m2 0h1m1 0h2m-33 1h2m4 0h1m1 0h5m1 0h4m2 0h1m1 0h1m1 0h3m1 0h1m1 0h2m-32 1h3m1 0h1m2 0h2m4 0h1m6 0h2m3 0h3m2 0h1m-30 1h1m1 0h1m1 0h2m1 0h2m2 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-31 1h2m3 0h2m1 0h2m6 0h4m1 0h5m1 0h2m1 0h1m-32 1h2m3 0h4m1 0h2m1 0h2m4 0h3m2 0h4m1 0h2m-32 1h2m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m1 0h1m4 0h3m1 0h1m1 0h5m-31 1h2m3 0h2m2 0h2m1 0h2m1 0h2m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-33 1h1m4 0h1m1 0h3m1 0h2m4 0h3m3 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h4m1 0h3m3 0h3m3 0h1m4 0h1m3 0h3m-32 1h1m1 0h1m5 0h1m4 0h2m6 0h2m2 0h3m1 0h2m-31 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h3m2 0h1m1 0h6m1 0h2m-25 1h2m1 0h1m1 0h2m1 0h1m1 0h4m1 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h2m1 0h2m1 0h4m3 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h5m1 0h2m2 0h1m1 0h5m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m1 0h3m3 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h5m1 0h1m2 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h8m-28 1h1m5 0h1m2 0h1m6 0h1m3 0h3m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h1m2 0h2m1 0h1m4 0h3m1 0h2m3 0h1"/></svg></a><span class="pass-bar" aria-hidden="true"></span><button type="button" class="pass-tab" aria-expanded="false" aria-controls="passSheet"><span class="tab-hint" data-i18n="about.passhint">click to open</span><span data-i18n="about.passmission">MISSION</span> <i aria-hidden="true">▾</i></button></footer>
-          <div class="pass-sheet" id="passSheet"><div class="pass-sheet-in"><span class="pass-k">MISSION</span><p class="mis" data-i18n="about.mission">Inspire a passion for physics, science and technology in more students across Latin America. Show how wonderful it can be to follow your curiosity and go all in on learning.</p><span class="pass-scan" data-i18n="about.passscan">scan · LinkedIn</span></div></div>
+          <footer class="pass-foot">
+            <a href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener" class="pass-li" aria-label="LinkedIn"><span class="pass-qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="qr" aria-hidden="true"><path stroke="#0b1230" d="M0 0.5h7m2 0h3m4 0h1m1 0h4m1 0h1m2 0h7m-33 1h1m5 0h1m2 0h4m2 0h1m2 0h1m5 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h2m2 0h4m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m1 0h4m1 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h1m3 0h1m2 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h5m2 0h4m1 0h2m4 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m5 0h2m3 0h1m1 0h2m1 0h1m-25 1h1m1 0h5m3 0h2m1 0h2m2 0h1m4 0h1m1 0h1m1 0h5m-31 1h1m1 0h1m4 0h1m2 0h2m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h1m4 0h3m3 0h6m1 0h1m2 0h2m1 0h1m3 0h1m1 0h2m-31 1h2m1 0h2m2 0h6m2 0h1m2 0h3m1 0h1m1 0h1m2 0h4m-29 1h2m1 0h1m2 0h3m2 0h1m1 0h5m1 0h3m2 0h3m1 0h1m-31 1h3m3 0h2m2 0h3m3 0h1m1 0h1m3 0h1m2 0h1m2 0h1m1 0h2m-33 1h2m4 0h1m1 0h5m1 0h4m2 0h1m1 0h1m1 0h3m1 0h1m1 0h2m-32 1h3m1 0h1m2 0h2m4 0h1m6 0h2m3 0h3m2 0h1m-30 1h1m1 0h1m1 0h2m1 0h2m2 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-31 1h2m3 0h2m1 0h2m6 0h4m1 0h5m1 0h2m1 0h1m-32 1h2m3 0h4m1 0h2m1 0h2m4 0h3m2 0h4m1 0h2m-32 1h2m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m1 0h1m4 0h3m1 0h1m1 0h5m-31 1h2m3 0h2m2 0h2m1 0h2m1 0h2m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-33 1h1m4 0h1m1 0h3m1 0h2m4 0h3m3 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h4m1 0h3m3 0h3m3 0h1m4 0h1m3 0h3m-32 1h1m1 0h1m5 0h1m4 0h2m6 0h2m2 0h3m1 0h2m-31 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h3m2 0h1m1 0h6m1 0h2m-25 1h2m1 0h1m1 0h2m1 0h1m1 0h4m1 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h2m1 0h2m1 0h4m3 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h5m1 0h2m2 0h1m1 0h5m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m1 0h3m3 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h5m1 0h1m2 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h8m-28 1h1m5 0h1m2 0h1m6 0h1m3 0h3m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h1m2 0h2m1 0h1m4 0h3m1 0h2m3 0h1"/></svg><b class="qr-in"><svg class="in" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></b></span><span class="li-lab"><svg class="in" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg><span data-i18n="about.passli">LinkedIn ↗</span></span></a>
+            <div class="pass-mbox"><span class="tab-hint" data-i18n="about.passhint">tap to read</span><button type="button" class="pass-tab" aria-expanded="false" aria-controls="passSheet"><svg class="doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg><span data-i18n="about.passmission">MISSION</span> <i aria-hidden="true">▾</i></button></div>
+          </footer>
+          <div class="pass-sheet" id="passSheet"><div class="pass-sheet-in"><span class="pass-k">MISSION</span><p class="mis" data-i18n="about.mission">Inspire a passion for physics, science and technology in more students across Latin America. Show how wonderful it can be to follow your curiosity and go all in on learning.</p></div></div>
           <span class="pass-shine" aria-hidden="true"></span>
         </article>
       </div>

@@ -28,7 +28,7 @@ const ES = {
   "work.title": "Cosas que he <em>construido</em>",
   "about.title": "Cómo la física me <em>encontró</em>",
   "about.p": "Estudio <strong>ingeniería en computación</strong> en Guayaquil, Ecuador. Desde pequeño siempre fui apasionado por la tecnología y la ciencia, en especial por la física. No pudiendo estudiar física a nivel universitario, la busqué por mi cuenta mediante libros, videos y aprovechando cualquier oportunidad para aprender más. Fui parte del club de física de mi colegio, donde obtuve <strong>2 medallas en olimpiadas nacionales de física</strong> (bronce 2022 y plata 2023).<br><br>Luego, al entrar a la universidad, he fungido como <strong>ayudante de cátedra de Física y Matemáticas</strong>, y dando clases he ayudado a decenas de estudiantes, manteniendo viva mi pasión por enseñar y aprender más. Durante mi intercambio en la <strong>Universidad de Oviedo</strong> he aprendido física desde un lado más académico, y descubrí cómo mi carrera, la ciencia de datos y la física de partículas se pueden complementar entre sí.",
-  "about.pass": "PASE DE ACCESO", "about.passrole": "Ingeniería en Computación · UEES → Universidad de Oviedo", "about.passscan": "escanea · LinkedIn", "about.passmission": "MISIÓN", "about.passhint": "clic para abrir",
+  "about.pass": "PASE DE ACCESO", "about.passrole": "Ingeniería en Computación · UEES → Universidad de Oviedo", "about.passscan": "escanea · LinkedIn", "about.passmission": "MISIÓN", "about.passhint": "toca para leer", "about.passli": "LinkedIn ↗",
   "about.mission": "Inspirar la pasión por la física, la ciencia y la tecnología a más estudiantes en Latinoamérica. Mostrar lo maravilloso que puede ser dejarse llevar por la curiosidad y arriesgarse con todo a aprender.",
   "about.smtitle": "El modelo estándar de mi historia", "about.draftchip": "borrador · textos por escribir",
   "journey.title": "Dónde he <em>estado</em>", "journey.peel": "psst: haz clic en una pegatina",
@@ -42,17 +42,17 @@ const UI = {
         company: "This code was built for a company, so I can't share it.", teamnote: "The repository belongs to the competition organisation.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
         soundOn: "Sound on", soundOff: "Sound off", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · Spain" }, view: "View",
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
-        enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored",
+        enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored", deeper: "deeper →", backStart: "back to start ↺",
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
-        aboutP: "About me", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
+        aboutP: "About me", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
   es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", figma: "Prototipo en Figma", video: "Video de presentación",
         company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
         soundOn: "Sonido activado", soundOff: "Sonido apagado", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · España" }, view: "Ver",
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
-        enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar",
+        enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar", deeper: "más profundo →", backStart: "volver al inicio ↺",
         smEmpty: "Haz clic en una partícula para leer esa parte de la historia.", smPhrase: "Frase corta por escribir aquí.", smFuture: "Espacio para lo que viene.",
-        aboutP: "Sobre mí", projOne: "proyecto", projMany: "proyectos", techHint: "psst: haz clic en cualquier tecnología para ver los proyectos donde la usé ↗", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
+        aboutP: "Sobre mí", smWip: "en proceso…", smPred: "Predicha, aún no observada.", stUni: "Universidad", stSchool: "Colegio", projOne: "proyecto", projMany: "proyectos", techHint: "psst: haz clic en cualquier tecnología para ver los proyectos donde la usé ↗", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
         nextK: "Siguiente parada", travel: "Viajar allí →", nextSolar: "Sistema Solar · sobre mí", nextEarth: "Tierra · mi trayectoria", nextSat: "El satélite · arcade", nextBh: "Volver al agujero negro", journeyP: "Mi trayectoria", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "yo", satellite: "Arcade" }
 };
 const T = () => UI[LANG];
@@ -201,6 +201,8 @@ function enterView(v, sub) {
   Game.setVis(v === "arcade");
   renderNav(); Sound.open();
   setTimeout(() => { const h = $("h2", el); h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }, 50);
+  if (v === "about") [350, 900].forEach(t => setTimeout(() => { StoryTrace.draw(); StoryTour.kick(); }, t));
+  if (v === "journey") [120, 700, 1300].forEach(t => setTimeout(() => TimelineReveal.on && TimelineReveal.on(), t));
 }
 function enterHome() {
   if (CURVIEW) { $("#v-" + CURVIEW).classList.remove("on"); CURVIEW = null; document.body.classList.remove("in-view"); Uni.zoomOut(); Sound.open(); }
@@ -293,26 +295,47 @@ function stepModal(d) { MODAL_I = (MODAL_I + d + MODAL_LIST.length) % MODAL_LIST
 
 /* ===================== ABOUT: the standard model of my story ===================== */
 let SM_SEL = null;
+const CHAPTERS = ["tc", "cp", "gy", "ta", "pr", "co", "ov", "h"];
 function renderStory() {
   const G = STORY_GROUPS;
+  if (!SM_SEL) SM_SEL = CHAPTERS[0];
   let h = `<span class="gl" style="--c:${G.q.c};grid-row:1;grid-column:1">${esc(L(G.q))}</span><span class="gl" style="--c:${G.l.c};grid-row:2;grid-column:1">${esc(L(G.l))}</span>`;
   h += STORY.map(s => {
     const pos = s.g === "h" ? "grid-row:1/3;grid-column:7" : `grid-row:${s.row};grid-column:${s.col}`;
-    if (s.empty) return `<div class="cell empty" style="--c:${G[s.g].c};${pos}" aria-hidden="true"><span class="yr">20··</span><span class="sy">?</span><span class="nm">…</span></div>`;
-    return `<button type="button" class="cell${s.g === "h" ? " higgs" : ""}" data-s="${s.id}" style="--c:${G[s.g].c};${pos}" aria-pressed="${SM_SEL === s.id}"><span class="yr">${esc(s.yr)}</span><span class="sy">${esc(s.sy)}</span><span class="nm">${esc(L(s.n))}</span></button>`;
+    if (s.empty) return `<div class="cell empty" style="--c:${G[s.g].c};${pos}" tabindex="0" data-tipq="${esc(T().smPred)}"><span class="yr">20··</span><span class="sy">?</span><span class="nm">${esc(T().smWip)}</span></div>`;
+    return `<button type="button" class="cell${s.g === "h" ? " higgs" : ""}" data-s="${s.id}" style="--c:${G[s.g].c};${pos}" aria-pressed="${SM_SEL === s.id}">${s.mt ? `<span class="mt">${esc(L(s.mt))}</span>` : ""}<span class="yr">${esc(s.yr)}</span><span class="sy">${esc(s.sy)}</span><span class="nm">${esc(L(s.n))}</span><i class="prog" aria-hidden="true"></i></button>`;
   }).join("");
   h += `<span class="gb2" style="grid-row:3;grid-column:5;--c:${G.b.c}">${esc(L(G.b))}</span><span class="gb2" style="grid-row:3;grid-column:7;--c:${G.h.c}">${esc(L(G.h))}</span>`;
   $("#smTable").innerHTML = h;
-  $$("#smTable [data-s]").forEach(b => { b.onclick = () => { SM_SEL = b.dataset.s; Sound.click(); renderStory(); }; b.onmouseenter = () => Sound.hover(); });
-  const p = $("#smPanel"), s = STORY.find(x => x.id === SM_SEL);
-  if (!s) { p.className = "sm-panel empty"; p.innerHTML = esc(T().smEmpty); return; }
-  p.className = "sm-panel"; p.style.setProperty("--c", G[s.g].c);
+  $$("#smTable [data-s]").forEach(b => {
+    b.onclick = () => { StoryTour.stop(); SM_SEL = b.dataset.s; Sound.click(); showStory(SM_SEL); };
+    b.onmouseenter = () => {
+      Sound.hover(); if (!FINE) return; clearTimeout(StoryTour.hv);
+      StoryTour.hv = setTimeout(() => { StoryTour.pause(); if (b.dataset.s !== StoryTour.cur) showStory(b.dataset.s, true); }, 120);
+    };
+    b.onmouseleave = () => clearTimeout(StoryTour.hv);
+  });
+  showStory(SM_SEL);
+  StoryTour.watch();
+}
+/* Show one particle in the panel (hover = preview, otherwise also the selection) */
+function showStory(id, preview) {
+  const G = STORY_GROUPS, p = $("#smPanel"), s = STORY.find(x => x.id === id);
+  if (!s) return;
+  StoryTour.cur = id;
+  $$("#smTable [data-s]").forEach(b => { b.setAttribute("aria-pressed", b.dataset.s === id); b.classList.remove("run"); });
+  p.className = "sm-panel"; p.style.setProperty("--c", G[s.g].c); $(".sm").style.setProperty("--c", G[s.g].c);
+  const k = CHAPTERS.indexOf(id);
+  const nav = `<nav class="sm-nav" aria-label="chapters"><button type="button" class="sm-arw" data-d="-1" aria-label="previous">◀</button><span class="sm-n">${k + 1} / ${CHAPTERS.length}</span><button type="button" class="sm-arw" data-d="1" aria-label="next">▶</button><span class="sm-dots">${CHAPTERS.map((c, j) => `<button type="button" data-c="${c}" style="--c:${G[STORY.find(x => x.id === c).g].c}" aria-label="${esc(STORY.find(x => x.id === c).sy)}"${j === k ? ' class="on"' : ""}></button>`).join("")}</span></nav>`;
   const paras = s.tech ? techPanel() : s.phrase ? richText(L(s.phrase)) : `<p class="draft">${esc(T().smPhrase)}</p>`;
   const items = (s.imgs || []).map(x => typeof x === "string" ? { u: x } : x);
   const media = s.tech ? "" : items.length ? `<div class="ph has"><img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="thumbs">${items.map((it, k) => `<button type="button" data-k="${k}"${it.page ? ' class="pg"' : ""} aria-pressed="${!k}" aria-label="${k + 1}/${items.length}"><img src="${it.u}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}</div>` : `<div class="ph sym" aria-hidden="true">${esc(s.sy)}</div>`;
   const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(L(s.link.t))}</a>` : "";
   p.classList.toggle("tech", !!s.tech);
-  p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
+  p.innerHTML = `${media}<div>${nav}<h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
+  $$(".sm-arw", p).forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = CHAPTERS[(k + +b.dataset.d + CHAPTERS.length) % CHAPTERS.length]; showStory(SM_SEL); });
+  $$(".sm-dots button", p).forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = b.dataset.c; showStory(SM_SEL); });
+  StoryTrace.draw();
   if (s.tech) {
     $$("[data-q]", p).forEach(b => b.onclick = () => {
       Sound.click(); const u = TECH_URL[b.dataset.q.toLowerCase()];
@@ -330,6 +353,45 @@ function renderStory() {
   main.onclick = () => lightbox(main.src);
 }
 
+/* The table tells itself: every ~6.5 s it moves to the next chapter, with a progress bar on the active particle.
+   Pauses while the pointer is over the table or panel, stops for good after a click; only runs while on screen. */
+const StoryTour = {
+  every: 6500, on: false, stopped: false, vis: false, paused: false,
+  watch() {
+    if (REDUCED || this.stopped) return;
+    const sm = $(".sm"); if (!sm || this.io) { this.kick(); return; }
+    this.io = new IntersectionObserver(es => es.forEach(e => { this.vis = e.isIntersecting; this.kick(); }), { threshold: .35 });
+    this.io.observe(sm);
+    sm.addEventListener("pointerenter", () => this.pause());
+    sm.addEventListener("pointerleave", () => { this.paused = false; this.kick(); });
+    document.addEventListener("visibilitychange", () => this.kick());
+  },
+  pause() { this.paused = true; clearTimeout(this.t); const c = $(`#smTable [data-s="${this.cur}"]`); if (c) c.classList.remove("run"); },
+  stop() { this.stopped = true; this.pause(); },
+  kick() {
+    clearTimeout(this.t);
+    const c = $(`#smTable [data-s="${this.cur}"]`);
+    if (c) c.classList.remove("run");
+    if (this.stopped || this.paused || !this.vis || document.hidden || CURVIEW !== "about") return;
+    if (c) { void c.offsetWidth; c.style.setProperty("--dur", this.every + "ms"); c.classList.add("run"); }
+    this.t = setTimeout(() => { const k = CHAPTERS.indexOf(this.cur); SM_SEL = CHAPTERS[(k + 1) % CHAPTERS.length]; showStory(SM_SEL); this.kick(); }, this.every);
+  }
+};
+/* A glowing particle track from the active cell to the panel */
+const StoryTrace = {
+  draw() {
+    const sm = $(".sm"), cell = $(`#smTable [data-s="${StoryTour.cur}"]`), p = $("#smPanel"); if (!sm || !cell || !p) return;
+    let svg = $(".sm-trace", sm);
+    if (!svg) { svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("class", "sm-trace"); svg.setAttribute("aria-hidden", "true"); svg.innerHTML = '<path class="tr-glow"/><path class="tr-core"/><circle r="3"/>'; sm.appendChild(svg); addEventListener("resize", () => this.draw()); }
+    const R = sm.getBoundingClientRect(), c = cell.getBoundingClientRect(), q = p.getBoundingClientRect();
+    svg.setAttribute("width", R.width); svg.setAttribute("height", R.height);
+    let d, x1, y1;
+    if (q.left > c.right) { const x0 = c.right - R.left, y0 = c.top + c.height / 2 - R.top; x1 = q.left - R.left; y1 = Math.min(Math.max(y0, q.top - R.top + 28), q.bottom - R.top - 28); const mx = (x0 + x1) / 2; d = `M${x0},${y0} C${mx},${y0} ${mx},${y1} ${x1},${y1}`; }
+    else { const x0 = c.left + c.width / 2 - R.left, y0 = c.bottom - R.top; x1 = Math.min(Math.max(x0, q.left - R.left + 28), q.right - R.left - 28); y1 = q.top - R.top; const my = (y0 + y1) / 2; d = `M${x0},${y0} C${x0},${my} ${x1},${my} ${x1},${y1}`; }
+    $$("path", svg).forEach(e => { e.setAttribute("d", d); e.style.animation = "none"; void e.getBBox; e.style.animation = ""; });
+    const dot = $("circle", svg); dot.setAttribute("cx", x1); dot.setAttribute("cy", y1);
+  }
+};
 /* Story text: blank line = new paragraph, **x** = highlighted in the particle colour,
    a paragraph that starts with "> " is a quote (its "— author" line becomes the citation) */
 function richText(t) {
@@ -412,10 +474,34 @@ const Pass = {
   init() {
     const p = $(".pass"), tab = $(".pass-tab"); if (!p || !tab) return;
     this.p = p; this.tab = tab;
-    if (!store.get("dv_pass_open", false)) tab.classList.add("nudge");
-    tab.onclick = () => { tab.classList.remove("nudge"); store.set("dv_pass_open", true); this.set(!p.classList.contains("open")); Sound.click(); };
+    tab.onclick = () => { this.set(!p.classList.contains("open")); Sound.click(); };
   },
   set(open) { this.p.classList.toggle("open", open); this.tab.setAttribute("aria-expanded", open); }
+};
+/* Journey effect: "reveal" (each moment fades in once + the line fills with gold as you scroll) or the older "focus" */
+const TL_MODE = "reveal";
+const TimelineReveal = {
+  watch() {
+    const tl = $("#timeline"), items = $$(".t-item, .t-stage", tl), sc = $("#v-journey"), fill = $(".tl-fill", tl);
+    if (this.io) this.io.disconnect();
+    tl.classList.add("reveal");
+    if (REDUCED || !("IntersectionObserver" in window)) { items.forEach(el => el.classList.add("in")); }
+    else {
+      this.io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); this.io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
+      items.forEach(el => this.io.observe(el));
+    }
+    const dots = $$(".t-item", tl);
+    const upd = () => {
+      this.raf = 0; const line = $(".t-line", tl); if (!line || !fill) return;
+      const r = tl.getBoundingClientRect(), x = line.getBoundingClientRect().left - r.left;
+      const target = innerHeight * .62 - r.top, h = clamp(target, 0, r.height - 30);
+      fill.style.left = x + "px"; fill.style.height = h + "px";
+      dots.forEach(d => d.classList.toggle("past", d.offsetTop + 12 <= h));
+    };
+    const on = () => { if (!this.raf) this.raf = requestAnimationFrame(upd); };
+    if (sc && !sc._tlScroll) { sc._tlScroll = true; sc.addEventListener("scroll", on, { passive: true }); addEventListener("resize", on); }
+    this.on = on; [50, 500, 1100].forEach(t => setTimeout(on, t));
+  }
 };
 /* Journey: the moment closest to the middle of the screen comes forward as you scroll */
 const TimelineFocus = {
@@ -505,15 +591,18 @@ async function peelSticker(s) {
   s.classList.remove("off", "fly");
 }
 function renderTimeline() {
-  $("#timeline").innerHTML = TIMELINE.map(it => {
+  let seenSchool = false;
+  $("#timeline").innerHTML = `<div class="t-stage first"><i></i><b></b><span>${esc(T().stUni)}</span></div>` + TIMELINE.map(it => {
     const action = (it.open ? `<button class="chip-btn" data-open="${it.open}">${T().view} ↗</button>` : it.filter ? `<button class="chip-btn" data-filter="${it.filter}">${T().view} ↗</button>` : "")
       + (it.links || []).map(l => `<a class="chip-btn ext" href="${l.u}" target="_blank" rel="noopener">${esc(L(l.t))} ↗</a>`).join("");
     const text = it.draft ? L(it.text).replace(/(DRAFT|BORRADOR) · Daniel:\s*/, "") : L(it.text);
-    return `<div class="t-item${it.hl ? " hl" : ""}"><div class="t-year">${esc(L(it.when))}</div><div class="t-line"></div>
+    const stage = it.stage === "school" && !seenSchool ? (seenSchool = true, `<div class="t-stage"><i></i><b class="t-line nod"></b><span>${esc(T().stSchool)}</span></div>`) : "";
+    return `${stage}<div class="t-item${it.hl ? " hl" : ""}"><div class="t-year">${esc(L(it.when))}</div><div class="t-line"></div>
       <div class="t-body">${it.imgs || it.img ? `<img class="t-img" src="${(it.imgs || [it.img])[0]}" alt="" loading="lazy">` : ""}<h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
       <p${it.draft ? ' class="draft"' : ""}>${esc(text)}</p>${action ? `<div class="t-act">${action}</div>` : ""}</div></div>`;
-  }).join("");
-  TimelineFocus.watch();
+  }).join("") + `<div class="tl-fill" aria-hidden="true"></div>`;
+  if (TL_MODE === "focus") TimelineFocus.watch(); else TimelineReveal.watch();
+  $$("#timeline .t-img").forEach(im => im.onclick = () => lightbox(im.src));
   $$("#timeline .t-img").forEach((im, i) => {
     const it = TIMELINE.filter(x => x.imgs || x.img)[i], list = it.imgs || [it.img];
     if (list.length > 1) Rot.make(im, list.length, k => swapImg(im, list[k]));
