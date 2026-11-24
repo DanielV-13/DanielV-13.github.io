@@ -44,7 +44,7 @@ const UI = {
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
         enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored", deeper: "deeper →", backStart: "back to start ↺",
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
-        aboutP: "About me", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
+        aboutP: "About me", readMore: "Read more", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
   es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", figma: "Prototipo en Figma", video: "Video de presentación",
         company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
@@ -52,7 +52,7 @@ const UI = {
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
         enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar", deeper: "más profundo →", backStart: "volver al inicio ↺",
         smEmpty: "Haz clic en una partícula para leer esa parte de la historia.", smPhrase: "Frase corta por escribir aquí.", smFuture: "Espacio para lo que viene.",
-        aboutP: "Sobre mí", smWip: "en proceso…", smPred: "Predicha, aún no observada.", stUni: "Universidad", stSchool: "Colegio", projOne: "proyecto", projMany: "proyectos", techHint: "psst: haz clic en cualquier tecnología para ver los proyectos donde la usé ↗", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
+        aboutP: "Sobre mí", readMore: "Leer más", smWip: "en proceso…", smPred: "Predicha, aún no observada.", stUni: "Universidad", stSchool: "Colegio", projOne: "proyecto", projMany: "proyectos", techHint: "psst: haz clic en cualquier tecnología para ver los proyectos donde la usé ↗", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
         nextK: "Siguiente parada", travel: "Viajar allí →", nextSolar: "Sistema Solar · sobre mí", nextEarth: "Tierra · mi trayectoria", nextSat: "El satélite · arcade", nextBh: "Volver al agujero negro", journeyP: "Mi trayectoria", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "yo", satellite: "Arcade" }
 };
 const T = () => UI[LANG];
@@ -201,7 +201,7 @@ function enterView(v, sub) {
   Game.setVis(v === "arcade");
   renderNav(); Sound.open();
   setTimeout(() => { const h = $("h2", el); h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }, 50);
-  if (v === "about") [350, 900].forEach(t => setTimeout(() => { StoryTrace.draw(); StoryTour.kick(); }, t));
+  if (v === "about") [350, 900].forEach(t => setTimeout(() => { placeNotch(); StoryTour.kick(); }, t));
   if (v === "journey") [120, 700, 1300].forEach(t => setTimeout(() => TimelineReveal.on && TimelineReveal.on(), t));
 }
 function enterHome() {
@@ -318,7 +318,8 @@ function renderStory() {
   showStory(SM_SEL);
   StoryTour.watch();
 }
-/* Show one particle in the panel (hover = preview, otherwise also the selection) */
+/* Show one particle in the panel (hover = preview, otherwise also the selection).
+   The panel is an "event card": big photo on one half, then a short hook, then the story (the rest behind "read more"). */
 function showStory(id, preview) {
   const G = STORY_GROUPS, p = $("#smPanel"), s = STORY.find(x => x.id === id);
   if (!s) return;
@@ -326,33 +327,46 @@ function showStory(id, preview) {
   $$("#smTable [data-s]").forEach(b => { b.setAttribute("aria-pressed", b.dataset.s === id); b.classList.remove("run"); });
   p.className = "sm-panel"; p.style.setProperty("--c", G[s.g].c); $(".sm").style.setProperty("--c", G[s.g].c);
   const k = CHAPTERS.indexOf(id);
-  const nav = `<nav class="sm-nav" aria-label="chapters"><button type="button" class="sm-arw" data-d="-1" aria-label="previous">◀</button><span class="sm-n">${k + 1} / ${CHAPTERS.length}</span><button type="button" class="sm-arw" data-d="1" aria-label="next">▶</button><span class="sm-dots">${CHAPTERS.map((c, j) => `<button type="button" data-c="${c}" style="--c:${G[STORY.find(x => x.id === c).g].c}" aria-label="${esc(STORY.find(x => x.id === c).sy)}"${j === k ? ' class="on"' : ""}></button>`).join("")}</span></nav>`;
-  const paras = s.tech ? techPanel() : s.phrase ? richText(L(s.phrase)) : `<p class="draft">${esc(T().smPhrase)}</p>`;
-  const items = (s.imgs || []).map(x => typeof x === "string" ? { u: x } : x);
-  const media = s.tech ? "" : items.length ? `<div class="ph has"><img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="thumbs">${items.map((it, k) => `<button type="button" data-k="${k}"${it.page ? ' class="pg"' : ""} aria-pressed="${!k}" aria-label="${k + 1}/${items.length}"><img src="${it.u}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}</div>` : `<div class="ph sym" aria-hidden="true">${esc(s.sy)}</div>`;
-  const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(L(s.link.t))}</a>` : "";
-  p.classList.toggle("tech", !!s.tech);
-  p.innerHTML = `${media}<div>${nav}<h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
-  $$(".sm-arw", p).forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = CHAPTERS[(k + +b.dataset.d + CHAPTERS.length) % CHAPTERS.length]; showStory(SM_SEL); });
-  $$(".sm-dots button", p).forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = b.dataset.c; showStory(SM_SEL); });
-  StoryTrace.draw();
+  $("#smNav").innerHTML = `<button type="button" class="sm-arw" data-d="-1" aria-label="previous">◀</button><span class="sm-n">${k + 1} / ${CHAPTERS.length}</span><button type="button" class="sm-arw" data-d="1" aria-label="next">▶</button><span class="sm-dots">${CHAPTERS.map((c, j) => `<button type="button" data-c="${c}" style="--c:${G[STORY.find(x => x.id === c).g].c}" aria-label="${esc(STORY.find(x => x.id === c).sy)}"${j === k ? ' class="on"' : ""}></button>`).join("")}</span>`;
+  $$("#smNav .sm-arw").forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = CHAPTERS[(k + +b.dataset.d + CHAPTERS.length) % CHAPTERS.length]; showStory(SM_SEL); });
+  $$("#smNav .sm-dots button").forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = b.dataset.c; showStory(SM_SEL); });
+  const notch = `<i class="notch" aria-hidden="true"></i>`;
   if (s.tech) {
+    p.classList.add("tech");
+    p.innerHTML = `${notch}<div><h4 class="th"><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${techPanel()}</div>`;
     $$("[data-q]", p).forEach(b => b.onclick = () => {
       Sound.click(); const u = TECH_URL[b.dataset.q.toLowerCase()];
       if (u) { window.open(u, "_blank", "noopener"); return; }
       location.hash = "work"; setTimeout(() => techFilter(b.dataset.q), 450);
     });
     if (!store.get("dv_tech_hint", false)) { store.set("dv_tech_hint", true); const c = $(".tch", p); if (c) c.classList.add("hint"); }
-    return;
+    placeNotch(); return;
   }
+  const items = (s.imgs || []).map(x => typeof x === "string" ? { u: x } : x);
+  const hud = `<i class="hud tl"></i><i class="hud tr"></i><i class="hud bl"></i><i class="hud br"></i>`;
+  const media = items.length
+    ? `<div class="ev">${hud}<img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="pdots">${items.map((it, j) => `<button type="button" data-k="${j}" aria-pressed="${!j}" aria-label="${j + 1}/${items.length}"></button>`).join("")}</div>` : ""}</div>`
+    : `<div class="ev sym" aria-hidden="true">${hud}<b>${esc(s.sy)}</b></div>`;
+  const blocks = s.phrase ? L(s.phrase).split("\n\n") : [];
+  const first = blocks.length ? richText(blocks[0]) : "", rest = blocks.slice(1).join("\n\n");
+  const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(L(s.link.t))}</a>` : "";
+  p.innerHTML = `${notch}${media}<div class="txt"><h4>${esc(s.sy)} · ${esc(L(s.t))}</h4>${s.hook ? `<p class="hook">${esc(L(s.hook))}</p>` : ""}${first}${rest ? `<div class="more"><div>${richText(rest)}</div></div><button type="button" class="rm">${esc(T().readMore)} <i>▾</i></button>` : ""}${link}</div>`;
+  const rm = $(".rm", p); if (rm) rm.onclick = () => { StoryTour.stop(); p.classList.toggle("exp"); Sound.click(); };
+  placeNotch();
   if (!items.length) return;
-  const main = $(".ph > img", p), btns = $$(".thumbs button", p);
-  const show = k => { swapImg(main, items[k].u, items[k].page); btns.forEach((x, j) => x.setAttribute("aria-pressed", j === k)); };
-  const r = Rot.make($(".ph", p), items.length, show);
-  btns.forEach(b => b.onclick = () => { r.go(+b.dataset.k); Sound.click(); });
+  const main = $(".ev > img", p), dots = $$(".pdots button", p);
+  const show = j => { swapImg(main, items[j].u, items[j].page); dots.forEach((x, i) => x.setAttribute("aria-pressed", i === j)); };
+  const r = Rot.make($(".ev", p), items.length, show);
+  dots.forEach(b => b.onclick = () => { r.go(+b.dataset.k); Sound.click(); });
   main.onclick = () => lightbox(main.src);
 }
-
+/* The small notch on the panel edge points at the active particle */
+function placeNotch() {
+  const cell = $(`#smTable [data-s="${StoryTour.cur}"]`), p = $("#smPanel"); if (!cell || !p) return;
+  const c = cell.getBoundingClientRect(), q = p.getBoundingClientRect();
+  if (q.left > c.right) p.style.setProperty("--ay", clamp(c.top + c.height / 2 - q.top, 22, q.height - 22) + "px");
+  else p.style.setProperty("--ax", clamp(c.left + c.width / 2 - q.left, 22, q.width - 22) + "px");
+}
 /* The table tells itself: every ~6.5 s it moves to the next chapter, with a progress bar on the active particle.
    Pauses while the pointer is over the table or panel, stops for good after a click; only runs while on screen. */
 const StoryTour = {
@@ -440,13 +454,13 @@ function swapImg(img, src, fit) {
   if (img.getAttribute("src") === src) return;
   const pre = new Image(); pre.src = src;
   img.style.opacity = 0;
-  const done = () => setTimeout(() => { img.src = src; img.classList.toggle("fit", !!fit); img.style.opacity = 1; }, 230);
+  const done = () => setTimeout(() => { img.src = src; img.classList.toggle("fit", !!fit); img.style.opacity = 1; }, 180);
   (pre.decode ? pre.decode() : Promise.resolve()).then(done, done);
 }
 /* Galleries that move on their own: every few seconds, only while on screen, the tab is visible
    and the pointer is not over them; never with reduced motion. Clicking still picks a picture. */
 const Rot = {
-  set: new Set(), every: 3200,
+  set: new Set(), every: 2400,
   io: "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.target._rot) e.target._rot.vis = e.isIntersecting; })) : null,
   make(el, n, show) {
     const r = { el, n, k: 0, vis: !Rot.io, hover: false, t: performance.now() + Math.random() * 1800 };

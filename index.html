@@ -644,6 +644,54 @@ body.in-view .view-bg{opacity:1}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+/* ---- v17: story panel as an "event card": big photo half, hook first, readable text ---- */
+.sm{align-items:stretch}
+.sm-left{display:flex;flex-direction:column;gap:10px}
+.sm-nav{display:flex;align-items:center;gap:8px;margin:2px 0 0 22px;font-size:11px;color:var(--muted)}
+.sm-panel{position:relative;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:0;padding:0;overflow:visible;align-items:stretch}
+.sm-panel.tech{grid-template-columns:minmax(0,1fr);padding:18px}
+.sm-panel .ev{position:relative;min-height:250px;border-radius:15px 0 0 15px;overflow:hidden;background:#060a1c}
+.sm-panel .ev > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:opacity .18s;cursor:zoom-in}
+.sm-panel .ev > img.fit{object-fit:contain;background:#0c1124}
+.sm-panel .ev .hud{position:absolute;width:16px;height:16px;border:2px solid rgba(232,182,76,.9);z-index:2}
+.sm-panel .ev .hud.tl{top:10px;left:10px;border-right:0;border-bottom:0}.sm-panel .ev .hud.tr{top:10px;right:10px;border-left:0;border-bottom:0}.sm-panel .ev .hud.bl{bottom:10px;left:10px;border-right:0;border-top:0}.sm-panel .ev .hud.br{bottom:10px;right:10px;border-left:0;border-top:0}
+.sm-panel .ev .pdots{position:absolute;left:0;right:0;bottom:12px;display:flex;justify-content:center;gap:5px;z-index:2}
+.sm-panel .ev .pdots button{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:rgba(255,255,255,.5);cursor:var(--cp,pointer);transition:width .2s,background .2s}
+.sm-panel .ev .pdots button[aria-pressed="true"]{width:18px;border-radius:4px;background:#fff}
+.sm-panel .ev.sym{display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--c) 22%,transparent),transparent 70%),#080d22}
+.sm-panel .ev.sym b{font-family:var(--display);font-size:84px;color:var(--c);text-shadow:0 0 30px color-mix(in srgb,var(--c) 60%,transparent)}
+.sm-panel .txt{padding:20px 22px}
+.sm-panel .txt h4{font-size:11.5px;line-height:1.5;font-weight:500;letter-spacing:.06em;color:color-mix(in srgb,var(--c) 75%,#fff);margin:0 0 6px}
+.sm-panel .txt .hook{font-family:var(--display);font-size:21px;line-height:1.25;color:#fff;margin:0 0 12px}
+.sm-panel .txt p,.sm-panel .txt blockquote p{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:14.5px;line-height:1.6;color:#c9d0ee}
+.sm-panel .txt .sq p{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.sm-panel .more{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s}
+.sm-panel .more > div{overflow:hidden;min-height:0}
+.sm-panel.exp .more{grid-template-rows:1fr}
+.sm-panel .rm{background:none;border:0;padding:0;margin-top:2px;color:var(--c);font:inherit;font-size:12.5px;cursor:var(--cp,pointer)}
+.sm-panel .rm i{font-style:normal;display:inline-block;transition:transform .3s}
+.sm-panel.exp .rm i{transform:rotate(180deg)}
+.sm-panel .notch{position:absolute;left:-9px;top:var(--ay,40px);width:16px;height:16px;background:var(--night);border-left:1px solid color-mix(in srgb,var(--c) 55%,var(--line));border-bottom:1px solid color-mix(in srgb,var(--c) 55%,var(--line));transform:translateY(-50%) rotate(45deg);transition:top .35s cubic-bezier(.3,.7,.2,1)}
+.sm-panel.tech .notch{background:var(--night)}
+@media (max-width:760px){
+  .sm-panel{grid-template-columns:minmax(0,1fr)}
+  .sm-panel .ev{min-height:220px;border-radius:15px 15px 0 0}
+  .sm-panel .notch{left:var(--ax,40px);top:-9px;transform:translateX(-50%) rotate(135deg)}
+  .sm-nav{margin-left:0}
+}
+/* ---- v17: journey photos in their own column, growing when the gold line reaches them ---- */
+.t-body{display:grid;grid-template-columns:minmax(0,1fr) 240px;column-gap:28px;max-width:none}
+.t-body::after{display:none}
+.t-body > :not(.t-img){grid-column:1}
+.t-body .t-img{grid-column:2;grid-row:1/span 4;float:none;margin:0;justify-self:end;width:240px;height:180px;transform:scale(.62);transform-origin:100% 0;transition:transform .6s cubic-bezier(.2,.7,.2,1),box-shadow .6s,opacity .18s}
+.t-item.past .t-body .t-img{transform:scale(1);box-shadow:0 18px 40px rgba(0,0,0,.45);border-color:color-mix(in srgb,var(--ember) 35%,var(--line))}
+.t-body .t-img:hover{transform:scale(1.04);filter:brightness(1.08)}
+.t-body:has(.t-img){min-height:180px}
+@media (max-width:760px){
+  .t-body{display:block}
+  .t-body .t-img{width:100%;height:auto;aspect-ratio:4/3;transform:none;margin:4px 0 10px}
+  .t-body:has(.t-img){min-height:0}
+}
 </style>
 </head>
 <body>
@@ -744,7 +792,7 @@ body.in-view .view-bg{opacity:1}
           <h3 class="pass-name">DANIEL VACA</h3>
           <p class="pass-role" data-i18n="about.passrole">Computer Engineering · UEES → Universidad de Oviedo</p>
           <footer class="pass-foot">
-            <a href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener" class="pass-li" aria-label="LinkedIn"><span class="pass-qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="qr" aria-hidden="true"><path stroke="#0b1230" d="M0 0.5h7m2 0h3m4 0h1m1 0h4m1 0h1m2 0h7m-33 1h1m5 0h1m2 0h4m2 0h1m2 0h1m5 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h2m2 0h4m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m1 0h4m1 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h1m3 0h1m2 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h5m2 0h4m1 0h2m4 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m5 0h2m3 0h1m1 0h2m1 0h1m-25 1h1m1 0h5m3 0h2m1 0h2m2 0h1m4 0h1m1 0h1m1 0h5m-31 1h1m1 0h1m4 0h1m2 0h2m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h1m4 0h3m3 0h6m1 0h1m2 0h2m1 0h1m3 0h1m1 0h2m-31 1h2m1 0h2m2 0h6m2 0h1m2 0h3m1 0h1m1 0h1m2 0h4m-29 1h2m1 0h1m2 0h3m2 0h1m1 0h5m1 0h3m2 0h3m1 0h1m-31 1h3m3 0h2m2 0h3m3 0h1m1 0h1m3 0h1m2 0h1m2 0h1m1 0h2m-33 1h2m4 0h1m1 0h5m1 0h4m2 0h1m1 0h1m1 0h3m1 0h1m1 0h2m-32 1h3m1 0h1m2 0h2m4 0h1m6 0h2m3 0h3m2 0h1m-30 1h1m1 0h1m1 0h2m1 0h2m2 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-31 1h2m3 0h2m1 0h2m6 0h4m1 0h5m1 0h2m1 0h1m-32 1h2m3 0h4m1 0h2m1 0h2m4 0h3m2 0h4m1 0h2m-32 1h2m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m1 0h1m4 0h3m1 0h1m1 0h5m-31 1h2m3 0h2m2 0h2m1 0h2m1 0h2m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-33 1h1m4 0h1m1 0h3m1 0h2m4 0h3m3 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h4m1 0h3m3 0h3m3 0h1m4 0h1m3 0h3m-32 1h1m1 0h1m5 0h1m4 0h2m6 0h2m2 0h3m1 0h2m-31 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h3m2 0h1m1 0h6m1 0h2m-25 1h2m1 0h1m1 0h2m1 0h1m1 0h4m1 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h2m1 0h2m1 0h4m3 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h5m1 0h2m2 0h1m1 0h5m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m1 0h3m3 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h5m1 0h1m2 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h8m-28 1h1m5 0h1m2 0h1m6 0h1m3 0h3m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h1m2 0h2m1 0h1m4 0h3m1 0h2m3 0h1"/></svg><b class="qr-in"><svg class="in" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></b></span><span class="li-lab"><svg class="in" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg><span data-i18n="about.passli">LinkedIn ↗</span></span></a>
+            <a href="https://www.linkedin.com/in/daniel-vaca-velastegui-3115b6339" target="_blank" rel="noopener" class="pass-li" aria-label="LinkedIn"><span class="pass-qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="qr" aria-hidden="true"><path stroke="#0b1230" d="M0 0.5h7m2 0h3m4 0h1m1 0h4m1 0h1m2 0h7m-33 1h1m5 0h1m2 0h4m2 0h1m2 0h1m5 0h1m1 0h1m5 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h2m2 0h4m3 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h2m1 0h1m3 0h1m1 0h4m1 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m6 0h1m3 0h1m2 0h2m2 0h1m1 0h3m1 0h1m-33 1h1m5 0h1m1 0h5m2 0h4m1 0h2m4 0h1m5 0h1m-33 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-25 1h1m5 0h2m3 0h1m1 0h2m1 0h1m-25 1h1m1 0h5m3 0h2m1 0h2m2 0h1m4 0h1m1 0h1m1 0h5m-31 1h1m1 0h1m4 0h1m2 0h2m1 0h1m2 0h1m1 0h2m1 0h1m1 0h1m2 0h2m1 0h2m1 0h1m-33 1h1m4 0h3m3 0h6m1 0h1m2 0h2m1 0h1m3 0h1m1 0h2m-31 1h2m1 0h2m2 0h6m2 0h1m2 0h3m1 0h1m1 0h1m2 0h4m-29 1h2m1 0h1m2 0h3m2 0h1m1 0h5m1 0h3m2 0h3m1 0h1m-31 1h3m3 0h2m2 0h3m3 0h1m1 0h1m3 0h1m2 0h1m2 0h1m1 0h2m-33 1h2m4 0h1m1 0h5m1 0h4m2 0h1m1 0h1m1 0h3m1 0h1m1 0h2m-32 1h3m1 0h1m2 0h2m4 0h1m6 0h2m3 0h3m2 0h1m-30 1h1m1 0h1m1 0h2m1 0h2m2 0h1m2 0h1m1 0h1m1 0h1m2 0h4m1 0h2m3 0h1m-31 1h2m3 0h2m1 0h2m6 0h4m1 0h5m1 0h2m1 0h1m-32 1h2m3 0h4m1 0h2m1 0h2m4 0h3m2 0h4m1 0h2m-32 1h2m1 0h1m1 0h1m2 0h1m1 0h3m1 0h1m1 0h1m4 0h3m1 0h1m1 0h5m-31 1h2m3 0h2m2 0h2m1 0h2m1 0h2m1 0h1m2 0h1m1 0h2m1 0h3m2 0h1m-33 1h1m4 0h1m1 0h3m1 0h2m4 0h3m3 0h1m1 0h2m2 0h1m2 0h1m-33 1h1m2 0h4m1 0h3m3 0h3m3 0h1m4 0h1m3 0h3m-32 1h1m1 0h1m5 0h1m4 0h2m6 0h2m2 0h3m1 0h2m-31 1h1m1 0h3m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m1 0h3m2 0h1m1 0h6m1 0h2m-25 1h2m1 0h1m1 0h2m1 0h1m1 0h4m1 0h2m3 0h1m1 0h1m1 0h1m-33 1h7m2 0h2m1 0h2m1 0h4m3 0h3m1 0h1m1 0h1m1 0h2m-32 1h1m5 0h1m1 0h5m1 0h2m2 0h1m1 0h5m3 0h3m1 0h1m-33 1h1m1 0h3m1 0h1m1 0h1m2 0h2m1 0h1m1 0h3m3 0h1m1 0h6m1 0h2m-33 1h1m1 0h3m1 0h1m1 0h1m3 0h1m1 0h1m2 0h1m1 0h5m1 0h1m2 0h5m-33 1h1m1 0h3m1 0h1m1 0h1m1 0h2m1 0h1m1 0h1m1 0h1m2 0h8m-28 1h1m5 0h1m2 0h1m6 0h1m3 0h3m2 0h1m2 0h3m-31 1h7m1 0h2m1 0h1m2 0h2m1 0h1m4 0h3m1 0h2m3 0h1"/></svg></span><span class="li-lab"><svg class="in" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg><span data-i18n="about.passli">LinkedIn ↗</span></span></a>
             <div class="pass-mbox"><span class="tab-hint" data-i18n="about.passhint">tap to read</span><button type="button" class="pass-tab" aria-expanded="false" aria-controls="passSheet"><svg class="doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg><span data-i18n="about.passmission">MISSION</span> <i aria-hidden="true">▾</i></button></div>
           </footer>
           <div class="pass-sheet" id="passSheet"><div class="pass-sheet-in"><span class="pass-k">MISSION</span><p class="mis" data-i18n="about.mission">Inspire a passion for physics, science and technology in more students across Latin America. Show how wonderful it can be to follow your curiosity and go all in on learning.</p></div></div>
@@ -754,7 +802,7 @@ body.in-view .view-bg{opacity:1}
     </div>
   </div>
   <div class="sm-head"><h3 data-i18n="about.smtitle">The standard model of my story</h3></div>
-  <div class="sm"><div class="sm-table" id="smTable"></div><div class="sm-panel empty" id="smPanel"></div></div>
+  <div class="sm"><div class="sm-left"><div class="sm-table" id="smTable"></div><nav class="sm-nav" id="smNav" aria-label="chapters"></nav></div><div class="sm-panel empty" id="smPanel"></div></div>
   <div class="contact-slot"></div>
 </div></section>
 
@@ -1095,15 +1143,15 @@ const TECH = [{"c": "data", "n": {"en": "Data & ML", "es": "Datos y ML"}, "items
    g: q = quark (origins), l = lepton (sharing), b = boson (turning points), h = Higgs (why it all has mass).
    row/col place the cell in the table; empty cells (sy: "?") are space for what comes next. */
 const STORY = [
-  { id: "cp", g: "q", row: 1, col: 2, mt: { en: "×2", es: "×2" }, sy: "Cp", yr: "2022–23", n: { en: "Olympiads", es: "Olimpiadas" },
+  { id: "cp", g: "q", row: 1, col: 2, mt: { en: "×2", es: "×2" }, hook: { en: "Bronze 2022, silver 2023", es: "Bronce 2022, plata 2023" }, sy: "Cp", yr: "2022–23", n: { en: "Olympiads", es: "Olimpiadas" },
     imgs: ["assets/story/apol-medallas.webp", "assets/story/apol-plata-escenario.webp", "assets/story/apol-lista.webp", "assets/story/apol22-410.webp", "assets/story/club-premiacion.webp"],
     phrase: { en: "Extra classes on Friday afternoons, solving harder problems and widening my view of the world of physics. A passionate teacher showed us that physics was not difficult, but inherently wonderful. All that effort led to two medals in national physics olympiads among 400+ students: bronze in 2022 and silver in 2023.", es: "Clases extra los viernes por la tarde, resolver ejercicios de mayor complejidad y expandir mi panorama del mundo de la física. Un maestro apasionado nos mostró que la física no era difícil, sino inherentemente maravillosa. Todo el esfuerzo concluyó en 2 medallas en olimpiadas nacionales de física entre más de 400 estudiantes: bronce en 2022 y plata en 2023." },
     t: { en: "The physics club & the olympiads", es: "El club de física y las olimpiadas" } },
-  { id: "gy", g: "q", row: 1, col: 3, mt: { en: "EC", es: "EC" }, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
+  { id: "gy", g: "q", row: 1, col: 3, mt: { en: "EC", es: "EC" }, hook: { en: "No physics degree in my city", es: "Sin carrera de física en mi ciudad" }, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
     phrase: { en: "In Guayaquil, my city, no university offers a physics degree. Physics is taught as a tool for engineering, almost never as a science of its own, and research opportunities are few.\n\nI chose Computer Engineering with a clear conviction: to use code and data to one day find my way into physics and seek opportunities abroad.", es: "En Guayaquil, mi ciudad, ninguna universidad ofrece la carrera de física. La física se enseña como herramienta para las ingenierías, casi nunca como una ciencia por sí misma, y las oportunidades de investigación son pocas.\n\nElegí Ingeniería en Computación, con la convicción clara de usar el código y los datos para en un futuro encaminarme al mundo de la física y buscar oportunidades a nivel internacional." },
     t: { en: "Studying physics from Guayaquil", es: "Estudiar física desde Guayaquil" } },
   { id: "q3", g: "q", row: 1, col: 4, empty: true },
-  { id: "ta", g: "l", row: 2, col: 2, mt: { en: "×5", es: "×5" }, sy: "Ta", yr: "2024", n: { en: "Teaching", es: "Enseñar" },
+  { id: "ta", g: "l", row: 2, col: 2, mt: { en: "×5", es: "×5" }, hook: { en: "5 semesters at the board", es: "5 semestres en la pizarra" }, sy: "Ta", yr: "2024", n: { en: "Teaching", es: "Enseñar" },
     imgs: ["assets/story/clase-loop.webp", "assets/story/clase-senalando.webp", "assets/story/clase-equilibrio.webp",
       { u: "assets/story/ayud-otra-forma.webp", page: true }, { u: "assets/story/ayud-trabajo.webp", page: true }, { u: "assets/story/ayud-problema-proyectil.webp", page: true },
       { u: "assets/story/ayud-ley-coseno.webp", page: true }, { u: "assets/story/ayud-mcu-mapa.webp", page: true }],
@@ -1112,16 +1160,16 @@ const STORY = [
     t: { en: "Why I started teaching", es: "Por qué empecé a enseñar" } },
   { id: "tc", g: "l", row: 2, col: 3, mt: { en: "30+", es: "30+" }, sy: "Tc", yr: "now", n: { en: "Tech stack", es: "Tecnologías" }, tech: true,
     t: { en: "Tech stack", es: "Tecnologías" } },
-  { id: "pr", g: "l", row: 2, col: 4, mt: { en: "×2", es: "×2" }, sy: "Pr", yr: "always", n: { en: "Purpose", es: "Propósito" },
+  { id: "pr", g: "l", row: 2, col: 4, mt: { en: "×2", es: "×2" }, hook: { en: "Two hands: one to move forward, one to pull others up", es: "Dos manos: una para avanzar y otra para jalar a los demás" }, sy: "Pr", yr: "always", n: { en: "Purpose", es: "Propósito" },
     phrase: { en: "A teacher once told me that we have two hands: one to push ourselves forward and one to pull up those who fall behind.\n\nI am no expert, and I am still finding my own way. But you do not need to have it all figured out to help: you start even if you are not perfect, and you share the little you know. Explaining things to others is how I understand them best. That is why I have found purpose in teaching.", es: "Un profesor me dijo una vez que tenemos dos manos: una para impulsarnos hacia adelante y otra para jalar a los que se quedan atrás.\n\nNo soy experto y sigo buscando mi propio camino. Pero no hace falta tenerlo o saberlo todo claro para ayudar; se empieza aunque no se sea perfecto, y se comparte lo poco que uno sabe. Explicar a otros es como mejor entiendo las cosas. Por eso he encontrado propósito en dar clases y enseñar." },
     t: { en: "Two hands and a purpose", es: "Dos manos y un propósito" } },
-  { id: "co", g: "b", row: 1, col: 5, mt: { en: "ML", es: "ML" }, sy: "Co", yr: "2024", n: { en: "Code ✕ physics", es: "Código ✕ física" },
+  { id: "co", g: "b", row: 1, col: 5, mt: { en: "ML", es: "ML" }, hook: { en: "Code and data, my way into physics", es: "El código y los datos, mi camino a la física" }, imgs: ["assets/projects/pa03.webp"], sy: "Co", yr: "2024", n: { en: "Code ✕ physics", es: "Código ✕ física" },
     phrase: { en: "It was common sense. Today physics and mathematics go hand in hand with technology, data analysis and artificial intelligence. Computing is my path into physics, through data science and machine learning applied to real experiments. I want to bring together everything I have learned in my degree and apply it to the world of science.", es: "Fue sentido común. Hoy la física y la matemática van de la mano con la tecnología, el análisis de datos y la inteligencia artificial. La computación es mi camino hacia la física a través del data science y el machine learning aplicados a experimentos reales. Busco juntar los conocimientos adquiridos durante mi carrera para poder aplicarlos al mundo de la ciencia." },
     t: { en: "When computing met physics", es: "Cuando la computación encontró a la física" } },
-  { id: "ov", g: "b", row: 2, col: 5, mt: { en: "ES", es: "ES" }, sy: "Ov", yr: "2026", n: { en: "Oviedo", es: "Oviedo" },
+  { id: "ov", g: "b", row: 2, col: 5, mt: { en: "ES", es: "ES" }, hook: { en: "Where computing and physics meet", es: "Donde la computación y la física se encuentran" }, imgs: ["assets/story/oviedo-becario.webp"], sy: "Ov", yr: "2026", n: { en: "Oviedo", es: "Oviedo" },
     phrase: { en: "I compared many universities, courses and research groups until I found one where I could combine computer science and physics, and where the timetables between faculties did not clash.\n\nHere, at the Faculty of Science, I take **Data Analysis in Modern Physics** and **Nuclear and Elementary Particle Physics**. Many things are still new to me and I look into them on my own, but I have seen how neural networks and data analysis drive experiments like CMS at CERN, and how much physics needs people coming from computing.", es: "Comparé muchas universidades, materias y grupos de investigación hasta encontrar una donde pudiera mezclar la informática y la física, y donde los horarios entre facultades no chocaran.\n\nAquí curso en la Facultad de Ciencias **Análisis de Datos en Física Moderna** y **Física Nuclear y de Partículas Elementales**. Muchas cosas aún son nuevas para mí y las investigo por mi cuenta, pero he visto cómo las redes neuronales y el análisis de datos impulsan experimentos como el CMS del CERN, y cuánto necesita la física gente que venga del sector de la computación." },
     t: { en: "Why Oviedo", es: "Por qué Oviedo" } },
-  { id: "h", g: "h", row: 1, col: 7, mt: { en: "125 GeV", es: "125 GeV" }, sy: "H", yr: "∞", n: { en: "Physics is beautiful", es: "La física es hermosa" },
+  { id: "h", g: "h", row: 1, col: 7, mt: { en: "125 GeV", es: "125 GeV" }, hook: { en: "We are made of physics", es: "Estamos hechos de física" }, sy: "H", yr: "∞", n: { en: "Physics is beautiful", es: "La física es hermosa" },
     t: { en: "The Higgs of my story", es: "El Higgs de mi historia" },
     phrase: { en: "> \"Because physics is wonderful. Because we are nothing but physics.\"\n— Javier Santaolalla, particle physicist (translated)\n\nPhysics is everywhere, and we are made of it. Behind every experiment there is a story of human ingenuity, courage and creativity. That living side is what I want to show: the one that makes you dream, look up at the sky and feel small and, at the same time, part of everything.\n\nThat is the reason behind everything else in this table.", es: "> «Porque la física es maravillosa. Porque no somos sino física.»\n— Javier Santaolalla, físico de partículas\n\nLa física está en todas partes, y estamos hechos de ella. Detrás de cada experimento hay una historia de ingenio, valentía y creatividad humana. Ese es el lado vivo que quiero mostrar: el que te hace soñar, mirar al cielo y sentirte pequeño y, a la vez, parte de un todo.\n\nEsa es la razón detrás de todo lo demás en esta tabla." } }
 ];
@@ -1146,7 +1194,7 @@ const LEVELS = [
   { id: "cluster", view: "work", scale: "10²³ m", name: { en: "Galaxy cluster", es: "Cúmulo de galaxias" },
     h: { en: "My work · one galaxy per area", es: "Mi trabajo · una galaxia por área" }, cta: { en: "Enter all projects", es: "Entrar a todos los proyectos" } },
   { id: "solar", view: "about", scale: "10¹³ m", name: { en: "Solar System", es: "Sistema Solar" },
-    h: { en: "About me · I'm the Sun", es: "Sobre mí · el Sol soy yo" }, cta: { en: "Enter my story", es: "Entrar a mi historia" } },
+    h: { en: "About me · click the Sun", es: "Sobre mí · haz clic en el Sol" }, cta: { en: "Enter my story", es: "Entrar a mi historia" } },
   { id: "earth", view: "journey", scale: "10⁷ m", name: { en: "Earth", es: "Tierra" },
     h: { en: "My journey · and a satellite to play", es: "Mi trayectoria · y un satélite para jugar" }, cta: { en: "Enter my journey", es: "Entrar a mi trayectoria" } }
 ];
@@ -1207,7 +1255,7 @@ const UI = {
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
         enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored", deeper: "deeper →", backStart: "back to start ↺",
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
-        aboutP: "About me", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
+        aboutP: "About me", readMore: "Read more", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
   es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", figma: "Prototipo en Figma", video: "Video de presentación",
         company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
@@ -1215,7 +1263,7 @@ const UI = {
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
         enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar", deeper: "más profundo →", backStart: "volver al inicio ↺",
         smEmpty: "Haz clic en una partícula para leer esa parte de la historia.", smPhrase: "Frase corta por escribir aquí.", smFuture: "Espacio para lo que viene.",
-        aboutP: "Sobre mí", smWip: "en proceso…", smPred: "Predicha, aún no observada.", stUni: "Universidad", stSchool: "Colegio", projOne: "proyecto", projMany: "proyectos", techHint: "psst: haz clic en cualquier tecnología para ver los proyectos donde la usé ↗", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
+        aboutP: "Sobre mí", readMore: "Leer más", smWip: "en proceso…", smPred: "Predicha, aún no observada.", stUni: "Universidad", stSchool: "Colegio", projOne: "proyecto", projMany: "proyectos", techHint: "psst: haz clic en cualquier tecnología para ver los proyectos donde la usé ↗", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
         nextK: "Siguiente parada", travel: "Viajar allí →", nextSolar: "Sistema Solar · sobre mí", nextEarth: "Tierra · mi trayectoria", nextSat: "El satélite · arcade", nextBh: "Volver al agujero negro", journeyP: "Mi trayectoria", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "yo", satellite: "Arcade" }
 };
 const T = () => UI[LANG];
@@ -1364,7 +1412,7 @@ function enterView(v, sub) {
   Game.setVis(v === "arcade");
   renderNav(); Sound.open();
   setTimeout(() => { const h = $("h2", el); h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }, 50);
-  if (v === "about") [350, 900].forEach(t => setTimeout(() => { StoryTrace.draw(); StoryTour.kick(); }, t));
+  if (v === "about") [350, 900].forEach(t => setTimeout(() => { placeNotch(); StoryTour.kick(); }, t));
   if (v === "journey") [120, 700, 1300].forEach(t => setTimeout(() => TimelineReveal.on && TimelineReveal.on(), t));
 }
 function enterHome() {
@@ -1481,7 +1529,8 @@ function renderStory() {
   showStory(SM_SEL);
   StoryTour.watch();
 }
-/* Show one particle in the panel (hover = preview, otherwise also the selection) */
+/* Show one particle in the panel (hover = preview, otherwise also the selection).
+   The panel is an "event card": big photo on one half, then a short hook, then the story (the rest behind "read more"). */
 function showStory(id, preview) {
   const G = STORY_GROUPS, p = $("#smPanel"), s = STORY.find(x => x.id === id);
   if (!s) return;
@@ -1489,33 +1538,46 @@ function showStory(id, preview) {
   $$("#smTable [data-s]").forEach(b => { b.setAttribute("aria-pressed", b.dataset.s === id); b.classList.remove("run"); });
   p.className = "sm-panel"; p.style.setProperty("--c", G[s.g].c); $(".sm").style.setProperty("--c", G[s.g].c);
   const k = CHAPTERS.indexOf(id);
-  const nav = `<nav class="sm-nav" aria-label="chapters"><button type="button" class="sm-arw" data-d="-1" aria-label="previous">◀</button><span class="sm-n">${k + 1} / ${CHAPTERS.length}</span><button type="button" class="sm-arw" data-d="1" aria-label="next">▶</button><span class="sm-dots">${CHAPTERS.map((c, j) => `<button type="button" data-c="${c}" style="--c:${G[STORY.find(x => x.id === c).g].c}" aria-label="${esc(STORY.find(x => x.id === c).sy)}"${j === k ? ' class="on"' : ""}></button>`).join("")}</span></nav>`;
-  const paras = s.tech ? techPanel() : s.phrase ? richText(L(s.phrase)) : `<p class="draft">${esc(T().smPhrase)}</p>`;
-  const items = (s.imgs || []).map(x => typeof x === "string" ? { u: x } : x);
-  const media = s.tech ? "" : items.length ? `<div class="ph has"><img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="thumbs">${items.map((it, k) => `<button type="button" data-k="${k}"${it.page ? ' class="pg"' : ""} aria-pressed="${!k}" aria-label="${k + 1}/${items.length}"><img src="${it.u}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}</div>` : `<div class="ph sym" aria-hidden="true">${esc(s.sy)}</div>`;
-  const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(L(s.link.t))}</a>` : "";
-  p.classList.toggle("tech", !!s.tech);
-  p.innerHTML = `${media}<div>${nav}<h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
-  $$(".sm-arw", p).forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = CHAPTERS[(k + +b.dataset.d + CHAPTERS.length) % CHAPTERS.length]; showStory(SM_SEL); });
-  $$(".sm-dots button", p).forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = b.dataset.c; showStory(SM_SEL); });
-  StoryTrace.draw();
+  $("#smNav").innerHTML = `<button type="button" class="sm-arw" data-d="-1" aria-label="previous">◀</button><span class="sm-n">${k + 1} / ${CHAPTERS.length}</span><button type="button" class="sm-arw" data-d="1" aria-label="next">▶</button><span class="sm-dots">${CHAPTERS.map((c, j) => `<button type="button" data-c="${c}" style="--c:${G[STORY.find(x => x.id === c).g].c}" aria-label="${esc(STORY.find(x => x.id === c).sy)}"${j === k ? ' class="on"' : ""}></button>`).join("")}</span>`;
+  $$("#smNav .sm-arw").forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = CHAPTERS[(k + +b.dataset.d + CHAPTERS.length) % CHAPTERS.length]; showStory(SM_SEL); });
+  $$("#smNav .sm-dots button").forEach(b => b.onclick = () => { StoryTour.stop(); Sound.click(); SM_SEL = b.dataset.c; showStory(SM_SEL); });
+  const notch = `<i class="notch" aria-hidden="true"></i>`;
   if (s.tech) {
+    p.classList.add("tech");
+    p.innerHTML = `${notch}<div><h4 class="th"><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${techPanel()}</div>`;
     $$("[data-q]", p).forEach(b => b.onclick = () => {
       Sound.click(); const u = TECH_URL[b.dataset.q.toLowerCase()];
       if (u) { window.open(u, "_blank", "noopener"); return; }
       location.hash = "work"; setTimeout(() => techFilter(b.dataset.q), 450);
     });
     if (!store.get("dv_tech_hint", false)) { store.set("dv_tech_hint", true); const c = $(".tch", p); if (c) c.classList.add("hint"); }
-    return;
+    placeNotch(); return;
   }
+  const items = (s.imgs || []).map(x => typeof x === "string" ? { u: x } : x);
+  const hud = `<i class="hud tl"></i><i class="hud tr"></i><i class="hud bl"></i><i class="hud br"></i>`;
+  const media = items.length
+    ? `<div class="ev">${hud}<img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="pdots">${items.map((it, j) => `<button type="button" data-k="${j}" aria-pressed="${!j}" aria-label="${j + 1}/${items.length}"></button>`).join("")}</div>` : ""}</div>`
+    : `<div class="ev sym" aria-hidden="true">${hud}<b>${esc(s.sy)}</b></div>`;
+  const blocks = s.phrase ? L(s.phrase).split("\n\n") : [];
+  const first = blocks.length ? richText(blocks[0]) : "", rest = blocks.slice(1).join("\n\n");
+  const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(L(s.link.t))}</a>` : "";
+  p.innerHTML = `${notch}${media}<div class="txt"><h4>${esc(s.sy)} · ${esc(L(s.t))}</h4>${s.hook ? `<p class="hook">${esc(L(s.hook))}</p>` : ""}${first}${rest ? `<div class="more"><div>${richText(rest)}</div></div><button type="button" class="rm">${esc(T().readMore)} <i>▾</i></button>` : ""}${link}</div>`;
+  const rm = $(".rm", p); if (rm) rm.onclick = () => { StoryTour.stop(); p.classList.toggle("exp"); Sound.click(); };
+  placeNotch();
   if (!items.length) return;
-  const main = $(".ph > img", p), btns = $$(".thumbs button", p);
-  const show = k => { swapImg(main, items[k].u, items[k].page); btns.forEach((x, j) => x.setAttribute("aria-pressed", j === k)); };
-  const r = Rot.make($(".ph", p), items.length, show);
-  btns.forEach(b => b.onclick = () => { r.go(+b.dataset.k); Sound.click(); });
+  const main = $(".ev > img", p), dots = $$(".pdots button", p);
+  const show = j => { swapImg(main, items[j].u, items[j].page); dots.forEach((x, i) => x.setAttribute("aria-pressed", i === j)); };
+  const r = Rot.make($(".ev", p), items.length, show);
+  dots.forEach(b => b.onclick = () => { r.go(+b.dataset.k); Sound.click(); });
   main.onclick = () => lightbox(main.src);
 }
-
+/* The small notch on the panel edge points at the active particle */
+function placeNotch() {
+  const cell = $(`#smTable [data-s="${StoryTour.cur}"]`), p = $("#smPanel"); if (!cell || !p) return;
+  const c = cell.getBoundingClientRect(), q = p.getBoundingClientRect();
+  if (q.left > c.right) p.style.setProperty("--ay", clamp(c.top + c.height / 2 - q.top, 22, q.height - 22) + "px");
+  else p.style.setProperty("--ax", clamp(c.left + c.width / 2 - q.left, 22, q.width - 22) + "px");
+}
 /* The table tells itself: every ~6.5 s it moves to the next chapter, with a progress bar on the active particle.
    Pauses while the pointer is over the table or panel, stops for good after a click; only runs while on screen. */
 const StoryTour = {
@@ -1603,13 +1665,13 @@ function swapImg(img, src, fit) {
   if (img.getAttribute("src") === src) return;
   const pre = new Image(); pre.src = src;
   img.style.opacity = 0;
-  const done = () => setTimeout(() => { img.src = src; img.classList.toggle("fit", !!fit); img.style.opacity = 1; }, 230);
+  const done = () => setTimeout(() => { img.src = src; img.classList.toggle("fit", !!fit); img.style.opacity = 1; }, 180);
   (pre.decode ? pre.decode() : Promise.resolve()).then(done, done);
 }
 /* Galleries that move on their own: every few seconds, only while on screen, the tab is visible
    and the pointer is not over them; never with reduced motion. Clicking still picks a picture. */
 const Rot = {
-  set: new Set(), every: 3200,
+  set: new Set(), every: 2400,
   io: "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.target._rot) e.target._rot.vis = e.isIntersecting; })) : null,
   make(el, n, show) {
     const r = { el, n, k: 0, vis: !Rot.io, hover: false, t: performance.now() + Math.random() * 1800 };
