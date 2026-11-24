@@ -233,11 +233,110 @@ const Intro = {
 };
 
 /* ===================== START ===================== */
+/* ===================== JOURNEY: an animated Feynman diagram ===================== */
+/* Three real processes take turns: e⁻e⁺ → γ* → μ⁻μ⁺ (QED), gg → H → γγ (how CMS found the Higgs) and β decay (weak force).
+   Lines draw themselves in time order, particles run along them, vertices flash. Click = next process; hover = pause. */
+const Feyn = {
+  C: { l: "#62e3b5", q: "#b18cff", b: "#ff9a4c", h: "#e8b64c" },
+  P: [
+    { name: { en: "e⁻e⁺ → γ* → μ⁻μ⁺ · electromagnetism", es: "e⁻e⁺ → γ* → μ⁻μ⁺ · electromagnetismo" },
+      tip: { en: "Matter and antimatter annihilate into light, and light becomes new matter.", es: "Materia y antimateria se aniquilan en luz, y la luz se vuelve materia nueva." },
+      n: { a: [24, 30], b: [24, 200], v1: [140, 115], v2: [260, 115], c: [376, 30], d: [376, 200] },
+      e: [["a", "v1", "f", "l", "e⁻", 0], ["b", "v1", "fa", "l", "e⁺", 0], ["v1", "v2", "w", "b", "γ*", 1], ["v2", "c", "f", "l", "μ⁻", 2], ["v2", "d", "fa", "l", "μ⁺", 2]] },
+    { name: { en: "gg → H → γγ · the Higgs boson", es: "gg → H → γγ · el bosón de Higgs" },
+      tip: { en: "The channel in which CMS and ATLAS discovered the Higgs at CERN in 2012.", es: "El canal con el que CMS y ATLAS descubrieron el Higgs en el CERN en 2012." },
+      n: { a: [24, 30], b: [24, 200], t1: [112, 72], t2: [112, 158], t3: [166, 115], v2: [282, 115], c: [376, 30], d: [376, 200] },
+      e: [["a", "t1", "g", "b", "g", 0], ["b", "t2", "g", "b", "g", 0], ["t1", "t2", "f", "q", "t", 1], ["t2", "t3", "f", "q", "", 1], ["t3", "t1", "f", "q", "", 1], ["t3", "v2", "h", "h", "H", 2], ["v2", "c", "w", "b", "γ", 3], ["v2", "d", "w", "b", "γ", 3]] },
+    { name: { en: "d → u W⁻ → u e⁻ ν̄ₑ · weak force (β decay)", es: "d → u W⁻ → u e⁻ ν̄ₑ · fuerza débil (desintegración β)" },
+      tip: { en: "A quark changes flavour by emitting a W boson: the same force that lets the Sun shine.", es: "Un quark cambia de sabor emitiendo un bosón W: la misma fuerza que hace brillar al Sol." },
+      n: { a: [24, 178], v1: [150, 178], b: [376, 208], v2: [258, 82], c: [376, 28], d: [376, 128] },
+      e: [["a", "v1", "f", "q", "d", 0], ["v1", "b", "f", "q", "u", 1], ["v1", "v2", "w", "b", "W⁻", 1], ["v2", "c", "f", "l", "e⁻", 2], ["v2", "d", "fa", "l", "ν̄ₑ", 2]] }
+  ],
+  k: 0, t: 0, run: false, vis: false, hover: false,
+  init() {
+    const el = $("#feyn"); if (!el) return; this.el = el;
+    el.innerHTML = `<svg viewBox="0 0 400 232" role="img" aria-label="Feynman diagram"><defs><filter id="fyg" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g class="fy-g"></g></svg><figcaption><span class="fy-dots"></span><b class="fy-name"></b><span class="fy-tip"></span></figcaption>`;
+    this.svg = $("svg", el); this.g = $(".fy-g", el);
+    $(".fy-dots", el).innerHTML = this.P.map((_, j) => `<button type="button" data-j="${j}" aria-label="${j + 1}"></button>`).join("");
+    $$(".fy-dots button", el).forEach(b => b.onclick = e => { e.stopPropagation(); this.set(+b.dataset.j); Sound.click(); });
+    this.svg.addEventListener("click", () => { this.set((this.k + 1) % this.P.length); Sound.click(); });
+    el.addEventListener("pointerenter", () => { this.hover = true; el.classList.add("hov"); });
+    el.addEventListener("pointerleave", () => { this.hover = false; el.classList.remove("hov"); });
+    new IntersectionObserver(es => es.forEach(e => { this.vis = e.isIntersecting; this.go(); })).observe(el);
+    document.addEventListener("visibilitychange", () => this.go());
+    langListeners.push(() => this.caption());
+    this.set(0);
+  },
+  path(type, [x1, y1], [x2, y2]) {
+    const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L, nx = -uy, ny = ux;
+    if (type === "w") { const n = Math.max(2, Math.round(L / 6)), A = 4.5; let d = `M${x1},${y1}`; for (let i = 1; i <= 120; i++) { const u = i / 120, o = A * Math.sin(n * Math.PI * u); d += ` L${(x1 + dx * u + nx * o).toFixed(1)},${(y1 + dy * u + ny * o).toFixed(1)}`; } return d; }
+    if (type === "g") { const m = Math.max(3, Math.round(L / 11)), r = 5; let d = `M${x1},${y1}`; for (let i = 1; i <= 220; i++) { const u = i / 220, th = 2 * Math.PI * m * u, al = L * u - 1.7 * r * Math.sin(th), pe = r * (1 - Math.cos(th)); d += ` L${(x1 + ux * al + nx * pe).toFixed(1)},${(y1 + uy * al + ny * pe).toFixed(1)}`; } return d; }
+    return `M${x1},${y1} L${x2},${y2}`;
+  },
+  set(k) {
+    this.k = k; this.t = REDUCED ? 99 : 0; const P = this.P[k], C = this.C, ns = "http://www.w3.org/2000/svg";
+    this.g.innerHTML = ""; this.g.style.opacity = 1; this.edges = []; this.verts = [];
+    const cx = 200, cy = 115;
+    P.e.forEach(([a, b, type, col, lab, st]) => {
+      const A = P.n[a], B = P.n[b], p = document.createElementNS(ns, "path"), c = C[col];
+      p.setAttribute("d", this.path(type === "fa" ? "f" : type, A, B)); p.setAttribute("class", "fy-l " + type); p.style.stroke = c;
+      this.g.appendChild(p);
+      const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+      const ext = !/^v|^t/.test(a) || !/^v|^t/.test(b), u = ext ? (/^v|^t/.test(a) ? .82 : .18) : .5, pt = p.getPointAtLength(L * u);
+      const dir = [B[0] - A[0], B[1] - A[1]], dl = Math.hypot(...dir); let nx = -dir[1] / dl, ny = dir[0] / dl;
+      if ((pt.x + nx - cx) ** 2 + (pt.y + ny - cy) ** 2 < (pt.x - cx) ** 2 + (pt.y - cy) ** 2) { nx = -nx; ny = -ny; }
+      let tx = null; if (lab) { tx = document.createElementNS(ns, "text"); tx.textContent = lab; tx.setAttribute("x", (pt.x + nx * 14).toFixed(1)); tx.setAttribute("y", (pt.y + ny * 14 + 4).toFixed(1)); tx.setAttribute("class", "fy-t"); tx.style.fill = c; this.g.appendChild(tx); }
+      let ar = null; if (type === "f" || type === "fa") { const m = p.getPointAtLength(L / 2), ang = Math.atan2(dir[1], dir[0]) * 180 / Math.PI + (type === "fa" ? 180 : 0); ar = document.createElementNS(ns, "path"); ar.setAttribute("d", "M-4,-3.5 L4,0 L-4,3.5 Z"); ar.setAttribute("transform", `translate(${m.x},${m.y}) rotate(${ang})`); ar.setAttribute("class", "fy-ar"); ar.style.fill = c; this.g.appendChild(ar); }
+      const dot = document.createElementNS(ns, "circle"); dot.setAttribute("r", type === "h" ? 4 : 3); dot.setAttribute("class", "fy-dot"); dot.style.fill = c; dot.setAttribute("filter", "url(#fyg)"); this.g.appendChild(dot);
+      this.edges.push({ p, L, tx, ar, dot, st, type, a, b });
+    });
+    // a vertex flashes when the lines of its stage arrive
+    const vs = {}; this.edges.forEach(e => { if (/^v|^t/.test(e.b)) vs[e.b] = Math.min(vs[e.b] ?? 9, e.st); });
+    for (const n in vs) { const [x, y] = P.n[n], f = document.createElementNS(ns, "circle"), d = document.createElementNS(ns, "circle"); f.setAttribute("cx", x); f.setAttribute("cy", y); f.setAttribute("class", "fy-fl"); d.setAttribute("cx", x); d.setAttribute("cy", y); d.setAttribute("r", 2.6); d.setAttribute("class", "fy-v"); this.g.appendChild(f); this.g.appendChild(d); this.verts.push({ f, d, st: vs[n] }); }
+    this.stages = Math.max(...P.e.map(e => e[5])) + 1;
+    this.caption(); this.draw(); this.go();
+  },
+  caption() {
+    if (!this.el) return; const P = this.P[this.k];
+    $(".fy-name", this.el).textContent = L(P.name); $(".fy-tip", this.el).textContent = L(P.tip);
+    $$(".fy-dots button", this.el).forEach((b, j) => b.setAttribute("aria-current", j === this.k));
+  },
+  go() {
+    const ok = this.vis && !document.hidden && CURVIEW === "journey" && !REDUCED;
+    if (ok && !this.run) { this.run = true; this.last = performance.now(); requestAnimationFrame(n => this.loop(n)); }
+    if (!ok) this.run = false;
+  },
+  loop(now) {
+    if (!this.run) return;
+    const dt = Math.min(.05, (now - this.last) / 1000); this.last = now;
+    const end = this.stages + 2.8;
+    if (!this.hover || this.t < end) this.t += dt;   // hover only holds the finished diagram, it never freezes the drawing
+    if (this.t > end + .6) { this.set((this.k + 1) % this.P.length); }
+    else { this.g.style.opacity = this.t > end ? Math.max(0, 1 - (this.t - end) / .6) : 1; this.draw(); }
+    if (CURVIEW !== "journey") this.run = false; else requestAnimationFrame(n => this.loop(n));
+  },
+  draw() {
+    const t = this.t;
+    this.edges.forEach(e => {
+      const p = clamp((t - e.st) / .85, 0, 1), ez = 1 - Math.pow(1 - p, 2);
+      if (e.type === "h" && p >= 1) { e.p.style.strokeDasharray = "7 5"; e.p.style.strokeDashoffset = -t * 18; e.p.style.opacity = .75 + .25 * Math.sin(t * 5); }
+      else { e.p.style.strokeDasharray = e.L; e.p.style.strokeDashoffset = e.L * (1 - ez); }
+      if (e.tx) e.tx.style.opacity = clamp((p - .45) * 2.2, 0, 1);
+      if (e.ar) e.ar.style.opacity = p > .55 ? 1 : 0;
+      if (p > 0 && p < 1) { const q = e.p.getPointAtLength(e.L * ez); e.dot.setAttribute("cx", q.x); e.dot.setAttribute("cy", q.y); e.dot.style.opacity = 1; } else e.dot.style.opacity = 0;
+    });
+    this.verts.forEach(v => {
+      const te = v.st + .85, f = t >= te ? Math.max(0, 1 - (t - te) / .55) : 0;
+      v.f.setAttribute("r", (3 + 13 * (1 - f)).toFixed(1)); v.f.style.opacity = f; v.d.style.opacity = t >= te ? 1 : 0;
+    });
+  }
+};
+
 function boot() {
   $$(".contact-slot").forEach(s => s.appendChild($("#contactTpl").content.cloneNode(true)));
   captureEN();
   Portal.init(); renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext();
-  NameFX.init(); CursorFX.init(); Pass.init(); Game.init(); Uni.init(); Visited.paint();
+  NameFX.init(); CursorFX.init(); Pass.init(); BackUni.init(); Feyn.init(); Game.init(); Uni.init(); Visited.paint();
   const stars = () => { drawStars($("#viewStars"), 4200); drawStars($("#introStars"), 2200); };
   stars(); addEventListener("resize", () => { clearTimeout(boot._r); boot._r = setTimeout(() => { stars(); if (Intro.visible()) CMSCover.draw(); }, 200); });
   langListeners.push(() => { renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext(); Visited.paint(); if ($("#modal").classList.contains("open")) fillModal(); if (Portal.key) Portal.label(); soundLabel(); });

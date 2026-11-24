@@ -335,8 +335,6 @@ body.in-view .view-bg{opacity:1}
 .sm-panel a.chip-btn svg{width:15px;height:15px;flex:none}
 #lb{position:fixed;inset:0;z-index:400;background:rgba(3,5,15,.93);display:none;place-items:center;padding:4vmin;cursor:zoom-out}
 #lb.on{display:grid;animation:fade .2s}
-#lb img{max-width:100%;max-height:92vh;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.7)}
-#lb button{position:absolute;top:14px;right:18px;background:none;border:0;color:#fff;font-size:34px;cursor:var(--cp,pointer);line-height:1}
 .t-body{max-width:780px}
 .t-body::after{content:"";display:block;clear:both}
 .t-img{float:right;width:120px;height:90px;object-fit:cover;object-position:50% 30%;border-radius:10px;margin:0 0 8px 16px;border:1px solid var(--line);transition:transform .3s,opacity .23s}
@@ -692,11 +690,58 @@ body.in-view .view-bg{opacity:1}
   .t-body .t-img{width:100%;height:auto;aspect-ratio:4/3;transform:none;margin:4px 0 10px}
   .t-body:has(.t-img){min-height:0}
 }
+/* ---- v18: Feynman diagram (journey) ---- */
+.j-top{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:20px;align-items:center}
+.fy{margin:0;position:relative;cursor:var(--cp,pointer)}
+.fy svg{width:100%;height:auto;display:block;overflow:visible}
+.fy .fy-l{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fy .fy-l.h{stroke-width:2.4}
+.fy .fy-t{font-family:var(--mono);font-size:13px;font-weight:700;text-anchor:middle;transition:opacity .2s}
+.fy .fy-ar{transition:opacity .2s}
+.fy .fy-fl{fill:none;stroke:#fff3cf;stroke-width:2}
+.fy .fy-v{fill:#fff3cf}
+.fy figcaption{display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:6px;text-align:center}
+.fy .fy-name{font-size:11.5px;color:#c9d0ee;font-weight:500;letter-spacing:.02em}
+.fy .fy-tip{font-size:10.5px;color:var(--muted);min-height:2.6em;max-width:330px;line-height:1.35;opacity:0;transition:opacity .25s}
+.fy.hov .fy-tip{opacity:1}
+.fy .fy-dots{display:flex;gap:6px;margin-bottom:2px}
+.fy .fy-dots button{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:#33427a;cursor:var(--cp,pointer)}
+.fy .fy-dots button[aria-current="true"]{background:var(--ember);width:18px;border-radius:4px}
+@media (max-width:1100px){.j-top{grid-template-columns:minmax(0,1fr)}.fy{max-width:420px;margin:0 auto 18px}}
+@media (max-width:760px){.fy{display:none}}
+/* ---- v18: lightbox gallery ---- */
+#lb .lb-fig{margin:0;display:grid;place-items:center;width:100%;height:100%}
+#lb .lb-fig img{max-width:min(100%,1200px);max-height:80vh;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.7);transition:opacity .18s;cursor:default}
+#lb .lb-x{position:absolute;top:14px;right:18px;background:none;border:0;color:#fff;font-size:34px;cursor:var(--cp,pointer);line-height:1}
+#lb .lb-arw{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid #33427a;background:rgba(4,6,18,.7);color:#fff;font-size:30px;line-height:1;cursor:var(--cp,pointer);display:none;place-items:center}
+#lb .lb-arw:hover{border-color:var(--ember);color:var(--ember)}
+#lb .lb-arw.prev{left:2vw}#lb .lb-arw.next{right:2vw}
+#lb.many .lb-arw{display:grid}
+#lb .lb-bar{position:absolute;left:0;right:0;bottom:14px;display:flex;flex-direction:column;align-items:center;gap:8px}
+#lb .lb-n{font-size:12px;color:#c9d0ee;letter-spacing:.08em}
+#lb .lb-th{display:flex;gap:6px;max-width:92vw;overflow-x:auto;padding:2px}
+#lb .lb-th button{flex:none;width:54px;height:40px;padding:0;border:2px solid transparent;border-radius:6px;overflow:hidden;background:none;opacity:.55;cursor:var(--cp,pointer)}
+#lb .lb-th button[aria-current="true"]{border-color:var(--ember);opacity:1}
+#lb .lb-th img{width:100%;height:100%;object-fit:cover}
+@media (max-width:760px){#lb .lb-arw{width:38px;height:38px;font-size:24px}#lb .lb-th button{width:42px;height:32px}}
+/* ---- v18: back-to-the-universe pill (only at the end of a page) ---- */
+.backuni{position:fixed;left:50%;bottom:24px;z-index:90;display:flex;align-items:center;gap:10px;padding:9px 16px;border-radius:999px;border:1px solid #33427a;background:rgba(6,9,26,.88);backdrop-filter:blur(8px);color:var(--ink);font:inherit;font-size:12.5px;cursor:var(--cp,pointer);opacity:0;pointer-events:none;transform:translate(-50%,16px);transition:opacity .35s,transform .35s cubic-bezier(.2,.7,.2,1),border-color .2s;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.backuni.on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+.backuni:hover{border-color:var(--ember)}
+.backuni .dot{width:9px;height:9px;border-radius:50%;background:var(--signal);box-shadow:0 0 10px var(--signal)}
+.backuni.todo .dot{background:var(--ember);box-shadow:0 0 0 0 rgba(232,182,76,.7);animation:beacon 1.6s ease-out infinite}
+.backuni b{font-weight:500;color:var(--ember);font-size:11.5px}
+.backuni:not(.todo) b{color:var(--mint)}
+@media (max-width:760px){.backuni{bottom:84px;font-size:11.5px;padding:8px 13px}}
+@media (prefers-reduced-motion:reduce){.backuni{transition:none}.backuni.todo .dot{animation:none}}
+.sm-panel .rm:focus:not(:focus-visible){outline:none}
+.sm-panel .txt em{font-style:italic;color:#dfe4f8}
 </style>
 </head>
 <body>
 <canvas id="cursorfx" aria-hidden="true"></canvas>
 <div id="cursorHead" aria-hidden="true"></div>
+<button type="button" id="backUni" class="backuni"></button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- ================= INTRO: the book ================= -->
@@ -807,9 +852,11 @@ body.in-view .view-bg{opacity:1}
 </div></section>
 
 <section class="view" id="v-journey" data-view="journey" aria-labelledby="journey-title"><div class="wrap">
+  <div class="j-top"><div class="j-left">
   <h2 class="sec-title" id="journey-title" data-i18n-html="journey.title">Where I've <em>been</em></h2>
   <div class="stickers" id="stickers"></div>
   <p class="sticker-note" data-i18n="journey.peel">psst: click a sticker</p>
+  </div><figure class="fy" id="feyn"></figure></div>
   <div class="timeline" id="timeline"></div>
   <div class="contact-slot"></div>
 </div></section>
@@ -1147,7 +1194,7 @@ const STORY = [
     imgs: ["assets/story/apol-medallas.webp", "assets/story/apol-plata-escenario.webp", "assets/story/apol-lista.webp", "assets/story/apol22-410.webp", "assets/story/club-premiacion.webp"],
     phrase: { en: "Extra classes on Friday afternoons, solving harder problems and widening my view of the world of physics. A passionate teacher showed us that physics was not difficult, but inherently wonderful. All that effort led to two medals in national physics olympiads among 400+ students: bronze in 2022 and silver in 2023.", es: "Clases extra los viernes por la tarde, resolver ejercicios de mayor complejidad y expandir mi panorama del mundo de la física. Un maestro apasionado nos mostró que la física no era difícil, sino inherentemente maravillosa. Todo el esfuerzo concluyó en 2 medallas en olimpiadas nacionales de física entre más de 400 estudiantes: bronce en 2022 y plata en 2023." },
     t: { en: "The physics club & the olympiads", es: "El club de física y las olimpiadas" } },
-  { id: "gy", g: "q", row: 1, col: 3, mt: { en: "EC", es: "EC" }, hook: { en: "No physics degree in my city", es: "Sin carrera de física en mi ciudad" }, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
+  { id: "gy", g: "q", row: 1, col: 3, mt: { en: "EC", es: "EC" }, hook: { en: "No physics degree in my city", es: "Sin carrera de física en mi ciudad" }, full: true, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
     phrase: { en: "In Guayaquil, my city, no university offers a physics degree. Physics is taught as a tool for engineering, almost never as a science of its own, and research opportunities are few.\n\nI chose Computer Engineering with a clear conviction: to use code and data to one day find my way into physics and seek opportunities abroad.", es: "En Guayaquil, mi ciudad, ninguna universidad ofrece la carrera de física. La física se enseña como herramienta para las ingenierías, casi nunca como una ciencia por sí misma, y las oportunidades de investigación son pocas.\n\nElegí Ingeniería en Computación, con la convicción clara de usar el código y los datos para en un futuro encaminarme al mundo de la física y buscar oportunidades a nivel internacional." },
     t: { en: "Studying physics from Guayaquil", es: "Estudiar física desde Guayaquil" } },
   { id: "q3", g: "q", row: 1, col: 4, empty: true },
@@ -1160,18 +1207,18 @@ const STORY = [
     t: { en: "Why I started teaching", es: "Por qué empecé a enseñar" } },
   { id: "tc", g: "l", row: 2, col: 3, mt: { en: "30+", es: "30+" }, sy: "Tc", yr: "now", n: { en: "Tech stack", es: "Tecnologías" }, tech: true,
     t: { en: "Tech stack", es: "Tecnologías" } },
-  { id: "pr", g: "l", row: 2, col: 4, mt: { en: "×2", es: "×2" }, hook: { en: "Two hands: one to move forward, one to pull others up", es: "Dos manos: una para avanzar y otra para jalar a los demás" }, sy: "Pr", yr: "always", n: { en: "Purpose", es: "Propósito" },
+  { id: "pr", g: "l", row: 2, col: 4, mt: { en: "×2", es: "×2" }, hook: { en: "Two hands: one to move forward, one to pull others up", es: "Dos manos: una para avanzar y otra para jalar a los demás" }, full: true, sy: "Pr", yr: "always", n: { en: "Purpose", es: "Propósito" },
     phrase: { en: "A teacher once told me that we have two hands: one to push ourselves forward and one to pull up those who fall behind.\n\nI am no expert, and I am still finding my own way. But you do not need to have it all figured out to help: you start even if you are not perfect, and you share the little you know. Explaining things to others is how I understand them best. That is why I have found purpose in teaching.", es: "Un profesor me dijo una vez que tenemos dos manos: una para impulsarnos hacia adelante y otra para jalar a los que se quedan atrás.\n\nNo soy experto y sigo buscando mi propio camino. Pero no hace falta tenerlo o saberlo todo claro para ayudar; se empieza aunque no se sea perfecto, y se comparte lo poco que uno sabe. Explicar a otros es como mejor entiendo las cosas. Por eso he encontrado propósito en dar clases y enseñar." },
     t: { en: "Two hands and a purpose", es: "Dos manos y un propósito" } },
   { id: "co", g: "b", row: 1, col: 5, mt: { en: "ML", es: "ML" }, hook: { en: "Code and data, my way into physics", es: "El código y los datos, mi camino a la física" }, imgs: ["assets/projects/pa03.webp"], sy: "Co", yr: "2024", n: { en: "Code ✕ physics", es: "Código ✕ física" },
     phrase: { en: "It was common sense. Today physics and mathematics go hand in hand with technology, data analysis and artificial intelligence. Computing is my path into physics, through data science and machine learning applied to real experiments. I want to bring together everything I have learned in my degree and apply it to the world of science.", es: "Fue sentido común. Hoy la física y la matemática van de la mano con la tecnología, el análisis de datos y la inteligencia artificial. La computación es mi camino hacia la física a través del data science y el machine learning aplicados a experimentos reales. Busco juntar los conocimientos adquiridos durante mi carrera para poder aplicarlos al mundo de la ciencia." },
     t: { en: "When computing met physics", es: "Cuando la computación encontró a la física" } },
-  { id: "ov", g: "b", row: 2, col: 5, mt: { en: "ES", es: "ES" }, hook: { en: "Where computing and physics meet", es: "Donde la computación y la física se encuentran" }, imgs: ["assets/story/oviedo-becario.webp"], sy: "Ov", yr: "2026", n: { en: "Oviedo", es: "Oviedo" },
+  { id: "ov", g: "b", row: 2, col: 5, mt: { en: "ES", es: "ES" }, hook: { en: "Where computing and physics meet", es: "Donde la computación y la física se encuentran" }, imgs: ["assets/story/oviedo-becario.webp"], full: true, sy: "Ov", yr: "2026", n: { en: "Oviedo", es: "Oviedo" },
     phrase: { en: "I compared many universities, courses and research groups until I found one where I could combine computer science and physics, and where the timetables between faculties did not clash.\n\nHere, at the Faculty of Science, I take **Data Analysis in Modern Physics** and **Nuclear and Elementary Particle Physics**. Many things are still new to me and I look into them on my own, but I have seen how neural networks and data analysis drive experiments like CMS at CERN, and how much physics needs people coming from computing.", es: "Comparé muchas universidades, materias y grupos de investigación hasta encontrar una donde pudiera mezclar la informática y la física, y donde los horarios entre facultades no chocaran.\n\nAquí curso en la Facultad de Ciencias **Análisis de Datos en Física Moderna** y **Física Nuclear y de Partículas Elementales**. Muchas cosas aún son nuevas para mí y las investigo por mi cuenta, pero he visto cómo las redes neuronales y el análisis de datos impulsan experimentos como el CMS del CERN, y cuánto necesita la física gente que venga del sector de la computación." },
     t: { en: "Why Oviedo", es: "Por qué Oviedo" } },
-  { id: "h", g: "h", row: 1, col: 7, mt: { en: "125 GeV", es: "125 GeV" }, hook: { en: "We are made of physics", es: "Estamos hechos de física" }, sy: "H", yr: "∞", n: { en: "Physics is beautiful", es: "La física es hermosa" },
+  { id: "h", g: "h", row: 1, col: 7, mt: { en: "125 GeV", es: "125 GeV" }, hook: { en: "We are made of physics", es: "Estamos hechos de física" }, full: true, sy: "H", yr: "∞", n: { en: "Physics is beautiful", es: "La física es hermosa" },
     t: { en: "The Higgs of my story", es: "El Higgs de mi historia" },
-    phrase: { en: "> \"Because physics is wonderful. Because we are nothing but physics.\"\n— Javier Santaolalla, particle physicist (translated)\n\nPhysics is everywhere, and we are made of it. Behind every experiment there is a story of human ingenuity, courage and creativity. That living side is what I want to show: the one that makes you dream, look up at the sky and feel small and, at the same time, part of everything.\n\nThat is the reason behind everything else in this table.", es: "> «Porque la física es maravillosa. Porque no somos sino física.»\n— Javier Santaolalla, físico de partículas\n\nLa física está en todas partes, y estamos hechos de ella. Detrás de cada experimento hay una historia de ingenio, valentía y creatividad humana. Ese es el lado vivo que quiero mostrar: el que te hace soñar, mirar al cielo y sentirte pequeño y, a la vez, parte de un todo.\n\nEsa es la razón detrás de todo lo demás en esta tabla." } }
+    phrase: { en: "> \"Because physics is wonderful. Because we are nothing but physics.\"\n— Javier Santaolalla, particle physicist, in *El bosón de Higgs no te va a hacer la cama* (translated)\n\nPhysics is everywhere, and we are made of it. It is not a list of cold formulas but a living science, made by people: behind every experiment there is a story of ingenuity, courage and creativity. That is the side I want to show, the one that asks absurd and obvious questions alike, all of them part of a universal story; the one that makes you dream, look up at the sky and feel small and, at the same time, part of everything.\n\nThat is the reason behind everything else in this table.", es: "> «Porque la física es maravillosa. Porque no somos sino física.»\n— Javier Santaolalla, físico de partículas, en *El bosón de Higgs no te va a hacer la cama*\n\nLa física está en todas partes, y estamos hechos de ella. No es una lista de fórmulas frías, sino una ciencia viva hecha por personas: detrás de cada experimento hay una historia de ingenio, valentía y creatividad. Ese es el lado que quiero mostrar, el que se hace preguntas absurdas y también obvias, todas parte de una historia universal; el que te hace soñar, mirar al cielo y sentirte pequeño y, a la vez, parte de un todo.\n\nEsa es la razón detrás de todo lo demás en esta tabla." } }
 ];
 const STORY_GROUPS = { q: { c: "var(--quark)", en: "origins", es: "orígenes" }, l: { c: "var(--mint)", en: "sharing", es: "compartir" }, b: { c: "var(--boson)", en: "turning points", es: "giros" }, h: { c: "var(--ember)", en: "the why", es: "el porqué" } };
 
@@ -1253,7 +1300,7 @@ const UI = {
         company: "This code was built for a company, so I can't share it.", teamnote: "The repository belongs to the competition organisation.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
         soundOn: "Sound on", soundOff: "Sound off", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · Spain" }, view: "View",
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
-        enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored", deeper: "deeper →", backStart: "back to start ↺",
+        enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored", buBack: "Back to the universe", buLeft: "explored · {n} left", buAll: "All explored ✓", deeper: "deeper →", backStart: "back to start ↺",
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
         aboutP: "About me", readMore: "Read more", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
@@ -1261,7 +1308,7 @@ const UI = {
         company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
         soundOn: "Sonido activado", soundOff: "Sonido apagado", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · España" }, view: "Ver",
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
-        enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar", deeper: "más profundo →", backStart: "volver al inicio ↺",
+        enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar", buBack: "Volver al universo", buLeft: "explorados · faltan {n}", buAll: "Todo explorado ✓", deeper: "más profundo →", backStart: "volver al inicio ↺",
         smEmpty: "Haz clic en una partícula para leer esa parte de la historia.", smPhrase: "Frase corta por escribir aquí.", smFuture: "Espacio para lo que viene.",
         aboutP: "Sobre mí", readMore: "Leer más", smWip: "en proceso…", smPred: "Predicha, aún no observada.", stUni: "Universidad", stSchool: "Colegio", projOne: "proyecto", projMany: "proyectos", techHint: "psst: haz clic en cualquier tecnología para ver los proyectos donde la usé ↗", aboutSub: "mi historia como un modelo estándar", left: "sin explorar", bhTip: "arrastra para girarlo · clic para caer",
         nextK: "Siguiente parada", travel: "Viajar allí →", nextSolar: "Sistema Solar · sobre mí", nextEarth: "Tierra · mi trayectoria", nextSat: "El satélite · arcade", nextBh: "Volver al agujero negro", journeyP: "Mi trayectoria", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "yo", satellite: "Arcade" }
@@ -1408,14 +1455,16 @@ function enterView(v, sub) {
     Uni.jump(VIEW_LEVEL[v]); Uni.zoomIn(); Portal.hide();
     document.body.classList.add("in-view");
   } else if (prev !== v) $("#v-" + prev).classList.remove("on");
-  const el = $("#v-" + v); el.scrollTop = 0; el.classList.add("on");
+  const el = $("#v-" + v); el.scrollTop = 0; el.classList.add("on"); BackUni.hide();
   Game.setVis(v === "arcade");
   renderNav(); Sound.open();
   setTimeout(() => { const h = $("h2", el); h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }, 50);
   if (v === "about") [350, 900].forEach(t => setTimeout(() => { placeNotch(); StoryTour.kick(); }, t));
   if (v === "journey") [120, 700, 1300].forEach(t => setTimeout(() => TimelineReveal.on && TimelineReveal.on(), t));
+  if (v === "journey") setTimeout(() => Feyn.go(), 200);
 }
 function enterHome() {
+  BackUni.hide();
   if (CURVIEW) { $("#v-" + CURVIEW).classList.remove("on"); CURVIEW = null; document.body.classList.remove("in-view"); Uni.zoomOut(); Sound.open(); }
   Game.setVis(false); renderNav(); Uni.start();
 }
@@ -1559,7 +1608,7 @@ function showStory(id, preview) {
     ? `<div class="ev">${hud}<img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="pdots">${items.map((it, j) => `<button type="button" data-k="${j}" aria-pressed="${!j}" aria-label="${j + 1}/${items.length}"></button>`).join("")}</div>` : ""}</div>`
     : `<div class="ev sym" aria-hidden="true">${hud}<b>${esc(s.sy)}</b></div>`;
   const blocks = s.phrase ? L(s.phrase).split("\n\n") : [];
-  const first = blocks.length ? richText(blocks[0]) : "", rest = blocks.slice(1).join("\n\n");
+  const first = blocks.length ? richText(s.full ? blocks.join("\n\n") : blocks[0]) : "", rest = s.full ? "" : blocks.slice(1).join("\n\n");
   const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(L(s.link.t))}</a>` : "";
   p.innerHTML = `${notch}${media}<div class="txt"><h4>${esc(s.sy)} · ${esc(L(s.t))}</h4>${s.hook ? `<p class="hook">${esc(L(s.hook))}</p>` : ""}${first}${rest ? `<div class="more"><div>${richText(rest)}</div></div><button type="button" class="rm">${esc(T().readMore)} <i>▾</i></button>` : ""}${link}</div>`;
   const rm = $(".rm", p); if (rm) rm.onclick = () => { StoryTour.stop(); p.classList.toggle("exp"); Sound.click(); };
@@ -1569,7 +1618,7 @@ function showStory(id, preview) {
   const show = j => { swapImg(main, items[j].u, items[j].page); dots.forEach((x, i) => x.setAttribute("aria-pressed", i === j)); };
   const r = Rot.make($(".ev", p), items.length, show);
   dots.forEach(b => b.onclick = () => { r.go(+b.dataset.k); Sound.click(); });
-  main.onclick = () => lightbox(main.src);
+  main.onclick = () => lightbox(main.src, items);
 }
 /* The small notch on the panel edge points at the active particle */
 function placeNotch() {
@@ -1620,7 +1669,7 @@ const StoryTrace = {
 /* Story text: blank line = new paragraph, **x** = highlighted in the particle colour,
    a paragraph that starts with "> " is a quote (its "— author" line becomes the citation) */
 function richText(t) {
-  const inl = x => esc(x).replace(/\*\*(.+?)\*\*/g, "<mark>$1</mark>");
+  const inl = x => esc(x).replace(/\*\*(.+?)\*\*/g, "<mark>$1</mark>").replace(/\*(.+?)\*/g, "<em>$1</em>");
   return t.split("\n\n").map(par => {
     if (par.startsWith("> ")) { const [q, ...au] = par.slice(2).split("\n"); return `<blockquote class="sq"><p>${inl(q)}</p>${au.length ? `<cite>${inl(au.join(" "))}</cite>` : ""}</blockquote>`; }
     return `<p>${inl(par)}</p>`;
@@ -1683,7 +1732,7 @@ const Rot = {
     return r;
   },
   tick() {
-    if (document.hidden || REDUCED) return;
+    if (document.hidden || REDUCED || Rot.hold) return;
     const now = performance.now();
     Rot.set.forEach(r => {
       if (!r.el.isConnected) { Rot.set.delete(r); Rot.io && Rot.io.unobserve(r.el); return; }
@@ -1702,6 +1751,39 @@ const Pass = {
     tab.onclick = () => { this.set(!p.classList.contains("open")); Sound.click(); };
   },
   set(open) { this.p.classList.toggle("open", open); this.tab.setAttribute("aria-expanded", open); }
+};
+/* "Back to the universe" pill: appears only once you reach the end of a page, and tells you what is still unexplored */
+const BackUni = {
+  init() {
+    const b = $("#backUni"); if (!b) return; this.b = b;
+    b.onclick = () => {
+      Sound.click(); const t = this.target();
+      if (t) Uni.pending = t;
+      goHome();
+    };
+    $$(".view").forEach(v => v.addEventListener("scroll", () => this.check(v), { passive: true }));
+    addEventListener("resize", () => CURVIEW && this.check($("#v-" + CURVIEW)));
+  },
+  /* the closest stop with something new, as a trip for the universe */
+  target() {
+    const lvl = { about: 2, journey: 3, arcade: 3 };
+    if (Visited.galaxiesLeft() > 0) return { level: 1 };
+    for (const k of ["about", "journey", "arcade"]) if (!Visited.has(k)) return { level: lvl[k], portal: k === "arcade" ? "sat" : null };
+    return null;
+  },
+  paint() {
+    if (!this.b) return;
+    const n = Visited.set.size, N = PLACES_TO_SEE.length, left = N - n;
+    this.b.classList.toggle("todo", left > 0);
+    this.b.innerHTML = `<span class="dot" aria-hidden="true"></span><span class="lb">${esc(T().buBack)}</span><b>${left ? `${n}/${N} ${esc(T().buLeft.replace("{n}", left))}` : esc(T().buAll)}</b>`;
+  },
+  check(v) {
+    if (!this.b || !v || v.dataset.view !== CURVIEW) return;
+    const end = v.scrollTop + v.clientHeight >= v.scrollHeight - 120 && v.scrollHeight > v.clientHeight + 40;
+    if (end && !this.b.classList.contains("on")) this.paint();
+    this.b.classList.toggle("on", end);
+  },
+  hide() { if (this.b) this.b.classList.remove("on"); }
 };
 /* Journey effect: "reveal" (each moment fades in once + the line fills with gold as you scroll) or the older "focus" */
 const TL_MODE = "reveal";
@@ -1741,17 +1823,45 @@ const TimelineFocus = {
     items.forEach(el => this.io.observe(el));
   }
 };
-/* Simple full-size viewer for story pictures and class pages */
-function lightbox(src) {
+/* Full-size viewer. Given the whole set of pictures of that moment, it is a small gallery:
+   arrows, keyboard ← →, swipe, counter and thumbnails. While it is open, the galleries stop rotating. */
+const LB = { list: [], k: 0 };
+function lightbox(src, list) {
   let lb = $("#lb");
   if (!lb) {
-    lb = document.createElement("div"); lb.id = "lb"; lb.setAttribute("role", "dialog"); lb.setAttribute("aria-label", "image");
-    lb.innerHTML = `<img alt=""><button type="button" aria-label="close">×</button>`;
+    lb = document.createElement("div"); lb.id = "lb"; lb.setAttribute("role", "dialog"); lb.setAttribute("aria-modal", "true"); lb.setAttribute("aria-label", "image viewer");
+    lb.innerHTML = `<figure class="lb-fig"><img alt=""></figure><button type="button" class="lb-x" aria-label="close">×</button><button type="button" class="lb-arw prev" aria-label="previous">‹</button><button type="button" class="lb-arw next" aria-label="next">›</button><div class="lb-bar"><span class="lb-n"></span><div class="lb-th"></div></div>`;
     document.body.appendChild(lb);
-    lb.onclick = () => lb.classList.remove("on");
-    addEventListener("keydown", e => { if (e.key === "Escape" && lb.classList.contains("on")) { lb.classList.remove("on"); e.stopImmediatePropagation(); } }, true);
+    const close = () => { lb.classList.remove("on"); Rot.hold = false; };
+    lb.onclick = e => { if (e.target === lb || e.target.classList.contains("lb-fig") || e.target.classList.contains("lb-x")) close(); };
+    $(".prev", lb).onclick = e => { e.stopPropagation(); LB.go(-1); };
+    $(".next", lb).onclick = e => { e.stopPropagation(); LB.go(1); };
+    addEventListener("keydown", e => {
+      if (!lb.classList.contains("on")) return;
+      if (e.key === "Escape") { close(); e.stopImmediatePropagation(); }
+      else if (e.key === "ArrowLeft") { LB.go(-1); e.preventDefault(); e.stopImmediatePropagation(); }
+      else if (e.key === "ArrowRight") { LB.go(1); e.preventDefault(); e.stopImmediatePropagation(); }
+    }, true);
+    let x0 = null;
+    lb.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
+    lb.addEventListener("touchend", e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) LB.go(dx < 0 ? 1 : -1); x0 = null; }, { passive: true });
+    LB.go = d => { if (LB.list.length < 2) return; LB.k = (LB.k + d + LB.list.length) % LB.list.length; LB.show(); };
+    LB.show = () => {
+      const u = LB.list[LB.k], im = $(".lb-fig img", lb); im.style.opacity = 0;
+      const pre = new Image(); pre.src = u; const done = () => { im.src = u; im.style.opacity = 1; };
+      (pre.decode ? pre.decode() : Promise.resolve()).then(done, done);
+      [LB.k - 1, LB.k + 1].forEach(j => { const v = LB.list[(j + LB.list.length) % LB.list.length]; if (v) { const i2 = new Image(); i2.src = v; } });
+      const many = LB.list.length > 1; lb.classList.toggle("many", many);
+      $(".lb-n", lb).textContent = many ? `${LB.k + 1} / ${LB.list.length}` : "";
+      $$(".lb-th button", lb).forEach((b, j) => b.setAttribute("aria-current", j === LB.k));
+    };
   }
-  $("img", lb).src = src; lb.classList.add("on");
+  const abs = u => new URL(u, location.href).href;
+  LB.list = (list && list.length ? list : [src]).map(u => typeof u === "string" ? u : u.u);
+  LB.k = Math.max(0, LB.list.findIndex(u => abs(u) === abs(src)));
+  $(".lb-th", lb).innerHTML = LB.list.length > 1 ? LB.list.map((u, j) => `<button type="button" data-j="${j}" aria-label="${j + 1}"><img src="${u}" alt="" loading="lazy"></button>`).join("") : "";
+  $$(".lb-th button", lb).forEach(b => b.onclick = e => { e.stopPropagation(); LB.k = +b.dataset.j; LB.show(); });
+  Rot.hold = true; lb.classList.add("on"); LB.show();
 }
 
 /* ===================== JOURNEY: stickers + timeline ===================== */
@@ -1827,7 +1937,7 @@ function renderTimeline() {
       <p${it.draft ? ' class="draft"' : ""}>${esc(text)}</p>${action ? `<div class="t-act">${action}</div>` : ""}</div></div>`;
   }).join("") + `<div class="tl-fill" aria-hidden="true"></div>`;
   if (TL_MODE === "focus") TimelineFocus.watch(); else TimelineReveal.watch();
-  $$("#timeline .t-img").forEach(im => im.onclick = () => lightbox(im.src));
+  $$("#timeline .t-img").forEach((im, i) => { const it = TIMELINE.filter(x => x.imgs || x.img)[i]; im.onclick = () => lightbox(im.src, it.imgs || [it.img]); });
   $$("#timeline .t-img").forEach((im, i) => {
     const it = TIMELINE.filter(x => x.imgs || x.img)[i], list = it.imgs || [it.img];
     if (list.length > 1) Rot.make(im, list.length, k => swapImg(im, list[k]));
@@ -2876,11 +2986,110 @@ const Intro = {
 };
 
 /* ===================== START ===================== */
+/* ===================== JOURNEY: an animated Feynman diagram ===================== */
+/* Three real processes take turns: e⁻e⁺ → γ* → μ⁻μ⁺ (QED), gg → H → γγ (how CMS found the Higgs) and β decay (weak force).
+   Lines draw themselves in time order, particles run along them, vertices flash. Click = next process; hover = pause. */
+const Feyn = {
+  C: { l: "#62e3b5", q: "#b18cff", b: "#ff9a4c", h: "#e8b64c" },
+  P: [
+    { name: { en: "e⁻e⁺ → γ* → μ⁻μ⁺ · electromagnetism", es: "e⁻e⁺ → γ* → μ⁻μ⁺ · electromagnetismo" },
+      tip: { en: "Matter and antimatter annihilate into light, and light becomes new matter.", es: "Materia y antimateria se aniquilan en luz, y la luz se vuelve materia nueva." },
+      n: { a: [24, 30], b: [24, 200], v1: [140, 115], v2: [260, 115], c: [376, 30], d: [376, 200] },
+      e: [["a", "v1", "f", "l", "e⁻", 0], ["b", "v1", "fa", "l", "e⁺", 0], ["v1", "v2", "w", "b", "γ*", 1], ["v2", "c", "f", "l", "μ⁻", 2], ["v2", "d", "fa", "l", "μ⁺", 2]] },
+    { name: { en: "gg → H → γγ · the Higgs boson", es: "gg → H → γγ · el bosón de Higgs" },
+      tip: { en: "The channel in which CMS and ATLAS discovered the Higgs at CERN in 2012.", es: "El canal con el que CMS y ATLAS descubrieron el Higgs en el CERN en 2012." },
+      n: { a: [24, 30], b: [24, 200], t1: [112, 72], t2: [112, 158], t3: [166, 115], v2: [282, 115], c: [376, 30], d: [376, 200] },
+      e: [["a", "t1", "g", "b", "g", 0], ["b", "t2", "g", "b", "g", 0], ["t1", "t2", "f", "q", "t", 1], ["t2", "t3", "f", "q", "", 1], ["t3", "t1", "f", "q", "", 1], ["t3", "v2", "h", "h", "H", 2], ["v2", "c", "w", "b", "γ", 3], ["v2", "d", "w", "b", "γ", 3]] },
+    { name: { en: "d → u W⁻ → u e⁻ ν̄ₑ · weak force (β decay)", es: "d → u W⁻ → u e⁻ ν̄ₑ · fuerza débil (desintegración β)" },
+      tip: { en: "A quark changes flavour by emitting a W boson: the same force that lets the Sun shine.", es: "Un quark cambia de sabor emitiendo un bosón W: la misma fuerza que hace brillar al Sol." },
+      n: { a: [24, 178], v1: [150, 178], b: [376, 208], v2: [258, 82], c: [376, 28], d: [376, 128] },
+      e: [["a", "v1", "f", "q", "d", 0], ["v1", "b", "f", "q", "u", 1], ["v1", "v2", "w", "b", "W⁻", 1], ["v2", "c", "f", "l", "e⁻", 2], ["v2", "d", "fa", "l", "ν̄ₑ", 2]] }
+  ],
+  k: 0, t: 0, run: false, vis: false, hover: false,
+  init() {
+    const el = $("#feyn"); if (!el) return; this.el = el;
+    el.innerHTML = `<svg viewBox="0 0 400 232" role="img" aria-label="Feynman diagram"><defs><filter id="fyg" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g class="fy-g"></g></svg><figcaption><span class="fy-dots"></span><b class="fy-name"></b><span class="fy-tip"></span></figcaption>`;
+    this.svg = $("svg", el); this.g = $(".fy-g", el);
+    $(".fy-dots", el).innerHTML = this.P.map((_, j) => `<button type="button" data-j="${j}" aria-label="${j + 1}"></button>`).join("");
+    $$(".fy-dots button", el).forEach(b => b.onclick = e => { e.stopPropagation(); this.set(+b.dataset.j); Sound.click(); });
+    this.svg.addEventListener("click", () => { this.set((this.k + 1) % this.P.length); Sound.click(); });
+    el.addEventListener("pointerenter", () => { this.hover = true; el.classList.add("hov"); });
+    el.addEventListener("pointerleave", () => { this.hover = false; el.classList.remove("hov"); });
+    new IntersectionObserver(es => es.forEach(e => { this.vis = e.isIntersecting; this.go(); })).observe(el);
+    document.addEventListener("visibilitychange", () => this.go());
+    langListeners.push(() => this.caption());
+    this.set(0);
+  },
+  path(type, [x1, y1], [x2, y2]) {
+    const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L, nx = -uy, ny = ux;
+    if (type === "w") { const n = Math.max(2, Math.round(L / 6)), A = 4.5; let d = `M${x1},${y1}`; for (let i = 1; i <= 120; i++) { const u = i / 120, o = A * Math.sin(n * Math.PI * u); d += ` L${(x1 + dx * u + nx * o).toFixed(1)},${(y1 + dy * u + ny * o).toFixed(1)}`; } return d; }
+    if (type === "g") { const m = Math.max(3, Math.round(L / 11)), r = 5; let d = `M${x1},${y1}`; for (let i = 1; i <= 220; i++) { const u = i / 220, th = 2 * Math.PI * m * u, al = L * u - 1.7 * r * Math.sin(th), pe = r * (1 - Math.cos(th)); d += ` L${(x1 + ux * al + nx * pe).toFixed(1)},${(y1 + uy * al + ny * pe).toFixed(1)}`; } return d; }
+    return `M${x1},${y1} L${x2},${y2}`;
+  },
+  set(k) {
+    this.k = k; this.t = REDUCED ? 99 : 0; const P = this.P[k], C = this.C, ns = "http://www.w3.org/2000/svg";
+    this.g.innerHTML = ""; this.g.style.opacity = 1; this.edges = []; this.verts = [];
+    const cx = 200, cy = 115;
+    P.e.forEach(([a, b, type, col, lab, st]) => {
+      const A = P.n[a], B = P.n[b], p = document.createElementNS(ns, "path"), c = C[col];
+      p.setAttribute("d", this.path(type === "fa" ? "f" : type, A, B)); p.setAttribute("class", "fy-l " + type); p.style.stroke = c;
+      this.g.appendChild(p);
+      const L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L;
+      const ext = !/^v|^t/.test(a) || !/^v|^t/.test(b), u = ext ? (/^v|^t/.test(a) ? .82 : .18) : .5, pt = p.getPointAtLength(L * u);
+      const dir = [B[0] - A[0], B[1] - A[1]], dl = Math.hypot(...dir); let nx = -dir[1] / dl, ny = dir[0] / dl;
+      if ((pt.x + nx - cx) ** 2 + (pt.y + ny - cy) ** 2 < (pt.x - cx) ** 2 + (pt.y - cy) ** 2) { nx = -nx; ny = -ny; }
+      let tx = null; if (lab) { tx = document.createElementNS(ns, "text"); tx.textContent = lab; tx.setAttribute("x", (pt.x + nx * 14).toFixed(1)); tx.setAttribute("y", (pt.y + ny * 14 + 4).toFixed(1)); tx.setAttribute("class", "fy-t"); tx.style.fill = c; this.g.appendChild(tx); }
+      let ar = null; if (type === "f" || type === "fa") { const m = p.getPointAtLength(L / 2), ang = Math.atan2(dir[1], dir[0]) * 180 / Math.PI + (type === "fa" ? 180 : 0); ar = document.createElementNS(ns, "path"); ar.setAttribute("d", "M-4,-3.5 L4,0 L-4,3.5 Z"); ar.setAttribute("transform", `translate(${m.x},${m.y}) rotate(${ang})`); ar.setAttribute("class", "fy-ar"); ar.style.fill = c; this.g.appendChild(ar); }
+      const dot = document.createElementNS(ns, "circle"); dot.setAttribute("r", type === "h" ? 4 : 3); dot.setAttribute("class", "fy-dot"); dot.style.fill = c; dot.setAttribute("filter", "url(#fyg)"); this.g.appendChild(dot);
+      this.edges.push({ p, L, tx, ar, dot, st, type, a, b });
+    });
+    // a vertex flashes when the lines of its stage arrive
+    const vs = {}; this.edges.forEach(e => { if (/^v|^t/.test(e.b)) vs[e.b] = Math.min(vs[e.b] ?? 9, e.st); });
+    for (const n in vs) { const [x, y] = P.n[n], f = document.createElementNS(ns, "circle"), d = document.createElementNS(ns, "circle"); f.setAttribute("cx", x); f.setAttribute("cy", y); f.setAttribute("class", "fy-fl"); d.setAttribute("cx", x); d.setAttribute("cy", y); d.setAttribute("r", 2.6); d.setAttribute("class", "fy-v"); this.g.appendChild(f); this.g.appendChild(d); this.verts.push({ f, d, st: vs[n] }); }
+    this.stages = Math.max(...P.e.map(e => e[5])) + 1;
+    this.caption(); this.draw(); this.go();
+  },
+  caption() {
+    if (!this.el) return; const P = this.P[this.k];
+    $(".fy-name", this.el).textContent = L(P.name); $(".fy-tip", this.el).textContent = L(P.tip);
+    $$(".fy-dots button", this.el).forEach((b, j) => b.setAttribute("aria-current", j === this.k));
+  },
+  go() {
+    const ok = this.vis && !document.hidden && CURVIEW === "journey" && !REDUCED;
+    if (ok && !this.run) { this.run = true; this.last = performance.now(); requestAnimationFrame(n => this.loop(n)); }
+    if (!ok) this.run = false;
+  },
+  loop(now) {
+    if (!this.run) return;
+    const dt = Math.min(.05, (now - this.last) / 1000); this.last = now;
+    const end = this.stages + 2.8;
+    if (!this.hover || this.t < end) this.t += dt;   // hover only holds the finished diagram, it never freezes the drawing
+    if (this.t > end + .6) { this.set((this.k + 1) % this.P.length); }
+    else { this.g.style.opacity = this.t > end ? Math.max(0, 1 - (this.t - end) / .6) : 1; this.draw(); }
+    if (CURVIEW !== "journey") this.run = false; else requestAnimationFrame(n => this.loop(n));
+  },
+  draw() {
+    const t = this.t;
+    this.edges.forEach(e => {
+      const p = clamp((t - e.st) / .85, 0, 1), ez = 1 - Math.pow(1 - p, 2);
+      if (e.type === "h" && p >= 1) { e.p.style.strokeDasharray = "7 5"; e.p.style.strokeDashoffset = -t * 18; e.p.style.opacity = .75 + .25 * Math.sin(t * 5); }
+      else { e.p.style.strokeDasharray = e.L; e.p.style.strokeDashoffset = e.L * (1 - ez); }
+      if (e.tx) e.tx.style.opacity = clamp((p - .45) * 2.2, 0, 1);
+      if (e.ar) e.ar.style.opacity = p > .55 ? 1 : 0;
+      if (p > 0 && p < 1) { const q = e.p.getPointAtLength(e.L * ez); e.dot.setAttribute("cx", q.x); e.dot.setAttribute("cy", q.y); e.dot.style.opacity = 1; } else e.dot.style.opacity = 0;
+    });
+    this.verts.forEach(v => {
+      const te = v.st + .85, f = t >= te ? Math.max(0, 1 - (t - te) / .55) : 0;
+      v.f.setAttribute("r", (3 + 13 * (1 - f)).toFixed(1)); v.f.style.opacity = f; v.d.style.opacity = t >= te ? 1 : 0;
+    });
+  }
+};
+
 function boot() {
   $$(".contact-slot").forEach(s => s.appendChild($("#contactTpl").content.cloneNode(true)));
   captureEN();
   Portal.init(); renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext();
-  NameFX.init(); CursorFX.init(); Pass.init(); Game.init(); Uni.init(); Visited.paint();
+  NameFX.init(); CursorFX.init(); Pass.init(); BackUni.init(); Feyn.init(); Game.init(); Uni.init(); Visited.paint();
   const stars = () => { drawStars($("#viewStars"), 4200); drawStars($("#introStars"), 2200); };
   stars(); addEventListener("resize", () => { clearTimeout(boot._r); boot._r = setTimeout(() => { stars(); if (Intro.visible()) CMSCover.draw(); }, 200); });
   langListeners.push(() => { renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext(); Visited.paint(); if ($("#modal").classList.contains("open")) fillModal(); if (Portal.key) Portal.label(); soundLabel(); });

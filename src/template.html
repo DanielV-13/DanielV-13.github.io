@@ -335,8 +335,6 @@ body.in-view .view-bg{opacity:1}
 .sm-panel a.chip-btn svg{width:15px;height:15px;flex:none}
 #lb{position:fixed;inset:0;z-index:400;background:rgba(3,5,15,.93);display:none;place-items:center;padding:4vmin;cursor:zoom-out}
 #lb.on{display:grid;animation:fade .2s}
-#lb img{max-width:100%;max-height:92vh;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.7)}
-#lb button{position:absolute;top:14px;right:18px;background:none;border:0;color:#fff;font-size:34px;cursor:var(--cp,pointer);line-height:1}
 .t-body{max-width:780px}
 .t-body::after{content:"";display:block;clear:both}
 .t-img{float:right;width:120px;height:90px;object-fit:cover;object-position:50% 30%;border-radius:10px;margin:0 0 8px 16px;border:1px solid var(--line);transition:transform .3s,opacity .23s}
@@ -692,11 +690,58 @@ body.in-view .view-bg{opacity:1}
   .t-body .t-img{width:100%;height:auto;aspect-ratio:4/3;transform:none;margin:4px 0 10px}
   .t-body:has(.t-img){min-height:0}
 }
+/* ---- v18: Feynman diagram (journey) ---- */
+.j-top{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:20px;align-items:center}
+.fy{margin:0;position:relative;cursor:var(--cp,pointer)}
+.fy svg{width:100%;height:auto;display:block;overflow:visible}
+.fy .fy-l{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fy .fy-l.h{stroke-width:2.4}
+.fy .fy-t{font-family:var(--mono);font-size:13px;font-weight:700;text-anchor:middle;transition:opacity .2s}
+.fy .fy-ar{transition:opacity .2s}
+.fy .fy-fl{fill:none;stroke:#fff3cf;stroke-width:2}
+.fy .fy-v{fill:#fff3cf}
+.fy figcaption{display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:6px;text-align:center}
+.fy .fy-name{font-size:11.5px;color:#c9d0ee;font-weight:500;letter-spacing:.02em}
+.fy .fy-tip{font-size:10.5px;color:var(--muted);min-height:2.6em;max-width:330px;line-height:1.35;opacity:0;transition:opacity .25s}
+.fy.hov .fy-tip{opacity:1}
+.fy .fy-dots{display:flex;gap:6px;margin-bottom:2px}
+.fy .fy-dots button{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:#33427a;cursor:var(--cp,pointer)}
+.fy .fy-dots button[aria-current="true"]{background:var(--ember);width:18px;border-radius:4px}
+@media (max-width:1100px){.j-top{grid-template-columns:minmax(0,1fr)}.fy{max-width:420px;margin:0 auto 18px}}
+@media (max-width:760px){.fy{display:none}}
+/* ---- v18: lightbox gallery ---- */
+#lb .lb-fig{margin:0;display:grid;place-items:center;width:100%;height:100%}
+#lb .lb-fig img{max-width:min(100%,1200px);max-height:80vh;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.7);transition:opacity .18s;cursor:default}
+#lb .lb-x{position:absolute;top:14px;right:18px;background:none;border:0;color:#fff;font-size:34px;cursor:var(--cp,pointer);line-height:1}
+#lb .lb-arw{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid #33427a;background:rgba(4,6,18,.7);color:#fff;font-size:30px;line-height:1;cursor:var(--cp,pointer);display:none;place-items:center}
+#lb .lb-arw:hover{border-color:var(--ember);color:var(--ember)}
+#lb .lb-arw.prev{left:2vw}#lb .lb-arw.next{right:2vw}
+#lb.many .lb-arw{display:grid}
+#lb .lb-bar{position:absolute;left:0;right:0;bottom:14px;display:flex;flex-direction:column;align-items:center;gap:8px}
+#lb .lb-n{font-size:12px;color:#c9d0ee;letter-spacing:.08em}
+#lb .lb-th{display:flex;gap:6px;max-width:92vw;overflow-x:auto;padding:2px}
+#lb .lb-th button{flex:none;width:54px;height:40px;padding:0;border:2px solid transparent;border-radius:6px;overflow:hidden;background:none;opacity:.55;cursor:var(--cp,pointer)}
+#lb .lb-th button[aria-current="true"]{border-color:var(--ember);opacity:1}
+#lb .lb-th img{width:100%;height:100%;object-fit:cover}
+@media (max-width:760px){#lb .lb-arw{width:38px;height:38px;font-size:24px}#lb .lb-th button{width:42px;height:32px}}
+/* ---- v18: back-to-the-universe pill (only at the end of a page) ---- */
+.backuni{position:fixed;left:50%;bottom:24px;z-index:90;display:flex;align-items:center;gap:10px;padding:9px 16px;border-radius:999px;border:1px solid #33427a;background:rgba(6,9,26,.88);backdrop-filter:blur(8px);color:var(--ink);font:inherit;font-size:12.5px;cursor:var(--cp,pointer);opacity:0;pointer-events:none;transform:translate(-50%,16px);transition:opacity .35s,transform .35s cubic-bezier(.2,.7,.2,1),border-color .2s;box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.backuni.on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+.backuni:hover{border-color:var(--ember)}
+.backuni .dot{width:9px;height:9px;border-radius:50%;background:var(--signal);box-shadow:0 0 10px var(--signal)}
+.backuni.todo .dot{background:var(--ember);box-shadow:0 0 0 0 rgba(232,182,76,.7);animation:beacon 1.6s ease-out infinite}
+.backuni b{font-weight:500;color:var(--ember);font-size:11.5px}
+.backuni:not(.todo) b{color:var(--mint)}
+@media (max-width:760px){.backuni{bottom:84px;font-size:11.5px;padding:8px 13px}}
+@media (prefers-reduced-motion:reduce){.backuni{transition:none}.backuni.todo .dot{animation:none}}
+.sm-panel .rm:focus:not(:focus-visible){outline:none}
+.sm-panel .txt em{font-style:italic;color:#dfe4f8}
 </style>
 </head>
 <body>
 <canvas id="cursorfx" aria-hidden="true"></canvas>
 <div id="cursorHead" aria-hidden="true"></div>
+<button type="button" id="backUni" class="backuni"></button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- ================= INTRO: the book ================= -->
@@ -807,9 +852,11 @@ body.in-view .view-bg{opacity:1}
 </div></section>
 
 <section class="view" id="v-journey" data-view="journey" aria-labelledby="journey-title"><div class="wrap">
+  <div class="j-top"><div class="j-left">
   <h2 class="sec-title" id="journey-title" data-i18n-html="journey.title">Where I've <em>been</em></h2>
   <div class="stickers" id="stickers"></div>
   <p class="sticker-note" data-i18n="journey.peel">psst: click a sticker</p>
+  </div><figure class="fy" id="feyn"></figure></div>
   <div class="timeline" id="timeline"></div>
   <div class="contact-slot"></div>
 </div></section>
