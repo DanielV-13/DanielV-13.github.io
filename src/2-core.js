@@ -39,7 +39,7 @@ const ES = {
 };
 const UI = {
   en: { all: "All", projects: "projects", project: "project", did: "What I did", tech: "Built with", with: "With", code: "Code on GitHub", colab: "Open in Colab", figma: "Figma prototype", video: "Video presentation",
-        company: "This code was built for a company, so I can't share it.", teamnote: "The repository belongs to the competition organisation.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
+        company: "This code was built for a company, so I can't share it.", teamnote: "The repository belongs to the competition organisation.", wip: "In progress", wipnote: "Work in progress: results and conclusions coming soon.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
         soundOn: "Sound on", soundOff: "Sound off", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · Spain" }, view: "View",
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
         enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored", buBack: "Back to the universe", buLeft: "explored · {n} left", buAll: "All explored ✓", deeper: "deeper →", backStart: "back to start ↺",
@@ -47,7 +47,7 @@ const UI = {
         aboutP: "About me", readMore: "Read more", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
   es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", figma: "Prototipo en Figma", video: "Video de presentación",
-        company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
+        company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", wip: "En progreso", wipnote: "Proyecto en progreso: pronto añadiré resultados y conclusiones.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
         soundOn: "Sonido activado", soundOff: "Sonido apagado", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · España" }, view: "Ver",
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
         enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar", buBack: "Volver al universo", buLeft: "explorados · faltan {n}", buAll: "Todo explorado ✓", deeper: "más profundo →", backStart: "volver al inicio ↺",
@@ -232,7 +232,7 @@ function cardHTML(p, i) {
     : `<div class="screen"><img src="${p.img}" alt="" loading="lazy"></div>`;
   const first = p.award ? `<span class="tag award">★ ${esc(L(p.award))}</span>` : `<span class="tag">${esc(L(THEMES[p.theme]))}</span>`;
   return `<button class="win${p.feat ? " feat" : ""}" type="button" data-id="${p.id}" style="animation-delay:${Math.min(i, 12) * 35}ms">${screen}
-    <div class="win-body"><div class="win-meta">${first}<span class="tag place-${p.place}">${p.place === "uees" ? "UEES" : "Uniovi"}</span></div>
+    <div class="win-body"><div class="win-meta">${first}<span class="tag place-${p.place}">${p.place === "uees" ? "UEES" : "Uniovi"}</span>${p.wip ? `<span class="tag wip">${esc(T().wip)}</span>` : ""}</div>
     <h3>${esc(L(p.title))}</h3></div></button>`;
 }
 function renderGrid() {
@@ -277,9 +277,10 @@ function fillModal() {
   if (p.company) links += `<div class="note"><span aria-hidden="true">🏢</span><span>${t.company}</span></div>`;
   if (p.teamRepoNote) links += `<div class="note"><span aria-hidden="true">ℹ</span><span>${t.teamnote}</span></div>`;
   $("#mBody").innerHTML = `<div>
-      <div class="m-top">${p.award ? `<span class="tag award">★ ${esc(L(p.award))}</span>` : ""}<span class="tag place-${p.place}">${t.place[p.place]}</span><span class="tag">${esc(L(THEMES[p.theme]))}</span><span class="tag">${p.year}</span></div>
+      <div class="m-top">${p.award ? `<span class="tag award">★ ${esc(L(p.award))}</span>` : ""}<span class="tag place-${p.place}">${t.place[p.place]}</span><span class="tag">${esc(L(THEMES[p.theme]))}</span><span class="tag">${p.year}</span>${p.wip ? `<span class="tag wip">${esc(t.wip)}</span>` : ""}</div>
       <h2 id="m-title">${esc(L(p.title))}</h2><p class="desc">${esc(L(p.desc))}</p>
-      <h4>${t.did}</h4><ul>${did.map(d => `<li>${esc(d)}</li>`).join("")}</ul></div>
+      ${p.wip ? `<p class="wipnote"><span aria-hidden="true"></span>${esc(t.wipnote)}</p>` : ""}
+      ${did.length ? `<h4>${t.did}</h4><ul>${did.map(d => `<li>${esc(d)}</li>`).join("")}</ul>` : ""}</div>
     <div class="m-side"><div class="m-links">${links}</div>
       <div><h4>${t.tech}</h4><div class="techs">${p.tech.map(x => `<span>${esc(x)}</span>`).join("")}</div></div>
       ${people ? `<p class="people">${t.with}: ${people}</p>` : ""}</div>`;
@@ -291,6 +292,7 @@ function closeModal(silent) {
   $("#modal").classList.remove("open");
   if (modalAnim) { Previews.remove(modalAnim); modalAnim = null; }
   $("#mHero").innerHTML = "";
+  Previews.start();
   if (lastFocus && !silent) lastFocus.focus();
 }
 function stepModal(d) { MODAL_I = (MODAL_I + d + MODAL_LIST.length) % MODAL_LIST.length; fillModal(); Sound.click(); }

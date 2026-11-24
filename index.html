@@ -198,11 +198,17 @@ body.in-view .view-bg{opacity:1}
 .win-meta{display:flex;flex-wrap:wrap;gap:6px}
 .tag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--muted)}
 .tag.place-uees{color:#ffd166;border-color:#ffd16655}.tag.place-uniovi{color:#7cb2ff;border-color:#7cb2ff55}
+img[src$="apol-plata-escenario.webp"]{object-position:4% 50%}
+img[src$="apol-lista.webp"]{object-position:50% 70%}
+.tag.wip{color:var(--mint);border-color:rgba(98,227,181,.45);background:rgba(98,227,181,.08)}
+.tag.wip::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--mint);margin-right:6px;vertical-align:1px;box-shadow:0 0 6px var(--mint)}
+.m-body .wipnote{display:flex;gap:10px;align-items:center;margin:-4px 0 18px;padding:10px 14px;border:1px dashed rgba(98,227,181,.4);border-radius:10px;color:#bfeedd;font-size:13px;background:rgba(98,227,181,.05)}
+.m-body .wipnote span{width:8px;height:8px;flex:none;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint)}
 .tag.award{color:#1d1203;background:var(--ember);border-color:var(--ember);font-weight:700}
 .win h3{font-size:15px;font-weight:700;line-height:1.35}
 
 /* Modal */
-.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,4,12,.8);backdrop-filter:blur(6px)}
+.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,4,12,.9)}
 .modal.open{display:flex;animation:fade .25s}
 @keyframes fade{from{opacity:0}}
 .m-panel{position:relative;width:min(1000px,100%);max-height:calc(100vh - 48px);overflow:auto;background:#0a1130;border:1px solid #26366d;border-radius:20px;box-shadow:0 40px 120px rgba(0,0,0,.7);animation:rise .35s cubic-bezier(.2,.8,.2,1)}
@@ -951,14 +957,13 @@ const PROJECTS = [
     tech: ["Python", "PyTorch", "pandas", "scikit-learn", "uproot (ROOT)", "Matplotlib"],
     links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_03_neural_network_torch.ipynb" }, { t: "colab", u: COLAB + "DanielV-13/ADFM---PA_03_neural_network_torch.ipynb/blob/main/ADFM_PA_03_neural_network_torch.ipynb" }] },
 
-  { id: "wids", theme: "data", place: "uees", year: 2026, feat: true, file: "wids_datathon_2026", anim: "data",
+  { id: "wids", theme: "data", place: "uees", year: 2026, feat: true, wip: true, file: "wids_datathon_2026", anim: "data",
     award: { en: "3rd place", es: "3.er lugar" },
     title: { en: "WiDS Datathon 2026 · Team Artemis", es: "Datathon WiDS 2026 · Equipo Artemis" },
     short: { en: "Third place at the Women in Data Science Datathon hosted by ESPOL, Ecuador.", es: "Tercer lugar en el Datathon Women in Data Science organizado por la ESPOL, Ecuador." },
     desc: { en: "A data-science competition organised at ESPOL where our team, Artemis, reached the podium in July 2026.",
             es: "Una competencia de ciencia de datos organizada en la ESPOL en la que nuestro equipo, Artemis, llegó al podio en julio de 2026." },
-    did: { en: ["DRAFT · Daniel: the problem we solved", "DRAFT · Daniel: my role in the team", "DRAFT · Daniel: model and metric that got us 3rd"],
-           es: ["BORRADOR · Daniel: el problema que resolvimos", "BORRADOR · Daniel: mi rol en el equipo", "BORRADOR · Daniel: el modelo y la métrica que nos dieron el 3.er lugar"] },
+    did: { en: [], es: [] },
     tech: ["Python", "pandas", "scikit-learn"], links: [], teamRepoNote: true },
 
   { id: "param", theme: "ml", place: "uniovi", year: 2026, file: "parameterized_nn.ipynb", anim: "param", img: "assets/projects/pl02.webp", plot: true,
@@ -1011,12 +1016,12 @@ const PROJECTS = [
     tech: ["Python", "NumPy", "SymPy", "PyTorch", "Matplotlib"],
     links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_01_autodiff" }] },
 
-  { id: "conv", theme: "ml", place: "uniovi", year: 2026, file: "dense_vs_conv.ipynb", anim: "conv",
+  { id: "conv", theme: "ml", place: "uniovi", year: 2026, wip: true, file: "dense_vs_conv.ipynb", anim: "conv",
     title: { en: "Dense vs. convolutional networks", es: "Redes densas frente a convolucionales" },
     short: { en: "Comparing fully connected and convolutional architectures on the same task.", es: "Comparación de arquitecturas totalmente conectadas y convolucionales en la misma tarea." },
-    desc: { en: "Practical PL_03 of ADFM. DRAFT · Daniel: add the dataset, the result and what you concluded.",
-            es: "Práctica PL_03 de ADFM. BORRADOR · Daniel: añade el conjunto de datos, el resultado y tu conclusión." },
-    did: { en: ["DRAFT · Daniel: key result"], es: ["BORRADOR · Daniel: resultado clave"] },
+    desc: { en: "Practical PL_03 of Data Analysis in Modern Physics (ADFM): a dense network and a convolutional one in PyTorch, compared on the same task.",
+            es: "Práctica PL_03 de Análisis de Datos en Física Moderna (ADFM): una red densa y una convolucional en PyTorch, comparadas en la misma tarea." },
+    did: { en: [], es: [] },
     tech: ["Python", "PyTorch"],
     links: [{ t: "github", u: GH + "DanielV-13/ADFM----PL_03_dense_vs_convolutional.ipynb" }] },
 
@@ -1135,12 +1140,12 @@ const PROJECTS = [
     tech: ["Unity", "C#"], people: ["paula"],
     links: [{ t: "github", u: GH + "bypaupau/Catventures-Game" }] },
 
-  { id: "srihci", theme: "design", place: "uees", year: 2026, file: "sri_redesign.fig", anim: "invoice",
+  { id: "srihci", theme: "design", place: "uees", year: 2026, wip: true, file: "sri_redesign.fig", anim: "invoice",
     title: { en: "Redesigning Ecuador's e-invoicing (SRI)", es: "Rediseño del facturador electrónico del SRI" },
     short: { en: "A human-centred redesign of the tax authority's invoice flow, prototyped in Figma.", es: "Un rediseño centrado en las personas del flujo de facturación del SRI, prototipado en Figma." },
     desc: { en: "A Human–Computer Interaction project: we studied how people struggle with the official invoicing tool and proposed a guided, step-by-step flow, presented in a video and an interactive prototype.",
             es: "Proyecto de Interacción Humano-Computador: estudiamos las dificultades de las personas con el facturador oficial y propusimos un flujo guiado paso a paso, presentado en un video y un prototipo interactivo." },
-    did: { en: ["DRAFT · Daniel: research method and key findings", "Step-by-step invoice wizard prototype"], es: ["BORRADOR · Daniel: método de investigación y hallazgos", "Prototipo de asistente de facturación paso a paso"] },
+    did: { en: ["Step-by-step invoice wizard prototype"], es: ["Prototipo de asistente de facturación paso a paso"] },
     tech: ["Figma", "User research"],
     links: [{ t: "figma", u: "https://www.figma.com/make/3B6GoCk2dkoPUfT2bJ5wp0/Invoice-Wizard-Design?fullscreen=1&t=PkJCDiROb9Ut1SuO-1&code-node-id=0-9" }, { t: "video", u: "https://drive.google.com/file/d/1IxkUrsPvYqDoRvacBT3pUclQym34asGu/view?usp=sharing" }] }
 ];
@@ -1228,9 +1233,9 @@ const STICKERS = [
   { id: "uees", rot: -8, bg: "#0b1230", fg: "#e8b64c", m: "assets/logos/uees.png" },
   { id: "uniovi", rot: 6, bg: "#1d3d7a", fg: "#f4f1ea", m: "assets/logos/uniovi.png", sub: "Uniovi" },
   { id: "wids", rot: -4, bg: "#e8b64c", fg: "#1d1203", txt: "WiDS", sub: { en: "3rd · 2026", es: "3.º · 2026" } },
-  { id: "apol", rot: 5, bg: "#0b1230", fg: "#ff5a76", txt: "APOL", sub: { en: "bronze · silver", es: "bronce · plata" } },
   { id: "dean", rot: -5, bg: "#7a1f2b", fg: "#f4e3c0", txt: "Dean's", sub: { en: "List · 97.08", es: "List · 97,08" } },
   { id: "gt", rot: 9, bg: "#f4f1ea", fg: "#4f2d7f", m: "assets/logos/gt.png", small: true, sub: "Grant Thornton" },
+  { id: "apol", rot: 5, bg: "#0b1230", fg: "#ff5a76", txt: "APOL", sub: { en: "bronze · silver", es: "bronce · plata" } },
   { id: "ec", rot: -10, bg: "linear-gradient(180deg,#ffd100 0 50%,#034ea2 50% 75%,#ef3340 75%)", fg: "#0b1230", txt: "EC", flag: true },
   { id: "es", rot: 7, bg: "linear-gradient(180deg,#c60b1e 0 25%,#ffc400 25% 75%,#c60b1e 75%)", fg: "#0b1230", txt: "ES", flag: true }
 ];
@@ -1298,7 +1303,7 @@ const ES = {
 };
 const UI = {
   en: { all: "All", projects: "projects", project: "project", did: "What I did", tech: "Built with", with: "With", code: "Code on GitHub", colab: "Open in Colab", figma: "Figma prototype", video: "Video presentation",
-        company: "This code was built for a company, so I can't share it.", teamnote: "The repository belongs to the competition organisation.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
+        company: "This code was built for a company, so I can't share it.", teamnote: "The repository belongs to the competition organisation.", wip: "In progress", wipnote: "Work in progress: results and conclusions coming soon.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
         soundOn: "Sound on", soundOff: "Sound off", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · Spain" }, view: "View",
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
         enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored", buBack: "Back to the universe", buLeft: "explored · {n} left", buAll: "All explored ✓", deeper: "deeper →", backStart: "back to start ↺",
@@ -1306,7 +1311,7 @@ const UI = {
         aboutP: "About me", readMore: "Read more", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
   es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", figma: "Prototipo en Figma", video: "Video de presentación",
-        company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
+        company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", wip: "En progreso", wipnote: "Proyecto en progreso: pronto añadiré resultados y conclusiones.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
         soundOn: "Sonido activado", soundOff: "Sonido apagado", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · España" }, view: "Ver",
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
         enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar", buBack: "Volver al universo", buLeft: "explorados · faltan {n}", buAll: "Todo explorado ✓", deeper: "más profundo →", backStart: "volver al inicio ↺",
@@ -1491,7 +1496,7 @@ function cardHTML(p, i) {
     : `<div class="screen"><img src="${p.img}" alt="" loading="lazy"></div>`;
   const first = p.award ? `<span class="tag award">★ ${esc(L(p.award))}</span>` : `<span class="tag">${esc(L(THEMES[p.theme]))}</span>`;
   return `<button class="win${p.feat ? " feat" : ""}" type="button" data-id="${p.id}" style="animation-delay:${Math.min(i, 12) * 35}ms">${screen}
-    <div class="win-body"><div class="win-meta">${first}<span class="tag place-${p.place}">${p.place === "uees" ? "UEES" : "Uniovi"}</span></div>
+    <div class="win-body"><div class="win-meta">${first}<span class="tag place-${p.place}">${p.place === "uees" ? "UEES" : "Uniovi"}</span>${p.wip ? `<span class="tag wip">${esc(T().wip)}</span>` : ""}</div>
     <h3>${esc(L(p.title))}</h3></div></button>`;
 }
 function renderGrid() {
@@ -1536,9 +1541,10 @@ function fillModal() {
   if (p.company) links += `<div class="note"><span aria-hidden="true">🏢</span><span>${t.company}</span></div>`;
   if (p.teamRepoNote) links += `<div class="note"><span aria-hidden="true">ℹ</span><span>${t.teamnote}</span></div>`;
   $("#mBody").innerHTML = `<div>
-      <div class="m-top">${p.award ? `<span class="tag award">★ ${esc(L(p.award))}</span>` : ""}<span class="tag place-${p.place}">${t.place[p.place]}</span><span class="tag">${esc(L(THEMES[p.theme]))}</span><span class="tag">${p.year}</span></div>
+      <div class="m-top">${p.award ? `<span class="tag award">★ ${esc(L(p.award))}</span>` : ""}<span class="tag place-${p.place}">${t.place[p.place]}</span><span class="tag">${esc(L(THEMES[p.theme]))}</span><span class="tag">${p.year}</span>${p.wip ? `<span class="tag wip">${esc(t.wip)}</span>` : ""}</div>
       <h2 id="m-title">${esc(L(p.title))}</h2><p class="desc">${esc(L(p.desc))}</p>
-      <h4>${t.did}</h4><ul>${did.map(d => `<li>${esc(d)}</li>`).join("")}</ul></div>
+      ${p.wip ? `<p class="wipnote"><span aria-hidden="true"></span>${esc(t.wipnote)}</p>` : ""}
+      ${did.length ? `<h4>${t.did}</h4><ul>${did.map(d => `<li>${esc(d)}</li>`).join("")}</ul>` : ""}</div>
     <div class="m-side"><div class="m-links">${links}</div>
       <div><h4>${t.tech}</h4><div class="techs">${p.tech.map(x => `<span>${esc(x)}</span>`).join("")}</div></div>
       ${people ? `<p class="people">${t.with}: ${people}</p>` : ""}</div>`;
@@ -1550,6 +1556,7 @@ function closeModal(silent) {
   $("#modal").classList.remove("open");
   if (modalAnim) { Previews.remove(modalAnim); modalAnim = null; }
   $("#mHero").innerHTML = "";
+  Previews.start();
   if (lastFocus && !silent) lastFocus.focus();
 }
 function stepModal(d) { MODAL_I = (MODAL_I + d + MODAL_LIST.length) % MODAL_LIST.length; fillModal(); Sound.click(); }
@@ -2165,7 +2172,7 @@ const Previews = {
   scan(root) { for (const c of [...this.items.keys()]) if (!document.contains(c)) this.remove(c); $$("canvas[data-anim]", root).forEach(c => this.add(c)); },
   draw(it, t) { if (it.ctx && it.w) { it.ctx.save(); it.fn(it.ctx, it.w, it.h, t); it.ctx.restore(); } },
   start() { if (this.running || REDUCED) return; this.running = true; let last = 0;
-    const loop = now => { let any = false; if (now - last > 33 && !document.hidden) { last = now; for (const it of this.items.values()) if (it.vis && (!it.view || it.view.classList.contains("on"))) { any = true; this.draw(it, now / 1000); } } else any = true;
+    const loop = now => { let any = false; if (now - last > 33 && !document.hidden) { last = now; const mo = !!document.getElementById("modal")?.classList.contains("open"); for (const it of this.items.values()) if (it.vis && (mo ? it.c === modalAnim : (!it.view || it.view.classList.contains("on")))) { any = true; this.draw(it, now / 1000); } } else any = true;
       if (any) requestAnimationFrame(loop); else this.running = false; };
     requestAnimationFrame(loop); }
 };

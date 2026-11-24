@@ -198,11 +198,17 @@ body.in-view .view-bg{opacity:1}
 .win-meta{display:flex;flex-wrap:wrap;gap:6px}
 .tag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);border-radius:999px;padding:3px 8px;color:var(--muted)}
 .tag.place-uees{color:#ffd166;border-color:#ffd16655}.tag.place-uniovi{color:#7cb2ff;border-color:#7cb2ff55}
+img[src$="apol-plata-escenario.webp"]{object-position:4% 50%}
+img[src$="apol-lista.webp"]{object-position:50% 70%}
+.tag.wip{color:var(--mint);border-color:rgba(98,227,181,.45);background:rgba(98,227,181,.08)}
+.tag.wip::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--mint);margin-right:6px;vertical-align:1px;box-shadow:0 0 6px var(--mint)}
+.m-body .wipnote{display:flex;gap:10px;align-items:center;margin:-4px 0 18px;padding:10px 14px;border:1px dashed rgba(98,227,181,.4);border-radius:10px;color:#bfeedd;font-size:13px;background:rgba(98,227,181,.05)}
+.m-body .wipnote span{width:8px;height:8px;flex:none;border-radius:50%;background:var(--mint);box-shadow:0 0 8px var(--mint)}
 .tag.award{color:#1d1203;background:var(--ember);border-color:var(--ember);font-weight:700}
 .win h3{font-size:15px;font-weight:700;line-height:1.35}
 
 /* Modal */
-.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,4,12,.8);backdrop-filter:blur(6px)}
+.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(2,4,12,.9)}
 .modal.open{display:flex;animation:fade .25s}
 @keyframes fade{from{opacity:0}}
 .m-panel{position:relative;width:min(1000px,100%);max-height:calc(100vh - 48px);overflow:auto;background:#0a1130;border:1px solid #26366d;border-radius:20px;box-shadow:0 40px 120px rgba(0,0,0,.7);animation:rise .35s cubic-bezier(.2,.8,.2,1)}

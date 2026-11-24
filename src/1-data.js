@@ -33,14 +33,13 @@ const PROJECTS = [
     tech: ["Python", "PyTorch", "pandas", "scikit-learn", "uproot (ROOT)", "Matplotlib"],
     links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_03_neural_network_torch.ipynb" }, { t: "colab", u: COLAB + "DanielV-13/ADFM---PA_03_neural_network_torch.ipynb/blob/main/ADFM_PA_03_neural_network_torch.ipynb" }] },
 
-  { id: "wids", theme: "data", place: "uees", year: 2026, feat: true, file: "wids_datathon_2026", anim: "data",
+  { id: "wids", theme: "data", place: "uees", year: 2026, feat: true, wip: true, file: "wids_datathon_2026", anim: "data",
     award: { en: "3rd place", es: "3.er lugar" },
     title: { en: "WiDS Datathon 2026 · Team Artemis", es: "Datathon WiDS 2026 · Equipo Artemis" },
     short: { en: "Third place at the Women in Data Science Datathon hosted by ESPOL, Ecuador.", es: "Tercer lugar en el Datathon Women in Data Science organizado por la ESPOL, Ecuador." },
     desc: { en: "A data-science competition organised at ESPOL where our team, Artemis, reached the podium in July 2026.",
             es: "Una competencia de ciencia de datos organizada en la ESPOL en la que nuestro equipo, Artemis, llegó al podio en julio de 2026." },
-    did: { en: ["DRAFT · Daniel: the problem we solved", "DRAFT · Daniel: my role in the team", "DRAFT · Daniel: model and metric that got us 3rd"],
-           es: ["BORRADOR · Daniel: el problema que resolvimos", "BORRADOR · Daniel: mi rol en el equipo", "BORRADOR · Daniel: el modelo y la métrica que nos dieron el 3.er lugar"] },
+    did: { en: [], es: [] },
     tech: ["Python", "pandas", "scikit-learn"], links: [], teamRepoNote: true },
 
   { id: "param", theme: "ml", place: "uniovi", year: 2026, file: "parameterized_nn.ipynb", anim: "param", img: "assets/projects/pl02.webp", plot: true,
@@ -93,12 +92,12 @@ const PROJECTS = [
     tech: ["Python", "NumPy", "SymPy", "PyTorch", "Matplotlib"],
     links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_01_autodiff" }] },
 
-  { id: "conv", theme: "ml", place: "uniovi", year: 2026, file: "dense_vs_conv.ipynb", anim: "conv",
+  { id: "conv", theme: "ml", place: "uniovi", year: 2026, wip: true, file: "dense_vs_conv.ipynb", anim: "conv",
     title: { en: "Dense vs. convolutional networks", es: "Redes densas frente a convolucionales" },
     short: { en: "Comparing fully connected and convolutional architectures on the same task.", es: "Comparación de arquitecturas totalmente conectadas y convolucionales en la misma tarea." },
-    desc: { en: "Practical PL_03 of ADFM. DRAFT · Daniel: add the dataset, the result and what you concluded.",
-            es: "Práctica PL_03 de ADFM. BORRADOR · Daniel: añade el conjunto de datos, el resultado y tu conclusión." },
-    did: { en: ["DRAFT · Daniel: key result"], es: ["BORRADOR · Daniel: resultado clave"] },
+    desc: { en: "Practical PL_03 of Data Analysis in Modern Physics (ADFM): a dense network and a convolutional one in PyTorch, compared on the same task.",
+            es: "Práctica PL_03 de Análisis de Datos en Física Moderna (ADFM): una red densa y una convolucional en PyTorch, comparadas en la misma tarea." },
+    did: { en: [], es: [] },
     tech: ["Python", "PyTorch"],
     links: [{ t: "github", u: GH + "DanielV-13/ADFM----PL_03_dense_vs_convolutional.ipynb" }] },
 
@@ -217,12 +216,12 @@ const PROJECTS = [
     tech: ["Unity", "C#"], people: ["paula"],
     links: [{ t: "github", u: GH + "bypaupau/Catventures-Game" }] },
 
-  { id: "srihci", theme: "design", place: "uees", year: 2026, file: "sri_redesign.fig", anim: "invoice",
+  { id: "srihci", theme: "design", place: "uees", year: 2026, wip: true, file: "sri_redesign.fig", anim: "invoice",
     title: { en: "Redesigning Ecuador's e-invoicing (SRI)", es: "Rediseño del facturador electrónico del SRI" },
     short: { en: "A human-centred redesign of the tax authority's invoice flow, prototyped in Figma.", es: "Un rediseño centrado en las personas del flujo de facturación del SRI, prototipado en Figma." },
     desc: { en: "A Human–Computer Interaction project: we studied how people struggle with the official invoicing tool and proposed a guided, step-by-step flow, presented in a video and an interactive prototype.",
             es: "Proyecto de Interacción Humano-Computador: estudiamos las dificultades de las personas con el facturador oficial y propusimos un flujo guiado paso a paso, presentado en un video y un prototipo interactivo." },
-    did: { en: ["DRAFT · Daniel: research method and key findings", "Step-by-step invoice wizard prototype"], es: ["BORRADOR · Daniel: método de investigación y hallazgos", "Prototipo de asistente de facturación paso a paso"] },
+    did: { en: ["Step-by-step invoice wizard prototype"], es: ["Prototipo de asistente de facturación paso a paso"] },
     tech: ["Figma", "User research"],
     links: [{ t: "figma", u: "https://www.figma.com/make/3B6GoCk2dkoPUfT2bJ5wp0/Invoice-Wizard-Design?fullscreen=1&t=PkJCDiROb9Ut1SuO-1&code-node-id=0-9" }, { t: "video", u: "https://drive.google.com/file/d/1IxkUrsPvYqDoRvacBT3pUclQym34asGu/view?usp=sharing" }] }
 ];
@@ -310,9 +309,9 @@ const STICKERS = [
   { id: "uees", rot: -8, bg: "#0b1230", fg: "#e8b64c", m: "assets/logos/uees.png" },
   { id: "uniovi", rot: 6, bg: "#1d3d7a", fg: "#f4f1ea", m: "assets/logos/uniovi.png", sub: "Uniovi" },
   { id: "wids", rot: -4, bg: "#e8b64c", fg: "#1d1203", txt: "WiDS", sub: { en: "3rd · 2026", es: "3.º · 2026" } },
-  { id: "apol", rot: 5, bg: "#0b1230", fg: "#ff5a76", txt: "APOL", sub: { en: "bronze · silver", es: "bronce · plata" } },
   { id: "dean", rot: -5, bg: "#7a1f2b", fg: "#f4e3c0", txt: "Dean's", sub: { en: "List · 97.08", es: "List · 97,08" } },
   { id: "gt", rot: 9, bg: "#f4f1ea", fg: "#4f2d7f", m: "assets/logos/gt.png", small: true, sub: "Grant Thornton" },
+  { id: "apol", rot: 5, bg: "#0b1230", fg: "#ff5a76", txt: "APOL", sub: { en: "bronze · silver", es: "bronce · plata" } },
   { id: "ec", rot: -10, bg: "linear-gradient(180deg,#ffd100 0 50%,#034ea2 50% 75%,#ef3340 75%)", fg: "#0b1230", txt: "EC", flag: true },
   { id: "es", rot: 7, bg: "linear-gradient(180deg,#c60b1e 0 25%,#ffc400 25% 75%,#c60b1e 75%)", fg: "#0b1230", txt: "ES", flag: true }
 ];
