@@ -86,6 +86,49 @@ const ANIMS = {
     const sy = base - .4 * h * .6 - 18 - Math.abs(Math.sin(t * 3)) * 6;
     c.fillStyle = "#ffd166"; c.font = `${Math.round(h * .12)}px serif`; c.fillText("★", bx + 2 * (bw + 6) + bw / 2, sy);
   },
+  evac(c, w, h, t) {
+    /* WiDS Track 2: a fire on a real street grid, the wind pushing a tongue of risk,
+       the fast route cutting through it and the safe one bending around it */
+    c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);
+    const bw = Math.min(w, h * 1.7), bh = Math.min(h, bw / 1.2), ox = (w - bw) / 2, oy = (h - bh) / 2, S = Math.min(bw, bh * 1.3), P = (x, y) => [ox + bw * x, oy + bh * y];
+    c.strokeStyle = "rgba(141,151,192,.16)"; c.lineWidth = 1;
+    for (let i = 0; i <= 12; i++) { const x = w * (i / 12) + Math.sin(i * 1.7) * 4; c.beginPath(); c.moveTo(x, 0); c.lineTo(x + Math.sin(i) * 10, h); c.stroke(); }
+    for (let j = 0; j <= 8; j++) { const y = h * (j / 8) + Math.cos(j * 2.1) * 4; c.beginPath(); c.moveTo(0, y); c.lineTo(w, y + Math.cos(j) * 8); c.stroke(); }
+    const [fx, fy] = P(.38, .36), wind = .55;   // wind pushes the fire towards the lower right
+    c.save(); c.translate(fx, fy); c.rotate(wind);
+    for (let k = 3; k >= 1; k--) {
+      const g = c.createRadialGradient(S * .05, 0, 0, S * .05, 0, S * .16 * k);
+      g.addColorStop(0, `rgba(255,90,60,${.20 + .05 * Math.sin(t * 2)})`); g.addColorStop(1, "rgba(255,90,60,0)");
+      c.fillStyle = g; c.beginPath(); c.ellipse(S * .12 * k, 0, S * .2 * k, S * .08 * k, 0, 0, 7); c.fill();
+    }
+    c.restore();
+    for (let i = 0; i < 9; i++) {   // wind streaks
+      const u = ((t * .25 + i * .37) % 1), x0 = w * (.05 + (i * .29) % .9), y0 = h * (.05 + (i * .43) % .5);
+      const x = x0 + Math.cos(wind) * u * S * .35, y = y0 + Math.sin(wind) * u * S * .35;
+      c.strokeStyle = `rgba(124,178,255,${.35 * Math.sin(u * Math.PI)})`; c.lineWidth = 1.2; c.beginPath(); c.moveTo(x, y); c.lineTo(x - Math.cos(wind) * 12, y - Math.sin(wind) * 12); c.stroke();
+    }
+    [[0, 0], [-.05, -.06], [.04, -.03]].forEach(([dx, dy], i) => {   // hotspots (NASA FIRMS)
+      const x = fx + dx * bw, y = fy + dy * bh, r = 4 + 2 * Math.sin(t * 5 + i * 2);
+      c.fillStyle = "#ff5a3c"; c.shadowColor = "#ff8a3c"; c.shadowBlur = 14; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill(); c.shadowBlur = 0;
+    });
+    const O = P(.5, .42), D = P(.9, .86);
+    const fast = [O, P(.52, .55), P(.6, .66), P(.74, .74), P(.82, .79), D];
+    const safe = [O, P(.44, .5), P(.3, .6), P(.22, .74), P(.3, .86), P(.6, .9), D];
+    const len = pts => pts.slice(1).reduce((a, p, i) => a + Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]), 0);
+    const at = (pts, f) => { let d = f * len(pts); for (let i = 1; i < pts.length; i++) { const s = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); if (d <= s) { const k = d / s; return [pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * k, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * k]; } d -= s; } return pts[pts.length - 1]; };
+    const line = (pts, col, wd, dash) => { c.strokeStyle = col; c.lineWidth = wd; c.setLineDash(dash || []); c.lineJoin = "round"; c.beginPath(); pts.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); c.stroke(); c.setLineDash([]); };
+    line(fast, "rgba(255,122,122,.75)", 2, [5, 5]);
+    const cyc = (t * .18) % 1, f = Math.min(1, cyc * 1.25);
+    const part = []; for (let k = 0; k <= 40; k++) part.push(at(safe, f * k / 40));
+    line(safe, "rgba(124,178,255,.22)", 3); line(part, "#7cb2ff", 3.2);
+    const [mx, my] = at(safe, f); c.fillStyle = "#fff"; c.beginPath(); c.arc(mx, my, 3.6, 0, 7); c.fill();
+    c.fillStyle = "#e8edff"; c.strokeStyle = "#0a1030"; c.lineWidth = 2; c.beginPath(); c.arc(O[0], O[1], 5, 0, 7); c.fill(); c.stroke();
+    c.fillStyle = "#62e3b5"; c.fillRect(D[0] - 6, D[1] - 6, 12, 12);
+    const fs = Math.max(9, S * .055); c.font = `${fs}px Space Mono, monospace`; c.textAlign = "left";
+    c.fillStyle = "#ff7a7a"; c.fillText("β=0  8.8 min", ...P(.62, .6));
+    c.fillStyle = "#7cb2ff"; c.fillText("β=25 16.3 min", ...P(.04, .97));
+    c.fillStyle = "#62e3b5"; c.font = `700 ${fs * 1.05}px Space Mono, monospace`; c.fillText("risk −42%", ...P(.04, .1));
+  },
   semf(c, w, h, t) {
     c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);
     const x0 = w * .12, y0 = h * .84, ww = w * .8, hh = h * .66;

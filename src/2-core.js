@@ -38,16 +38,16 @@ const ES = {
   "m.prev": "anterior", "m.next": "siguiente"
 };
 const UI = {
-  en: { all: "All", projects: "projects", project: "project", did: "What I did", tech: "Built with", with: "With", code: "Code on GitHub", colab: "Open in Colab", figma: "Figma prototype", video: "Video presentation",
-        company: "This code was built for a company, so I can't share it.", teamnote: "The repository belongs to the competition organisation.", wip: "In progress", wipnote: "Work in progress: results and conclusions coming soon.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
+  en: { all: "All", projects: "projects", project: "project", did: "What I did", tech: "Built with", with: "With", code: "Code on GitHub", colab: "Open in Colab", map: "Interactive evacuation map", figma: "Figma prototype", video: "Video presentation",
+        company: "This code was built for a company, so I can't share it.", teamnote: "Team repository of Artemis-4, hosted on a teammate's account.", wip: "In progress", wipnote: "Work in progress: results and conclusions coming soon.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
         soundOn: "Sound on", soundOff: "Sound off", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · Spain" }, view: "View",
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
         enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored", buBack: "Back to the universe", buLeft: "explored · {n} left", buAll: "All explored ✓", deeper: "deeper →", backStart: "back to start ↺",
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
         aboutP: "About me", readMore: "Read more", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
-  es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", figma: "Prototipo en Figma", video: "Video de presentación",
-        company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", wip: "En progreso", wipnote: "Proyecto en progreso: pronto añadiré resultados y conclusiones.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
+  es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", map: "Mapa interactivo de evacuación", figma: "Prototipo en Figma", video: "Video de presentación",
+        company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "Repositorio del equipo Artemis-4, en la cuenta de una compañera.", wip: "En progreso", wipnote: "Proyecto en progreso: pronto añadiré resultados y conclusiones.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
         soundOn: "Sonido activado", soundOff: "Sonido apagado", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · España" }, view: "Ver",
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
         enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar", buBack: "Volver al universo", buLeft: "explorados · faltan {n}", buAll: "Todo explorado ✓", deeper: "más profundo →", backStart: "volver al inicio ↺",
@@ -267,7 +267,7 @@ function fillModal() {
   else if (p.img) hero.innerHTML = `<img src="${p.img}" alt="${esc(L(p.title))}">`;
   else { hero.innerHTML = `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>`; modalAnim = $("canvas", hero); Previews.add(modalAnim, true); }
   const linkBtn = l => {
-    const lab = { github: t.code, colab: t.colab, figma: t.figma, video: t.video }[l.t];
+    const lab = { github: t.code, colab: t.colab, figma: t.figma, video: t.video, map: t.map }[l.t];
     const ic = l.t === "github" ? '<path d="M9 19c-4 1.5-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>' : '<path d="M7 17 17 7M8 7h9v9"/>';
     return `<a class="btn${l.t === "github" ? "" : " ghost"}" href="${l.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24">${ic}</svg>${lab}</a>`;
   };

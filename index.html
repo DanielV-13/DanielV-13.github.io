@@ -959,14 +959,18 @@ const PROJECTS = [
     tech: ["Python", "PyTorch", "pandas", "scikit-learn", "uproot (ROOT)", "Matplotlib"],
     links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_03_neural_network_torch.ipynb" }, { t: "colab", u: COLAB + "DanielV-13/ADFM---PA_03_neural_network_torch.ipynb/blob/main/ADFM_PA_03_neural_network_torch.ipynb" }] },
 
-  { id: "wids", theme: "data", place: "uees", year: 2026, feat: true, wip: true, file: "wids_datathon_2026", anim: "data",
+  { id: "wids", theme: "data", place: "uees", year: 2026, feat: true, file: "Track2_Rutas_Evacuacion.ipynb", anim: "evac",
     award: { en: "3rd place", es: "3.er lugar" },
-    title: { en: "WiDS Datathon 2026 · Team Artemis", es: "Datathon WiDS 2026 · Equipo Artemis" },
-    short: { en: "Third place at the Women in Data Science Datathon hosted by ESPOL, Ecuador.", es: "Tercer lugar en el Datathon Women in Data Science organizado por la ESPOL, Ecuador." },
-    desc: { en: "A data-science competition organised at ESPOL where our team, Artemis, reached the podium in July 2026.",
-            es: "Una competencia de ciencia de datos organizada en la ESPOL en la que nuestro equipo, Artemis, llegó al podio en julio de 2026." },
-    did: { en: [], es: [] },
-    tech: ["Python", "pandas", "scikit-learn"], links: [], teamRepoNote: true },
+    title: { en: "WiDS Datathon 2026 · Team Artemis-4", es: "Datathon WiDS 2026 · Equipo Artemis-4" },
+    short: { en: "3rd place: wildfire evacuation routes for Guayaquil, from satellite fire data, wind and the real street network.", es: "3.er lugar: rutas de evacuación ante incendios en Guayaquil, con datos satelitales, viento y la red vial real." },
+    desc: { en: "Track 2 of the WiDS Worldwide Datathon at ESPOL (June 2026). We took a real fire, Cerro Azul in Guayaquil on 2 December 2024, and asked where people should evacuate: NASA FIRMS hotspots, Open-Meteo wind (ERA5) and the OpenStreetMap streets as a graph. The fastest route is not the safest one.",
+            es: "Track 2 del WiDS Worldwide Datathon en la ESPOL (junio de 2026). Tomamos un incendio real, el de Cerro Azul en Guayaquil del 2 de diciembre de 2024, y nos preguntamos por dónde evacuar: focos de NASA FIRMS, viento de Open-Meteo (ERA5) y las calles de OpenStreetMap como un grafo. La ruta más rápida no es la más segura." },
+    did: { en: ["Wrote the final version of the team notebook: data dictionary, step-by-step EDA, interactive map and metrics", "A risk score for every intersection: distance to the fire plus alignment with the wind, so risk spreads as a tongue, not a circle", "Dijkstra on the street graph with cost = time × (1 + β·risk); β lets a decision-maker trade speed for safety", "Result: the safe route cuts fire exposure by 42% for 7.5 extra minutes (8.8 → 16.3 min)"],
+           es: ["Escribí la versión final del notebook del equipo: diccionario de datos, EDA paso a paso, mapa interactivo y métricas", "Un riesgo para cada intersección: cercanía al fuego y alineación con el viento, así el riesgo se extiende como una lengua y no como un círculo", "Dijkstra sobre el grafo de calles con costo = tiempo × (1 + β·riesgo); β deja elegir cuánto pesa la seguridad frente a la rapidez", "Resultado: la ruta segura reduce la exposición al fuego un 42 % a cambio de 7,5 minutos más (8,8 → 16,3 min)"] },
+    tech: ["Python", "pandas", "NetworkX", "OSMnx", "folium", "Matplotlib", "seaborn"],
+    links: [{ t: "github", u: "https://github.com/bypaupau/WIDS-DATATHON-2026-ARTEMIS4" },
+            { t: "colab", u: "https://colab.research.google.com/github/bypaupau/WIDS-DATATHON-2026-ARTEMIS4/blob/main/notebooks/Track2_Rutas_Evacuacion_Guayaquil.ipynb" },
+            { t: "map", u: "assets/wids/mapa-evacuacion.html" }], teamRepoNote: true },
 
   { id: "param", theme: "ml", place: "uniovi", year: 2026, file: "parameterized_nn.ipynb", anim: "param", img: "assets/projects/pl02.webp", plot: true,
     title: { en: "Parameterized neural networks for an X → tt̄ search", es: "Redes neuronales paramétricas para buscar X → tt̄" },
@@ -1156,9 +1160,9 @@ const TIMELINE = [
   { when: { en: "Sep 2026 — Jan 2027", es: "sep. 2026 — ene. 2027" }, hl: true, filter: "ml", img: "assets/story/oviedo-becario.webp",
     title: { en: "Exchange semester · international scholar", es: "Semestre de intercambio · becario internacional" }, org: "Universidad de Oviedo",
     text: { en: "Data Analysis in Modern Physics, Nuclear and Particle Physics, and Intelligent Systems.", es: "Análisis de Datos en Física Moderna, Física Nuclear y de Partículas, y Sistemas Inteligentes." } },
-  { when: { en: "Jul 2026", es: "jul. 2026" }, hl: true, open: "wids", imgs: ["assets/story/wids-badge.webp", "assets/story/wids-credencial.webp"],
+  { when: { en: "Jul 2026", es: "jul. 2026" }, hl: true, open: "wids", imgs: ["assets/story/wids-equipo.webp", "assets/story/wids-badge.webp", "assets/story/wids-rutas.webp", "assets/story/wids-credencial.webp"],
     title: { en: "3rd place · WiDS Datathon", es: "3.er lugar · Datathon WiDS" }, org: "ESPOL",
-    text: { en: "Team Artemis on the podium of the Women in Data Science Datathon.", es: "El equipo Artemis en el podio del Datathon Women in Data Science." },
+    text: { en: "Team Artemis-4: wildfire evacuation routes for Guayaquil with satellite data, wind and real streets.", es: "Equipo Artemis-4: rutas de evacuación ante incendios en Guayaquil con datos satelitales, viento y calles reales." },
     links: [{ t: { en: "Verify credential", es: "Verificar credencial" }, u: "https://verified.sertifier.com/en/verify/08910752588849/" }] },
   { when: { en: "Apr 2026", es: "abr. 2026" }, hl: true, imgs: ["assets/story/dean-placa.webp", "assets/story/dean-padres.webp", "assets/story/dean-diploma.webp", "assets/story/dean-mama.webp"],
     title: { en: "Dean's List", es: "Dean's List · Lista del Decano" }, org: "UEES",
@@ -1183,7 +1187,7 @@ const TIMELINE = [
   { when: { en: "2025", es: "2025" }, img: "assets/story/eureka.webp",
     title: { en: "Entrepreneurship", es: "Emprendimiento" }, org: "EUNOIA · Eureka Factory",
     text: { en: "UEES's EUNOIA club and the Eureka Factory incubator (50 hours).", es: "Club EUNOIA de la UEES y la incubadora Eureka Factory (50 horas)." } },
-  { stage: "school", when: { en: "2024", es: "2024" }, hl: true, imgs: ["assets/story/abanderado.webp", "assets/story/fil-escenario.webp", "assets/story/grad-discurso.webp", "assets/story/grad-padres.webp", "assets/story/fil-mama.webp", "assets/story/fil-papa.webp", "assets/story/fil-medalla.webp", "assets/story/grad-titulo.webp"],
+  { stage: "school", when: { en: "2024", es: "2024" }, hl: true, imgs: ["assets/story/abanderado.webp", "assets/story/fil-escenario.webp", "assets/story/grad-discurso.webp", "assets/story/grad-padres.webp", "assets/story/grad-familia.webp", "assets/story/grad-padres-titulo.webp", "assets/story/fil-mama.webp", "assets/story/fil-papa.webp", "assets/story/fil-medalla.webp", "assets/story/grad-titulo.webp"],
     title: { en: "Flag-bearer & \u201cLa Filantrópica\u201d medal", es: "Abanderado y Medalla «La Filantrópica»" }, org: "Interamericano · Sociedad Filantrópica del Guayas",
     text: { en: "9.97/10 average, graduation speech in English, and the medal for the city's top students (2023–2024).", es: "Promedio de 9,97/10, discurso de graduación en inglés y la medalla a los mejores estudiantes de la ciudad (2023–2024)." } },
   { when: { en: "2022 — 2023", es: "2022 — 2023" }, hl: true, imgs: ["assets/story/apol-medallas.webp", "assets/story/apol-plata-escenario.webp", "assets/story/apol22-410.webp", "assets/story/club-premiacion.webp", "assets/story/club-pizarra.webp"],
@@ -1304,16 +1308,16 @@ const ES = {
   "m.prev": "anterior", "m.next": "siguiente"
 };
 const UI = {
-  en: { all: "All", projects: "projects", project: "project", did: "What I did", tech: "Built with", with: "With", code: "Code on GitHub", colab: "Open in Colab", figma: "Figma prototype", video: "Video presentation",
-        company: "This code was built for a company, so I can't share it.", teamnote: "The repository belongs to the competition organisation.", wip: "In progress", wipnote: "Work in progress: results and conclusions coming soon.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
+  en: { all: "All", projects: "projects", project: "project", did: "What I did", tech: "Built with", with: "With", code: "Code on GitHub", colab: "Open in Colab", map: "Interactive evacuation map", figma: "Figma prototype", video: "Video presentation",
+        company: "This code was built for a company, so I can't share it.", teamnote: "Team repository of Artemis-4, hosted on a teammate's account.", wip: "In progress", wipnote: "Work in progress: results and conclusions coming soon.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
         soundOn: "Sound on", soundOff: "Sound off", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · Spain" }, view: "View",
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
         enter: "click to enter", tapEnter: "tap again to enter", play: "click to play", tapPlay: "tap again to play", next: "Next", unexplored: "Unexplored", buBack: "Back to the universe", buLeft: "explored · {n} left", buAll: "All explored ✓", deeper: "deeper →", backStart: "back to start ↺",
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
         aboutP: "About me", readMore: "Read more", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
-  es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", figma: "Prototipo en Figma", video: "Video de presentación",
-        company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "El repositorio pertenece a la organización de la competencia.", wip: "En progreso", wipnote: "Proyecto en progreso: pronto añadiré resultados y conclusiones.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
+  es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", map: "Mapa interactivo de evacuación", figma: "Prototipo en Figma", video: "Video de presentación",
+        company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "Repositorio del equipo Artemis-4, en la cuenta de una compañera.", wip: "En progreso", wipnote: "Proyecto en progreso: pronto añadiré resultados y conclusiones.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
         soundOn: "Sonido activado", soundOff: "Sonido apagado", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · España" }, view: "Ver",
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
         enter: "haz clic para entrar", tapEnter: "toca otra vez para entrar", play: "haz clic para jugar", tapPlay: "toca otra vez para jugar", next: "Siguiente", unexplored: "Sin explorar", buBack: "Volver al universo", buLeft: "explorados · faltan {n}", buAll: "Todo explorado ✓", deeper: "más profundo →", backStart: "volver al inicio ↺",
@@ -1533,7 +1537,7 @@ function fillModal() {
   else if (p.img) hero.innerHTML = `<img src="${p.img}" alt="${esc(L(p.title))}">`;
   else { hero.innerHTML = `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>`; modalAnim = $("canvas", hero); Previews.add(modalAnim, true); }
   const linkBtn = l => {
-    const lab = { github: t.code, colab: t.colab, figma: t.figma, video: t.video }[l.t];
+    const lab = { github: t.code, colab: t.colab, figma: t.figma, video: t.video, map: t.map }[l.t];
     const ic = l.t === "github" ? '<path d="M9 19c-4 1.5-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>' : '<path d="M7 17 17 7M8 7h9v9"/>';
     return `<a class="btn${l.t === "github" ? "" : " ghost"}" href="${l.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24">${ic}</svg>${lab}</a>`;
   };
@@ -2043,6 +2047,49 @@ const ANIMS = {
     });
     const sy = base - .4 * h * .6 - 18 - Math.abs(Math.sin(t * 3)) * 6;
     c.fillStyle = "#ffd166"; c.font = `${Math.round(h * .12)}px serif`; c.fillText("★", bx + 2 * (bw + 6) + bw / 2, sy);
+  },
+  evac(c, w, h, t) {
+    /* WiDS Track 2: a fire on a real street grid, the wind pushing a tongue of risk,
+       the fast route cutting through it and the safe one bending around it */
+    c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);
+    const bw = Math.min(w, h * 1.7), bh = Math.min(h, bw / 1.2), ox = (w - bw) / 2, oy = (h - bh) / 2, S = Math.min(bw, bh * 1.3), P = (x, y) => [ox + bw * x, oy + bh * y];
+    c.strokeStyle = "rgba(141,151,192,.16)"; c.lineWidth = 1;
+    for (let i = 0; i <= 12; i++) { const x = w * (i / 12) + Math.sin(i * 1.7) * 4; c.beginPath(); c.moveTo(x, 0); c.lineTo(x + Math.sin(i) * 10, h); c.stroke(); }
+    for (let j = 0; j <= 8; j++) { const y = h * (j / 8) + Math.cos(j * 2.1) * 4; c.beginPath(); c.moveTo(0, y); c.lineTo(w, y + Math.cos(j) * 8); c.stroke(); }
+    const [fx, fy] = P(.38, .36), wind = .55;   // wind pushes the fire towards the lower right
+    c.save(); c.translate(fx, fy); c.rotate(wind);
+    for (let k = 3; k >= 1; k--) {
+      const g = c.createRadialGradient(S * .05, 0, 0, S * .05, 0, S * .16 * k);
+      g.addColorStop(0, `rgba(255,90,60,${.20 + .05 * Math.sin(t * 2)})`); g.addColorStop(1, "rgba(255,90,60,0)");
+      c.fillStyle = g; c.beginPath(); c.ellipse(S * .12 * k, 0, S * .2 * k, S * .08 * k, 0, 0, 7); c.fill();
+    }
+    c.restore();
+    for (let i = 0; i < 9; i++) {   // wind streaks
+      const u = ((t * .25 + i * .37) % 1), x0 = w * (.05 + (i * .29) % .9), y0 = h * (.05 + (i * .43) % .5);
+      const x = x0 + Math.cos(wind) * u * S * .35, y = y0 + Math.sin(wind) * u * S * .35;
+      c.strokeStyle = `rgba(124,178,255,${.35 * Math.sin(u * Math.PI)})`; c.lineWidth = 1.2; c.beginPath(); c.moveTo(x, y); c.lineTo(x - Math.cos(wind) * 12, y - Math.sin(wind) * 12); c.stroke();
+    }
+    [[0, 0], [-.05, -.06], [.04, -.03]].forEach(([dx, dy], i) => {   // hotspots (NASA FIRMS)
+      const x = fx + dx * bw, y = fy + dy * bh, r = 4 + 2 * Math.sin(t * 5 + i * 2);
+      c.fillStyle = "#ff5a3c"; c.shadowColor = "#ff8a3c"; c.shadowBlur = 14; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill(); c.shadowBlur = 0;
+    });
+    const O = P(.5, .42), D = P(.9, .86);
+    const fast = [O, P(.52, .55), P(.6, .66), P(.74, .74), P(.82, .79), D];
+    const safe = [O, P(.44, .5), P(.3, .6), P(.22, .74), P(.3, .86), P(.6, .9), D];
+    const len = pts => pts.slice(1).reduce((a, p, i) => a + Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1]), 0);
+    const at = (pts, f) => { let d = f * len(pts); for (let i = 1; i < pts.length; i++) { const s = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); if (d <= s) { const k = d / s; return [pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * k, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * k]; } d -= s; } return pts[pts.length - 1]; };
+    const line = (pts, col, wd, dash) => { c.strokeStyle = col; c.lineWidth = wd; c.setLineDash(dash || []); c.lineJoin = "round"; c.beginPath(); pts.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); c.stroke(); c.setLineDash([]); };
+    line(fast, "rgba(255,122,122,.75)", 2, [5, 5]);
+    const cyc = (t * .18) % 1, f = Math.min(1, cyc * 1.25);
+    const part = []; for (let k = 0; k <= 40; k++) part.push(at(safe, f * k / 40));
+    line(safe, "rgba(124,178,255,.22)", 3); line(part, "#7cb2ff", 3.2);
+    const [mx, my] = at(safe, f); c.fillStyle = "#fff"; c.beginPath(); c.arc(mx, my, 3.6, 0, 7); c.fill();
+    c.fillStyle = "#e8edff"; c.strokeStyle = "#0a1030"; c.lineWidth = 2; c.beginPath(); c.arc(O[0], O[1], 5, 0, 7); c.fill(); c.stroke();
+    c.fillStyle = "#62e3b5"; c.fillRect(D[0] - 6, D[1] - 6, 12, 12);
+    const fs = Math.max(9, S * .055); c.font = `${fs}px Space Mono, monospace`; c.textAlign = "left";
+    c.fillStyle = "#ff7a7a"; c.fillText("β=0  8.8 min", ...P(.62, .6));
+    c.fillStyle = "#7cb2ff"; c.fillText("β=25 16.3 min", ...P(.04, .97));
+    c.fillStyle = "#62e3b5"; c.font = `700 ${fs * 1.05}px Space Mono, monospace`; c.fillText("risk −42%", ...P(.04, .1));
   },
   semf(c, w, h, t) {
     c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);
