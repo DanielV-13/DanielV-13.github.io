@@ -245,13 +245,17 @@ body.in-view .view-bg{opacity:1}
 .about-intro{display:grid;grid-template-columns:1.5fr 1fr;gap:40px;align-items:start;margin-bottom:50px}
 .about-intro p{margin:0;font-size:15.5px;color:#d3daf5}
 .about-intro p strong{color:var(--ember);font-weight:500}
+.about-side{display:flex;flex-direction:column;align-items:center;gap:22px}
+.about-side .txt{width:100%}
+.me{margin:0;width:168px;height:168px;border-radius:50%;padding:4px;background:conic-gradient(from 210deg,var(--ember),#ff5a76,#7cb2ff,var(--ember));box-shadow:0 0 40px rgba(232,182,76,.25)}
+.me img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;border:3px solid var(--night)}
 .txt{background:var(--night);border:1px solid var(--line);border-radius:12px;padding:12px 15px}
 .txt .f{font-size:11.5px;color:var(--signal)}
 .txt p{margin:4px 0 0;font-size:14px}
 .sm-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
 .sm-head h3{font-family:var(--display);font-size:13px;line-height:1.6}
 .draft-chip{font-size:10px;letter-spacing:.12em;color:var(--ember);border:1px dashed rgba(232,182,76,.6);border-radius:999px;padding:2px 9px;text-transform:uppercase}
-.sm{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:start}
+.sm{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:start}
 .sm-table{--cs:92px;display:grid;grid-template-columns:14px repeat(4,var(--cs)) 4px var(--cs);grid-template-rows:var(--cs) var(--cs) auto;gap:8px}
 .sm-table .gl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--c);writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;align-self:center;opacity:.85}
 .sm-table .gb2{font-size:9px;letter-spacing:.1em;text-transform:uppercase;text-align:center;color:var(--c);border-top:1px solid var(--c);padding-top:5px;line-height:1.3}
@@ -261,7 +265,7 @@ body.in-view .view-bg{opacity:1}
 .cell .sy{font-family:var(--display);font-size:20px;color:var(--c);margin:auto 0 4px;line-height:1}
 .cell .nm{font-size:10px;line-height:1.2;color:var(--ink)}
 .sm-panel .draft{color:var(--muted);font-size:13px}
-.sm-panel{grid-template-columns:220px 1fr}
+.sm-panel{grid-template-columns:220px minmax(0,1fr)}
 .sm-panel .ph.has{padding:0;background:#060a1c;border:0;display:block;aspect-ratio:auto}
 .sm-panel .ph.has > img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}
 .sm-panel .thumbs{display:flex;gap:6px;margin-top:8px}
@@ -295,6 +299,28 @@ body.in-view .view-bg{opacity:1}
 .sm-panel h4 i{font-style:normal;font-family:var(--display);font-size:13px;color:var(--c);margin-right:8px}
 .sm-panel p{margin:0 0 8px;color:#c3cbea;font-size:14px}
 .sm-panel .q{font-size:12px;color:var(--ember)}
+.sm-panel mark{background:none;color:var(--c);font-weight:700}
+.sm-panel .sq{margin:0 0 12px;padding:4px 0 4px 14px;border-left:3px solid var(--ember)}
+.sm-panel .sq p{font-style:italic;color:#efe6cf;font-size:15px;margin:0 0 4px}
+.sm-panel .sq cite{display:block;font-style:normal;font-size:11.5px;color:var(--muted);letter-spacing:.02em}
+.sm-panel.tech{grid-template-columns:minmax(0,1fr)}
+.sm-panel.tech > div{min-width:0}
+.tmq{overflow:hidden;margin:0 -4px 8px;-webkit-mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.ttr{display:flex;gap:8px;width:max-content;animation:tmv 38s linear infinite}
+.ttr.rv{animation-direction:reverse}
+.tmq:hover .ttr{animation-play-state:paused}
+@keyframes tmv{to{transform:translateX(calc(-50% - 4px))}}
+.tk{display:flex;align-items:center;gap:7px;padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:#0b1233;color:#aeb7dd;font:inherit;font-size:12.5px;cursor:var(--cp,pointer);white-space:nowrap;transition:border-color .2s,color .2s}
+.tk .ic{width:18px;height:18px;flex:none;background:#8a95c4;-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;transition:background .2s}
+.tk:hover,.tk:focus-visible{border-color:var(--h);color:#fff}
+.tk:hover .ic,.tk:focus-visible .ic{background:var(--h)}
+.ttab{display:grid;grid-template-columns:130px minmax(0,1fr);gap:8px 14px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:12.5px}
+.tcat{color:var(--muted);padding-top:3px}
+.tch{display:inline-block;margin:0 6px 6px 0;padding:3px 9px;border-radius:8px;border:0;font:inherit;font-size:12px;background:color-mix(in srgb,var(--c) 14%,transparent);color:color-mix(in srgb,var(--c) 75%,#fff);cursor:var(--cp,pointer)}
+.tch:hover{background:color-mix(in srgb,var(--c) 26%,transparent)}
+.win.tech-hit{outline:2px solid var(--mint);outline-offset:3px;box-shadow:0 0 28px color-mix(in srgb,var(--mint) 40%,transparent)}
+@media (max-width:760px){.ttab{grid-template-columns:1fr}.tcat{padding-top:6px}}
+@media (prefers-reduced-motion:reduce){.ttr{animation:none;flex-wrap:wrap;width:auto}}
 .sm-panel.empty{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;text-align:center}
 
 /* Journey */
@@ -311,7 +337,9 @@ body.in-view .view-bg{opacity:1}
 .sticker .shadow{position:absolute;inset:6px;border-radius:50%;background:rgba(0,0,0,.35);filter:blur(6px);opacity:0;transform:translateY(8px)}
 .sticker:hover .s-in{transform:rotateY(-14deg)}
 .sticker:focus-visible{border-radius:50%;outline-offset:5px}
+.sticker .s-flap{position:absolute;inset:0;border-radius:50%;transform-origin:0 0;background:repeating-linear-gradient(45deg,#f4f1ea 0 6px,#e3dfd4 6px 12px);border:3px solid #f4f1ea;box-shadow:inset 8px 8px 14px rgba(0,0,0,.12);pointer-events:none;clip-path:polygon(0 0,0 0,0 0)}
 .sticker.off{pointer-events:none}
+.sticker.off .s-in{transform:none}
 .sticker.fly{z-index:60}
 .sticker-note{font-size:11.5px;color:var(--muted);margin:0 0 40px}
 .timeline{display:flex;flex-direction:column}
@@ -323,6 +351,9 @@ body.in-view .view-bg{opacity:1}
 .t-body h3{font-size:16px;font-weight:700;margin:0 0 4px;line-height:1.4}
 .t-body h3 span{color:var(--muted);font-weight:400}
 .t-body p{margin:0 0 10px;color:#c3cbea;font-size:14px;max-width:64ch}
+.t-act{display:flex;flex-wrap:wrap;gap:8px}
+.t-act a.chip-btn{text-decoration:none}
+.t-act a.chip-btn.ext{border-color:color-mix(in srgb,var(--ember) 45%,var(--line));color:color-mix(in srgb,var(--ember) 70%,#fff)}
 @media (max-width:760px){.timeline.focus .t-item.on .t-img{transform:scale(1.3)}.timeline.focus .t-img{transform-origin:100% 0}.timeline.focus .t-item.on .t-body p{transform:none}}
 /* scroll focus: the moment in the middle of the screen comes forward, the rest steps back a little */
 .timeline.focus .t-item{transition:opacity .45s}
@@ -470,7 +501,7 @@ body.in-view .view-bg{opacity:1}
 @media (max-width:1100px){
   .win.feat{grid-column:auto}
   .m-body,.about-intro{grid-template-columns:1fr}
-  .sm{grid-template-columns:1fr}
+  .sm{grid-template-columns:minmax(0,1fr)}
   .tnav a{padding:7px 9px}
   .brand .nm{display:none}
 }
@@ -602,7 +633,10 @@ body.in-view .view-bg{opacity:1}
   <h2 class="sec-title" id="about-title" data-i18n-html="about.title">How physics <em>found</em> me</h2>
   <div class="about-intro">
     <p data-i18n-html="about.p">I study <strong>computer engineering</strong> in Guayaquil, Ecuador. Ever since I was a kid I have been passionate about technology and science, especially physics. Since I could not study physics at university, I went looking for it on my own: books, videos and every chance I got to learn more. I was part of my school's physics club, where I won <strong>two medals in national physics olympiads</strong> (bronze 2022 and silver 2023).<br><br>At university I became a <strong>Physics and Mathematics teaching assistant</strong>, and through my classes I have helped dozens of students while keeping alive my passion for teaching and for learning more. During my exchange at the <strong>Universidad de Oviedo</strong> I have been learning physics from a more academic side, and I discovered how my degree, data science and particle physics complement each other.</p>
-    <div class="txt"><span class="f">mission.txt</span><p data-i18n="about.mission">Inspire a passion for physics, science and technology in more students across Latin America. Show how wonderful it can be to follow your curiosity and go all in on learning.</p></div>
+    <div class="about-side">
+      <figure class="me"><img src="assets/story/perfil.webp" alt="Daniel Vaca" width="168" height="168" loading="lazy"></figure>
+      <div class="txt"><span class="f">mission.txt</span><p data-i18n="about.mission">Inspire a passion for physics, science and technology in more students across Latin America. Show how wonderful it can be to follow your curiosity and go all in on learning.</p></div>
+    </div>
   </div>
   <div class="sm-head"><h3 data-i18n="about.smtitle">The standard model of my story</h3></div>
   <div class="sm"><div class="sm-table" id="smTable"></div><div class="sm-panel empty" id="smPanel"></div></div>

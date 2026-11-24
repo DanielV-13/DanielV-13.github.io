@@ -228,65 +228,65 @@ const PROJECTS = [
 ];
 
 const TIMELINE = [
-  { when: { en: "2014 — 2016", es: "2014 — 2016" }, imgs: ["assets/story/robotopia.webp", "assets/story/infancia-spelling.webp", "assets/story/infancia-cebi.webp", "assets/story/infancia-mencion.webp"],
-    title: { en: "Where it started", es: "Donde empezó todo" }, org: "Interamericano",
-    text: { en: "Robotopia \u201cBuild your robot\u201d (2015), maths and spelling contests, and an honour mention. I was already reading popular-science books and watching physics videos.", es: "Robotopia \u201cArma tu robot\u201d (2015), concursos de matemáticas y ortografía y una mención de honor. Ya leía libros de divulgación y veía videos de física." } },
-  { when: { en: "Last years of school", es: "Últimos años de colegio" },
+  { when: { en: "Last years of school", es: "Últimos años de colegio" }, imgs: ["assets/story/club-premiacion.webp", "assets/story/club-pizarra.webp"],
     title: { en: "The school physics club", es: "El club de física del colegio" }, org: "Interamericano",
-    text: { en: "Barely five students, every Friday for four hours after class, solving university-level problems with a teacher who showed us physics is not hard, it is beautiful. That is where it clicked.", es: "Apenas cinco estudiantes, cada viernes cuatro horas después de clases, resolviendo ejercicios de nivel universitario con un maestro que nos mostró que la física no es difícil: es hermosa. Ahí hizo clic." } },
-  { when: { en: "Oct 2022", es: "oct. 2022" }, hl: true, imgs: ["assets/story/apol-medallas.webp", "assets/story/apol-lista.webp", "assets/story/apol22-410.webp", "assets/story/apol22-premiacion.webp"],
+    text: { en: "Fridays after class, five students and university-level problems. That is where physics clicked.", es: "Los viernes después de clases, cinco estudiantes y ejercicios de nivel universitario. Ahí la física hizo clic." } },
+  { when: { en: "Oct 2022", es: "oct. 2022" }, hl: true, imgs: ["assets/story/apol-medallas.webp", "assets/story/apol22-410.webp"],
     title: { en: "Bronze medal · National Physics Olympiad", es: "Medalla de bronce · Olimpiada Nacional de Física" }, org: "APOL",
-    text: { en: "3rd place in the XVII APOL Physics Olympiad among 410+ students from across Ecuador. Awarded at UEES.", es: "3.er puesto en la XVII Olimpiada de Física APOL entre más de 410 estudiantes de todo Ecuador. Premiación en la UEES." } },
+    text: { en: "3rd place among 410+ students from across Ecuador.", es: "3.er lugar entre más de 410 estudiantes de todo Ecuador." } },
   { when: { en: "Nov 2023", es: "nov. 2023" }, hl: true, img: "assets/story/apol-plata-escenario.webp",
     title: { en: "Silver medal · National Physics Olympiad", es: "Medalla de plata · Olimpiada Nacional de Física" }, org: "APOL",
-    text: { en: "2nd place in the XVIII edition, with 420+ students. That year I also took part in the ESPOL physics olympiad.", es: "2.º puesto en la XVIII edición, con más de 420 estudiantes. Ese año también participé en la olimpiada de física de la ESPOL." } },
-  { when: { en: "2024", es: "2024" },
+    text: { en: "2nd place among 420+ students.", es: "2.º lugar entre más de 420 estudiantes." } },
+  { when: { en: "2024", es: "2024" }, imgs: ["assets/story/abanderado.webp", "assets/story/grad-discurso.webp", "assets/story/grad-padres.webp", "assets/story/grad-titulo.webp"],
     title: { en: "Flag-bearer of Guayaquil", es: "Abanderado de la ciudad de Guayaquil" }, org: "Interamericano",
-    text: { en: "Graduated with a 9.97/10 average and gave the graduation speech, in English.", es: "Me gradué con un promedio de 9,97/10 y di el discurso de graduación, en inglés." } },
+    text: { en: "A 9.97/10 average, and I gave the graduation speech in English.", es: "Promedio de 9,97/10 y el discurso de graduación, en inglés." } },
   { when: { en: "Nov 2024", es: "nov. 2024" }, hl: true, imgs: ["assets/story/fil-escenario.webp", "assets/story/fil-mama.webp", "assets/story/fil-papa.webp", "assets/story/fil-medalla.webp", "assets/story/fil-diploma.webp"],
-    title: { en: "\u201cLa Filantrópica\u201d medal", es: "Medalla «La Filantrópica»" }, org: "Sociedad Filantrópica del Guayas",
-    text: { en: "Awarded to the city's top students for the 2023–2024 school year.", es: "Otorgada a los mejores estudiantes de la ciudad por el periodo lectivo 2023–2024." } },
+    title: { en: "“La Filantrópica” medal", es: "Medalla «La Filantrópica»" }, org: "Sociedad Filantrópica del Guayas",
+    text: { en: "For the city's top students of 2023–2024.", es: "Para los mejores estudiantes de la ciudad, periodo 2023–2024." } },
   { when: { en: "Apr 2024 — 2028", es: "abr. 2024 — 2028" }, mark: "{ }",
     title: { en: "Computer Engineering", es: "Ingeniería en Computación" }, org: "UEES",
-    text: { en: "Overall GPA 95.06/100 · Dean's List with 97.08 in Ordinario I 2024.", es: "Promedio general 95,06/100 · Dean's List con 97,08 en el Ordinario I 2024." } },
-  { when: { en: "2024 — now", es: "2024 — hoy" }, mark: "∂",
+    text: { en: "Overall GPA 95.06/100.", es: "Promedio general 95,06/100." } },
+  { when: { en: "2024", es: "2024" }, hl: true, imgs: ["assets/story/dean-placa.webp", "assets/story/dean-padres.webp", "assets/story/dean-diploma.webp", "assets/story/dean-mama.webp"],
+    title: { en: "Dean's List", es: "Dean's List · Lista del Decano" }, org: "UEES",
+    text: { en: "97.08 average in Ordinario I 2024, awarded at the April 2026 ceremony.", es: "Promedio de 97,08 en el Ordinario I 2024, entregado en la ceremonia de abril de 2026." },
+    links: [{ t: { en: "Official list", es: "Lista oficial" }, u: "https://uees.edu.ec/distinciones-academicas-deans-list/" }] },
+  { when: { en: "2024 — now", es: "2024 — hoy" }, mark: "∂", imgs: ["assets/story/clase-loop.webp", "assets/story/clase-senalando.webp", "assets/story/clase-equilibrio.webp"],
     title: { en: "Teaching assistant", es: "Ayudante de cátedra" }, org: "UEES",
-    text: { en: "Five semesters: Physics I, Mathematics I, III and II, and back to Physics I. Professors and students kept asking me to return. I also teach online: Python, statistics, financial maths and IB mathematics.", es: "Cinco semestres: Física I, Matemáticas I, III y II, y de vuelta a Física I. Profesores y estudiantes me pedían volver cada semestre. También doy clases en línea: Python, estadística, matemática financiera y matemáticas IB." }, imgs: ["assets/story/clase-loop.webp", "assets/story/clase-senalando.webp", "assets/story/clase-equilibrio.webp"] },
-  { when: { en: "2025", es: "2025" },
+    text: { en: "Five semesters of Physics I and Mathematics I–III. Professors and students kept asking me back.", es: "Cinco semestres de Física I y Matemáticas I–III. Profesores y estudiantes me pedían volver." } },
+  { when: { en: "2025", es: "2025" }, imgs: ["assets/story/midas-logo.webp", "assets/story/midas-web.webp"],
     title: { en: "Chief Operating Officer", es: "Chief Operating Officer" }, org: "MIDAS",
-    text: { en: "Financial-education app (beta). I coordinate the tech, marketing, finance and strategy teams and follow the development milestones.", es: "App de educación financiera (beta). Coordino los equipos de tecnología, marketing, finanzas y estrategia y doy seguimiento a los hitos de desarrollo." } },
-  { when: { en: "2025", es: "2025" }, hl: true,
+    text: { en: "A financial-education app. I coordinate tech, marketing, finance and strategy.", es: "App de educación financiera. Coordino tecnología, marketing, finanzas y estrategia." },
+    links: [{ t: { en: "Instagram", es: "Instagram" }, u: "https://www.instagram.com/midas_official_latam/" }] },
+  { when: { en: "2025", es: "2025" }, hl: true, imgs: ["assets/story/qs-certificado.webp", "assets/story/novapeak-1.webp", "assets/story/novapeak-2.webp"],
     title: { en: "Top 10 worldwide · QS ImpACT Skills Challenge", es: "Top 10 mundial · QS ImpACT Skills Challenge" }, org: "NOVAPEAK",
-    text: { en: "Our 2.5D video game on the UN Sustainable Development Goals was among the 10 best of 210+ teams.", es: "Nuestro videojuego 2.5D sobre los Objetivos de Desarrollo Sostenible quedó entre los 10 mejores de más de 210 equipos." } },
-  { when: { en: "2025", es: "2025" }, hl: true,
-    title: { en: "2nd place · Veolia Challenge Hackathon", es: "2.º lugar · Veolia Challenge Hackathon" }, org: "UEES · NAVILOG",
-    text: { en: "Eco-efficient mycelium containers to make clinical-waste logistics safer, plus new truck-management features for the Veolia app.", es: "Contenedores ecoeficientes de micelio para una logística de desechos clínicos más segura, y nuevas funciones de gestión de camiones para la app de Veolia." } },
+    text: { en: "Our 2.5D game on the UN Sustainable Development Goals, top 10 of 210+ teams.", es: "Nuestro videojuego 2.5D sobre los ODS, entre los 10 mejores de más de 210 equipos." } },
   { when: { en: "2025", es: "2025" }, img: "assets/story/spacehack-equipo.webp",
     title: { en: "SpaceHACK for Sustainability", es: "SpaceHACK for Sustainability" }, org: "UEES · Arizona State University",
-    text: { en: "A web platform to plan and monitor urban farming terraces for food-insecure communities in Arizona.", es: "Una plataforma web para planificar y monitorear terrazas de cultivo urbano para comunidades con inseguridad alimentaria en Arizona." } },
-  { when: { en: "2025", es: "2025" }, mark: "↗",
+    text: { en: "A web platform to plan urban farming terraces in Arizona.", es: "Plataforma web para planificar terrazas de cultivo urbano en Arizona." } },
+  { when: { en: "2025", es: "2025" }, img: "assets/story/eureka.webp",
     title: { en: "Entrepreneurship", es: "Emprendimiento" }, org: "EUNOIA · Eureka Factory",
-    text: { en: "Member of UEES's EUNOIA entrepreneurship club and the Eureka Factory incubator.", es: "Miembro del club de emprendimiento EUNOIA de la UEES y de la incubadora Eureka Factory." } },
-  { when: { en: "Mar — Aug 2026", es: "mar. — ago. 2026" }, mark: "IT",
+    text: { en: "UEES's EUNOIA club and the Eureka Factory incubator (50 hours).", es: "Club EUNOIA de la UEES y la incubadora Eureka Factory (50 horas)." } },
+  { when: { en: "Mar — Aug 2026", es: "mar. — ago. 2026" }, imgs: ["assets/story/gt-logo.webp", "assets/story/cascos.webp"],
     title: { en: "IT intern · IT audit", es: "Pasante de IT · auditoría informática" }, org: "Grant Thornton Ecuador",
-    text: { en: "Supported the IT audit team with Grant Thornton International audit controls and compliance documentation. I built an SRI invoice reader (PDF → Excel) and an internal search tool for tax-court rulings on top of NotebookLM.", es: "Apoyé al equipo de auditoría informática con controles de auditoría de Grant Thornton International y documentación de cumplimiento. Hice un lector de facturas del SRI (PDF → Excel) y una herramienta interna de búsqueda de sentencias tributarias sobre NotebookLM." } },
-  { when: { en: "Jun 2026", es: "jun. 2026" }, mark: "♻",
-    title: { en: "Cascos Verdes certification", es: "Certificación Cascos Verdes" }, org: "UNITAR · EKOS",
-    text: { en: "Certification issued by UNITAR and EKOS. DRAFT · Daniel: one line on what it covered.", es: "Certificación otorgada por UNITAR y EKOS. BORRADOR · Daniel: una línea sobre de qué trató." }, draft: true },
-  { when: { en: "Jul 2026", es: "jul. 2026" }, mark: "3", hl: true, open: "wids",
+    text: { en: "IT audit support, an SRI invoice reader and a NotebookLM search tool. Plus UNITAR's Green Helmets certificate in climate leadership.", es: "Apoyo en auditoría informática, un lector de facturas del SRI y un buscador con NotebookLM. Además, la certificación Cascos Verdes de UNITAR en liderazgo climático." } },
+  { when: { en: "Jul 2026", es: "jul. 2026" }, hl: true, open: "wids", imgs: ["assets/story/wids-badge.webp", "assets/story/wids-credencial.webp"],
     title: { en: "3rd place · WiDS Datathon", es: "3.er lugar · Datathon WiDS" }, org: "ESPOL",
-    text: { en: "Team Artemis reached the podium of the Women in Data Science Datathon.", es: "El equipo Artemis llegó al podio del Datathon Women in Data Science." } },
-  { when: { en: "Sep 2026 — Jan 2027", es: "sep. 2026 — ene. 2027" }, mark: "OVD", hl: true, filter: "ml",
-    title: { en: "Exchange semester", es: "Semestre de intercambio" }, org: "Universidad de Oviedo",
-    text: { en: "Data Analysis in Modern Physics with Prof. Pietro Vischia, Nuclear and Particle Physics, and Intelligent Systems. Machine learning on particle-physics data, for real.", es: "Análisis de Datos en Física Moderna con el profesor Pietro Vischia, Física Nuclear y de Partículas, y Sistemas Inteligentes. Machine learning con datos de física de partículas, de verdad." } }
+    text: { en: "Team Artemis on the podium of the Women in Data Science Datathon.", es: "El equipo Artemis en el podio del Datathon Women in Data Science." },
+    links: [{ t: { en: "Verify credential", es: "Verificar credencial" }, u: "https://verified.sertifier.com/en/verify/08910752588849/" }] },
+  { when: { en: "Sep 2026 — Jan 2027", es: "sep. 2026 — ene. 2027" }, hl: true, filter: "ml", img: "assets/story/oviedo-becario.webp",
+    title: { en: "Exchange semester · international scholar", es: "Semestre de intercambio · becario internacional" }, org: "Universidad de Oviedo",
+    text: { en: "Data Analysis in Modern Physics, Nuclear and Particle Physics, and Intelligent Systems.", es: "Análisis de Datos en Física Moderna, Física Nuclear y de Partículas, y Sistemas Inteligentes." } }
 ];
+
+/* Tech stack (the Tc particle): logos are Simple Icons (CC0) saved in assets/tech; items without a logo show as text */
+const TECH = [{"c": "data", "n": {"en": "Data & ML", "es": "Datos y ML"}, "items": [{"n": "Python", "s": "python", "hex": "#3776AB"}, {"n": "NumPy", "s": "numpy", "hex": "#013243"}, {"n": "pandas", "s": "pandas", "hex": "#150458"}, {"n": "SciPy", "s": "scipy", "hex": "#8CAAE6"}, {"n": "scikit-learn", "s": "scikitlearn", "hex": "#F7931E"}, {"n": "PyTorch", "s": "pytorch", "hex": "#EE4C2C"}, {"n": "Matplotlib"}, {"n": "seaborn"}, {"n": "Jupyter", "s": "jupyter", "hex": "#F37626"}]}, {"c": "phys", "n": {"en": "Physics", "es": "Física"}, "items": [{"n": "ROOT / uproot", "s": "root", "hex": "#1ED3E4"}, {"n": "iminuit"}, {"n": "SymPy", "s": "sympy", "hex": "#3B5526"}]}, {"c": "soft", "n": {"en": "Software", "es": "Software"}, "items": [{"n": "Java", "s": "openjdk", "hex": "#000000"}, {"n": "C# / .NET", "s": "dotnet", "hex": "#512BD4"}, {"n": "JavaScript", "s": "javascript", "hex": "#F7DF1E"}, {"n": "PHP", "s": "php", "hex": "#777BB4"}, {"n": "Laravel", "s": "laravel", "hex": "#FF2D20"}, {"n": "Prolog"}, {"n": "Android", "s": "android", "hex": "#3DDC84"}]}, {"c": "web", "n": {"en": "Web & databases", "es": "Web y BD"}, "items": [{"n": "Node.js", "s": "nodedotjs", "hex": "#5FA04E"}, {"n": "Express", "s": "express", "hex": "#0A0A0A"}, {"n": "Vue", "s": "vuedotjs", "hex": "#4FC08D"}, {"n": "PostgreSQL", "s": "postgresql", "hex": "#4169E1"}, {"n": "MongoDB", "s": "mongodb", "hex": "#47A248"}, {"n": "SQLite", "s": "sqlite", "hex": "#003B57"}]}, {"c": "infra", "n": {"en": "Infrastructure", "es": "Infraestructura"}, "items": [{"n": "Docker", "s": "docker", "hex": "#2496ED"}, {"n": "Kubernetes", "s": "kubernetes", "hex": "#326CE5"}, {"n": "Tailscale", "s": "tailscale", "hex": "#242424"}, {"n": "Git", "s": "git", "hex": "#F03C2E"}, {"n": "GitHub", "s": "github", "hex": "#181717"}]}, {"c": "play", "n": {"en": "Games & design", "es": "Juegos y diseño"}, "items": [{"n": "Unity", "s": "unity", "hex": "#FFFFFF"}, {"n": "Figma", "s": "figma", "hex": "#F24E1E"}]}];
 
 /* "The standard model of my story": each moment of the story is a particle.
    g: q = quark (origins), l = lepton (sharing), b = boson (turning points), h = Higgs (why it all has mass).
    row/col place the cell in the table; empty cells (sy: "?") are space for what comes next. */
 const STORY = [
   { id: "cp", g: "q", row: 1, col: 2, sy: "Cp", yr: "2022–23", n: { en: "Olympiads", es: "Olimpiadas" },
-    imgs: ["assets/story/apol-medallas.webp", "assets/story/apol-plata-escenario.webp", "assets/story/apol-lista.webp", "assets/story/apol22-410.webp"],
+    imgs: ["assets/story/apol-medallas.webp", "assets/story/apol-plata-escenario.webp", "assets/story/apol-lista.webp", "assets/story/apol22-410.webp", "assets/story/club-premiacion.webp"],
     phrase: { en: "Extra classes on Friday afternoons, solving harder problems and widening my view of the world of physics. A passionate teacher showed us that physics was not difficult, but inherently wonderful. All that effort led to two medals in national physics olympiads among 400+ students: bronze in 2022 and silver in 2023.", es: "Clases extra los viernes por la tarde, resolver ejercicios de mayor complejidad y expandir mi panorama del mundo de la física. Un maestro apasionado nos mostró que la física no era difícil, sino inherentemente maravillosa. Todo el esfuerzo concluyó en 2 medallas en olimpiadas nacionales de física entre más de 400 estudiantes: bronce en 2022 y plata en 2023." },
     t: { en: "The physics club & the olympiads", es: "El club de física y las olimpiadas" } },
   { id: "gy", g: "q", row: 1, col: 3, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
@@ -300,21 +300,20 @@ const STORY = [
     phrase: { en: "Physics I had the most failed students of all the engineering degrees at my university (UEES), and many lost their degree because of it. I became a teaching assistant to change that, and to show physics through a lens of curiosity instead of fear.\n\nI was a teaching assistant for Physics I, Mathematics I, III and II over 5 semesters. Professors and students asked me to come back every semester. Teaching makes me feel alive and gives me purpose. Nothing compares to helping others while learning more every day.", es: "Física I era la materia con más reprobados de todas las ingenierías en mi universidad (UEES), y muchos perdían su carrera por ella. Me hice ayudante de cátedra para cambiar eso, y para mostrar la física desde un lente de curiosidad en lugar de miedo.\n\nFungí como ayudante de Física I, Matemáticas I, Matemáticas III y II durante 5 semestres. Los profesores y estudiantes me pedían volver cada semestre. Enseñar me hace sentir vivo y con propósito. No hay nada comparable con ayudar a otros mientras se aprende más cada día." },
     link: { u: "https://drive.google.com/drive/folders/1zZVa2M3M2WBlf-QhCDNZdtF8_1GZHzMG", t: { en: "Class materials · Drive ↗", es: "Material de clase · Drive ↗" } },
     t: { en: "Why I started teaching", es: "Por qué empecé a enseñar" } },
-  { id: "ou", g: "l", row: 2, col: 3, sy: "Ou", yr: "next", n: { en: "Outreach", es: "Divulgación" },
-    phrase: { en: "Honestly, I have not done much outreach yet. In every class I try to show that physics is far more than hard exercises in a classroom: its applications, its open questions, a reason to keep reading.\n\nWhat comes next: talks, and helping change the idea that physics is difficult and only for a few.", es: "Siendo honesto, todavía no he hecho mucha divulgación. En cada clase intento mostrar que la física es mucho más que ejercicios difíciles en un aula: sus aplicaciones, sus preguntas abiertas, una razón para seguir leyendo.\n\nLo que viene: charlas, y ayudar a cambiar la idea de que la física es difícil y solo para unos pocos." },
-    t: { en: "Sharing physics beyond the classroom", es: "Compartir la física fuera del aula" } },
-  { id: "po", g: "l", row: 2, col: 4, sy: "Po", yr: "always", n: { en: "Polaris", es: "Polaris" },
-    phrase: { en: "A teacher once told me we have two hands: one to push ourselves forward and one to pull up those who fall behind.\n\nI am no expert, and I am still looking for my own Polaris. But you do not need to have it all figured out to help: you start before it is perfect, and you share the little you know. Explaining is how I understand things best, as Feynman said. Maybe the point is not to find your north star, but to become one for someone else.", es: "Un profesor me dijo una vez que tenemos dos manos: una para impulsarnos hacia adelante y otra para jalar a los que se quedan atrás.\n\nNo soy experto y sigo buscando mi propia Polaris. Pero no hace falta tenerlo todo claro para ayudar: se empieza aunque no sea perfecto, y se comparte lo poco que uno sabe. Explicar es como mejor entiendo las cosas, como decía Feynman. Quizá no se trata de encontrar tu estrella del norte, sino de convertirte en la de alguien más." },
-    t: { en: "Be someone's Polaris", es: "Ser la Polaris de alguien" } },
+  { id: "tc", g: "l", row: 2, col: 3, sy: "Tc", yr: "30+", n: { en: "Tech stack", es: "Tecnologías" }, tech: true,
+    t: { en: "Tech stack", es: "Tecnologías" } },
+  { id: "pr", g: "l", row: 2, col: 4, sy: "Pr", yr: "always", n: { en: "Purpose", es: "Propósito" },
+    phrase: { en: "A teacher once told me that we have two hands: one to push ourselves forward and one to pull up those who fall behind.\n\nI am no expert, and I am still finding my own way. But you do not need to have it all figured out to help: you start even if you are not perfect, and you share the little you know. Explaining things to others is how I understand them best. That is why I have found purpose in teaching.", es: "Un profesor me dijo una vez que tenemos dos manos: una para impulsarnos hacia adelante y otra para jalar a los que se quedan atrás.\n\nNo soy experto y sigo buscando mi propio camino. Pero no hace falta tenerlo o saberlo todo claro para ayudar; se empieza aunque no se sea perfecto, y se comparte lo poco que uno sabe. Explicar a otros es como mejor entiendo las cosas. Por eso he encontrado propósito en dar clases y enseñar." },
+    t: { en: "Two hands and a purpose", es: "Dos manos y un propósito" } },
   { id: "co", g: "b", row: 1, col: 5, sy: "Co", yr: "2024", n: { en: "Code ✕ physics", es: "Código ✕ física" },
-    phrase: { en: "It felt like common sense. Today physics, mathematics and chemistry go hand in hand with code and data, and AI is only making that stronger.\n\nComputing is my way into physics: data analysis and machine learning applied to real experiments.", es: "Fue sentido común. Hoy la física, la matemática y la química van de la mano con el código y los datos, y la inteligencia artificial lo hace cada vez más fuerte.\n\nLa computación es mi camino hacia la física: análisis de datos y machine learning aplicados a experimentos reales." },
+    phrase: { en: "It was common sense. Today physics and mathematics go hand in hand with technology, data analysis and artificial intelligence. Computing is my path into physics, through data science and machine learning applied to real experiments. I want to bring together everything I have learned in my degree and apply it to the world of science.", es: "Fue sentido común. Hoy la física y la matemática van de la mano con la tecnología, el análisis de datos y la inteligencia artificial. La computación es mi camino hacia la física a través del data science y el machine learning aplicados a experimentos reales. Busco juntar los conocimientos adquiridos durante mi carrera para poder aplicarlos al mundo de la ciencia." },
     t: { en: "When computing met physics", es: "Cuando la computación encontró a la física" } },
   { id: "ov", g: "b", row: 2, col: 5, sy: "Ov", yr: "2026", n: { en: "Oviedo", es: "Oviedo" },
-    phrase: { en: "I compared many universities, courses and research groups until I found one where computer science and physics are close together and the timetables do not clash: Oviedo.\n\nHere I take Data Analysis in Modern Physics with Prof. Pietro Vischia. Plenty is still new to me and I look a lot of it up on my own, but I have seen how neural networks and data analysis drive experiments like CMS at CERN, and how much physics needs people who can program.", es: "Comparé muchas universidades, materias y grupos de investigación hasta encontrar una donde la informática y la física estuvieran cerca y los horarios no chocaran: Oviedo.\n\nAquí curso Análisis de Datos en Física Moderna con el profesor Pietro Vischia. Muchas cosas aún son nuevas para mí y las investigo por mi cuenta, pero he visto cómo las redes neuronales y el análisis de datos impulsan experimentos como el CMS del CERN, y cuánto necesita la física gente que sepa programar." },
+    phrase: { en: "I compared many universities, courses and research groups until I found one where I could combine computer science and physics, and where the timetables between faculties did not clash.\n\nHere, at the Faculty of Science, I take **Data Analysis in Modern Physics** and **Nuclear and Elementary Particle Physics**. Many things are still new to me and I look into them on my own, but I have seen how neural networks and data analysis drive experiments like CMS at CERN, and how much physics needs people coming from computing.", es: "Comparé muchas universidades, materias y grupos de investigación hasta encontrar una donde pudiera mezclar la informática y la física, y donde los horarios entre facultades no chocaran.\n\nAquí curso en la Facultad de Ciencias **Análisis de Datos en Física Moderna** y **Física Nuclear y de Partículas Elementales**. Muchas cosas aún son nuevas para mí y las investigo por mi cuenta, pero he visto cómo las redes neuronales y el análisis de datos impulsan experimentos como el CMS del CERN, y cuánto necesita la física gente que venga del sector de la computación." },
     t: { en: "Why Oviedo", es: "Por qué Oviedo" } },
   { id: "h", g: "h", row: 1, col: 7, sy: "H", yr: "∞", n: { en: "Physics is beautiful", es: "La física es hermosa" },
     t: { en: "The Higgs of my story", es: "El Higgs de mi historia" },
-    phrase: { en: "Physics is everywhere, and we are made of it. Behind every experiment there is a story of human ingenuity, courage and creativity, and that is the side I want to show: the one that makes you look up at the sky and feel small and part of everything at once.\n\nThat is the reason behind everything else in this table.", es: "La física está en todas partes, y estamos hechos de ella. Detrás de cada experimento hay una historia de ingenio, valentía y creatividad humana, y ese es el lado que quiero mostrar: el que te hace mirar al cielo y sentirte pequeño y parte de todo a la vez.\n\nEsa es la razón detrás de todo lo demás en esta tabla." } }
+    phrase: { en: "> \"Because physics is wonderful. Because we are nothing but physics.\"\n— Javier Santaolalla, particle physicist (translated)\n\nPhysics is everywhere, and we are made of it. Behind every experiment there is a story of human ingenuity, courage and creativity. That living side is what I want to show: the one that makes you dream, look up at the sky and feel small and, at the same time, part of everything.\n\nThat is the reason behind everything else in this table.", es: "> «Porque la física es maravillosa. Porque no somos sino física.»\n— Javier Santaolalla, físico de partículas\n\nLa física está en todas partes, y estamos hechos de ella. Detrás de cada experimento hay una historia de ingenio, valentía y creatividad humana. Ese es el lado vivo que quiero mostrar: el que te hace soñar, mirar al cielo y sentirte pequeño y, a la vez, parte de un todo.\n\nEsa es la razón detrás de todo lo demás en esta tabla." } }
 ];
 const STORY_GROUPS = { q: { c: "var(--quark)", en: "origins", es: "orígenes" }, l: { c: "var(--mint)", en: "sharing", es: "compartir" }, b: { c: "var(--boson)", en: "turning points", es: "giros" }, h: { c: "var(--ember)", en: "the why", es: "el porqué" } };
 
@@ -324,8 +323,9 @@ const STICKERS = [
   { id: "uniovi", rot: 6, bg: "#1d3d7a", fg: "#f4f1ea", m: "assets/logos/uniovi.png", sub: "Uniovi" },
   { id: "wids", rot: -4, bg: "#e8b64c", fg: "#1d1203", txt: "WiDS", sub: { en: "3rd · 2026", es: "3.º · 2026" } },
   { id: "apol", rot: 5, bg: "#0b1230", fg: "#ff5a76", txt: "APOL", sub: { en: "bronze · silver", es: "bronce · plata" } },
+  { id: "dean", rot: -5, bg: "#7a1f2b", fg: "#f4e3c0", txt: "Dean's", sub: { en: "List · 97.08", es: "List · 97,08" } },
   { id: "qs", rot: -7, bg: "#62e3b5", fg: "#06281d", txt: "QS", sub: { en: "Top 10 world", es: "Top 10 mundial" } },
-  { id: "gt", rot: 9, bg: "#f4f1ea", fg: "#0b1230", m: "assets/logos/gt.png", small: true, sub: "Grant Thornton" },
+  { id: "gt", rot: 9, bg: "#f4f1ea", fg: "#4f2d7f", m: "assets/logos/gt.png", small: true, sub: "Grant Thornton" },
   { id: "ec", rot: -10, bg: "linear-gradient(180deg,#ffd100 0 50%,#034ea2 50% 75%,#ef3340 75%)", fg: "#0b1230", txt: "EC", flag: true },
   { id: "es", rot: 7, bg: "linear-gradient(180deg,#c60b1e 0 25%,#ffc400 25% 75%,#c60b1e 75%)", fg: "#0b1230", txt: "ES", flag: true }
 ];
@@ -347,7 +347,7 @@ const PLANETS = [
   { en: "Machine learning", es: "Machine learning", color: "#e8b64c", r: .34, size: 9 },
   { en: "Teaching", es: "Enseñar", color: "#62e3b5", r: .52, size: 7 },
   { en: "Software", es: "Software", color: "#ff9f5a", r: .72, size: 12, ring: true },
-  { en: "Outreach", es: "Divulgación", color: "#c6b3ff", r: .92, size: 8 }
+  { en: "Data science", es: "Ciencia de datos", color: "#c6b3ff", r: .92, size: 8 }
 ];
 /* Places to explore (the "Explored n/9" counter): 6 galaxies + Sun + Earth + satellite */
 const PLACES_TO_SEE = ["ml", "data", "software", "systems", "games", "design", "about", "journey", "arcade"];

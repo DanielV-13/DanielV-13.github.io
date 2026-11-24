@@ -103,6 +103,22 @@ const Sound = {
   shoot() { this.tone(1200, .07, "square", .02, 600); },
   boom() { this.noise(.18, .05, 500); },
   peel() { this.noise(.25, .05, 2600); },
+  /* sticky tape coming off: crackly noise whose band rises as the corner lifts, lasting as long as the fold (d seconds) */
+  rip(d = .9) {
+    if (!this.on || !this.ctx) return;
+    try {
+      const c = this.ctx, t = c.currentTime, n = Math.floor(c.sampleRate * d), b = c.createBuffer(1, n, c.sampleRate), x = b.getChannelData(0);
+      let crack = 0;
+      for (let i = 0; i < n; i++) {
+        const p = i / n; if (Math.random() < .0016 + p * .004) crack = 1; crack *= .985;
+        x[i] = (Math.random() * 2 - 1) * (.18 + .55 * crack) * Math.min(1, p * 6) * (p > .9 ? (1 - p) * 10 : 1);
+      }
+      const src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+      f.type = "bandpass"; f.Q.value = .9; f.frequency.setValueAtTime(700, t); f.frequency.exponentialRampToValueAtTime(3400, t + d);
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.16, t + d * .7); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+      src.buffer = b; src.connect(f).connect(g).connect(c.destination); src.start(t);
+    } catch (e) {}
+  },
   stick() { this.noise(.08, .04, 1200); this.tone(320, .09, "sine", .03, 180); },
   warp() { this.tone(80, 1.1, "sine", .06, 900); this.noise(1, .03, 300); },
   portal() { this.tone(520, .25, "sine", .025, 1040); }
@@ -290,11 +306,13 @@ function renderStory() {
   const p = $("#smPanel"), s = STORY.find(x => x.id === SM_SEL);
   if (!s) { p.className = "sm-panel empty"; p.innerHTML = esc(T().smEmpty); return; }
   p.className = "sm-panel"; p.style.setProperty("--c", G[s.g].c);
-  const paras = s.phrase ? L(s.phrase).split("\n\n").map(x => `<p>${esc(x)}</p>`).join("") : `<p class="draft">${esc(T().smPhrase)}</p>`;
+  const paras = s.tech ? techPanel() : s.phrase ? richText(L(s.phrase)) : `<p class="draft">${esc(T().smPhrase)}</p>`;
   const items = (s.imgs || []).map(x => typeof x === "string" ? { u: x } : x);
-  const media = items.length ? `<div class="ph has"><img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="thumbs">${items.map((it, k) => `<button type="button" data-k="${k}"${it.page ? ' class="pg"' : ""} aria-pressed="${!k}" aria-label="${k + 1}/${items.length}"><img src="${it.u}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}</div>` : `<div class="ph sym" aria-hidden="true">${esc(s.sy)}</div>`;
+  const media = s.tech ? "" : items.length ? `<div class="ph has"><img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="thumbs">${items.map((it, k) => `<button type="button" data-k="${k}"${it.page ? ' class="pg"' : ""} aria-pressed="${!k}" aria-label="${k + 1}/${items.length}"><img src="${it.u}" alt="" loading="lazy"></button>`).join("")}</div>` : ""}</div>` : `<div class="ph sym" aria-hidden="true">${esc(s.sy)}</div>`;
   const link = s.link ? `<a class="chip-btn" href="${s.link.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${esc(L(s.link.t))}</a>` : "";
+  p.classList.toggle("tech", !!s.tech);
   p.innerHTML = `${media}<div><h4><i>${esc(s.sy)}</i>${esc(L(s.t))}</h4>${paras}${link}</div>`;
+  if (s.tech) { $$("[data-q]", p).forEach(b => b.onclick = () => { Sound.click(); location.hash = "work"; setTimeout(() => techFilter(b.dataset.q), 450); }); return; }
   if (!items.length) return;
   const main = $(".ph > img", p), btns = $$(".thumbs button", p);
   const show = k => { swapImg(main, items[k].u, items[k].page); btns.forEach((x, j) => x.setAttribute("aria-pressed", j === k)); };
@@ -303,6 +321,35 @@ function renderStory() {
   main.onclick = () => lightbox(main.src);
 }
 
+/* Story text: blank line = new paragraph, **x** = highlighted in the particle colour,
+   a paragraph that starts with "> " is a quote (its "— author" line becomes the citation) */
+function richText(t) {
+  const inl = x => esc(x).replace(/\*\*(.+?)\*\*/g, "<mark>$1</mark>");
+  return t.split("\n\n").map(par => {
+    if (par.startsWith("> ")) { const [q, ...au] = par.slice(2).split("\n"); return `<blockquote class="sq"><p>${inl(q)}</p>${au.length ? `<cite>${inl(au.join(" "))}</cite>` : ""}</blockquote>`; }
+    return `<p>${inl(par)}</p>`;
+  }).join("");
+}
+/* Tc particle: two rows of logos drifting in opposite directions, then the whole list by category */
+function techPanel() {
+  const all = TECH.flatMap(c => c.items), logos = all.filter(i => i.s);
+  const lum = h => { const n = parseInt(h.slice(1), 16), r = n >> 16, g = n >> 8 & 255, b = n & 255; return (r * .3 + g * .59 + b * .11) / 255; };
+  const chip = i => `<button type="button" class="tk" data-q="${esc(i.n)}" title="${esc(i.n)}" style="--h:${lum(i.hex) < .28 ? "#f4f1ea" : i.hex}"><span class="ic" style="--m:url(assets/tech/${i.s}.svg)"></span><span class="nm">${esc(i.n)}</span></button>`;
+  const half = Math.ceil(logos.length / 2), rows = [logos.slice(0, half), logos.slice(half)];
+  const strip = rows.map((r, k) => `<div class="tmq"><div class="ttr${k ? " rv" : ""}">${r.map(chip).join("")}${r.map(chip).join("").replace(/<button /g, '<button tabindex="-1" aria-hidden="true" ')}</div></div>`).join("");
+  const table = `<div class="ttab">${TECH.map(c => `<span class="tcat">${esc(L(c.n))}</span><span class="tval">${c.items.map(i => `<button type="button" class="tch" data-q="${esc(i.n)}">${esc(i.n)}</button>`).join("")}</span>`).join("")}</div>`;
+  return strip + table;
+}
+/* From the tech stack: open My work showing the projects that use that technology */
+function techFilter(q) {
+  const key = q.split(" /")[0].toLowerCase().replace("c# / .net", "c#");
+  const tok = t => t.toLowerCase().split(/[^a-z0-9#+.\-]+/).filter(Boolean);
+  const ids = PROJECTS.filter(p => (p.tech || []).some(t => t.toLowerCase() === key || tok(t).includes(key))).map(p => p.id);
+  if (!ids.length) return;
+  $$("#grid [data-id]").forEach(c => c.classList.toggle("tech-hit", ids.includes(c.dataset.id)));
+  const first = $(`#grid [data-id="${ids[0]}"]`); if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
+  clearTimeout(techFilter.t); techFilter.t = setTimeout(() => $$("#grid .tech-hit").forEach(c => c.classList.remove("tech-hit")), 4000);
+}
 /* Cross-fade an <img> to a new picture (decoded first, so it never flashes empty) */
 function swapImg(img, src, fit) {
   if (img.getAttribute("src") === src) return;
@@ -377,29 +424,44 @@ function renderStickers() {
 /* A sticker peels off from one corner, drops with gravity (spinning, swaying a little) and later sticks back in its place */
 async function peelSticker(s) {
   if (s.classList.contains("off") || !s.animate) return;
-  s.classList.add("off"); Sound.peel();
-  const inner = $(".s-in", s), sh = $(".shadow", s);
+  s.classList.add("off");
+  const inner = $(".s-in", s), face = $(".s-face", s), sh = $(".shadow", s), S = s.offsetWidth;
   try {
     if (REDUCED) {
+      Sound.peel();
       await s.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 250, fill: "forwards" }).finished;
     } else {
-      inner.style.transformOrigin = "18% 18%";
-      sh.animate([{ opacity: 0, transform: "translateY(8px)" }, { opacity: .9, transform: "translate(10px,18px) scale(1.08)" }], { duration: 360, fill: "forwards" });
-      await inner.animate([{ transform: "none" }, { transform: "translateZ(10px) rotate3d(1,-1,0,26deg)", offset: .55 }, { transform: "translateZ(22px) rotate3d(1,-1,0,52deg)" }],
-        { duration: 380, easing: "cubic-bezier(.4,0,.6,1)", fill: "forwards" }).finished;
+      /* 1 · the top-left corner folds over, slowly, along a line perpendicular to the diagonal (in sync with the tape sound) */
+      const flap = document.createElement("span"); flap.className = "s-flap"; inner.appendChild(flap);
+      const T = 950, Dmax = S * .78, t0 = performance.now(); Sound.rip(T / 1000);
+      sh.style.opacity = .5;
+      await new Promise(res => {
+        const step = now => {
+          const k = Math.min(1, (now - t0) / T), e = k * k * (3 - 2 * k) * (.35 + .65 * k), D = Dmax * e;
+          face.style.clipPath = `polygon(${D}px 0, 100% 0, 100% 100%, 0 100%, 0 ${D}px)`;
+          flap.style.clipPath = `polygon(0 0, ${D}px 0, 0 ${D}px)`;
+          flap.style.transform = `matrix(0,-1,-1,0,${D},${D})`;
+          sh.style.transform = `translate(${4 + 10 * e}px,${8 + 12 * e}px) scale(${1 + .06 * e})`;
+          k < 1 ? requestAnimationFrame(step) : res();
+        };
+        requestAnimationFrame(step);
+      });
+      /* 2 · it lets go and drops, spinning and swaying a little */
       s.classList.add("fly");
       const dir = Math.random() < .5 ? -1 : 1, spin = dir * (140 + Math.random() * 140), fall = Math.max(380, innerHeight * .6), sway = dir * (18 + Math.random() * 22);
-      sh.animate([{ opacity: .9 }, { opacity: 0 }], { duration: 200, fill: "forwards" });
+      sh.animate([{ opacity: .5 }, { opacity: 0 }], { duration: 200, fill: "forwards" });
       await s.animate([
         { transform: "translate(0,0) rotate(0deg)", opacity: 1 },
         { transform: `translate(${sway}px,${fall * .14}px) rotate(${spin * .25}deg)`, opacity: 1, offset: .25 },
         { transform: `translate(${-sway * .6}px,${fall * .45}px) rotate(${spin * .6}deg)`, opacity: 1, offset: .55 },
         { transform: `translate(${sway * .4}px,${fall}px) rotate(${spin}deg)`, opacity: 0 }
       ], { duration: 950, easing: "cubic-bezier(.45,0,.9,.6)", fill: "forwards" }).finished;
+      flap.remove();
     }
     await new Promise(r => setTimeout(r, 900));
-    s.getAnimations().forEach(a => a.cancel()); inner.getAnimations().forEach(a => a.cancel()); sh.getAnimations().forEach(a => a.cancel());
-    inner.style.transformOrigin = ""; s.classList.remove("fly");
+    s.getAnimations().forEach(a => a.cancel()); sh.getAnimations().forEach(a => a.cancel());
+    face.style.clipPath = ""; sh.style.transform = ""; sh.style.opacity = ""; s.classList.remove("fly");
+    /* 3 · a fresh one sticks back in its place */
     Sound.stick();
     await s.animate(REDUCED ? [{ opacity: 0 }, { opacity: 1 }] : [
       { transform: "scale(1.18)", opacity: 0, filter: "drop-shadow(0 16px 14px rgba(0,0,0,.5))" },
@@ -411,11 +473,12 @@ async function peelSticker(s) {
 }
 function renderTimeline() {
   $("#timeline").innerHTML = TIMELINE.map(it => {
-    const action = it.open ? `<button class="chip-btn" data-open="${it.open}">${T().view} ↗</button>` : it.filter ? `<button class="chip-btn" data-filter="${it.filter}">${T().view} ↗</button>` : "";
+    const action = (it.open ? `<button class="chip-btn" data-open="${it.open}">${T().view} ↗</button>` : it.filter ? `<button class="chip-btn" data-filter="${it.filter}">${T().view} ↗</button>` : "")
+      + (it.links || []).map(l => `<a class="chip-btn ext" href="${l.u}" target="_blank" rel="noopener">${esc(L(l.t))} ↗</a>`).join("");
     const text = it.draft ? L(it.text).replace(/(DRAFT|BORRADOR) · Daniel:\s*/, "") : L(it.text);
     return `<div class="t-item${it.hl ? " hl" : ""}"><div class="t-year">${esc(L(it.when))}</div><div class="t-line"></div>
       <div class="t-body">${it.imgs || it.img ? `<img class="t-img" src="${(it.imgs || [it.img])[0]}" alt="" loading="lazy">` : ""}<h3>${esc(L(it.title))}${it.org ? ` <span>· ${esc(it.org)}</span>` : ""}</h3>
-      <p${it.draft ? ' class="draft"' : ""}>${esc(text)}</p>${action}</div></div>`;
+      <p${it.draft ? ' class="draft"' : ""}>${esc(text)}</p>${action ? `<div class="t-act">${action}</div>` : ""}</div></div>`;
   }).join("");
   TimelineFocus.watch();
   $$("#timeline .t-img").forEach((im, i) => {
