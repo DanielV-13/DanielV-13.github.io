@@ -997,13 +997,18 @@ const PEOPLE = {
   jose:   ["José Viteri", "https://github.com/jvit04"],
   leonor: ["Leonor Molina", "https://github.com/Leomz21"],
   justin: ["Justin Soledispa", "https://github.com/justsole1385"],
-  raulm:  ["Raúl Molina", ""]
+  emilio: ["Emilio Aldean", ""],
+  xavierb: ["Xavier Barriga", ""],
+  lucas:  ["José Lucas Ruiz", ""],
+  alejandro: ["Alejandro Andrade", ""],
+  yan:    ["Yan Portero", ""],
+  hector: ["Héctor Rugel", ""]
 };
 const GH = "https://github.com/";
 const COLAB = "https://colab.research.google.com/github/";
 
 /* «All» on wide screens (4 columns): each big card (2×2) sits beside 4 cards — ML with Higgs, data/HCI with WiDS, games with evacuation */
-const ORDER4 = ["higgs", "param", "dnn", "semf", "likelihood", "wids", "autodiff", "schaman", "srihci", "reserve", "evac", "kart", "catventures", "turtle", "rpg", "libros", "cine", "k8s", "inventory", "adoption", "xml", "todo", "sriconv", "android", "conv"];
+const ORDER4 = ["higgs", "param", "dnn", "semf", "likelihood", "wids", "autodiff", "schaman", "cine", "libros", "evac", "kart", "catventures", "turtle", "rpg", "srihci", "reserve", "museos", "k8s", "inventory", "adoption", "xml", "todo", "sriconv", "android", "conv"];
 /* img: picture in assets/projects · plot: white chart (shown whole) · anim: animated preview drawn in code */
 const PROJECTS = [
   { id: "higgs", media: ["anim", "assets/projects/g/higgs-1.webp", "assets/projects/g/higgs-2.webp", "assets/projects/g/higgs-3.webp", "assets/projects/g/higgs-4.webp"], theme: "ml", place: "uniovi", year: 2026, feat: true, file: "higgs_ttH.ipynb", anim: "higgs", img: "assets/projects/pa03.webp", plot: true,
@@ -1079,24 +1084,25 @@ const PROJECTS = [
     tech: ["Python", "NumPy", "SymPy", "PyTorch", "Matplotlib"],
     links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_01_autodiff" }, { t: "colab", u: COLAB + "DanielV-13/ADFM---PA_01_autodiff/blob/main/ADFM_PA_01_autodiff.ipynb" }] },
 
-  { id: "srihci", media: ["assets/projects/g/hci-1.webp", "assets/projects/g/hci-2.webp", "assets/projects/g/hci-3.webp", "assets/projects/g/hci-4.webp", "assets/projects/g/hci-5.webp", "assets/projects/g/hci-6.webp", "assets/projects/g/hci-7.webp", "assets/projects/g/hci-8.webp"], theme: "design", place: "uees", year: 2026, file: "sri_redesign.fig",
-    title: { en: "Redesigning Ecuador's e-invoicing (SRI)", es: "Rediseño del facturador electrónico del SRI" },
-    short: { en: "A human-centred redesign of the tax authority's invoice flow, prototyped in Figma.", es: "Un rediseño centrado en las personas del flujo de facturación del SRI, prototipado en Figma." },
-    desc: { en: "A Human–Computer Interaction project: we studied how people struggle with the official invoicing tool and proposed a guided, step-by-step flow, presented in a video and an interactive prototype.",
-            es: "Proyecto de Interacción Humano-Computador: estudiamos las dificultades de las personas con el facturador oficial y propusimos un flujo guiado paso a paso, presentado en un video y un prototipo interactivo." },
-    did: { en: ["From paper prototypes with sticky notes to an interactive high-fidelity prototype", "Four redesigned features: a 3-step invoice wizard with field validation, receipts management, products and services, and help"], es: ["Del prototipo en papel con post-its a un prototipo interactivo de alta fidelidad", "Cuatro funciones rediseñadas: asistente de factura en 3 pasos con validación de campos, administración de comprobantes, productos y servicios, y ayuda"] },
-    tech: ["Figma", "User research"],
-    links: [{ t: "figma", u: "https://www.figma.com/make/3B6GoCk2dkoPUfT2bJ5wp0/Invoice-Wizard-Design?fullscreen=1&t=PkJCDiROb9Ut1SuO-1&code-node-id=0-9" }, { t: "video", u: "https://drive.google.com/file/d/1IxkUrsPvYqDoRvacBT3pUclQym34asGu/view?usp=sharing" }] },
+  { id: "schaman", media: ["assets/projects/g/sch-1.webp", "assets/projects/g/sch-etl.webp", "assets/projects/g/sch-sql.webp", "assets/projects/g/sch-2.webp", "assets/projects/g/sch-3.webp"], theme: "data", place: "uees", year: 2026, file: "hecho_sesion_omnicanal.sql", img: "assets/projects/g/sch-1.webp",
+    title: { en: "Schaman Analytics: a data warehouse for customer service", es: "Schaman Analytics: data warehouse de atención al cliente" },
+    short: { en: "A star-schema data warehouse with ETL and SQL KPIs, read live by an analytics dashboard.", es: "Un data warehouse en modelo estrella, con ETL y KPIs en SQL, consumido en vivo por un dashboard analítico." },
+    desc: { en: "Database Systems II team project, built on the business model of Schaman, a company that automates customer service on digital channels. We designed and loaded a data warehouse to analyse its omnichannel service sessions, and a React dashboard reads it live. The values in the screenshots are demonstration data. Paula later redesigned the interface on her own, documented in her case study.",
+            es: "Proyecto en equipo de Base de Datos II, sobre el modelo de negocio de Schaman, una empresa que automatiza la atención al cliente por canales digitales. Diseñamos y cargamos un data warehouse para analizar sus sesiones de atención omnicanal, y un dashboard en React lo consume en vivo. Los valores de las capturas son datos de demostración. Después, Paula rediseñó la interfaz por su cuenta, documentado en su caso de estudio." },
+    did: { en: ["Defined the star schema: a fact table with one row per service session and eight dimensions (date, customer, channel, zone, problem, contract, device, user)", "ETL from the operational database into the warehouse with Pentaho Data Integration", "PostgreSQL on Supabase with SQL functions (RPC) for the KPIs: first-contact resolution, average handling time, T-NPS, success rate, AI deflection and a global score out of 500"],
+           es: ["Definí el modelo estrella: una tabla de hechos con una fila por sesión de atención y ocho dimensiones (fecha, cliente, canal, zona, problema, contrato, dispositivo, usuario)", "ETL de la base operacional al data warehouse con Pentaho Data Integration", "PostgreSQL en Supabase con funciones SQL (RPC) para los KPIs: resolución al primer contacto, tiempo medio de operación, T-NPS, tasa de éxito, deflexión por IA y un score global sobre 500"] },
+    tech: ["PostgreSQL", "Supabase", "SQL", "Pentaho PDI"], people: ["paula", "leonor", "raul"],
+    links: [{ t: "github", u: GH + "bypaupau/Schaman-Analytics-BI" }, { t: "case", lab: { en: "Paula's design case study", es: "Caso de diseño de Paula" }, u: "https://bypaupau.github.io/Portafolio/casos/schaman-analytics-bi/" }] },
 
-  { id: "reserve", cardMedia: ["assets/projects/res-prev.mp4"], media: ["assets/projects/res-prev.mp4", "assets/projects/g/res-1.webp", "assets/projects/g/res-2.webp"], poster: "assets/projects/res-prev.webp", theme: "design", place: "uees", year: 2026, file: "uees_reserve.fig", img: "assets/projects/g/res-1.webp",
-    title: { en: "UEES Reserve: a place to study as a group", es: "UEES Reserve: un lugar para estudiar en grupo" },
-    short: { en: "A mobile prototype to see which group-study rooms are free on campus, book one and keep it without interruptions.", es: "Un prototipo móvil para ver qué salas de estudio en grupo están libres en el campus, reservar una y conservarla sin interrupciones." },
-    desc: { en: "Human–Computer Interaction project, second term. After the old library was demolished, students had no reliable way to find a place for group work, and the common area was always full. We researched the problem, turned the findings into three design principles and prototyped the solution in Figma inside the university's services app.",
-            es: "Proyecto de Interacción Humano-Computador, segundo parcial. Tras la demolición de la antigua biblioteca, los estudiantes no tenían una forma fiable de encontrar dónde trabajar en grupo, y el área común siempre estaba llena. Investigamos el problema, convertimos los hallazgos en tres principios de diseño y prototipamos la solución en Figma dentro de la app de servicios de la universidad." },
-    did: { en: ["Semi-structured interviews, a focus group and a survey with 101 responses, synthesised in an affinity diagram", "Three design principles: passive availability; silence, connectivity and infrastructure; continuity of use", "Interactive Figma prototype: availability by building, booking form, confirmation and an active-session timer"],
-           es: ["Entrevistas semiestructuradas, un focus group y una encuesta con 101 respuestas, sintetizadas en un diagrama de afinidad", "Tres principios de diseño: disponibilidad pasiva; silencio, conectividad e infraestructura; continuidad de uso", "Prototipo interactivo en Figma: disponibilidad por edificio, formulario de reserva, confirmación y temporizador de sesión activa"] },
-    tech: ["Figma", "User research", "Miro"],
-    links: [] },
+  { id: "cine", media: ["anim", "assets/projects/g/cine-1.webp", "assets/projects/g/cine-2.webp"], theme: "systems", place: "uees", year: 2026, file: "cine_backend.py", anim: "cine",
+    title: { en: "Cinema seats: threads, semaphores and round robin", es: "Asientos de cine: hilos, semáforos y round robin" },
+    short: { en: "A concurrency simulation where 12 users compete for 4 seats, scheduled like processes on a CPU.", es: "Una simulación de concurrencia donde 12 usuarios compiten por 4 asientos, planificados como procesos en una CPU." },
+    desc: { en: "Final project for Operating Systems. Each user is a thread and the four seats are a semaphore; a mutex stops two threads from taking the same chair, and a clock thread plays a 225-minute film. Users get a 20-minute quantum and may leave for the bathroom, which models voluntary I/O. At the end, a ranking shows how many minutes each one watched.",
+            es: "Proyecto final de Sistemas Operativos. Cada usuario es un hilo y los cuatro asientos son un semáforo; un mutex evita que dos hilos ocupen la misma silla y un hilo reloj proyecta una película de 225 minutos. Cada usuario tiene un quantum de 20 minutos y puede salir al baño, lo que modela una E/S voluntaria. Al final, un ranking muestra cuántos minutos vio cada uno." },
+    did: { en: ["Semaphore(4) for the seats plus a Lock for the physical seat", "Round robin with a 20-minute quantum and random I/O interruptions", "A background clock thread, a log file and a final ranking"],
+           es: ["Semaphore(4) para los asientos y un Lock para la silla física", "Round robin con quantum de 20 minutos e interrupciones de E/S aleatorias", "Un hilo reloj en segundo plano, una bitácora y un ranking final"] },
+    tech: ["Python", "threading"], people: ["justin"],
+    links: [{ t: "github", u: GH + "justsole1385/proyecto_so" }] },
 
   { id: "evac", feat: true, cardMedia: ["assets/projects/g/evac-1.webp", "assets/projects/g/evac-2.webp"], media: ["assets/projects/evac-completo.webp", "assets/projects/evac-nodos.webp"], theme: "systems", place: "uees", year: 2026, file: "evacuation_routes.py", img: "assets/projects/evac-completo.webp", gallery: ["assets/projects/evac-completo.webp", "assets/projects/evac-nodos.webp"],
     title: { en: "Earthquake evacuation routes for a shopping mall", es: "Rutas de evacuación ante sismos para un centro comercial" },
@@ -1125,6 +1131,35 @@ const PROJECTS = [
     did: { en: ["Catcher mini-game", "HUD with lives and score", "Win and game-over screens"], es: ["Minijuego Catcher", "HUD con vidas y puntaje", "Pantallas de victoria y derrota"] },
     tech: ["Unity", "C#"], people: ["paula"], credit: { en: "Art and design: Paula Martillo", es: "Arte y diseño: Paula Martillo" },
     links: [{ t: "release", u: GH + "bypaupau/Catventures-Game/releases" }, { t: "github", u: GH + "bypaupau/Catventures-Game" }] },
+
+  { id: "srihci", media: ["assets/projects/g/hci-hand.webp", "assets/projects/g/hci-1.webp", "assets/projects/g/hci-2.webp", "assets/projects/g/hci-3.webp", "assets/projects/g/hci-4.webp", "assets/projects/g/hci-5.webp", "assets/projects/g/hci-6.webp", "assets/projects/g/hci-7.webp", "assets/projects/g/hci-8.webp", "assets/projects/g/hci-test.webp", "assets/projects/g/hci-admin.webp"], theme: "design", place: "uees", year: 2026, file: "sri_redesign.fig",
+    title: { en: "Redesigning Ecuador's e-invoicing (SRI)", es: "Rediseño del facturador electrónico del SRI" },
+    short: { en: "A human-centred redesign of the tax authority's invoice flow, prototyped in Figma.", es: "Un rediseño centrado en las personas del flujo de facturación del SRI, prototipado en Figma." },
+    desc: { en: "A Human–Computer Interaction project: we studied how people struggle with the official invoicing tool and proposed a guided, step-by-step flow, presented in a video and an interactive prototype.",
+            es: "Proyecto de Interacción Humano-Computador: estudiamos las dificultades de las personas con el facturador oficial y propusimos un flujo guiado paso a paso, presentado en un video y un prototipo interactivo." },
+    did: { en: ["From paper prototypes with sticky notes to an interactive high-fidelity prototype", "Four redesigned features: a 3-step invoice wizard with field validation, receipts management, products and services, and help"], es: ["Del prototipo en papel con post-its a un prototipo interactivo de alta fidelidad", "Cuatro funciones rediseñadas: asistente de factura en 3 pasos con validación de campos, administración de comprobantes, productos y servicios, y ayuda"] },
+    tech: ["Figma", "User research"],
+    links: [{ t: "figma", u: "https://www.figma.com/make/3B6GoCk2dkoPUfT2bJ5wp0/Invoice-Wizard-Design?fullscreen=1&t=PkJCDiROb9Ut1SuO-1&code-node-id=0-9" }, { t: "video", u: "https://drive.google.com/file/d/1IxkUrsPvYqDoRvacBT3pUclQym34asGu/view?usp=sharing" }, { t: "case", lab: { en: "Research material (interviews, tests)", es: "Material de investigación (entrevistas, pruebas)" }, u: "https://docs.google.com/document/d/1bP5I4veRoN6E-9ufu3Id-i1DFw38fvXaqiXT46R45L4" }] },
+
+  { id: "reserve", cardMedia: ["assets/projects/res-prev.mp4", "assets/projects/g/res-sk1.webp", "assets/projects/g/res-fg.webp", "assets/projects/g/res-aff.webp"], media: ["assets/projects/res-prev.mp4", "assets/projects/g/res-meth.webp", "assets/projects/g/res-int.webp", "assets/projects/g/res-fg.webp", "assets/projects/g/res-form.webp", "assets/projects/g/res-aff.webp", "assets/projects/g/res-dp.webp", "assets/projects/g/res-sk1.webp", "assets/projects/g/res-sk2.webp", "assets/projects/g/res-vote.webp", "assets/projects/g/res-1.webp", "assets/projects/g/res-2.webp"], poster: "assets/projects/res-prev.webp", theme: "design", place: "uees", year: 2026, file: "uees_reserve.fig", img: "assets/projects/g/res-1.webp",
+    title: { en: "UEES Reserve: a place to study as a group", es: "UEES Reserve: un lugar para estudiar en grupo" },
+    short: { en: "A mobile prototype to see which group-study rooms are free on campus, book one and keep it without interruptions.", es: "Un prototipo móvil para ver qué salas de estudio en grupo están libres en el campus, reservar una y conservarla sin interrupciones." },
+    desc: { en: "Human–Computer Interaction project, second term. After the old library was demolished, students had no reliable way to find a place for group work, and the common area was always full. We researched the problem, turned the findings into three design principles and prototyped the solution in Figma inside the university's services app.",
+            es: "Proyecto de Interacción Humano-Computador, segundo parcial. Tras la demolición de la antigua biblioteca, los estudiantes no tenían una forma fiable de encontrar dónde trabajar en grupo, y el área común siempre estaba llena. Investigamos el problema, convertimos los hallazgos en tres principios de diseño y prototipamos la solución en Figma dentro de la app de servicios de la universidad." },
+    did: { en: ["Semi-structured interviews, a focus group and a survey with 101 responses, synthesised in an affinity diagram", "Three design principles: passive availability; silence, connectivity and infrastructure; continuity of use", "Interactive Figma prototype: availability by building, booking form, confirmation and an active-session timer"],
+           es: ["Entrevistas semiestructuradas, un focus group y una encuesta con 101 respuestas, sintetizadas en un diagrama de afinidad", "Tres principios de diseño: disponibilidad pasiva; silencio, conectividad e infraestructura; continuidad de uso", "Prototipo interactivo en Figma: disponibilidad por edificio, formulario de reserva, confirmación y temporizador de sesión activa"] },
+    tech: ["Figma", "User research", "Miro"], people: ["emilio", "xavierb", "lucas"],
+    links: [{ t: "figma", u: "https://www.figma.com/make/dCfBIkJgjgLcGVgwa92NxF/Desktop-Application-Screen-Design--Copy-?p=f&fullscreen=1" }, { t: "case", lab: { en: "Research material (interviews, tests)", es: "Material de investigación (entrevistas, pruebas)" }, u: "https://docs.google.com/document/d/1bP5I4veRoN6E-9ufu3Id-i1DFw38fvXaqiXT46R45L4" }] },
+
+  { id: "museos", media: ["assets/projects/g/mus-1.webp", "assets/projects/g/mus-2.webp", "assets/projects/g/mus-3.webp", "assets/projects/g/mus-4.webp"], theme: "software", place: "uees", year: 2025, file: "SGMGA_SRS.pdf", img: "assets/projects/g/mus-1.webp",
+    title: { en: "Software architecture for a national network of museums", es: "Arquitectura de software para una red nacional de museos" },
+    short: { en: "Requirements and architecture for a system that manages collections, exhibitions, loans and visits across 17 museums.", es: "Requisitos y arquitectura de un sistema que gestiona colecciones, exhibiciones, préstamos y visitas en 17 museos." },
+    desc: { en: "Software Design project, more research and design than code: a 56-page software requirements specification and architecture for SGMGA, a management system for museums and art galleries under the Ministry of Culture. It covers collections, exhibitions, loans, restoration, an inter-museum calendar and QR-based visitor control.",
+            es: "Proyecto de Diseño de Software, más de investigación y diseño que de código: una especificación de requisitos de 56 páginas y la arquitectura de SGMGA, un sistema de gestión para museos y galerías de arte del Ministerio de Cultura. Cubre colecciones, exhibiciones, préstamos, restauración, un calendario entre museos y control de aforo con códigos QR." },
+    did: { en: ["Wrote the scope, definitions, product functions and user characteristics of the requirements document, plus its assumptions, dependencies and expected evolution", "Created the architecture section; my proposal, a layered architecture with a client–server pattern, was the one the team selected", "Justified it by security, 95 % availability, search across 700,000 cultural assets, traceability required by law and maintainability"],
+           es: ["Redacté el alcance, las definiciones, las funciones del producto y las características de los usuarios del documento de requisitos, además de sus suposiciones, dependencias y evolución previsible", "Creé la sección de arquitectura; mi propuesta, una arquitectura en capas con patrón cliente-servidor, fue la que eligió el equipo", "La justifiqué por seguridad, 95 % de disponibilidad, búsqueda en 700 mil bienes culturales, trazabilidad exigida por ley y mantenibilidad"] },
+    tech: ["Software architecture", "C4 model", "UML", "draw.io"], people: ["alejandro", "yan", "hector"],
+    links: [] },
 
   { id: "turtle", cardMedia: ["assets/projects/turtle-prev.mp4"], theme: "games", place: "uees", year: 2026, file: "TurtleNinja.unity", img: "assets/projects/turtle.webp", video: "assets/projects/turtle.mp4",
     title: { en: "Turtle Ninja: an endless platformer", es: "Turtle Ninja: un plataformas infinito" },
@@ -1155,16 +1190,6 @@ const PROJECTS = [
     tech: ["PHP", "Laravel", "Blade", "Bootstrap", "SQLite"], people: ["paula"], credit: { en: "Interface design: Paula Martillo", es: "Diseño de interfaz: Paula Martillo" },
     links: [{ t: "github", u: GH + "bypaupau/Biblioteca-Personal" }] },
 
-  { id: "cine", media: ["anim", "assets/projects/g/cine-1.webp", "assets/projects/g/cine-2.webp"], theme: "systems", place: "uees", year: 2026, file: "cine_backend.py", anim: "cine",
-    title: { en: "Cinema seats: threads, semaphores and round robin", es: "Asientos de cine: hilos, semáforos y round robin" },
-    short: { en: "A concurrency simulation where 12 users compete for 4 seats, scheduled like processes on a CPU.", es: "Una simulación de concurrencia donde 12 usuarios compiten por 4 asientos, planificados como procesos en una CPU." },
-    desc: { en: "Final project for Operating Systems. Each user is a thread and the four seats are a semaphore; a mutex stops two threads from taking the same chair, and a clock thread plays a 225-minute film. Users get a 20-minute quantum and may leave for the bathroom, which models voluntary I/O. At the end, a ranking shows how many minutes each one watched.",
-            es: "Proyecto final de Sistemas Operativos. Cada usuario es un hilo y los cuatro asientos son un semáforo; un mutex evita que dos hilos ocupen la misma silla y un hilo reloj proyecta una película de 225 minutos. Cada usuario tiene un quantum de 20 minutos y puede salir al baño, lo que modela una E/S voluntaria. Al final, un ranking muestra cuántos minutos vio cada uno." },
-    did: { en: ["Semaphore(4) for the seats plus a Lock for the physical seat", "Round robin with a 20-minute quantum and random I/O interruptions", "A background clock thread, a log file and a final ranking"],
-           es: ["Semaphore(4) para los asientos y un Lock para la silla física", "Round robin con quantum de 20 minutos e interrupciones de E/S aleatorias", "Un hilo reloj en segundo plano, una bitácora y un ranking final"] },
-    tech: ["Python", "threading"], people: ["justin"],
-    links: [{ t: "github", u: GH + "justsole1385/proyecto_so" }] },
-
   { id: "k8s", theme: "systems", place: "uees", year: 2026, file: "k8s-tasks-platform", img: "assets/projects/k8s.webp",
     title: { en: "Distributed task platform on Kubernetes", es: "Plataforma de tareas distribuida en Kubernetes" },
     short: { en: "Two machines, two clusters, one app: the interface and the backend live on different computers.", es: "Dos máquinas, dos clústeres, una app: la interfaz y el backend viven en computadoras distintas." },
@@ -1185,17 +1210,7 @@ const PROJECTS = [
     tech: ["Docker", "PostgreSQL", "Node.js", "Express", "Tailscale"], people: ["paula"],
     links: [{ t: "github", u: GH + "bypaupau/proyectoSistemasDistribuidosP1" }] },
 
-  { id: "schaman", media: ["assets/projects/g/sch-1.webp", "assets/projects/g/sch-2.webp", "assets/projects/g/sch-3.webp"], theme: "data", place: "uees", year: 2026, file: "hecho_sesion_omnicanal.sql", img: "assets/projects/g/sch-1.webp",
-    title: { en: "Schaman Analytics: a data warehouse for customer service", es: "Schaman Analytics: data warehouse de atención al cliente" },
-    short: { en: "A star-schema data warehouse with ETL and SQL KPIs, read live by an analytics dashboard.", es: "Un data warehouse en modelo estrella, con ETL y KPIs en SQL, consumido en vivo por un dashboard analítico." },
-    desc: { en: "Database Systems II team project, built on the business model of Schaman, a company that automates customer service on digital channels. We designed and loaded a data warehouse to analyse its omnichannel service sessions, and a React dashboard reads it live. The values in the screenshots are demonstration data. Paula later redesigned the interface on her own, documented in her case study.",
-            es: "Proyecto en equipo de Base de Datos II, sobre el modelo de negocio de Schaman, una empresa que automatiza la atención al cliente por canales digitales. Diseñamos y cargamos un data warehouse para analizar sus sesiones de atención omnicanal, y un dashboard en React lo consume en vivo. Los valores de las capturas son datos de demostración. Después, Paula rediseñó la interfaz por su cuenta, documentado en su caso de estudio." },
-    did: { en: ["Defined the star schema: a fact table with one row per service session and eight dimensions (date, customer, channel, zone, problem, contract, device, user)", "ETL from the operational database into the warehouse with Pentaho Data Integration", "PostgreSQL on Supabase with SQL functions (RPC) for the KPIs: first-contact resolution, average handling time, T-NPS, success rate, AI deflection and a global score out of 500"],
-           es: ["Definí el modelo estrella: una tabla de hechos con una fila por sesión de atención y ocho dimensiones (fecha, cliente, canal, zona, problema, contrato, dispositivo, usuario)", "ETL de la base operacional al data warehouse con Pentaho Data Integration", "PostgreSQL en Supabase con funciones SQL (RPC) para los KPIs: resolución al primer contacto, tiempo medio de operación, T-NPS, tasa de éxito, deflexión por IA y un score global sobre 500"] },
-    tech: ["PostgreSQL", "Supabase", "SQL", "Pentaho PDI"], people: ["paula", "leonor", "raulm"],
-    links: [{ t: "github", u: GH + "bypaupau/Schaman-Analytics-BI" }, { t: "case", lab: { en: "Paula's design case study", es: "Caso de diseño de Paula" }, u: "https://bypaupau.github.io/Portafolio/casos/schaman-analytics-bi/" }] },
-
-  { id: "adoption", media: ["assets/projects/g/adop-1.webp", "anim", "assets/projects/g/adop-2.webp", "assets/projects/g/adop-3.webp", "assets/projects/g/adop-4.webp"], theme: "software", place: "uees", year: 2025, file: "adoption_agency.sql", anim: "db",
+  { id: "adoption", media: ["assets/projects/g/adop-er.webp", "assets/projects/g/adop-1.webp", "anim", "assets/projects/g/adop-2.webp", "assets/projects/g/adop-3.webp", "assets/projects/g/adop-4.webp"], theme: "software", place: "uees", year: 2025, file: "adoption_agency.sql", anim: "db",
     title: { en: "Child-adoption agency database", es: "Base de datos de una agencia de adopción" },
     short: { en: "From one messy spreadsheet to a normalized database with PDF reports.", es: "De una hoja de cálculo desordenada a una base normalizada con reportes en PDF." },
     desc: { en: "A Database I project: the data was normalized step by step from 0NF to 3NF, loaded into SQL and served through a JavaFX application that generates PDF reports.",
@@ -3024,7 +3039,7 @@ const Portal = {
     if (p._pk) return p._pk;
     const cm = (p.cardMedia || []).find(m => /\.mp4$/.test(m)) || p.video;
     const md = (p.media || []).concat(p.cardMedia || []).find(m => m !== "anim" && !/\.mp4$/.test(m)) || p.img;
-    const pk = cm ? { v: cm } : md ? { i: md, plot: /\/g\/(higgs|param|like|autodiff|dnn|semf|wids-[1-4]|ov-|sch-1)|\/(pa0|pl0)/.test(md) || p.plot } : p.anim ? { a: p.anim } : {};
+    const pk = cm ? { v: cm } : md ? { i: md, plot: /\/g\/(higgs|param|like|autodiff|dnn|semf|wids-[1-4]|ov-|sch-1|sch-sql|mus-|adop-er|res-(form|aff|meth|dp))|\/(pa0|pl0)/.test(md) || p.plot } : p.anim ? { a: p.anim } : {};
     return (p._pk = pk);
   },
   prep() {
