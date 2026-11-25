@@ -129,6 +129,52 @@ const ANIMS = {
     c.fillStyle = "#7cb2ff"; c.fillText("β=25 16.3 min", ...P(.04, .97));
     c.fillStyle = "#62e3b5"; c.font = `700 ${fs * 1.05}px Space Mono, monospace`; c.fillText("risk −42%", ...P(.04, .1));
   },
+  gyRoute(c, w, h, t) {
+    /* Gy: no physics degree in Guayaquil → computing → code and data → physics → the world */
+    const P = "#b18cff", g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, "#0b0c26"); g.addColorStop(1, "#140f33");
+    c.fillStyle = g; c.fillRect(0, 0, w, h);
+    const u = Math.min(w, h * .8), cyc = 9, ph = (t % cyc) / cyc;
+    // stars
+    for (let i = 0; i < 40; i++) { const x = (i * 97.3) % w, y = (i * 53.1) % (h * .6); c.fillStyle = `rgba(232,237,255,${.25 + .25 * Math.sin(t * 1.5 + i)})`; c.fillRect(x, y, 1.4, 1.4); }
+    // river Guayas
+    const ry = h * .9;
+    for (let k = 0; k < 3; k++) { c.strokeStyle = `rgba(124,178,255,${.35 - k * .1})`; c.lineWidth = 1.2; c.beginPath();
+      for (let x = 0; x <= w; x += 6) { const y = ry + k * 9 + Math.sin(x * .03 + t * 1.2 + k) * 2.2; x ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke(); }
+    // Cerro Santa Ana with Las Peñas houses and the lighthouse
+    const hx = w * .26, hy = h * .62;
+    c.fillStyle = "#1c1645"; c.strokeStyle = P; c.lineWidth = 1.6; c.beginPath(); c.moveTo(0, ry); c.quadraticCurveTo(w * .05, hy + h * .08, hx, hy); c.quadraticCurveTo(w * .42, hy + h * .1, w * .5, ry); c.closePath(); c.fill(); c.stroke();
+    const cols = ["#ff9a4c", "#62e3b5", "#e8b64c", "#ff5a76", "#7cb2ff"];
+    for (let i = 0; i < 11; i++) { const f = i / 10, x = w * .04 + f * w * .42, yTop = ry - (ry - hy) * Math.sin(f * Math.PI) * .82 - 4; c.fillStyle = cols[i % 5]; c.globalAlpha = .75; c.fillRect(x, yTop, w * .028, 9); c.globalAlpha = 1; }
+    c.strokeStyle = "#e8edff"; c.lineWidth = 2; c.beginPath(); c.moveTo(hx, hy); c.lineTo(hx, hy - u * .07); c.stroke();
+    const blink = .5 + .5 * Math.sin(t * 3); c.fillStyle = `rgba(255,214,102,${.4 + .6 * blink})`; c.beginPath(); c.arc(hx, hy - u * .075, 3.5, 0, 7); c.fill();
+    const lg = c.createRadialGradient(hx, hy - u * .075, 0, hx, hy - u * .075, u * .09); lg.addColorStop(0, `rgba(255,214,102,${.25 * blink})`); lg.addColorStop(1, "rgba(255,214,102,0)"); c.fillStyle = lg; c.fillRect(hx - u * .1, hy - u * .17, u * .2, u * .2);
+    // city towers to the right
+    [[.58, .16], [.63, .24], [.69, .12], [.74, .2], [.8, .3], [.86, .14], [.92, .22]].forEach(([x, hh]) => { c.strokeStyle = "rgba(177,140,255,.55)"; c.lineWidth = 1.2; c.strokeRect(w * x, ry - h * hh, w * .04, h * hh); });
+    // pin GYE and «física ✕»
+    const px = w * .5, py = h * .78; c.fillStyle = "#ff5a76"; c.shadowColor = "#ff5a76"; c.shadowBlur = 12; c.beginPath(); c.arc(px, py, 6, 0, 7); c.fill(); c.shadowBlur = 0;
+    const fs = Math.max(10, u * .045); c.font = `700 ${fs}px Space Mono, monospace`; c.textAlign = "left"; c.fillStyle = "#e8edff"; c.fillText("GYE", px + 12, py + 4);
+    c.font = `${fs * .9}px Space Mono, monospace`; c.fillStyle = "rgba(195,203,234,.55)"; const ft = "física"; c.fillText(ft, px + 12, py + fs * 1.4);
+    const tw = c.measureText(ft).width; c.strokeStyle = "rgba(255,90,118,.8)"; c.lineWidth = 1.5; c.beginPath(); c.moveTo(px + 10, py + fs * 1.1); c.lineTo(px + 14 + tw, py + fs * 1.1); c.stroke();
+    // the path upward: code → data → particle track → atom
+    const pts = [[px, py], [w * .42, h * .62], [w * .52, h * .48], [w * .44, h * .34], [w * .56, h * .22]];
+    const at = f => { const n = pts.length - 1, k = Math.min(n - 1, Math.floor(f * n)), l = f * n - k, a = pts[k], b = pts[k + 1]; return [a[0] + (b[0] - a[0]) * l, a[1] + (b[1] - a[1]) * l]; };
+    const draw = Math.min(1, ph / .6);
+    c.strokeStyle = P; c.lineWidth = 2; c.setLineDash([6, 6]); c.beginPath(); for (let i = 0; i <= 60 * draw; i++) { const [x, y] = at(i / 60); i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke(); c.setLineDash([]);
+    const tokens = [["{ }", .12], ["for", .24], ["np.", .36]];
+    c.font = `${fs}px Space Mono, monospace`;
+    tokens.forEach(([tx, f]) => { if (draw < f) return; const [x, y] = at(f), a = Math.min(1, (draw - f) * 6); c.globalAlpha = a; c.fillStyle = "#62e3b5"; c.fillText(tx, x + 10, y); c.globalAlpha = 1; });
+    if (draw > .5) for (let i = 0; i < 9; i++) { const f = .48 + i * .02, [x, y] = at(f); c.fillStyle = "#7cb2ff"; c.globalAlpha = Math.min(1, (draw - f) * 8); c.fillRect(x + 12 + Math.sin(i * 2.3) * 14, y + Math.cos(i * 1.7) * 6, 3, 3); c.globalAlpha = 1; }
+    if (draw > .7) { const [x, y] = at(.72); c.strokeStyle = "#ffb45e"; c.lineWidth = 1.6; c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(x + u * .12, y - u * .05, x + u * .2, y - u * .02); c.stroke(); }
+    // atom at the end of the path
+    if (draw > .85) { const [ax, ay] = pts[pts.length - 1], R = u * .07, a = Math.min(1, (draw - .85) * 7); c.globalAlpha = a; c.strokeStyle = P; c.lineWidth = 1.4;
+      for (let k = 0; k < 3; k++) { c.save(); c.translate(ax, ay); c.rotate(k * Math.PI / 3 + t * .4); c.beginPath(); c.ellipse(0, 0, R, R * .35, 0, 0, 7); c.stroke(); c.restore(); }
+      c.fillStyle = "#e8b64c"; c.beginPath(); c.arc(ax, ay, 4, 0, 7); c.fill(); c.globalAlpha = 1; }
+    // last act: an arc out to the world
+    if (ph > .62) { const k = Math.min(1, (ph - .62) / .3), [ax, ay] = pts[pts.length - 1], bx = w * .9, by = h * .08, cx2 = w * .82, cy2 = h * .3;
+      c.strokeStyle = "#e8b64c"; c.lineWidth = 1.6; c.setLineDash([4, 5]); c.beginPath(); c.moveTo(ax, ay);
+      for (let i = 1; i <= 30 * k; i++) { const f = i / 30, x = (1 - f) * (1 - f) * ax + 2 * (1 - f) * f * cx2 + f * f * bx, y = (1 - f) * (1 - f) * ay + 2 * (1 - f) * f * cy2 + f * f * by; c.lineTo(x, y); } c.stroke(); c.setLineDash([]);
+      if (k >= 1) { c.strokeStyle = "#e8b64c"; c.lineWidth = 1.3; const gr = u * .035; c.beginPath(); c.arc(bx, by, gr, 0, 7); c.stroke(); c.beginPath(); c.ellipse(bx, by, gr * .45, gr, 0, 0, 7); c.stroke(); c.beginPath(); c.moveTo(bx - gr, by); c.lineTo(bx + gr, by); c.stroke(); } }
+  },
   semf(c, w, h, t) {
     c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);
     const x0 = w * .12, y0 = h * .84, ww = w * .8, hh = h * .66;
@@ -740,15 +786,23 @@ const Portal = {
   },
   vid(src) { let v = this.vids[src]; if (!v) { v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.preload = "auto"; v.src = src; this.vids[src] = v; } return v; },
   img(src) { let im = this.imgs[src]; if (!im) { im = new Image(); im.decoding = "async"; im.src = src; this.imgs[src] = im; } return im; },
+  /* what the portal shows for a project: a moving clip, else its first real picture, else its animation */
+  pick(p) {
+    if (p._pk) return p._pk;
+    const cm = (p.cardMedia || []).find(m => /\.mp4$/.test(m)) || p.video;
+    const md = (p.media || []).concat(p.cardMedia || []).find(m => m !== "anim" && !/\.mp4$/.test(m)) || p.img;
+    const pk = cm ? { v: cm } : md ? { i: md, plot: /\/g\/(higgs|param|like|autodiff|dnn|semf|wids-[1-4]|ov-)|\/(pa0|pl0)/.test(md) || p.plot } : p.anim ? { a: p.anim } : {};
+    return (p._pk = pk);
+  },
   prep() {
-    const p = this.items[this.idx];
-    for (const s in this.vids) if (p.video !== s) this.vids[s].pause();
-    if (p.video) { const v = this.vid(p.video); try { v.currentTime = 0; } catch (e) {} const pr = v.play(); if (pr) pr.catch(() => {}); }
-    const nx = this.items[(this.idx + 1) % this.items.length]; if (nx.img) this.img(nx.img);
+    const p = this.items[this.idx], pk = this.pick(p);
+    for (const s in this.vids) if (pk.v !== s) this.vids[s].pause();
+    if (pk.v) { const v = this.vid(pk.v); try { v.currentTime = 0; } catch (e) {} const pr = v.play(); if (pr) pr.catch(() => {}); }
+    const nx = this.pick(this.items[(this.idx + 1) % this.items.length]); if (nx.i) this.img(nx.i);
   },
   cover(src, sw, sh, plot) {
     const c = this.ctx, S = this.S;
-    if (plot) { c.fillStyle = "#fff"; c.fillRect(0, 0, S, S); const k = Math.min(S * .8 / sw, S * .8 / sh); c.drawImage(src, (S - sw * k) / 2, (S - sh * k) / 2, sw * k, sh * k); return; }
+    if (plot) { c.fillStyle = "#fff"; c.fillRect(0, 0, S, S); const k = Math.min(S * .96 / sw, S * .96 / sh); c.drawImage(src, (S - sw * k) / 2, (S - sh * k) / 2, sw * k, sh * k); return; }
     const s = Math.min(sw, sh); c.drawImage(src, (sw - s) / 2, (sh - s) / 2, s, s, 0, 0, S, S);
   },
   draw(now) {
@@ -758,10 +812,10 @@ const Portal = {
       if (this.kind === "gal") {
         const k = Math.floor((now - this.t0) / 2000) % this.items.length;
         if (k !== this.idx) { this.idx = k; this.label(); this.prep(); }
-        const p = this.items[k];
-        if (p.video && this.vid(p.video).readyState >= 2) { const v = this.vid(p.video); this.cover(v, v.videoWidth, v.videoHeight); }
-        else if (p.anim && ANIMS[p.anim]) { c.save(); c.translate(-S * .3, 0); ANIMS[p.anim](c, S * 1.6, S, t); c.restore(); }
-        else if (p.img) { const im = this.img(p.img); if (im.complete && im.naturalWidth) this.cover(im, im.naturalWidth, im.naturalHeight, p.plot); }
+        const p = this.items[k], pk = this.pick(p);
+        if (pk.v) { const v = this.vid(pk.v); if (v.readyState >= 2) this.cover(v, v.videoWidth, v.videoHeight); else if (p.img || p.poster) { const im = this.img(p.poster || p.img); if (im.complete && im.naturalWidth) this.cover(im, im.naturalWidth, im.naturalHeight); } }
+        else if (pk.i) { const im = this.img(pk.i); if (im.complete && im.naturalWidth) this.cover(im, im.naturalWidth, im.naturalHeight, pk.plot); }
+        else if (pk.a && ANIMS[pk.a]) { c.save(); c.translate(-S * .3, 0); ANIMS[pk.a](c, S * 1.6, S, t); c.restore(); }
       } else if (this.kind === "sun") this.drawSM(t);
       else if (this.kind === "globe") this.drawTrip(t);
       else this.drawGame(t);

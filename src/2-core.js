@@ -38,7 +38,7 @@ const ES = {
   "m.prev": "anterior", "m.next": "siguiente"
 };
 const UI = {
-  en: { all: "All", projects: "projects", project: "project", did: "What I did", tech: "Built with", with: "With", code: "Code on GitHub", colab: "Open in Colab", map: "Interactive evacuation map", figma: "Figma prototype", video: "Video presentation",
+  en: { all: "All", projects: "projects", project: "project", did: "What I did", tech: "Built with", with: "With", code: "Code on GitHub", colab: "Open in Colab", map: "Interactive evacuation map", release: "Download the game", playable: "Playable", ovPics: "See photos of Oviedo", figma: "Figma prototype", video: "Video presentation",
         company: "This code was built for a company, so I can't share it.", teamnote: "Team repository of Artemis-4, hosted on a teammate's account.", wip: "In progress", wipnote: "Work in progress: results and conclusions coming soon.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
         soundOn: "Sound on", soundOff: "Sound off", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · Spain" }, view: "View",
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
@@ -46,7 +46,7 @@ const UI = {
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
         aboutP: "About me", readMore: "Read more", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
-  es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", map: "Mapa interactivo de evacuación", figma: "Prototipo en Figma", video: "Video de presentación",
+  es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", map: "Mapa interactivo de evacuación", release: "Descargar el juego", playable: "Jugable", ovPics: "Ver fotos de Oviedo", figma: "Prototipo en Figma", video: "Video de presentación",
         company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "Repositorio del equipo Artemis-4, en la cuenta de una compañera.", wip: "En progreso", wipnote: "Proyecto en progreso: pronto añadiré resultados y conclusiones.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
         soundOn: "Sonido activado", soundOff: "Sonido apagado", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · España" }, view: "Ver",
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
@@ -204,10 +204,11 @@ function enterView(v, sub) {
   if (v === "about") [350, 900].forEach(t => setTimeout(() => { placeNotch(); StoryTour.kick(); }, t));
   if (v === "journey") [120, 700, 1300].forEach(t => setTimeout(() => TimelineReveal.on && TimelineReveal.on(), t));
   if (v === "journey") setTimeout(() => Feyn.go(), 200);
+  [300, 900].forEach(t => setTimeout(() => VidPlay.sync(), t));
 }
 function enterHome() {
   BackUni.hide();
-  if (CURVIEW) { $("#v-" + CURVIEW).classList.remove("on"); CURVIEW = null; document.body.classList.remove("in-view"); Uni.zoomOut(); Sound.open(); }
+  if (CURVIEW) { $("#v-" + CURVIEW).classList.remove("on"); CURVIEW = null; document.body.classList.remove("in-view"); Uni.zoomOut(); Sound.open(); VidPlay.sync(); }
   Game.setVis(false); renderNav(); Uni.start();
 }
 
@@ -226,23 +227,52 @@ function renderFilters() {
   });
 }
 /* media: the animation ("anim") and the real pictures of a project, shown in turns */
-function mediaOf(p) {
+function mediaOf(p, card) {
+  if (card && p.cardMedia) return p.cardMedia;
   if (p.media) return p.media;
   if (p.anim) return ["anim"];
   return p.gallery || (p.img ? [p.img] : []);
 }
-function slideHTML(p, m, on, lazy) {
-  return `<div class="sl${on ? " on" : ""}">${m === "anim" ? `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>` : `<img src="${m}" alt="" ${lazy ? 'loading="lazy"' : ""} decoding="async">`}</div>`;
+const isVid = m => /\.mp4$/.test(m);
+const VID_OK = !REDUCED && !(navigator.connection && navigator.connection.saveData);
+function slideHTML(p, m, on, lazy, card) {
+  let inner;
+  if (m === "anim") inner = `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>`;
+  else if (isVid(m)) inner = card
+    ? `<video muted loop playsinline preload="none" poster="${p.poster || p.img || ""}" data-src="${m}" aria-hidden="true"></video>`
+    : `<video muted loop playsinline preload="metadata" poster="${p.poster || p.img || ""}" src="${m}" aria-label="${esc(L(p.title))}"></video>`;
+  else inner = `<img src="${m}" alt="" ${lazy ? 'loading="lazy"' : ""} decoding="async">`;
+  return `<div class="sl${on ? " on" : ""}">${inner}</div>`;
 }
+/* card videos: only load and play while the card is on screen (one at a time on phones) */
+const VidPlay = {
+  io: null, ratio: new Map(),
+  setup(root) {
+    if (this.io) this.io.disconnect(); this.ratio.clear();
+    if (!VID_OK) return;
+    this.io = new IntersectionObserver(es => { es.forEach(e => this.ratio.set(e.target, e.isIntersecting ? e.intersectionRatio : 0)); this.sync(); }, { threshold: [0, .35, .6, .9] });
+    $$(".screen video", root).forEach(v => this.io.observe(v));
+  },
+  sync() {
+    if (!VID_OK) return;
+    const open = $("#modal").classList.contains("open") || CURVIEW !== "work" || document.hidden, phone = innerWidth < 760 || matchMedia("(pointer:coarse)").matches;
+    let best = null, br = 0; this.ratio.forEach((r, v) => { const sl = v.closest(".sl"); if ((!sl || sl.classList.contains("on")) && r > br) { best = v; br = r; } });
+    this.ratio.forEach((r, v) => {
+      const sl = v.closest(".sl"), active = !sl || sl.classList.contains("on");
+      const go = !open && active && r >= .35 && v === best;   // one video at a time keeps the page at 60 fps
+      if (go) { if (!v.src) v.src = v.dataset.src; const pr = v.play(); if (pr) pr.catch(() => {}); } else if (!v.paused) v.pause();
+    });
+  }
+};
+document.addEventListener("visibilitychange", () => VidPlay.sync());
 function cardHTML(p, i) {
-  const md = mediaOf(p), many = md.length > 1;
+  const md = mediaOf(p, true), many = md.length > 1;
   const screen = many
-    ? `<div class="screen multi">${md.map((m, k) => slideHTML(p, m, !k, true)).join("")}<div class="sdots" aria-hidden="true">${md.map((_, k) => `<i class="${k ? "" : "on"}"></i>`).join("")}</div></div>`
-    : md[0] === "anim" ? `<div class="screen"><canvas data-anim="${p.anim}" aria-hidden="true"></canvas></div>`
-    : `<div class="screen"><img src="${md[0]}" alt="" loading="lazy"></div>`;
+    ? `<div class="screen multi">${md.map((m, k) => slideHTML(p, m, !k, true, true)).join("")}<div class="sdots" aria-hidden="true">${md.map((_, k) => `<i class="${k ? "" : "on"}"></i>`).join("")}</div></div>`
+    : `<div class="screen">${slideHTML(p, md[0], true, true, true)}</div>`;
   const first = p.award ? `<span class="tag award">★ ${esc(L(p.award))}</span>` : `<span class="tag">${esc(L(THEMES[p.theme]))}</span>`;
   return `<button class="win${p.feat ? " feat" : ""}" type="button" data-id="${p.id}" style="animation-delay:${Math.min(i, 12) * 35}ms">${screen}
-    <div class="win-body"><div class="win-meta">${first}<span class="tag place-${p.place}">${p.place === "uees" ? "UEES" : "Uniovi"}</span>${p.wip ? `<span class="tag wip">${esc(T().wip)}</span>` : ""}</div>
+    <div class="win-body"><div class="win-meta">${first}<span class="tag place-${p.place}">${p.place === "uees" ? "UEES" : "Uniovi"}</span>${p.playable ? `<span class="tag play">▶ ${esc(T().playable)}</span>` : ""}${p.wip ? `<span class="tag wip">${esc(T().wip)}</span>` : ""}</div>
     <h3>${esc(L(p.title))}</h3></div></button>`;
 }
 /* cards with several slides cross-fade on their own while they are on screen; hover pauses */
@@ -252,7 +282,7 @@ const CardRot = {
     this.cards = []; if (this.io) this.io.disconnect();
     this.io = new IntersectionObserver(es => es.forEach(e => { const c = this.cards.find(x => x.el === e.target); if (c) c.vis = e.isIntersecting; }), { threshold: .35 });
     $$(".screen.multi", root).forEach((el, idx) => {
-      const c = { el, k: 0, n: $$(".sl", el).length, vis: false, hover: false, next: performance.now() + 2600 + (idx % 4) * 900 };
+      const c = { el, k: 0, n: $$(".sl", el).length, vis: false, hover: false, next: performance.now() + ($(".sl.on video", el) ? 7000 : 2600 + (idx % 4) * 900) };
       const win = el.closest(".win"); win.addEventListener("pointerenter", () => c.hover = true); win.addEventListener("pointerleave", () => c.hover = false);
       $$(".sl canvas", el).forEach((cv, j) => Previews.setOff(cv, j !== 0));
       this.cards.push(c); this.io.observe(el);
@@ -262,18 +292,19 @@ const CardRot = {
   show(c, k) {
     c.k = k; $$(".sl", c.el).forEach((s, j) => { s.classList.toggle("on", j === k); const cv = $("canvas", s); if (cv) Previews.setOff(cv, j !== k); });
     $$(".sdots i", c.el).forEach((d, j) => d.classList.toggle("on", j === k));
+    VidPlay.sync();
   },
   tick() {
     if (document.hidden || CURVIEW !== "work" || $("#modal").classList.contains("open")) return;
     const now = performance.now();
-    this.cards.forEach(c => { if (!c.vis || c.hover) { c.next = Math.max(c.next, now + 1200); return; } if (now >= c.next) { this.show(c, (c.k + 1) % c.n); c.next = now + this.every; } });
+    this.cards.forEach(c => { if (!c.vis || c.hover) { c.next = Math.max(c.next, now + 1200); return; } if (now >= c.next) { this.show(c, (c.k + 1) % c.n); c.next = now + ($(".sl.on video", c.el) ? 7000 : this.every); } });
   }
 };
 function renderGrid() {
   const g = $("#grid");
   g.innerHTML = visibleProjects().map(cardHTML).join("");
   $$(".win", g).forEach(w => { w.onclick = () => openModal(w.dataset.id); w.onmouseenter = () => Sound.hover(); });
-  Previews.scan(g); CardRot.setup(g);
+  Previews.scan(g); CardRot.setup(g); VidPlay.setup(g);
 }
 
 let MODAL_LIST = [], MODAL_I = 0, modalAnim = null, lastFocus = null;
@@ -282,7 +313,7 @@ function openModal(id) {
   MODAL_I = MODAL_LIST.findIndex(p => p.id === id);
   lastFocus = document.activeElement;
   $("#modal").classList.add("open");
-  fillModal(); Sound.open(); $("#mClose").focus();
+  fillModal(); Sound.open(); $("#mClose").focus(); VidPlay.sync();
 }
 function fillModal() {
   const p = MODAL_LIST[MODAL_I], t = T();
@@ -293,13 +324,14 @@ function fillModal() {
   hero.className = "m-hero" + (p.video ? " vid" : md.length > 1 ? " gal" : (p.img && p.plot && !p.anim ? " plot" : ""));
   if (p.video) hero.innerHTML = `<video src="${p.video}" poster="${p.img || ""}" autoplay muted loop playsinline aria-label="${esc(L(p.title))}"></video>`;
   else if (md.length > 1) {
-    let gi = 0; const pics = md.filter(m => m !== "anim");
-    hero.innerHTML = md.map((m, k) => slideHTML(p, m, !k, k > 1)).join("") + `<button class="g-nav prev" type="button" aria-label="previous image">‹</button><button class="g-nav next" type="button" aria-label="next image">›</button><div class="g-dots">${md.map(() => "<i></i>").join("")}</div><span class="g-n"></span>`;
+    let gi = 0; const pics = md.filter(m => m !== "anim" && !isVid(m));
+    hero.innerHTML = md.map((m, k) => slideHTML(p, m, !k, k > 1, false)).join("") + `<button class="g-nav prev" type="button" aria-label="previous image">‹</button><button class="g-nav next" type="button" aria-label="next image">›</button><div class="g-dots">${md.map(() => "<i></i>").join("")}</div><span class="g-n"></span>`;
     const cv = $("canvas", hero); if (cv) { modalAnim = cv; Previews.add(cv, true); }
     const show = () => {
       $$(".sl", hero).forEach((s, k) => s.classList.toggle("on", k === gi));
       $$(".g-dots i", hero).forEach((d, k) => d.classList.toggle("on", k === gi));
       if (cv) Previews.setOff(cv, md[gi] !== "anim");
+      $$(".sl video", hero).forEach((v, j) => { if (md[gi] === v.getAttribute("src")) { const pr = v.play(); if (pr) pr.catch(() => {}); } else v.pause(); });
       $(".g-n", hero).textContent = `${gi + 1} / ${md.length}`;
     };
     const go = d => { gi = (gi + d + md.length) % md.length; show(); Sound.click(); };
@@ -311,12 +343,14 @@ function fillModal() {
     hero.ontouchend = e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); x0 = null; };
     show();
   }
-  else if (md[0] && md[0] !== "anim") hero.innerHTML = `<img src="${md[0]}" alt="${esc(L(p.title))}">`;
+  else if (md[0] && md[0] !== "anim") hero.innerHTML = isVid(md[0]) ? `<video src="${md[0]}" autoplay muted loop playsinline></video>` : `<img src="${md[0]}" alt="${esc(L(p.title))}">`;
   else { hero.innerHTML = `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>`; modalAnim = $("canvas", hero); Previews.add(modalAnim, true); }
   const linkBtn = l => {
-    const lab = { github: t.code, colab: t.colab, figma: t.figma, video: t.video, map: t.map }[l.t];
+    const lab = { github: t.code, colab: t.colab, figma: t.figma, video: t.video, map: t.map, release: t.release }[l.t];
     const ic = l.t === "github" ? '<path d="M9 19c-4 1.5-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>' : '<path d="M7 17 17 7M8 7h9v9"/>';
-    return `<a class="btn${l.t === "github" ? "" : " ghost"}" href="${l.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24">${ic}</svg>${lab}</a>`;
+    const gold = l.t === "release" || (l.t === "github" && !p.links.some(x => x.t === "release"));
+    const ic2 = l.t === "release" ? '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>' : ic;
+    return `<a class="btn${gold ? "" : " ghost"}${l.t === "release" ? " rel" : ""}" href="${l.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24">${ic2}</svg>${lab}</a>`;
   };
   const did = L(p.did) || [];
   const people = (p.people || []).map(k => `<a href="${PEOPLE[k][1]}" target="_blank" rel="noopener">${PEOPLE[k][0]}</a>`).join(", ");
@@ -339,7 +373,7 @@ function closeModal(silent) {
   $("#modal").classList.remove("open");
   if (modalAnim) { Previews.remove(modalAnim); modalAnim = null; }
   $("#mHero").innerHTML = "";
-  Previews.start();
+  Previews.start(); VidPlay.sync();
   if (lastFocus && !silent) lastFocus.focus();
 }
 function stepModal(d) { MODAL_I = (MODAL_I + d + MODAL_LIST.length) % MODAL_LIST.length; fillModal(); Sound.click(); }
@@ -397,6 +431,7 @@ function showStory(id, preview) {
   const hud = `<i class="hud tl"></i><i class="hud tr"></i><i class="hud bl"></i><i class="hud br"></i>`;
   const media = items.length
     ? `<div class="ev">${hud}<img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="pdots">${items.map((it, j) => `<button type="button" data-k="${j}" aria-pressed="${!j}" aria-label="${j + 1}/${items.length}"></button>`).join("")}</div>` : ""}</div>`
+    : s.anim ? `<div class="ev anim" aria-hidden="true">${hud}<canvas data-anim="${s.anim}"></canvas><b class="seal">${esc(s.sy)}</b></div>`
     : `<div class="ev sym" aria-hidden="true">${hud}<b>${esc(s.sy)}</b></div>`;
   const blocks = s.phrase ? L(s.phrase).split("\n\n") : [];
   const first = blocks.length ? richText(s.full ? blocks.join("\n\n") : blocks[0]) : "", rest = s.full ? "" : blocks.slice(1).join("\n\n");
@@ -404,6 +439,8 @@ function showStory(id, preview) {
   p.innerHTML = `${notch}${media}<div class="txt"><h4>${esc(s.sy)} · ${esc(L(s.t))}</h4>${s.hook ? `<p class="hook">${esc(L(s.hook))}</p>` : ""}${first}${rest ? `<div class="more"><div>${richText(rest)}</div></div><button type="button" class="rm">${esc(T().readMore)} <i>▾</i></button>` : ""}${link}</div>`;
   const rm = $(".rm", p); if (rm) rm.onclick = () => { StoryTour.stop(); p.classList.toggle("exp"); Sound.click(); };
   placeNotch();
+  if (showStory.cv) { Previews.remove(showStory.cv); showStory.cv = null; }
+  const scv = $(".ev.anim canvas", p); if (scv) { showStory.cv = scv; Previews.add(scv, true); }
   if (!items.length) return;
   const main = $(".ev > img", p), dots = $$(".pdots button", p);
   const show = j => { swapImg(main, items[j].u, items[j].page); dots.forEach((x, i) => x.setAttribute("aria-pressed", i === j)); };
@@ -588,17 +625,20 @@ const TimelineReveal = {
       this.io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); this.io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
       items.forEach(el => this.io.observe(el));
     }
-    const dots = $$(".t-item", tl);
     const upd = () => {
-      this.raf = 0; const line = $(".t-line", tl); if (!line || !fill) return;
+      this.raf = 0; const tl = $("#timeline"); if (!tl) return;
+      const line = $(".t-line", tl), fill = $(".tl-fill", tl); if (!line || !fill) return;
       const r = tl.getBoundingClientRect(), x = line.getBoundingClientRect().left - r.left;
       const target = innerHeight * .62 - r.top, h = clamp(target, 0, r.height - 30);
       fill.style.left = x + "px"; fill.style.height = h + "px";
-      dots.forEach(d => d.classList.toggle("past", d.offsetTop + 12 <= h));
+      $$(".t-item", tl).forEach(d => d.classList.toggle("past", d.offsetTop + 12 <= h));
     };
     const on = () => { if (!this.raf) this.raf = requestAnimationFrame(upd); };
-    if (sc && !sc._tlScroll) { sc._tlScroll = true; sc.addEventListener("scroll", on, { passive: true }); addEventListener("resize", on); }
-    this.on = on; [50, 500, 1100].forEach(t => setTimeout(on, t));
+    this.on = on;
+    if (sc && !sc._tlScroll) { sc._tlScroll = true; sc.addEventListener("scroll", () => this.on(), { passive: true }); addEventListener("resize", () => this.on()); }
+    if (this.ro) this.ro.disconnect();
+    if ("ResizeObserver" in window) { this.ro = new ResizeObserver(() => this.on()); this.ro.observe(tl); }
+    [50, 500, 1100].forEach(t => setTimeout(() => this.on(), t));
   }
 };
 /* Journey: the moment closest to the middle of the screen comes forward as you scroll */
@@ -656,6 +696,33 @@ function lightbox(src, list) {
 }
 
 /* ===================== JOURNEY: stickers + timeline ===================== */
+/* About: the two achievements that matter most, stuck on the access pass (Dean's List first, then WiDS) */
+const PASS_STK = [
+  { id: "dean", u: "https://uees.edu.ec/distinciones-academicas-deans-list/", tip: { en: "Dean's List UEES · see the official list ↗", es: "Dean's List UEES · ver la lista oficial ↗" }, rot: -10, cls: "a" },
+  { id: "wids", u: "https://verified.sertifier.com/en/verify/08910752588849/", tip: { en: "3rd place WiDS · verify the credential ↗", es: "3.er lugar WiDS · verificar credencial ↗" }, rot: 8, cls: "b" }
+];
+function renderPassStickers() {
+  const ph = $(".pass .pass-photo"); if (!ph) return;
+  let lay = $(".pstk-layer"); if (!lay) { lay = document.createElement("div"); lay.className = "pstk-layer"; ph.after(lay); }
+  lay.innerHTML = PASS_STK.map(k => {
+    const s = STICKERS.find(x => x.id === k.id); if (!s) return "";
+    const face = s.m ? `<span class="lg${s.small ? " sm" : ""}" style="--m:url(${s.m})"></span>` : `<span style="font-size:17px">${s.txt}</span>`;
+    const sub = s.sub ? `<small>${esc(L(s.sub))}</small>` : "";
+    return `<a class="sticker pstk ${k.cls}" href="${k.u}" target="_blank" rel="noopener" style="--rot:${k.rot}deg" data-tip="${esc(L(k.tip))}" aria-label="${esc(L(k.tip))}"><span class="shadow"></span><span class="s-rot"><span class="s-in"><span class="s-face" style="--bg:${s.bg};--fg:${s.fg}">${face}${sub}</span></span></span></a>`;
+  }).join("");
+  const fit = () => { lay.style.top = ph.offsetTop + "px"; lay.style.left = ph.offsetLeft + "px"; lay.style.width = ph.offsetWidth + "px"; lay.style.height = ph.offsetHeight + "px"; };
+  fit(); if (!lay._ro && "ResizeObserver" in window) { lay._ro = new ResizeObserver(fit); lay._ro.observe(ph); }
+}
+/* About: "Universidad de Oviedo" in the text opens the photos of Oviedo */
+function wireOviedoLink() {
+  const el = $('[data-i18n-html="about.p"]'); if (!el) return;
+  const st = [...$$("strong", el)].find(x => /Oviedo/.test(x.textContent)); if (!st) return;
+  st.classList.add("ov-link"); st.tabIndex = 0; st.setAttribute("role", "button"); st.title = T().ovPics;
+  const list = ["assets/story/ov-ciencias.webp", "assets/story/ov-ciudad.webp", "assets/story/ov-informatica.webp", "assets/story/ov-ciencias-2.webp", "assets/story/oviedo-becario.webp"];
+  const go = () => lightbox(list[0], list);
+  st.onclick = go; st.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } };
+}
+
 function renderStickers() {
   $("#stickers").innerHTML = STICKERS.map(s => {
     const face = s.m ? `<span class="lg${s.small ? " sm" : ""}" style="--m:url(${s.m})"></span>` : s.flag ? `<span style="background:#fff;color:#0b1230;padding:2px 6px;border-radius:5px;font-size:15px">${s.txt}</span>` : `<span style="font-size:17px">${s.txt}</span>`;

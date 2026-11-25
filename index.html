@@ -262,7 +262,7 @@ img[src$="apol-lista.webp"]{object-position:50% 70%}
 @media (max-width:1100px){.about-side{margin-top:34px}}
 .pass-wrap{position:relative;padding-top:40px;perspective:900px}
 .lanyard{position:absolute;top:-36px;left:50%;width:120px;height:92px;transform:translateX(-50%);background:linear-gradient(115deg,transparent 46%,#ff5a76 46% 54%,transparent 54%),linear-gradient(65deg,transparent 46%,#ff5a76 46% 54%,transparent 54%);opacity:.85;-webkit-mask:linear-gradient(#0000,#000 30%);mask:linear-gradient(#0000,#000 30%)}
-.pass{position:relative;width:276px;border-radius:18px;padding:16px 16px 14px;background:linear-gradient(160deg,#121b44,#0b1230 55%,#0a1028);border:1px solid #2b3a78;box-shadow:0 30px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.06);transform-origin:50% -40px;transform:rotate(-3deg);animation:sway 7s ease-in-out infinite;overflow:hidden;transition:box-shadow .3s}
+.pass{position:relative;width:276px;border-radius:18px;padding:16px 16px 14px;background:linear-gradient(160deg,#121b44,#0b1230 55%,#0a1028);border:1px solid #2b3a78;box-shadow:0 30px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.06);transform-origin:50% -40px;transform:rotate(-3deg);animation:sway 7s ease-in-out infinite;overflow:visible;transition:box-shadow .3s}
 .pass:hover{animation-play-state:paused;box-shadow:0 30px 70px rgba(0,0,0,.6),0 0 0 1px var(--ember),0 0 40px rgba(232,182,76,.18)}
 @keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(1.5deg)}}
 .pass .clip{position:absolute;top:8px;left:50%;width:46px;height:9px;margin-left:-23px;border-radius:6px;background:#060a1c;box-shadow:inset 0 1px 2px rgba(0,0,0,.8)}
@@ -307,6 +307,7 @@ img[src$="apol-lista.webp"]{object-position:50% 70%}
 .pass-sheet-in>.pass-k{margin-top:12px;padding-top:10px;border-top:1px dashed #2b3a78}
 .pass-sheet-in .mis{padding-bottom:18px}
 .pass-scan{position:absolute;right:0;bottom:2px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:#5f6fa8}
+.pass-glint{position:absolute;inset:0;overflow:hidden;border-radius:18px;pointer-events:none}
 .pass-shine{position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.08) 45%,transparent 55%);transform:translateX(-100%);pointer-events:none}
 .pass:hover .pass-shine{transition:transform .9s;transform:translateX(100%)}
 @media (prefers-reduced-motion:reduce){.pass{animation:none}}
@@ -759,6 +760,31 @@ img[src$="apol-lista.webp"]{object-position:50% 70%}
 .g-n{position:absolute;right:14px;bottom:12px;z-index:3;font-size:11px;color:#c3cbea;background:rgba(5,8,22,.7);padding:3px 8px;border-radius:999px}
 @media (max-width:760px){.m-hero.gal{aspect-ratio:16/10.5}.g-nav{width:36px;height:36px;font-size:19px}.g-nav.prev{left:8px}.g-nav.next{right:8px}}
 @media (prefers-reduced-motion:reduce){.screen.multi .sl,.m-hero .sl{transition:none}}
+
+/* ===== v24 ===== */
+.screen video,.screen.multi .sl video{width:100%;height:100%;display:block;object-fit:cover;background:#060a1c}
+.m-hero.gal .sl video{width:100%;height:100%;object-fit:contain;display:block;background:#000}
+.tag.play{color:#1d1203;background:#62e3b5;border-color:#62e3b5;font-weight:700}
+.btn.rel{box-shadow:0 0 0 0 rgba(232,182,76,.6);animation:relPulse 2.6s ease-out 1s 2}
+@keyframes relPulse{0%{box-shadow:0 0 0 0 rgba(232,182,76,.55)}100%{box-shadow:0 0 0 14px rgba(232,182,76,0)}}
+img[src$="wids-5.webp"]{object-position:50% 8%}
+.sm-panel .ev > img[src*="/projects/g/"]:not([src*="co-code"]){object-fit:contain;background:#fff}
+.sm-panel .ev > img[src*="co-code"]{object-fit:contain;background:#0e1228}
+.sm-panel .ev > img[src$="ov-ruta.webp"]{object-fit:contain;background:#080b1e}
+.screen > .sl{position:absolute;inset:0}
+.sm-panel .ev.anim canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.sm-panel .ev .seal{position:absolute;right:16px;bottom:14px;font-family:var(--display);font-size:22px;color:#b18cff;opacity:.85;text-shadow:0 0 14px rgba(177,140,255,.6)}
+.pstk-layer{position:absolute;pointer-events:none;z-index:3}
+.pstk{position:absolute;pointer-events:auto;text-decoration:none}
+.pstk.a{width:80px;height:80px;left:-30px;top:-30px}
+.pstk.b{width:62px;height:62px;right:-26px;bottom:-20px}
+.pstk.b .s-face{font-size:10px}.pstk.b .s-face small{font-size:7.5px}
+.pstk:hover .s-in{transform:translateY(-3px) scale(1.07)}
+.pstk:hover .shadow{opacity:1}
+.pstk .s-face{box-shadow:0 8px 18px rgba(0,0,0,.55)}
+.ov-link{cursor:var(--cp,pointer);text-decoration:underline dotted;text-underline-offset:4px}
+.ov-link:hover,.ov-link:focus-visible{color:#fff;outline:none}
+@media (prefers-reduced-motion:reduce){.btn.rel{animation:none}}
 </style>
 </head>
 <body>
@@ -864,7 +890,7 @@ img[src$="apol-lista.webp"]{object-position:50% 70%}
             <div class="pass-mbox"><span class="tab-hint" data-i18n="about.passhint">tap to read</span><button type="button" class="pass-tab" aria-expanded="false" aria-controls="passSheet"><svg class="doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg><span data-i18n="about.passmission">MISSION</span> <i aria-hidden="true">▾</i></button></div>
           </footer>
           <div class="pass-sheet" id="passSheet"><div class="pass-sheet-in"><span class="pass-k">MISSION</span><p class="mis" data-i18n="about.mission">Inspire a passion for physics, science and technology in more students across Latin America. Show how wonderful it can be to follow your curiosity and go all in on learning.</p></div></div>
-          <span class="pass-shine" aria-hidden="true"></span>
+          <span class="pass-glint" aria-hidden="true"><span class="pass-shine"></span></span>
         </article>
       </div>
     </div>
@@ -1026,6 +1052,52 @@ const PROJECTS = [
     tech: ["Python", "NumPy", "pandas", "scikit-learn", "Matplotlib"],
     links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_02_neural_network_from_scratch" }, { t: "colab", u: COLAB + "DanielV-13/ADFM---PA_02_neural_network_from_scratch/blob/main/ADFM_PA_02_neural_network_from_scratch.ipynb" }] },
 
+  { id: "catventures", feat: true, playable: true, cardMedia: ["assets/projects/cat-prev.mp4", "assets/projects/g/cat-1.webp", "assets/projects/g/cat-2.webp", "assets/projects/g/cat-3.webp"], media: ["assets/projects/catventures-reel.mp4", "assets/projects/g/cat-1.webp", "assets/projects/g/cat-2.webp", "assets/projects/g/cat-3.webp", "assets/projects/g/cat-4.webp"], poster: "assets/projects/catventures-reel.webp", theme: "games", place: "uees", year: 2026, file: "Catventures.unity", img: "assets/projects/catventures.webp",
+    title: { en: "Catventures", es: "Catventures" },
+    short: { en: "A complete, playable 2D game: a lost kitten, a maze and a Catcher mini-game. Download it and play.", es: "Un juego 2D completo y jugable: un gatito perdido, un laberinto y un minijuego Catcher. Descárgalo y juega." },
+    desc: { en: "A finished 2D Unity game, ready to download from its release. Lives are shared across both mini-games, the difficulty is chosen once, and maze enemies chase you when they see you. Paula built the menu, narration and top-down maze; I built the Catcher mini-game, the HUD and the ending screens.",
+            es: "Un juego 2D en Unity terminado y listo para descargar desde su release. Las vidas se comparten entre los dos minijuegos, la dificultad se elige una vez y los enemigos del laberinto te persiguen si te ven. Paula hizo el menú, la narración y el laberinto; yo hice el minijuego Catcher, el HUD y las pantallas de final." },
+    did: { en: ["Catcher mini-game", "HUD with lives and score", "Win and game-over screens"], es: ["Minijuego Catcher", "HUD con vidas y puntaje", "Pantallas de victoria y derrota"] },
+    tech: ["Unity", "C#"], people: ["paula"],
+    links: [{ t: "release", u: GH + "bypaupau/Catventures-Game/releases" }, { t: "github", u: GH + "bypaupau/Catventures-Game" }] },
+
+  { id: "rpg", theme: "software", place: "uees", year: 2026, file: "rpg_prolog_bot", img: "assets/projects/rpg.webp",
+    title: { en: "RPG Prolog Bot", es: "RPG Prolog Bot" },
+    short: { en: "A role-playing game where a chatbot turns your words into real Prolog queries.", es: "Un juego de rol en el que un chatbot convierte tus palabras en consultas Prolog reales." },
+    desc: { en: "A Laravel web interface that queries a SWI-Prolog knowledge base of characters, enemies, missions and weapons, and narrates the result, styled like the classic SNES-era Dragon Quest games.",
+            es: "Una interfaz web en Laravel que consulta una base de conocimiento en SWI-Prolog con personajes, enemigos, misiones y armas, y narra el resultado, con la estética de los Dragon Quest clásicos de SNES." },
+    did: { en: ["Knowledge base and new rules in Prolog", "Chatbot that builds and runs Prolog queries", "Single and group combat with generated narration"],
+           es: ["Base de conocimiento y reglas nuevas en Prolog", "Chatbot que construye y ejecuta consultas Prolog", "Combate individual y grupal con narración generada"] },
+    tech: ["PHP", "Laravel", "SWI-Prolog", "CSS"],
+    links: [{ t: "github", u: GH + "DanielV-13/Actividad_Recuperacion_Prolog_Laravel" }] },
+
+  { id: "kart", cardMedia: ["assets/projects/kart-prev.mp4"], theme: "games", place: "uees", year: 2026, file: "KartRacing3D.unity", img: "assets/projects/kart.webp", video: "assets/projects/kart.mp4",
+    title: { en: "3D kart racing", es: "Carreras de karts en 3D" },
+    short: { en: "Unity's Karting Microgame, extended with my own power-up, obstacle and spawner.", es: "El Karting Microgame de Unity, ampliado con mi propio power-up, obstáculo y generador." },
+    desc: { en: "My first 3D game: a faster custom kart, a speed boost with cooldown, an obstacle, an extended track and a manager that spawns power-ups or obstacles at random as you approach.",
+            es: "Mi primer juego 3D: un kart personalizado más rápido, un impulso de velocidad con recarga, un obstáculo, un tramo de pista extendido y un administrador que genera power-ups u obstáculos al azar cuando te acercas." },
+    did: { en: ["Proximity-based random spawner", "Custom boost with cooldown", "Extended track with checkpoints"], es: ["Generador aleatorio por proximidad", "Impulso propio con recarga", "Pista extendida con checkpoints"] },
+    tech: ["Unity", "C#"],
+    links: [{ t: "github", u: GH + "DanielV-13/proyecto3D" }] },
+
+  { id: "turtle", cardMedia: ["assets/projects/turtle-prev.mp4"], theme: "games", place: "uees", year: 2026, file: "TurtleNinja.unity", img: "assets/projects/turtle.webp", video: "assets/projects/turtle.mp4",
+    title: { en: "Turtle Ninja: an endless platformer", es: "Turtle Ninja: un plataformas infinito" },
+    short: { en: "Jump, throw rocks at saws, eat apples. The level never ends.", es: "Salta, lanza rocas a las sierras, come manzanas. El nivel nunca termina." },
+    desc: { en: "A 2D platformer in Unity where the turtle runs on its own and platforms, saws and apples are generated as you go.",
+            es: "Un juego de plataformas 2D en Unity donde la tortuga corre sola y las plataformas, sierras y manzanas se generan mientras avanzas." },
+    did: { en: ["Procedural generation of platforms and obstacles", "Projectile mechanic to destroy saws", "Score and restart loop"], es: ["Generación procedural de plataformas y obstáculos", "Mecánica de proyectiles para destruir sierras", "Puntaje y reinicio"] },
+    tech: ["Unity 6", "C#", "URP 2D"],
+    links: [{ t: "github", u: GH + "DanielV-13/Proyecto_Unity_1" }] },
+
+  { id: "srihci", media: ["assets/projects/g/hci-1.webp", "assets/projects/g/hci-2.webp", "assets/projects/g/hci-3.webp", "assets/projects/g/hci-4.webp", "assets/projects/g/hci-5.webp", "assets/projects/g/hci-6.webp", "assets/projects/g/hci-7.webp", "assets/projects/g/hci-8.webp"], theme: "design", place: "uees", year: 2026, file: "sri_redesign.fig",
+    title: { en: "Redesigning Ecuador's e-invoicing (SRI)", es: "Rediseño del facturador electrónico del SRI" },
+    short: { en: "A human-centred redesign of the tax authority's invoice flow, prototyped in Figma.", es: "Un rediseño centrado en las personas del flujo de facturación del SRI, prototipado en Figma." },
+    desc: { en: "A Human–Computer Interaction project: we studied how people struggle with the official invoicing tool and proposed a guided, step-by-step flow, presented in a video and an interactive prototype.",
+            es: "Proyecto de Interacción Humano-Computador: estudiamos las dificultades de las personas con el facturador oficial y propusimos un flujo guiado paso a paso, presentado en un video y un prototipo interactivo." },
+    did: { en: ["From paper prototypes with sticky notes to an interactive high-fidelity prototype", "Four redesigned features: a 3-step invoice wizard with field validation, receipts management, products and services, and help"], es: ["Del prototipo en papel con post-its a un prototipo interactivo de alta fidelidad", "Cuatro funciones rediseñadas: asistente de factura en 3 pasos con validación de campos, administración de comprobantes, productos y servicios, y ayuda"] },
+    tech: ["Figma", "User research"],
+    links: [{ t: "figma", u: "https://www.figma.com/make/3B6GoCk2dkoPUfT2bJ5wp0/Invoice-Wizard-Design?fullscreen=1&t=PkJCDiROb9Ut1SuO-1&code-node-id=0-9" }, { t: "video", u: "https://drive.google.com/file/d/1IxkUrsPvYqDoRvacBT3pUclQym34asGu/view?usp=sharing" }] },
+
   { id: "autodiff", media: ["anim", "assets/projects/g/autodiff-1.webp", "assets/projects/g/autodiff-2.webp", "assets/projects/g/autodiff-3.webp"], theme: "ml", place: "uniovi", year: 2026, file: "autodiff.ipynb", anim: "autodiff", img: "assets/projects/pa01.webp", plot: true,
     title: { en: "Autodiff: how a computer takes derivatives", es: "Autodiff: cómo deriva un ordenador" },
     short: { en: "Analytic, symbolic, numerical and automatic derivatives, plus autodiff built from dual numbers.", es: "Derivadas analíticas, simbólicas, numéricas y automáticas, y autodiff construido con números duales." },
@@ -1035,15 +1107,6 @@ const PROJECTS = [
            es: ["Una clase DualNumber con su propia aritmética y seno", "Error numérico según el paso ε", "Comparación con el modo inverso de PyTorch"] },
     tech: ["Python", "NumPy", "SymPy", "PyTorch", "Matplotlib"],
     links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_01_autodiff" }, { t: "colab", u: COLAB + "DanielV-13/ADFM---PA_01_autodiff/blob/main/ADFM_PA_01_autodiff.ipynb" }] },
-
-  { id: "conv", theme: "ml", place: "uniovi", year: 2026, wip: true, file: "dense_vs_conv.ipynb", anim: "conv",
-    title: { en: "Dense vs. convolutional networks", es: "Redes densas frente a convolucionales" },
-    short: { en: "Comparing fully connected and convolutional architectures on the same task.", es: "Comparación de arquitecturas totalmente conectadas y convolucionales en la misma tarea." },
-    desc: { en: "Practical PL_03 of Data Analysis in Modern Physics (ADFM): a dense network and a convolutional one in PyTorch, compared on the same task.",
-            es: "Práctica PL_03 de Análisis de Datos en Física Moderna (ADFM): una red densa y una convolucional en PyTorch, comparadas en la misma tarea." },
-    did: { en: [], es: [] },
-    tech: ["Python", "PyTorch"],
-    links: [{ t: "github", u: GH + "DanielV-13/ADFM----PL_03_dense_vs_convolutional.ipynb" }, { t: "colab", u: COLAB + "DanielV-13/ADFM----PL_03_dense_vs_convolutional.ipynb/blob/main/ADFM_PL_03_dense_vs_convolutional.ipynb" }] },
 
   { id: "evac", media: ["assets/projects/evac-completo.webp", "assets/projects/evac-nodos.webp"], theme: "systems", place: "uees", year: 2026, file: "evacuation_routes.py", img: "assets/projects/evac-completo.webp", gallery: ["assets/projects/evac-completo.webp", "assets/projects/evac-nodos.webp"],
     title: { en: "Earthquake evacuation routes for a shopping mall", es: "Rutas de evacuación ante sismos para un centro comercial" },
@@ -1065,6 +1128,26 @@ const PROJECTS = [
     tech: ["Kubernetes", "Docker", "Node.js", "MongoDB", "Vue"], people: ["paula"],
     links: [{ t: "github", u: GH + "bypaupau/Kubernetes-Proyecto-IIParcial-Distribuidos" }] },
 
+  { id: "adoption", media: ["assets/projects/g/adop-1.webp", "anim", "assets/projects/g/adop-2.webp", "assets/projects/g/adop-3.webp", "assets/projects/g/adop-4.webp"], theme: "software", place: "uees", year: 2025, file: "adoption_agency.sql", anim: "db",
+    title: { en: "Child-adoption agency database", es: "Base de datos de una agencia de adopción" },
+    short: { en: "From one messy spreadsheet to a normalized database with PDF reports.", es: "De una hoja de cálculo desordenada a una base normalizada con reportes en PDF." },
+    desc: { en: "A Database I project: the data was normalized step by step from 0NF to 3NF, loaded into SQL and served through a JavaFX application that generates PDF reports.",
+            es: "Proyecto de Base de Datos I: los datos se normalizaron paso a paso de 0FN a 3FN, se cargaron en SQL y se presentan en una aplicación JavaFX que genera reportes en PDF." },
+    did: { en: ["Normalization 0NF → 1NF → 2NF → 3NF", "Reports on adoptions, process states and cancellation reasons", "JavaFX desktop interface"],
+           es: ["Normalización 0FN → 1FN → 2FN → 3FN", "Reportes de adopciones, estados del proceso y motivos de cancelación", "Interfaz de escritorio en JavaFX"] },
+    tech: ["SQL", "Java", "JavaFX", "PDF reports"], people: ["paula", "leonor"],
+    links: [{ t: "github", u: GH + "DanielV-13/BASE-DE-DATOS-ADOPCION-NI-O" }] },
+
+  { id: "xml", media: ["assets/projects/parser.webp", "assets/projects/g/xml-2.webp", "assets/projects/g/xml-3.webp", "assets/projects/g/xml-4.webp", "assets/projects/g/xml-5.webp"], theme: "software", place: "uees", year: 2025, file: "ArbolXML.java", img: "assets/projects/parser.webp",
+    title: { en: "XML parser with a multi-child tree", es: "Parser XML con árbol multihijos" },
+    short: { en: "Reads, validates and rebuilds XML from scratch, without XML libraries.", es: "Lee, valida y reconstruye XML desde cero, sin librerías XML." },
+    desc: { en: "A Java Swing application that builds a multi-child tree from any XML file, validates its structure and lets you traverse, search, sort and generate new XML files.",
+            es: "Una aplicación en Java Swing que construye un árbol multihijos a partir de cualquier XML, valida su estructura y permite recorrerlo, buscar, ordenar y generar nuevos archivos XML." },
+    did: { en: ["Parser and validation without external libraries", "Tree traversals and heap-based ordered search", "Swing GUI with load, search, sort and add-node panels"],
+           es: ["Parser y validación sin librerías externas", "Recorridos del árbol y búsqueda ordenada con Heap", "Interfaz Swing con paneles de carga, búsqueda, orden y agregar nodo"] },
+    tech: ["Java", "Swing", "Trees", "Heap"], people: ["xavier"],
+    links: [{ t: "github", u: GH + "DanielV-13/ESTRUCTURA-DE-DATOS-PROYECTO-PARSER-XML" }] },
+
   { id: "inventory", theme: "systems", place: "uees", year: 2026, file: "inventory-distributed", anim: "network",
     title: { en: "Distributed inventory system", es: "Sistema de inventario distribuido" },
     short: { en: "An inventory app on one machine, its database and reports on another, joined over Tailscale.", es: "Una app de inventario en una máquina y su base de datos y reportes en otra, unidas por Tailscale." },
@@ -1084,7 +1167,7 @@ const PROJECTS = [
            es: ["Parser para cuatro tipos de documentos del SRI", "Exportación a Excel lista para contabilidad", "Mejoras iterativas con la regla de no romper nada"] },
     tech: ["Python", "PDF parsing", "pandas", "Excel"], links: [] },
 
-  { id: "todo", media: ["assets/projects/todo.webp", "assets/projects/g/todo-2.webp", "assets/projects/g/todo-3.webp"], theme: "software", place: "uees", year: 2025, file: "ToDoApp.java", img: "assets/projects/todo.webp",
+  { id: "todo", theme: "software", place: "uees", year: 2025, file: "ToDoApp.java", img: "assets/projects/todo.webp",
     title: { en: "To-Do list manager in Java", es: "Gestor de tareas en Java" },
     short: { en: "22 options, undo and redo with stacks, history and file persistence.", es: "22 opciones, deshacer y rehacer con pilas, historial y persistencia en archivo." },
     desc: { en: "A console application for the Data Structures course: several to-do lists, each with tasks that have priority and due date, plus search, filters, moves between lists and a history of completed work.",
@@ -1093,26 +1176,6 @@ const PROJECTS = [
            es: ["Deshacer y rehacer implementados con pilas", "Historial de completadas por semana, 15 días y mes", "Datos guardados en archivo entre ejecuciones"] },
     tech: ["Java", "Data structures"], people: ["xavier"],
     links: [{ t: "github", u: GH + "DanielV-13/PROYECTO-TO-DO-APP-CARDENAS-VACA" }] },
-
-  { id: "xml", media: ["assets/projects/parser.webp", "assets/projects/g/xml-2.webp", "assets/projects/g/xml-3.webp", "assets/projects/g/xml-4.webp", "assets/projects/g/xml-5.webp"], theme: "software", place: "uees", year: 2025, file: "ArbolXML.java", img: "assets/projects/parser.webp",
-    title: { en: "XML parser with a multi-child tree", es: "Parser XML con árbol multihijos" },
-    short: { en: "Reads, validates and rebuilds XML from scratch, without XML libraries.", es: "Lee, valida y reconstruye XML desde cero, sin librerías XML." },
-    desc: { en: "A Java Swing application that builds a multi-child tree from any XML file, validates its structure and lets you traverse, search, sort and generate new XML files.",
-            es: "Una aplicación en Java Swing que construye un árbol multihijos a partir de cualquier XML, valida su estructura y permite recorrerlo, buscar, ordenar y generar nuevos archivos XML." },
-    did: { en: ["Parser and validation without external libraries", "Tree traversals and heap-based ordered search", "Swing GUI with load, search, sort and add-node panels"],
-           es: ["Parser y validación sin librerías externas", "Recorridos del árbol y búsqueda ordenada con Heap", "Interfaz Swing con paneles de carga, búsqueda, orden y agregar nodo"] },
-    tech: ["Java", "Swing", "Trees", "Heap"], people: ["xavier"],
-    links: [{ t: "github", u: GH + "DanielV-13/ESTRUCTURA-DE-DATOS-PROYECTO-PARSER-XML" }] },
-
-  { id: "adoption", theme: "software", place: "uees", year: 2025, file: "adoption_agency.sql", anim: "db",
-    title: { en: "Child-adoption agency database", es: "Base de datos de una agencia de adopción" },
-    short: { en: "From one messy spreadsheet to a normalized database with PDF reports.", es: "De una hoja de cálculo desordenada a una base normalizada con reportes en PDF." },
-    desc: { en: "A Database I project: the data was normalized step by step from 0NF to 3NF, loaded into SQL and served through a JavaFX application that generates PDF reports.",
-            es: "Proyecto de Base de Datos I: los datos se normalizaron paso a paso de 0FN a 3FN, se cargaron en SQL y se presentan en una aplicación JavaFX que genera reportes en PDF." },
-    did: { en: ["Normalization 0NF → 1NF → 2NF → 3NF", "Reports on adoptions, process states and cancellation reasons", "JavaFX desktop interface"],
-           es: ["Normalización 0FN → 1FN → 2FN → 3FN", "Reportes de adopciones, estados del proceso y motivos de cancelación", "Interfaz de escritorio en JavaFX"] },
-    tech: ["SQL", "Java", "JavaFX", "PDF reports"], people: ["paula", "leonor"],
-    links: [{ t: "github", u: GH + "DanielV-13/BASE-DE-DATOS-ADOPCION-NI-O" }] },
 
   { id: "android", theme: "software", place: "uees", year: 2026, file: "SurveyApp.apk", anim: "phone",
     title: { en: "Offline survey app for Android", es: "App de encuestas offline para Android" },
@@ -1123,55 +1186,18 @@ const PROJECTS = [
     tech: ["Android", "Java", "SQLite"],
     links: [{ t: "github", u: GH + "DanielV-13/Android-App-Encuestas-Offline" }] },
 
-  { id: "rpg", theme: "software", place: "uees", year: 2026, file: "rpg_prolog_bot", img: "assets/projects/rpg.webp",
-    title: { en: "RPG Prolog Bot", es: "RPG Prolog Bot" },
-    short: { en: "A role-playing game where a chatbot turns your words into real Prolog queries.", es: "Un juego de rol en el que un chatbot convierte tus palabras en consultas Prolog reales." },
-    desc: { en: "A Laravel web interface that queries a SWI-Prolog knowledge base of characters, enemies, missions and weapons, and narrates the result, styled like the classic SNES-era Dragon Quest games.",
-            es: "Una interfaz web en Laravel que consulta una base de conocimiento en SWI-Prolog con personajes, enemigos, misiones y armas, y narra el resultado, con la estética de los Dragon Quest clásicos de SNES." },
-    did: { en: ["Knowledge base and new rules in Prolog", "Chatbot that builds and runs Prolog queries", "Single and group combat with generated narration"],
-           es: ["Base de conocimiento y reglas nuevas en Prolog", "Chatbot que construye y ejecuta consultas Prolog", "Combate individual y grupal con narración generada"] },
-    tech: ["PHP", "Laravel", "SWI-Prolog", "CSS"],
-    links: [{ t: "github", u: GH + "DanielV-13/Actividad_Recuperacion_Prolog_Laravel" }] },
-
-  { id: "kart", theme: "games", place: "uees", year: 2026, file: "KartRacing3D.unity", img: "assets/projects/kart.webp", video: "assets/projects/kart.mp4",
-    title: { en: "3D kart racing", es: "Carreras de karts en 3D" },
-    short: { en: "Unity's Karting Microgame, extended with my own power-up, obstacle and spawner.", es: "El Karting Microgame de Unity, ampliado con mi propio power-up, obstáculo y generador." },
-    desc: { en: "My first 3D game: a faster custom kart, a speed boost with cooldown, an obstacle, an extended track and a manager that spawns power-ups or obstacles at random as you approach.",
-            es: "Mi primer juego 3D: un kart personalizado más rápido, un impulso de velocidad con recarga, un obstáculo, un tramo de pista extendido y un administrador que genera power-ups u obstáculos al azar cuando te acercas." },
-    did: { en: ["Proximity-based random spawner", "Custom boost with cooldown", "Extended track with checkpoints"], es: ["Generador aleatorio por proximidad", "Impulso propio con recarga", "Pista extendida con checkpoints"] },
-    tech: ["Unity", "C#"],
-    links: [{ t: "github", u: GH + "DanielV-13/proyecto3D" }] },
-
-  { id: "turtle", theme: "games", place: "uees", year: 2026, file: "TurtleNinja.unity", img: "assets/projects/turtle.webp", video: "assets/projects/turtle.mp4",
-    title: { en: "Turtle Ninja: an endless platformer", es: "Turtle Ninja: un plataformas infinito" },
-    short: { en: "Jump, throw rocks at saws, eat apples. The level never ends.", es: "Salta, lanza rocas a las sierras, come manzanas. El nivel nunca termina." },
-    desc: { en: "A 2D platformer in Unity where the turtle runs on its own and platforms, saws and apples are generated as you go.",
-            es: "Un juego de plataformas 2D en Unity donde la tortuga corre sola y las plataformas, sierras y manzanas se generan mientras avanzas." },
-    did: { en: ["Procedural generation of platforms and obstacles", "Projectile mechanic to destroy saws", "Score and restart loop"], es: ["Generación procedural de plataformas y obstáculos", "Mecánica de proyectiles para destruir sierras", "Puntaje y reinicio"] },
-    tech: ["Unity 6", "C#", "URP 2D"],
-    links: [{ t: "github", u: GH + "DanielV-13/Proyecto_Unity_1" }] },
-
-  { id: "catventures", theme: "games", place: "uees", year: 2026, file: "Catventures.unity", img: "assets/projects/catventures.webp",
-    title: { en: "Catventures", es: "Catventures" },
-    short: { en: "A lost kitten, two chained mini-games and one way home.", es: "Un gatito perdido, dos minijuegos encadenados y un camino a casa." },
-    desc: { en: "A 2D Unity game with shared lives and a difficulty chosen once. Paula built the menu, narration and top-down maze; I built the Catcher mini-game, the HUD and the ending screens.",
-            es: "Un juego 2D en Unity con vidas compartidas y una dificultad que se elige una sola vez. Paula hizo el menú, la narración y el laberinto; yo hice el minijuego Catcher, el HUD y las pantallas de final." },
-    did: { en: ["Catcher mini-game", "HUD with lives and score", "Win and game-over screens"], es: ["Minijuego Catcher", "HUD con vidas y puntaje", "Pantallas de victoria y derrota"] },
-    tech: ["Unity", "C#"], people: ["paula"],
-    links: [{ t: "github", u: GH + "bypaupau/Catventures-Game" }] },
-
-  { id: "srihci", media: ["anim", "assets/projects/g/hci-1.webp", "assets/projects/g/hci-2.webp", "assets/projects/g/hci-3.webp", "assets/projects/g/hci-4.webp", "assets/projects/g/hci-5.webp", "assets/projects/g/hci-6.webp", "assets/projects/g/hci-7.webp", "assets/projects/g/hci-8.webp"], theme: "design", place: "uees", year: 2026, wip: true, file: "sri_redesign.fig", anim: "invoice",
-    title: { en: "Redesigning Ecuador's e-invoicing (SRI)", es: "Rediseño del facturador electrónico del SRI" },
-    short: { en: "A human-centred redesign of the tax authority's invoice flow, prototyped in Figma.", es: "Un rediseño centrado en las personas del flujo de facturación del SRI, prototipado en Figma." },
-    desc: { en: "A Human–Computer Interaction project: we studied how people struggle with the official invoicing tool and proposed a guided, step-by-step flow, presented in a video and an interactive prototype.",
-            es: "Proyecto de Interacción Humano-Computador: estudiamos las dificultades de las personas con el facturador oficial y propusimos un flujo guiado paso a paso, presentado en un video y un prototipo interactivo." },
-    did: { en: ["From paper prototypes with sticky notes to an interactive high-fidelity prototype", "Four redesigned features: a 3-step invoice wizard with field validation, receipts management, products and services, and help"], es: ["Del prototipo en papel con post-its a un prototipo interactivo de alta fidelidad", "Cuatro funciones rediseñadas: asistente de factura en 3 pasos con validación de campos, administración de comprobantes, productos y servicios, y ayuda"] },
-    tech: ["Figma", "User research"],
-    links: [{ t: "figma", u: "https://www.figma.com/make/3B6GoCk2dkoPUfT2bJ5wp0/Invoice-Wizard-Design?fullscreen=1&t=PkJCDiROb9Ut1SuO-1&code-node-id=0-9" }, { t: "video", u: "https://drive.google.com/file/d/1IxkUrsPvYqDoRvacBT3pUclQym34asGu/view?usp=sharing" }] }
+  { id: "conv", theme: "ml", place: "uniovi", year: 2026, wip: true, file: "dense_vs_conv.ipynb", anim: "conv",
+    title: { en: "Dense vs. convolutional networks", es: "Redes densas frente a convolucionales" },
+    short: { en: "Comparing fully connected and convolutional architectures on the same task.", es: "Comparación de arquitecturas totalmente conectadas y convolucionales en la misma tarea." },
+    desc: { en: "Practical PL_03 of Data Analysis in Modern Physics (ADFM): a dense network and a convolutional one in PyTorch, compared on the same task.",
+            es: "Práctica PL_03 de Análisis de Datos en Física Moderna (ADFM): una red densa y una convolucional en PyTorch, comparadas en la misma tarea." },
+    did: { en: [], es: [] },
+    tech: ["Python", "PyTorch"],
+    links: [{ t: "github", u: GH + "DanielV-13/ADFM----PL_03_dense_vs_convolutional.ipynb" }, { t: "colab", u: COLAB + "DanielV-13/ADFM----PL_03_dense_vs_convolutional.ipynb/blob/main/ADFM_PL_03_dense_vs_convolutional.ipynb" }] }
 ];
 
 const TIMELINE = [
-  { when: { en: "Sep 2026 — Jan 2027", es: "sep. 2026 — ene. 2027" }, hl: true, filter: "ml", img: "assets/story/oviedo-becario.webp",
+  { when: { en: "Sep 2026 — Jan 2027", es: "sep. 2026 — ene. 2027" }, hl: true, filter: "ml", imgs: ["assets/story/ov-ciencias.webp", "assets/story/ov-ciudad.webp", "assets/story/oviedo-becario.webp", "assets/story/ov-informatica.webp"],
     title: { en: "Exchange semester · international scholar", es: "Semestre de intercambio · becario internacional" }, org: "Universidad de Oviedo",
     text: { en: "Data Analysis in Modern Physics, Nuclear and Particle Physics, and Intelligent Systems.", es: "Análisis de Datos en Física Moderna, Física Nuclear y de Partículas, y Sistemas Inteligentes." } },
   { when: { en: "Jul 2026", es: "jul. 2026" }, hl: true, open: "wids", imgs: ["assets/story/wids-equipo.webp", "assets/story/wids-badge.webp", "assets/story/wids-rutas.webp"],
@@ -1220,11 +1246,11 @@ const STORY = [
     imgs: ["assets/story/apol-medallas.webp", "assets/story/apol-plata-escenario.webp", "assets/story/apol-lista.webp", "assets/story/apol22-410.webp", "assets/story/club-premiacion.webp"],
     phrase: { en: "Extra classes on Friday afternoons, solving harder problems and widening my view of the world of physics. A passionate teacher showed us that physics was not difficult, but inherently wonderful. All that effort led to two medals in national physics olympiads among 400+ students: bronze in 2022 and silver in 2023.", es: "Clases extra los viernes por la tarde, resolver ejercicios de mayor complejidad y expandir mi panorama del mundo de la física. Un maestro apasionado nos mostró que la física no era difícil, sino inherentemente maravillosa. Todo el esfuerzo concluyó en 2 medallas en olimpiadas nacionales de física entre más de 400 estudiantes: bronce en 2022 y plata en 2023." },
     t: { en: "The physics club & the olympiads", es: "El club de física y las olimpiadas" } },
-  { id: "gy", g: "q", row: 1, col: 3, mt: { en: "EC", es: "EC" }, hook: { en: "No physics degree in my city", es: "Sin carrera de física en mi ciudad" }, full: true, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
+  { id: "gy", anim: "gyRoute", g: "q", row: 1, col: 3, mt: { en: "EC", es: "EC" }, hook: { en: "No physics degree in my city", es: "Sin carrera de física en mi ciudad" }, full: true, sy: "Gy", yr: "2024", n: { en: "Guayaquil", es: "Guayaquil" },
     phrase: { en: "In Guayaquil, my city, no university offers a physics degree. Physics is taught as a tool for engineering, almost never as a science of its own, and research opportunities are few.\n\nI chose Computer Engineering with a clear conviction: to use code and data to one day find my way into physics and seek opportunities abroad.", es: "En Guayaquil, mi ciudad, ninguna universidad ofrece la carrera de física. La física se enseña como herramienta para las ingenierías, casi nunca como una ciencia por sí misma, y las oportunidades de investigación son pocas.\n\nElegí Ingeniería en Computación, con la convicción clara de usar el código y los datos para en un futuro encaminarme al mundo de la física y buscar oportunidades a nivel internacional." },
     t: { en: "Studying physics from Guayaquil", es: "Estudiar física desde Guayaquil" } },
   { id: "q3", g: "q", row: 1, col: 4, empty: true },
-  { id: "ta", g: "l", row: 2, col: 2, mt: { en: "×5", es: "×5" }, hook: { en: "5 semesters at the board", es: "5 semestres en la pizarra" }, sy: "Ta", yr: "2024", n: { en: "Teaching", es: "Enseñar" },
+  { id: "ta", g: "l", row: 2, col: 2, mt: { en: "×5", es: "×5" }, hook: { en: "5 semesters as a teaching assistant", es: "5 semestres de ayudante" }, sy: "Ta", yr: "2024", n: { en: "Teaching", es: "Enseñar" },
     imgs: ["assets/story/clase-loop.webp", "assets/story/clase-senalando.webp", "assets/story/clase-equilibrio.webp",
       { u: "assets/story/ayud-otra-forma.webp", page: true }, { u: "assets/story/ayud-trabajo.webp", page: true }, { u: "assets/story/ayud-problema-proyectil.webp", page: true },
       { u: "assets/story/ayud-ley-coseno.webp", page: true }, { u: "assets/story/ayud-mcu-mapa.webp", page: true }],
@@ -1236,10 +1262,10 @@ const STORY = [
   { id: "pr", g: "l", row: 2, col: 4, mt: { en: "×2", es: "×2" }, hook: { en: "Two hands: one to move forward, one to pull others up", es: "Dos manos: una para avanzar y otra para jalar a los demás" }, full: true, sy: "Pr", yr: "always", n: { en: "Purpose", es: "Propósito" },
     phrase: { en: "A teacher once told me that we have two hands: one to push ourselves forward and one to pull up those who fall behind.\n\nI am no expert, and I am still finding my own way. But you do not need to have it all figured out to help: you start even if you are not perfect, and you share the little you know. Explaining things to others is how I understand them best. That is why I have found purpose in teaching.", es: "Un profesor me dijo una vez que tenemos dos manos: una para impulsarnos hacia adelante y otra para jalar a los que se quedan atrás.\n\nNo soy experto y sigo buscando mi propio camino. Pero no hace falta tenerlo o saberlo todo claro para ayudar; se empieza aunque no se sea perfecto, y se comparte lo poco que uno sabe. Explicar a otros es como mejor entiendo las cosas. Por eso he encontrado propósito en dar clases y enseñar." },
     t: { en: "Two hands and a purpose", es: "Dos manos y un propósito" } },
-  { id: "co", g: "b", row: 1, col: 5, mt: { en: "ML", es: "ML" }, hook: { en: "Code and data, my way into physics", es: "El código y los datos, mi camino a la física" }, imgs: ["assets/projects/pa03.webp"], sy: "Co", yr: "2024", n: { en: "Code ✕ physics", es: "Código ✕ física" },
+  { id: "co", g: "b", row: 1, col: 5, mt: { en: "ML", es: "ML" }, hook: { en: "Code and data, my way into physics", es: "El código y los datos, mi camino a la física" }, imgs: ["assets/projects/g/co-code.webp", "assets/projects/g/higgs-1.webp", "assets/projects/g/higgs-3.webp", "assets/projects/g/semf-1.webp", "assets/projects/g/param-1.webp", "assets/projects/g/wids-1.webp"], sy: "Co", yr: "2024", n: { en: "Code ✕ physics", es: "Código ✕ física" },
     phrase: { en: "It was common sense. Today physics and mathematics go hand in hand with technology, data analysis and artificial intelligence. Computing is my path into physics, through data science and machine learning applied to real experiments. I want to bring together everything I have learned in my degree and apply it to the world of science.", es: "Fue sentido común. Hoy la física y la matemática van de la mano con la tecnología, el análisis de datos y la inteligencia artificial. La computación es mi camino hacia la física a través del data science y el machine learning aplicados a experimentos reales. Busco juntar los conocimientos adquiridos durante mi carrera para poder aplicarlos al mundo de la ciencia." },
     t: { en: "When computing met physics", es: "Cuando la computación encontró a la física" } },
-  { id: "ov", g: "b", row: 2, col: 5, mt: { en: "ES", es: "ES" }, hook: { en: "Where computing and physics meet", es: "Donde la computación y la física se encuentran" }, imgs: ["assets/story/oviedo-becario.webp"], full: true, sy: "Ov", yr: "2026", n: { en: "Oviedo", es: "Oviedo" },
+  { id: "ov", g: "b", row: 2, col: 5, mt: { en: "ES", es: "ES" }, hook: { en: "Where computing and physics meet", es: "Donde la computación y la física se encuentran" }, imgs: ["assets/story/ov-ruta.webp", "assets/story/ov-ciencias.webp", "assets/story/oviedo-becario.webp", "assets/projects/g/ov-adfm.webp", "assets/projects/g/ov-fnpe.webp", "assets/story/ov-informatica.webp", "assets/story/ov-ciudad.webp"], full: true, sy: "Ov", yr: "2026", n: { en: "Oviedo", es: "Oviedo" },
     phrase: { en: "I compared many universities, courses and research groups until I found one where I could combine computer science and physics, and where the timetables between faculties did not clash.\n\nHere, at the Faculty of Science, I take **Data Analysis in Modern Physics** and **Nuclear and Elementary Particle Physics**. Many things are still new to me and I look into them on my own, but I have seen how neural networks and data analysis drive experiments like CMS at CERN, and how much physics needs people coming from computing.", es: "Comparé muchas universidades, materias y grupos de investigación hasta encontrar una donde pudiera mezclar la informática y la física, y donde los horarios entre facultades no chocaran.\n\nAquí curso en la Facultad de Ciencias **Análisis de Datos en Física Moderna** y **Física Nuclear y de Partículas Elementales**. Muchas cosas aún son nuevas para mí y las investigo por mi cuenta, pero he visto cómo las redes neuronales y el análisis de datos impulsan experimentos como el CMS del CERN, y cuánto necesita la física gente que venga del sector de la computación." },
     t: { en: "Why Oviedo", es: "Por qué Oviedo" } },
   { id: "h", g: "h", row: 1, col: 7, mt: { en: "125 GeV", es: "125 GeV" }, hook: { en: "We are made of physics", es: "Estamos hechos de física" }, full: true, sy: "H", yr: "∞", n: { en: "Physics is beautiful", es: "La física es hermosa" },
@@ -1322,7 +1348,7 @@ const ES = {
   "m.prev": "anterior", "m.next": "siguiente"
 };
 const UI = {
-  en: { all: "All", projects: "projects", project: "project", did: "What I did", tech: "Built with", with: "With", code: "Code on GitHub", colab: "Open in Colab", map: "Interactive evacuation map", figma: "Figma prototype", video: "Video presentation",
+  en: { all: "All", projects: "projects", project: "project", did: "What I did", tech: "Built with", with: "With", code: "Code on GitHub", colab: "Open in Colab", map: "Interactive evacuation map", release: "Download the game", playable: "Playable", ovPics: "See photos of Oviedo", figma: "Figma prototype", video: "Video presentation",
         company: "This code was built for a company, so I can't share it.", teamnote: "Team repository of Artemis-4, hosted on a teammate's account.", wip: "In progress", wipnote: "Work in progress: results and conclusions coming soon.", copied: "Email copied", cvmsg: "My CV is being updated. Write to me meanwhile: daniel.vacavelastegui@gmail.com",
         soundOn: "Sound on", soundOff: "Sound off", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · Spain" }, view: "View",
         nav: { universe: "Universe", work: "Work", about: "About", journey: "Journey", arcade: "Arcade" }, explored: "Explored",
@@ -1330,7 +1356,7 @@ const UI = {
         smEmpty: "Click a particle to read that part of the story.", smPhrase: "Short phrase to write here.", smFuture: "Space for what comes next.",
         aboutP: "About me", readMore: "Read more", smWip: "in progress…", smPred: "Predicted, not yet observed.", stUni: "University", stSchool: "School", projOne: "project", projMany: "projects", techHint: "psst: click any technology to see the projects where I used it ↗", aboutSub: "my story as a standard model", left: "unexplored", bhTip: "drag to rotate · click to fall in",
         nextK: "Next stop", travel: "Travel there →", nextSolar: "Solar System · about me", nextEarth: "Earth · my journey", nextSat: "The satellite · arcade", nextBh: "Back to the black hole", journeyP: "My journey", journeySub: "Guayaquil → Oviedo", arcadeP: "Arcade", arcadeSub: "Particle Invaders", me: "me", satellite: "Arcade" },
-  es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", map: "Mapa interactivo de evacuación", figma: "Prototipo en Figma", video: "Video de presentación",
+  es: { all: "Todos", projects: "proyectos", project: "proyecto", did: "Qué hice", tech: "Hecho con", with: "Con", code: "Código en GitHub", colab: "Abrir en Colab", map: "Mapa interactivo de evacuación", release: "Descargar el juego", playable: "Jugable", ovPics: "Ver fotos de Oviedo", figma: "Prototipo en Figma", video: "Video de presentación",
         company: "Este código fue hecho para una empresa, por eso no puedo compartirlo.", teamnote: "Repositorio del equipo Artemis-4, en la cuenta de una compañera.", wip: "En progreso", wipnote: "Proyecto en progreso: pronto añadiré resultados y conclusiones.", copied: "Correo copiado", cvmsg: "Estoy actualizando mi CV. Mientras tanto, escríbeme: daniel.vacavelastegui@gmail.com",
         soundOn: "Sonido activado", soundOff: "Sonido apagado", place: { uees: "UEES · Ecuador", uniovi: "Uniovi · España" }, view: "Ver",
         nav: { universe: "Universo", work: "Proyectos", about: "Sobre mí", journey: "Trayectoria", arcade: "Arcade" }, explored: "Explorado",
@@ -1488,10 +1514,11 @@ function enterView(v, sub) {
   if (v === "about") [350, 900].forEach(t => setTimeout(() => { placeNotch(); StoryTour.kick(); }, t));
   if (v === "journey") [120, 700, 1300].forEach(t => setTimeout(() => TimelineReveal.on && TimelineReveal.on(), t));
   if (v === "journey") setTimeout(() => Feyn.go(), 200);
+  [300, 900].forEach(t => setTimeout(() => VidPlay.sync(), t));
 }
 function enterHome() {
   BackUni.hide();
-  if (CURVIEW) { $("#v-" + CURVIEW).classList.remove("on"); CURVIEW = null; document.body.classList.remove("in-view"); Uni.zoomOut(); Sound.open(); }
+  if (CURVIEW) { $("#v-" + CURVIEW).classList.remove("on"); CURVIEW = null; document.body.classList.remove("in-view"); Uni.zoomOut(); Sound.open(); VidPlay.sync(); }
   Game.setVis(false); renderNav(); Uni.start();
 }
 
@@ -1510,23 +1537,52 @@ function renderFilters() {
   });
 }
 /* media: the animation ("anim") and the real pictures of a project, shown in turns */
-function mediaOf(p) {
+function mediaOf(p, card) {
+  if (card && p.cardMedia) return p.cardMedia;
   if (p.media) return p.media;
   if (p.anim) return ["anim"];
   return p.gallery || (p.img ? [p.img] : []);
 }
-function slideHTML(p, m, on, lazy) {
-  return `<div class="sl${on ? " on" : ""}">${m === "anim" ? `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>` : `<img src="${m}" alt="" ${lazy ? 'loading="lazy"' : ""} decoding="async">`}</div>`;
+const isVid = m => /\.mp4$/.test(m);
+const VID_OK = !REDUCED && !(navigator.connection && navigator.connection.saveData);
+function slideHTML(p, m, on, lazy, card) {
+  let inner;
+  if (m === "anim") inner = `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>`;
+  else if (isVid(m)) inner = card
+    ? `<video muted loop playsinline preload="none" poster="${p.poster || p.img || ""}" data-src="${m}" aria-hidden="true"></video>`
+    : `<video muted loop playsinline preload="metadata" poster="${p.poster || p.img || ""}" src="${m}" aria-label="${esc(L(p.title))}"></video>`;
+  else inner = `<img src="${m}" alt="" ${lazy ? 'loading="lazy"' : ""} decoding="async">`;
+  return `<div class="sl${on ? " on" : ""}">${inner}</div>`;
 }
+/* card videos: only load and play while the card is on screen (one at a time on phones) */
+const VidPlay = {
+  io: null, ratio: new Map(),
+  setup(root) {
+    if (this.io) this.io.disconnect(); this.ratio.clear();
+    if (!VID_OK) return;
+    this.io = new IntersectionObserver(es => { es.forEach(e => this.ratio.set(e.target, e.isIntersecting ? e.intersectionRatio : 0)); this.sync(); }, { threshold: [0, .35, .6, .9] });
+    $$(".screen video", root).forEach(v => this.io.observe(v));
+  },
+  sync() {
+    if (!VID_OK) return;
+    const open = $("#modal").classList.contains("open") || CURVIEW !== "work" || document.hidden, phone = innerWidth < 760 || matchMedia("(pointer:coarse)").matches;
+    let best = null, br = 0; this.ratio.forEach((r, v) => { const sl = v.closest(".sl"); if ((!sl || sl.classList.contains("on")) && r > br) { best = v; br = r; } });
+    this.ratio.forEach((r, v) => {
+      const sl = v.closest(".sl"), active = !sl || sl.classList.contains("on");
+      const go = !open && active && r >= .35 && v === best;   // one video at a time keeps the page at 60 fps
+      if (go) { if (!v.src) v.src = v.dataset.src; const pr = v.play(); if (pr) pr.catch(() => {}); } else if (!v.paused) v.pause();
+    });
+  }
+};
+document.addEventListener("visibilitychange", () => VidPlay.sync());
 function cardHTML(p, i) {
-  const md = mediaOf(p), many = md.length > 1;
+  const md = mediaOf(p, true), many = md.length > 1;
   const screen = many
-    ? `<div class="screen multi">${md.map((m, k) => slideHTML(p, m, !k, true)).join("")}<div class="sdots" aria-hidden="true">${md.map((_, k) => `<i class="${k ? "" : "on"}"></i>`).join("")}</div></div>`
-    : md[0] === "anim" ? `<div class="screen"><canvas data-anim="${p.anim}" aria-hidden="true"></canvas></div>`
-    : `<div class="screen"><img src="${md[0]}" alt="" loading="lazy"></div>`;
+    ? `<div class="screen multi">${md.map((m, k) => slideHTML(p, m, !k, true, true)).join("")}<div class="sdots" aria-hidden="true">${md.map((_, k) => `<i class="${k ? "" : "on"}"></i>`).join("")}</div></div>`
+    : `<div class="screen">${slideHTML(p, md[0], true, true, true)}</div>`;
   const first = p.award ? `<span class="tag award">★ ${esc(L(p.award))}</span>` : `<span class="tag">${esc(L(THEMES[p.theme]))}</span>`;
   return `<button class="win${p.feat ? " feat" : ""}" type="button" data-id="${p.id}" style="animation-delay:${Math.min(i, 12) * 35}ms">${screen}
-    <div class="win-body"><div class="win-meta">${first}<span class="tag place-${p.place}">${p.place === "uees" ? "UEES" : "Uniovi"}</span>${p.wip ? `<span class="tag wip">${esc(T().wip)}</span>` : ""}</div>
+    <div class="win-body"><div class="win-meta">${first}<span class="tag place-${p.place}">${p.place === "uees" ? "UEES" : "Uniovi"}</span>${p.playable ? `<span class="tag play">▶ ${esc(T().playable)}</span>` : ""}${p.wip ? `<span class="tag wip">${esc(T().wip)}</span>` : ""}</div>
     <h3>${esc(L(p.title))}</h3></div></button>`;
 }
 /* cards with several slides cross-fade on their own while they are on screen; hover pauses */
@@ -1536,7 +1592,7 @@ const CardRot = {
     this.cards = []; if (this.io) this.io.disconnect();
     this.io = new IntersectionObserver(es => es.forEach(e => { const c = this.cards.find(x => x.el === e.target); if (c) c.vis = e.isIntersecting; }), { threshold: .35 });
     $$(".screen.multi", root).forEach((el, idx) => {
-      const c = { el, k: 0, n: $$(".sl", el).length, vis: false, hover: false, next: performance.now() + 2600 + (idx % 4) * 900 };
+      const c = { el, k: 0, n: $$(".sl", el).length, vis: false, hover: false, next: performance.now() + ($(".sl.on video", el) ? 7000 : 2600 + (idx % 4) * 900) };
       const win = el.closest(".win"); win.addEventListener("pointerenter", () => c.hover = true); win.addEventListener("pointerleave", () => c.hover = false);
       $$(".sl canvas", el).forEach((cv, j) => Previews.setOff(cv, j !== 0));
       this.cards.push(c); this.io.observe(el);
@@ -1546,18 +1602,19 @@ const CardRot = {
   show(c, k) {
     c.k = k; $$(".sl", c.el).forEach((s, j) => { s.classList.toggle("on", j === k); const cv = $("canvas", s); if (cv) Previews.setOff(cv, j !== k); });
     $$(".sdots i", c.el).forEach((d, j) => d.classList.toggle("on", j === k));
+    VidPlay.sync();
   },
   tick() {
     if (document.hidden || CURVIEW !== "work" || $("#modal").classList.contains("open")) return;
     const now = performance.now();
-    this.cards.forEach(c => { if (!c.vis || c.hover) { c.next = Math.max(c.next, now + 1200); return; } if (now >= c.next) { this.show(c, (c.k + 1) % c.n); c.next = now + this.every; } });
+    this.cards.forEach(c => { if (!c.vis || c.hover) { c.next = Math.max(c.next, now + 1200); return; } if (now >= c.next) { this.show(c, (c.k + 1) % c.n); c.next = now + ($(".sl.on video", c.el) ? 7000 : this.every); } });
   }
 };
 function renderGrid() {
   const g = $("#grid");
   g.innerHTML = visibleProjects().map(cardHTML).join("");
   $$(".win", g).forEach(w => { w.onclick = () => openModal(w.dataset.id); w.onmouseenter = () => Sound.hover(); });
-  Previews.scan(g); CardRot.setup(g);
+  Previews.scan(g); CardRot.setup(g); VidPlay.setup(g);
 }
 
 let MODAL_LIST = [], MODAL_I = 0, modalAnim = null, lastFocus = null;
@@ -1566,7 +1623,7 @@ function openModal(id) {
   MODAL_I = MODAL_LIST.findIndex(p => p.id === id);
   lastFocus = document.activeElement;
   $("#modal").classList.add("open");
-  fillModal(); Sound.open(); $("#mClose").focus();
+  fillModal(); Sound.open(); $("#mClose").focus(); VidPlay.sync();
 }
 function fillModal() {
   const p = MODAL_LIST[MODAL_I], t = T();
@@ -1577,13 +1634,14 @@ function fillModal() {
   hero.className = "m-hero" + (p.video ? " vid" : md.length > 1 ? " gal" : (p.img && p.plot && !p.anim ? " plot" : ""));
   if (p.video) hero.innerHTML = `<video src="${p.video}" poster="${p.img || ""}" autoplay muted loop playsinline aria-label="${esc(L(p.title))}"></video>`;
   else if (md.length > 1) {
-    let gi = 0; const pics = md.filter(m => m !== "anim");
-    hero.innerHTML = md.map((m, k) => slideHTML(p, m, !k, k > 1)).join("") + `<button class="g-nav prev" type="button" aria-label="previous image">‹</button><button class="g-nav next" type="button" aria-label="next image">›</button><div class="g-dots">${md.map(() => "<i></i>").join("")}</div><span class="g-n"></span>`;
+    let gi = 0; const pics = md.filter(m => m !== "anim" && !isVid(m));
+    hero.innerHTML = md.map((m, k) => slideHTML(p, m, !k, k > 1, false)).join("") + `<button class="g-nav prev" type="button" aria-label="previous image">‹</button><button class="g-nav next" type="button" aria-label="next image">›</button><div class="g-dots">${md.map(() => "<i></i>").join("")}</div><span class="g-n"></span>`;
     const cv = $("canvas", hero); if (cv) { modalAnim = cv; Previews.add(cv, true); }
     const show = () => {
       $$(".sl", hero).forEach((s, k) => s.classList.toggle("on", k === gi));
       $$(".g-dots i", hero).forEach((d, k) => d.classList.toggle("on", k === gi));
       if (cv) Previews.setOff(cv, md[gi] !== "anim");
+      $$(".sl video", hero).forEach((v, j) => { if (md[gi] === v.getAttribute("src")) { const pr = v.play(); if (pr) pr.catch(() => {}); } else v.pause(); });
       $(".g-n", hero).textContent = `${gi + 1} / ${md.length}`;
     };
     const go = d => { gi = (gi + d + md.length) % md.length; show(); Sound.click(); };
@@ -1595,12 +1653,14 @@ function fillModal() {
     hero.ontouchend = e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); x0 = null; };
     show();
   }
-  else if (md[0] && md[0] !== "anim") hero.innerHTML = `<img src="${md[0]}" alt="${esc(L(p.title))}">`;
+  else if (md[0] && md[0] !== "anim") hero.innerHTML = isVid(md[0]) ? `<video src="${md[0]}" autoplay muted loop playsinline></video>` : `<img src="${md[0]}" alt="${esc(L(p.title))}">`;
   else { hero.innerHTML = `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>`; modalAnim = $("canvas", hero); Previews.add(modalAnim, true); }
   const linkBtn = l => {
-    const lab = { github: t.code, colab: t.colab, figma: t.figma, video: t.video, map: t.map }[l.t];
+    const lab = { github: t.code, colab: t.colab, figma: t.figma, video: t.video, map: t.map, release: t.release }[l.t];
     const ic = l.t === "github" ? '<path d="M9 19c-4 1.5-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>' : '<path d="M7 17 17 7M8 7h9v9"/>';
-    return `<a class="btn${l.t === "github" ? "" : " ghost"}" href="${l.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24">${ic}</svg>${lab}</a>`;
+    const gold = l.t === "release" || (l.t === "github" && !p.links.some(x => x.t === "release"));
+    const ic2 = l.t === "release" ? '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>' : ic;
+    return `<a class="btn${gold ? "" : " ghost"}${l.t === "release" ? " rel" : ""}" href="${l.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24">${ic2}</svg>${lab}</a>`;
   };
   const did = L(p.did) || [];
   const people = (p.people || []).map(k => `<a href="${PEOPLE[k][1]}" target="_blank" rel="noopener">${PEOPLE[k][0]}</a>`).join(", ");
@@ -1623,7 +1683,7 @@ function closeModal(silent) {
   $("#modal").classList.remove("open");
   if (modalAnim) { Previews.remove(modalAnim); modalAnim = null; }
   $("#mHero").innerHTML = "";
-  Previews.start();
+  Previews.start(); VidPlay.sync();
   if (lastFocus && !silent) lastFocus.focus();
 }
 function stepModal(d) { MODAL_I = (MODAL_I + d + MODAL_LIST.length) % MODAL_LIST.length; fillModal(); Sound.click(); }
@@ -1681,6 +1741,7 @@ function showStory(id, preview) {
   const hud = `<i class="hud tl"></i><i class="hud tr"></i><i class="hud bl"></i><i class="hud br"></i>`;
   const media = items.length
     ? `<div class="ev">${hud}<img class="${items[0].page ? "fit" : ""}" src="${items[0].u}" alt="${esc(L(s.t))}" loading="lazy">${items.length > 1 ? `<div class="pdots">${items.map((it, j) => `<button type="button" data-k="${j}" aria-pressed="${!j}" aria-label="${j + 1}/${items.length}"></button>`).join("")}</div>` : ""}</div>`
+    : s.anim ? `<div class="ev anim" aria-hidden="true">${hud}<canvas data-anim="${s.anim}"></canvas><b class="seal">${esc(s.sy)}</b></div>`
     : `<div class="ev sym" aria-hidden="true">${hud}<b>${esc(s.sy)}</b></div>`;
   const blocks = s.phrase ? L(s.phrase).split("\n\n") : [];
   const first = blocks.length ? richText(s.full ? blocks.join("\n\n") : blocks[0]) : "", rest = s.full ? "" : blocks.slice(1).join("\n\n");
@@ -1688,6 +1749,8 @@ function showStory(id, preview) {
   p.innerHTML = `${notch}${media}<div class="txt"><h4>${esc(s.sy)} · ${esc(L(s.t))}</h4>${s.hook ? `<p class="hook">${esc(L(s.hook))}</p>` : ""}${first}${rest ? `<div class="more"><div>${richText(rest)}</div></div><button type="button" class="rm">${esc(T().readMore)} <i>▾</i></button>` : ""}${link}</div>`;
   const rm = $(".rm", p); if (rm) rm.onclick = () => { StoryTour.stop(); p.classList.toggle("exp"); Sound.click(); };
   placeNotch();
+  if (showStory.cv) { Previews.remove(showStory.cv); showStory.cv = null; }
+  const scv = $(".ev.anim canvas", p); if (scv) { showStory.cv = scv; Previews.add(scv, true); }
   if (!items.length) return;
   const main = $(".ev > img", p), dots = $$(".pdots button", p);
   const show = j => { swapImg(main, items[j].u, items[j].page); dots.forEach((x, i) => x.setAttribute("aria-pressed", i === j)); };
@@ -1872,17 +1935,20 @@ const TimelineReveal = {
       this.io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); this.io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
       items.forEach(el => this.io.observe(el));
     }
-    const dots = $$(".t-item", tl);
     const upd = () => {
-      this.raf = 0; const line = $(".t-line", tl); if (!line || !fill) return;
+      this.raf = 0; const tl = $("#timeline"); if (!tl) return;
+      const line = $(".t-line", tl), fill = $(".tl-fill", tl); if (!line || !fill) return;
       const r = tl.getBoundingClientRect(), x = line.getBoundingClientRect().left - r.left;
       const target = innerHeight * .62 - r.top, h = clamp(target, 0, r.height - 30);
       fill.style.left = x + "px"; fill.style.height = h + "px";
-      dots.forEach(d => d.classList.toggle("past", d.offsetTop + 12 <= h));
+      $$(".t-item", tl).forEach(d => d.classList.toggle("past", d.offsetTop + 12 <= h));
     };
     const on = () => { if (!this.raf) this.raf = requestAnimationFrame(upd); };
-    if (sc && !sc._tlScroll) { sc._tlScroll = true; sc.addEventListener("scroll", on, { passive: true }); addEventListener("resize", on); }
-    this.on = on; [50, 500, 1100].forEach(t => setTimeout(on, t));
+    this.on = on;
+    if (sc && !sc._tlScroll) { sc._tlScroll = true; sc.addEventListener("scroll", () => this.on(), { passive: true }); addEventListener("resize", () => this.on()); }
+    if (this.ro) this.ro.disconnect();
+    if ("ResizeObserver" in window) { this.ro = new ResizeObserver(() => this.on()); this.ro.observe(tl); }
+    [50, 500, 1100].forEach(t => setTimeout(() => this.on(), t));
   }
 };
 /* Journey: the moment closest to the middle of the screen comes forward as you scroll */
@@ -1940,6 +2006,33 @@ function lightbox(src, list) {
 }
 
 /* ===================== JOURNEY: stickers + timeline ===================== */
+/* About: the two achievements that matter most, stuck on the access pass (Dean's List first, then WiDS) */
+const PASS_STK = [
+  { id: "dean", u: "https://uees.edu.ec/distinciones-academicas-deans-list/", tip: { en: "Dean's List UEES · see the official list ↗", es: "Dean's List UEES · ver la lista oficial ↗" }, rot: -10, cls: "a" },
+  { id: "wids", u: "https://verified.sertifier.com/en/verify/08910752588849/", tip: { en: "3rd place WiDS · verify the credential ↗", es: "3.er lugar WiDS · verificar credencial ↗" }, rot: 8, cls: "b" }
+];
+function renderPassStickers() {
+  const ph = $(".pass .pass-photo"); if (!ph) return;
+  let lay = $(".pstk-layer"); if (!lay) { lay = document.createElement("div"); lay.className = "pstk-layer"; ph.after(lay); }
+  lay.innerHTML = PASS_STK.map(k => {
+    const s = STICKERS.find(x => x.id === k.id); if (!s) return "";
+    const face = s.m ? `<span class="lg${s.small ? " sm" : ""}" style="--m:url(${s.m})"></span>` : `<span style="font-size:17px">${s.txt}</span>`;
+    const sub = s.sub ? `<small>${esc(L(s.sub))}</small>` : "";
+    return `<a class="sticker pstk ${k.cls}" href="${k.u}" target="_blank" rel="noopener" style="--rot:${k.rot}deg" data-tip="${esc(L(k.tip))}" aria-label="${esc(L(k.tip))}"><span class="shadow"></span><span class="s-rot"><span class="s-in"><span class="s-face" style="--bg:${s.bg};--fg:${s.fg}">${face}${sub}</span></span></span></a>`;
+  }).join("");
+  const fit = () => { lay.style.top = ph.offsetTop + "px"; lay.style.left = ph.offsetLeft + "px"; lay.style.width = ph.offsetWidth + "px"; lay.style.height = ph.offsetHeight + "px"; };
+  fit(); if (!lay._ro && "ResizeObserver" in window) { lay._ro = new ResizeObserver(fit); lay._ro.observe(ph); }
+}
+/* About: "Universidad de Oviedo" in the text opens the photos of Oviedo */
+function wireOviedoLink() {
+  const el = $('[data-i18n-html="about.p"]'); if (!el) return;
+  const st = [...$$("strong", el)].find(x => /Oviedo/.test(x.textContent)); if (!st) return;
+  st.classList.add("ov-link"); st.tabIndex = 0; st.setAttribute("role", "button"); st.title = T().ovPics;
+  const list = ["assets/story/ov-ciencias.webp", "assets/story/ov-ciudad.webp", "assets/story/ov-informatica.webp", "assets/story/ov-ciencias-2.webp", "assets/story/oviedo-becario.webp"];
+  const go = () => lightbox(list[0], list);
+  st.onclick = go; st.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } };
+}
+
 function renderStickers() {
   $("#stickers").innerHTML = STICKERS.map(s => {
     const face = s.m ? `<span class="lg${s.small ? " sm" : ""}" style="--m:url(${s.m})"></span>` : s.flag ? `<span style="background:#fff;color:#0b1230;padding:2px 6px;border-radius:5px;font-size:15px">${s.txt}</span>` : `<span style="font-size:17px">${s.txt}</span>`;
@@ -2151,6 +2244,52 @@ const ANIMS = {
     c.fillStyle = "#ff7a7a"; c.fillText("β=0  8.8 min", ...P(.62, .6));
     c.fillStyle = "#7cb2ff"; c.fillText("β=25 16.3 min", ...P(.04, .97));
     c.fillStyle = "#62e3b5"; c.font = `700 ${fs * 1.05}px Space Mono, monospace`; c.fillText("risk −42%", ...P(.04, .1));
+  },
+  gyRoute(c, w, h, t) {
+    /* Gy: no physics degree in Guayaquil → computing → code and data → physics → the world */
+    const P = "#b18cff", g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, "#0b0c26"); g.addColorStop(1, "#140f33");
+    c.fillStyle = g; c.fillRect(0, 0, w, h);
+    const u = Math.min(w, h * .8), cyc = 9, ph = (t % cyc) / cyc;
+    // stars
+    for (let i = 0; i < 40; i++) { const x = (i * 97.3) % w, y = (i * 53.1) % (h * .6); c.fillStyle = `rgba(232,237,255,${.25 + .25 * Math.sin(t * 1.5 + i)})`; c.fillRect(x, y, 1.4, 1.4); }
+    // river Guayas
+    const ry = h * .9;
+    for (let k = 0; k < 3; k++) { c.strokeStyle = `rgba(124,178,255,${.35 - k * .1})`; c.lineWidth = 1.2; c.beginPath();
+      for (let x = 0; x <= w; x += 6) { const y = ry + k * 9 + Math.sin(x * .03 + t * 1.2 + k) * 2.2; x ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke(); }
+    // Cerro Santa Ana with Las Peñas houses and the lighthouse
+    const hx = w * .26, hy = h * .62;
+    c.fillStyle = "#1c1645"; c.strokeStyle = P; c.lineWidth = 1.6; c.beginPath(); c.moveTo(0, ry); c.quadraticCurveTo(w * .05, hy + h * .08, hx, hy); c.quadraticCurveTo(w * .42, hy + h * .1, w * .5, ry); c.closePath(); c.fill(); c.stroke();
+    const cols = ["#ff9a4c", "#62e3b5", "#e8b64c", "#ff5a76", "#7cb2ff"];
+    for (let i = 0; i < 11; i++) { const f = i / 10, x = w * .04 + f * w * .42, yTop = ry - (ry - hy) * Math.sin(f * Math.PI) * .82 - 4; c.fillStyle = cols[i % 5]; c.globalAlpha = .75; c.fillRect(x, yTop, w * .028, 9); c.globalAlpha = 1; }
+    c.strokeStyle = "#e8edff"; c.lineWidth = 2; c.beginPath(); c.moveTo(hx, hy); c.lineTo(hx, hy - u * .07); c.stroke();
+    const blink = .5 + .5 * Math.sin(t * 3); c.fillStyle = `rgba(255,214,102,${.4 + .6 * blink})`; c.beginPath(); c.arc(hx, hy - u * .075, 3.5, 0, 7); c.fill();
+    const lg = c.createRadialGradient(hx, hy - u * .075, 0, hx, hy - u * .075, u * .09); lg.addColorStop(0, `rgba(255,214,102,${.25 * blink})`); lg.addColorStop(1, "rgba(255,214,102,0)"); c.fillStyle = lg; c.fillRect(hx - u * .1, hy - u * .17, u * .2, u * .2);
+    // city towers to the right
+    [[.58, .16], [.63, .24], [.69, .12], [.74, .2], [.8, .3], [.86, .14], [.92, .22]].forEach(([x, hh]) => { c.strokeStyle = "rgba(177,140,255,.55)"; c.lineWidth = 1.2; c.strokeRect(w * x, ry - h * hh, w * .04, h * hh); });
+    // pin GYE and «física ✕»
+    const px = w * .5, py = h * .78; c.fillStyle = "#ff5a76"; c.shadowColor = "#ff5a76"; c.shadowBlur = 12; c.beginPath(); c.arc(px, py, 6, 0, 7); c.fill(); c.shadowBlur = 0;
+    const fs = Math.max(10, u * .045); c.font = `700 ${fs}px Space Mono, monospace`; c.textAlign = "left"; c.fillStyle = "#e8edff"; c.fillText("GYE", px + 12, py + 4);
+    c.font = `${fs * .9}px Space Mono, monospace`; c.fillStyle = "rgba(195,203,234,.55)"; const ft = "física"; c.fillText(ft, px + 12, py + fs * 1.4);
+    const tw = c.measureText(ft).width; c.strokeStyle = "rgba(255,90,118,.8)"; c.lineWidth = 1.5; c.beginPath(); c.moveTo(px + 10, py + fs * 1.1); c.lineTo(px + 14 + tw, py + fs * 1.1); c.stroke();
+    // the path upward: code → data → particle track → atom
+    const pts = [[px, py], [w * .42, h * .62], [w * .52, h * .48], [w * .44, h * .34], [w * .56, h * .22]];
+    const at = f => { const n = pts.length - 1, k = Math.min(n - 1, Math.floor(f * n)), l = f * n - k, a = pts[k], b = pts[k + 1]; return [a[0] + (b[0] - a[0]) * l, a[1] + (b[1] - a[1]) * l]; };
+    const draw = Math.min(1, ph / .6);
+    c.strokeStyle = P; c.lineWidth = 2; c.setLineDash([6, 6]); c.beginPath(); for (let i = 0; i <= 60 * draw; i++) { const [x, y] = at(i / 60); i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke(); c.setLineDash([]);
+    const tokens = [["{ }", .12], ["for", .24], ["np.", .36]];
+    c.font = `${fs}px Space Mono, monospace`;
+    tokens.forEach(([tx, f]) => { if (draw < f) return; const [x, y] = at(f), a = Math.min(1, (draw - f) * 6); c.globalAlpha = a; c.fillStyle = "#62e3b5"; c.fillText(tx, x + 10, y); c.globalAlpha = 1; });
+    if (draw > .5) for (let i = 0; i < 9; i++) { const f = .48 + i * .02, [x, y] = at(f); c.fillStyle = "#7cb2ff"; c.globalAlpha = Math.min(1, (draw - f) * 8); c.fillRect(x + 12 + Math.sin(i * 2.3) * 14, y + Math.cos(i * 1.7) * 6, 3, 3); c.globalAlpha = 1; }
+    if (draw > .7) { const [x, y] = at(.72); c.strokeStyle = "#ffb45e"; c.lineWidth = 1.6; c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(x + u * .12, y - u * .05, x + u * .2, y - u * .02); c.stroke(); }
+    // atom at the end of the path
+    if (draw > .85) { const [ax, ay] = pts[pts.length - 1], R = u * .07, a = Math.min(1, (draw - .85) * 7); c.globalAlpha = a; c.strokeStyle = P; c.lineWidth = 1.4;
+      for (let k = 0; k < 3; k++) { c.save(); c.translate(ax, ay); c.rotate(k * Math.PI / 3 + t * .4); c.beginPath(); c.ellipse(0, 0, R, R * .35, 0, 0, 7); c.stroke(); c.restore(); }
+      c.fillStyle = "#e8b64c"; c.beginPath(); c.arc(ax, ay, 4, 0, 7); c.fill(); c.globalAlpha = 1; }
+    // last act: an arc out to the world
+    if (ph > .62) { const k = Math.min(1, (ph - .62) / .3), [ax, ay] = pts[pts.length - 1], bx = w * .9, by = h * .08, cx2 = w * .82, cy2 = h * .3;
+      c.strokeStyle = "#e8b64c"; c.lineWidth = 1.6; c.setLineDash([4, 5]); c.beginPath(); c.moveTo(ax, ay);
+      for (let i = 1; i <= 30 * k; i++) { const f = i / 30, x = (1 - f) * (1 - f) * ax + 2 * (1 - f) * f * cx2 + f * f * bx, y = (1 - f) * (1 - f) * ay + 2 * (1 - f) * f * cy2 + f * f * by; c.lineTo(x, y); } c.stroke(); c.setLineDash([]);
+      if (k >= 1) { c.strokeStyle = "#e8b64c"; c.lineWidth = 1.3; const gr = u * .035; c.beginPath(); c.arc(bx, by, gr, 0, 7); c.stroke(); c.beginPath(); c.ellipse(bx, by, gr * .45, gr, 0, 0, 7); c.stroke(); c.beginPath(); c.moveTo(bx - gr, by); c.lineTo(bx + gr, by); c.stroke(); } }
   },
   semf(c, w, h, t) {
     c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);
@@ -2763,15 +2902,23 @@ const Portal = {
   },
   vid(src) { let v = this.vids[src]; if (!v) { v = document.createElement("video"); v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.preload = "auto"; v.src = src; this.vids[src] = v; } return v; },
   img(src) { let im = this.imgs[src]; if (!im) { im = new Image(); im.decoding = "async"; im.src = src; this.imgs[src] = im; } return im; },
+  /* what the portal shows for a project: a moving clip, else its first real picture, else its animation */
+  pick(p) {
+    if (p._pk) return p._pk;
+    const cm = (p.cardMedia || []).find(m => /\.mp4$/.test(m)) || p.video;
+    const md = (p.media || []).concat(p.cardMedia || []).find(m => m !== "anim" && !/\.mp4$/.test(m)) || p.img;
+    const pk = cm ? { v: cm } : md ? { i: md, plot: /\/g\/(higgs|param|like|autodiff|dnn|semf|wids-[1-4]|ov-)|\/(pa0|pl0)/.test(md) || p.plot } : p.anim ? { a: p.anim } : {};
+    return (p._pk = pk);
+  },
   prep() {
-    const p = this.items[this.idx];
-    for (const s in this.vids) if (p.video !== s) this.vids[s].pause();
-    if (p.video) { const v = this.vid(p.video); try { v.currentTime = 0; } catch (e) {} const pr = v.play(); if (pr) pr.catch(() => {}); }
-    const nx = this.items[(this.idx + 1) % this.items.length]; if (nx.img) this.img(nx.img);
+    const p = this.items[this.idx], pk = this.pick(p);
+    for (const s in this.vids) if (pk.v !== s) this.vids[s].pause();
+    if (pk.v) { const v = this.vid(pk.v); try { v.currentTime = 0; } catch (e) {} const pr = v.play(); if (pr) pr.catch(() => {}); }
+    const nx = this.pick(this.items[(this.idx + 1) % this.items.length]); if (nx.i) this.img(nx.i);
   },
   cover(src, sw, sh, plot) {
     const c = this.ctx, S = this.S;
-    if (plot) { c.fillStyle = "#fff"; c.fillRect(0, 0, S, S); const k = Math.min(S * .8 / sw, S * .8 / sh); c.drawImage(src, (S - sw * k) / 2, (S - sh * k) / 2, sw * k, sh * k); return; }
+    if (plot) { c.fillStyle = "#fff"; c.fillRect(0, 0, S, S); const k = Math.min(S * .96 / sw, S * .96 / sh); c.drawImage(src, (S - sw * k) / 2, (S - sh * k) / 2, sw * k, sh * k); return; }
     const s = Math.min(sw, sh); c.drawImage(src, (sw - s) / 2, (sh - s) / 2, s, s, 0, 0, S, S);
   },
   draw(now) {
@@ -2781,10 +2928,10 @@ const Portal = {
       if (this.kind === "gal") {
         const k = Math.floor((now - this.t0) / 2000) % this.items.length;
         if (k !== this.idx) { this.idx = k; this.label(); this.prep(); }
-        const p = this.items[k];
-        if (p.video && this.vid(p.video).readyState >= 2) { const v = this.vid(p.video); this.cover(v, v.videoWidth, v.videoHeight); }
-        else if (p.anim && ANIMS[p.anim]) { c.save(); c.translate(-S * .3, 0); ANIMS[p.anim](c, S * 1.6, S, t); c.restore(); }
-        else if (p.img) { const im = this.img(p.img); if (im.complete && im.naturalWidth) this.cover(im, im.naturalWidth, im.naturalHeight, p.plot); }
+        const p = this.items[k], pk = this.pick(p);
+        if (pk.v) { const v = this.vid(pk.v); if (v.readyState >= 2) this.cover(v, v.videoWidth, v.videoHeight); else if (p.img || p.poster) { const im = this.img(p.poster || p.img); if (im.complete && im.naturalWidth) this.cover(im, im.naturalWidth, im.naturalHeight); } }
+        else if (pk.i) { const im = this.img(pk.i); if (im.complete && im.naturalWidth) this.cover(im, im.naturalWidth, im.naturalHeight, pk.plot); }
+        else if (pk.a && ANIMS[pk.a]) { c.save(); c.translate(-S * .3, 0); ANIMS[pk.a](c, S * 1.6, S, t); c.restore(); }
       } else if (this.kind === "sun") this.drawSM(t);
       else if (this.kind === "globe") this.drawTrip(t);
       else this.drawGame(t);
@@ -3233,11 +3380,11 @@ const Feyn = {
 function boot() {
   $$(".contact-slot").forEach(s => s.appendChild($("#contactTpl").content.cloneNode(true)));
   captureEN();
-  Portal.init(); renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext();
+  Portal.init(); renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext(); renderPassStickers(); wireOviedoLink();
   NameFX.init(); CursorFX.init(); Pass.init(); BackUni.init(); Feyn.init(); Game.init(); Uni.init(); Visited.paint();
   const stars = () => { drawStars($("#viewStars"), 4200); drawStars($("#introStars"), 2200); };
   stars(); addEventListener("resize", () => { clearTimeout(boot._r); boot._r = setTimeout(() => { stars(); if (Intro.visible()) CMSCover.draw(); }, 200); });
-  langListeners.push(() => { renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext(); Visited.paint(); if ($("#modal").classList.contains("open")) fillModal(); if (Portal.key) Portal.label(); soundLabel(); });
+  langListeners.push(() => { renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext(); renderPassStickers(); wireOviedoLink(); Visited.paint(); if ($("#modal").classList.contains("open")) fillModal(); if (Portal.key) Portal.label(); soundLabel(); });
   $$(".seg button").forEach(b => b.onclick = () => { setLang(b.dataset.lang); Sound.click(); });
   const wantSound = store.get("dv_sound", false);
   $("#soundBtn").onclick = () => setSound(!Sound.on);

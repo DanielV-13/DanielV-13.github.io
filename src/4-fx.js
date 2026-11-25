@@ -335,11 +335,11 @@ const Feyn = {
 function boot() {
   $$(".contact-slot").forEach(s => s.appendChild($("#contactTpl").content.cloneNode(true)));
   captureEN();
-  Portal.init(); renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext();
+  Portal.init(); renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext(); renderPassStickers(); wireOviedoLink();
   NameFX.init(); CursorFX.init(); Pass.init(); BackUni.init(); Feyn.init(); Game.init(); Uni.init(); Visited.paint();
   const stars = () => { drawStars($("#viewStars"), 4200); drawStars($("#introStars"), 2200); };
   stars(); addEventListener("resize", () => { clearTimeout(boot._r); boot._r = setTimeout(() => { stars(); if (Intro.visible()) CMSCover.draw(); }, 200); });
-  langListeners.push(() => { renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext(); Visited.paint(); if ($("#modal").classList.contains("open")) fillModal(); if (Portal.key) Portal.label(); soundLabel(); });
+  langListeners.push(() => { renderFilters(); renderGrid(); renderStory(); renderStickers(); renderTimeline(); renderNext(); renderPassStickers(); wireOviedoLink(); Visited.paint(); if ($("#modal").classList.contains("open")) fillModal(); if (Portal.key) Portal.label(); soundLabel(); });
   $$(".seg button").forEach(b => b.onclick = () => { setLang(b.dataset.lang); Sound.click(); });
   const wantSound = store.get("dv_sound", false);
   $("#soundBtn").onclick = () => setSound(!Sound.on);
