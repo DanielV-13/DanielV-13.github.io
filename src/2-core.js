@@ -225,21 +225,55 @@ function renderFilters() {
     renderFilters(); renderGrid();
   });
 }
+/* media: the animation ("anim") and the real pictures of a project, shown in turns */
+function mediaOf(p) {
+  if (p.media) return p.media;
+  if (p.anim) return ["anim"];
+  return p.gallery || (p.img ? [p.img] : []);
+}
+function slideHTML(p, m, on, lazy) {
+  return `<div class="sl${on ? " on" : ""}">${m === "anim" ? `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>` : `<img src="${m}" alt="" ${lazy ? 'loading="lazy"' : ""} decoding="async">`}</div>`;
+}
 function cardHTML(p, i) {
-  const screen = p.anim && !p.img
-    ? `<div class="screen"><canvas data-anim="${p.anim}" aria-hidden="true"></canvas></div>`
-    : p.anim ? `<div class="screen"><canvas data-anim="${p.anim}" aria-hidden="true"></canvas></div>`
-    : `<div class="screen"><img src="${p.img}" alt="" loading="lazy"></div>`;
+  const md = mediaOf(p), many = md.length > 1;
+  const screen = many
+    ? `<div class="screen multi">${md.map((m, k) => slideHTML(p, m, !k, true)).join("")}<div class="sdots" aria-hidden="true">${md.map((_, k) => `<i class="${k ? "" : "on"}"></i>`).join("")}</div></div>`
+    : md[0] === "anim" ? `<div class="screen"><canvas data-anim="${p.anim}" aria-hidden="true"></canvas></div>`
+    : `<div class="screen"><img src="${md[0]}" alt="" loading="lazy"></div>`;
   const first = p.award ? `<span class="tag award">★ ${esc(L(p.award))}</span>` : `<span class="tag">${esc(L(THEMES[p.theme]))}</span>`;
   return `<button class="win${p.feat ? " feat" : ""}" type="button" data-id="${p.id}" style="animation-delay:${Math.min(i, 12) * 35}ms">${screen}
     <div class="win-body"><div class="win-meta">${first}<span class="tag place-${p.place}">${p.place === "uees" ? "UEES" : "Uniovi"}</span>${p.wip ? `<span class="tag wip">${esc(T().wip)}</span>` : ""}</div>
     <h3>${esc(L(p.title))}</h3></div></button>`;
 }
+/* cards with several slides cross-fade on their own while they are on screen; hover pauses */
+const CardRot = {
+  cards: [], io: null, every: 4200,
+  setup(root) {
+    this.cards = []; if (this.io) this.io.disconnect();
+    this.io = new IntersectionObserver(es => es.forEach(e => { const c = this.cards.find(x => x.el === e.target); if (c) c.vis = e.isIntersecting; }), { threshold: .35 });
+    $$(".screen.multi", root).forEach((el, idx) => {
+      const c = { el, k: 0, n: $$(".sl", el).length, vis: false, hover: false, next: performance.now() + 2600 + (idx % 4) * 900 };
+      const win = el.closest(".win"); win.addEventListener("pointerenter", () => c.hover = true); win.addEventListener("pointerleave", () => c.hover = false);
+      $$(".sl canvas", el).forEach((cv, j) => Previews.setOff(cv, j !== 0));
+      this.cards.push(c); this.io.observe(el);
+    });
+    if (!this.timer && !REDUCED) this.timer = setInterval(() => this.tick(), 400);
+  },
+  show(c, k) {
+    c.k = k; $$(".sl", c.el).forEach((s, j) => { s.classList.toggle("on", j === k); const cv = $("canvas", s); if (cv) Previews.setOff(cv, j !== k); });
+    $$(".sdots i", c.el).forEach((d, j) => d.classList.toggle("on", j === k));
+  },
+  tick() {
+    if (document.hidden || CURVIEW !== "work" || $("#modal").classList.contains("open")) return;
+    const now = performance.now();
+    this.cards.forEach(c => { if (!c.vis || c.hover) { c.next = Math.max(c.next, now + 1200); return; } if (now >= c.next) { this.show(c, (c.k + 1) % c.n); c.next = now + this.every; } });
+  }
+};
 function renderGrid() {
   const g = $("#grid");
   g.innerHTML = visibleProjects().map(cardHTML).join("");
   $$(".win", g).forEach(w => { w.onclick = () => openModal(w.dataset.id); w.onmouseenter = () => Sound.hover(); });
-  Previews.scan(g);
+  Previews.scan(g); CardRot.setup(g);
 }
 
 let MODAL_LIST = [], MODAL_I = 0, modalAnim = null, lastFocus = null;
@@ -255,16 +289,29 @@ function fillModal() {
   Visited.mark(p.theme);
   const hero = $("#mHero");
   if (modalAnim) { Previews.remove(modalAnim); modalAnim = null; }
-  hero.className = "m-hero" + (!p.video && p.img && p.plot ? " plot" : "") + (p.gallery ? " gal" : "") + (p.video ? " vid" : "");
+  const md = mediaOf(p);
+  hero.className = "m-hero" + (p.video ? " vid" : md.length > 1 ? " gal" : (p.img && p.plot && !p.anim ? " plot" : ""));
   if (p.video) hero.innerHTML = `<video src="${p.video}" poster="${p.img || ""}" autoplay muted loop playsinline aria-label="${esc(L(p.title))}"></video>`;
-  else if (p.gallery) {
-    let gi = 0; const show = () => { $("img", hero).src = p.gallery[gi]; $$(".g-dots i", hero).forEach((d, k) => d.classList.toggle("on", k === gi)); };
-    hero.innerHTML = `<img src="${p.gallery[0]}" alt="${esc(L(p.title))}"><button class="g-nav prev" aria-label="previous image">‹</button><button class="g-nav next" aria-label="next image">›</button><div class="g-dots">${p.gallery.map(() => "<i></i>").join("")}</div>`;
-    $(".g-nav.prev", hero).onclick = () => { gi = (gi - 1 + p.gallery.length) % p.gallery.length; show(); Sound.click(); };
-    $(".g-nav.next", hero).onclick = () => { gi = (gi + 1) % p.gallery.length; show(); Sound.click(); };
+  else if (md.length > 1) {
+    let gi = 0; const pics = md.filter(m => m !== "anim");
+    hero.innerHTML = md.map((m, k) => slideHTML(p, m, !k, k > 1)).join("") + `<button class="g-nav prev" type="button" aria-label="previous image">‹</button><button class="g-nav next" type="button" aria-label="next image">›</button><div class="g-dots">${md.map(() => "<i></i>").join("")}</div><span class="g-n"></span>`;
+    const cv = $("canvas", hero); if (cv) { modalAnim = cv; Previews.add(cv, true); }
+    const show = () => {
+      $$(".sl", hero).forEach((s, k) => s.classList.toggle("on", k === gi));
+      $$(".g-dots i", hero).forEach((d, k) => d.classList.toggle("on", k === gi));
+      if (cv) Previews.setOff(cv, md[gi] !== "anim");
+      $(".g-n", hero).textContent = `${gi + 1} / ${md.length}`;
+    };
+    const go = d => { gi = (gi + d + md.length) % md.length; show(); Sound.click(); };
+    $(".g-nav.prev", hero).onclick = () => go(-1); $(".g-nav.next", hero).onclick = () => go(1);
+    $$(".g-dots i", hero).forEach((d, k) => d.onclick = () => { gi = k; show(); });
+    $$(".sl img", hero).forEach(im => { im.style.cursor = "zoom-in"; im.onclick = () => lightbox(im.getAttribute("src"), pics); });
+    let x0 = null;
+    hero.ontouchstart = e => { x0 = e.touches[0].clientX; };
+    hero.ontouchend = e => { if (x0 == null) return; const dx = e.changedTouches[0].clientX - x0; if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1); x0 = null; };
     show();
   }
-  else if (p.img) hero.innerHTML = `<img src="${p.img}" alt="${esc(L(p.title))}">`;
+  else if (md[0] && md[0] !== "anim") hero.innerHTML = `<img src="${md[0]}" alt="${esc(L(p.title))}">`;
   else { hero.innerHTML = `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>`; modalAnim = $("canvas", hero); Previews.add(modalAnim, true); }
   const linkBtn = l => {
     const lab = { github: t.code, colab: t.colab, figma: t.figma, video: t.video, map: t.map }[l.t];

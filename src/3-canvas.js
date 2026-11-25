@@ -255,11 +255,12 @@ const Previews = {
   ro: new ResizeObserver(es => es.forEach(e => { const it = Previews.items.get(e.target); if (it) Previews.size(it); })),
   size(it) { const r = it.c.getBoundingClientRect(); if (!r.width) return; it.w = r.width; it.h = r.height; it.ctx = fitCanvas(it.c, r.width, r.height); this.draw(it, performance.now() / 1000); },
   add(c, vis = false) { const it = { c, vis, fn: ANIMS[c.dataset.anim], view: c.closest(".view") }; if (!it.fn) return; this.items.set(c, it); this.io.observe(c); this.ro.observe(c); this.size(it); this.start(); },
+  setOff(c, v) { const it = this.items.get(c); if (it) { it.off = v; if (!v) this.start(); } },
   remove(c) { this.io.unobserve(c); this.ro.unobserve(c); this.items.delete(c); },
   scan(root) { for (const c of [...this.items.keys()]) if (!document.contains(c)) this.remove(c); $$("canvas[data-anim]", root).forEach(c => this.add(c)); },
   draw(it, t) { if (it.ctx && it.w) { it.ctx.save(); it.fn(it.ctx, it.w, it.h, t); it.ctx.restore(); } },
   start() { if (this.running || REDUCED) return; this.running = true; let last = 0;
-    const loop = now => { let any = false; if (now - last > 33 && !document.hidden) { last = now; const mo = !!document.getElementById("modal")?.classList.contains("open"); for (const it of this.items.values()) if (it.vis && (mo ? it.c === modalAnim : (!it.view || it.view.classList.contains("on")))) { any = true; this.draw(it, now / 1000); } } else any = true;
+    const loop = now => { let any = false; if (now - last > 33 && !document.hidden) { last = now; const mo = !!document.getElementById("modal")?.classList.contains("open"); for (const it of this.items.values()) if (it.vis && !it.off && (mo ? it.c === modalAnim : (!it.view || it.view.classList.contains("on")))) { any = true; this.draw(it, now / 1000); } } else any = true;
       if (any) requestAnimationFrame(loop); else this.running = false; };
     requestAnimationFrame(loop); }
 };

@@ -23,7 +23,7 @@ const COLAB = "https://colab.research.google.com/github/";
 
 /* img: picture in assets/projects · plot: white chart (shown whole) · anim: animated preview drawn in code */
 const PROJECTS = [
-  { id: "higgs", theme: "ml", place: "uniovi", year: 2026, feat: true, file: "higgs_ttH.ipynb", anim: "higgs", img: "assets/projects/pa03.webp", plot: true,
+  { id: "higgs", media: ["anim", "assets/projects/g/higgs-1.webp", "assets/projects/g/higgs-2.webp", "assets/projects/g/higgs-3.webp", "assets/projects/g/higgs-4.webp"], theme: "ml", place: "uniovi", year: 2026, feat: true, file: "higgs_ttH.ipynb", anim: "higgs", img: "assets/projects/pa03.webp", plot: true,
     title: { en: "Hunting the Higgs boson (ttH) with PyTorch", es: "Buscando el bosón de Higgs (ttH) con PyTorch" },
     short: { en: "Neural networks that separate Higgs-boson signal from background in collision data, then predict the Higgs pT.", es: "Redes neuronales que separan la señal del bosón de Higgs del fondo en datos de colisiones y predicen el pT del Higgs." },
     desc: { en: "My extended, corrected and fully commented edition of practical PA_03 from the Data Analysis in Modern Physics course (ADFM), created by Prof. Pietro Vischia. It reads ROOT files, trains PyTorch classifiers to find ttH events among their backgrounds, and builds a regression for the Higgs transverse momentum.",
@@ -33,7 +33,7 @@ const PROJECTS = [
     tech: ["Python", "PyTorch", "pandas", "scikit-learn", "uproot (ROOT)", "Matplotlib"],
     links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_03_neural_network_torch.ipynb" }, { t: "colab", u: COLAB + "DanielV-13/ADFM---PA_03_neural_network_torch.ipynb/blob/main/ADFM_PA_03_neural_network_torch.ipynb" }] },
 
-  { id: "wids", theme: "data", place: "uees", year: 2026, feat: true, file: "Track2_Rutas_Evacuacion.ipynb", anim: "evac",
+  { id: "wids", media: ["assets/projects/g/wids-1.webp", "assets/projects/g/wids-2.webp", "assets/projects/g/wids-3.webp", "assets/projects/g/wids-4.webp", "assets/projects/g/wids-5.webp"], theme: "data", place: "uees", year: 2026, feat: true, file: "Track2_Rutas_Evacuacion.ipynb",
     award: { en: "3rd place", es: "3.er lugar" },
     title: { en: "WiDS Datathon 2026 · Team Artemis-4", es: "Datathon WiDS 2026 · Equipo Artemis-4" },
     short: { en: "3rd place: wildfire evacuation routes for Guayaquil, from satellite fire data, wind and the real street network.", es: "3.er lugar: rutas de evacuación ante incendios en Guayaquil, con datos satelitales, viento y la red vial real." },
@@ -46,7 +46,7 @@ const PROJECTS = [
             { t: "colab", u: "https://colab.research.google.com/github/bypaupau/WIDS-DATATHON-2026-ARTEMIS4/blob/main/notebooks/Track2_Rutas_Evacuacion_Guayaquil.ipynb" },
             { t: "map", u: "assets/wids/mapa-evacuacion.html" }], teamRepoNote: true },
 
-  { id: "param", theme: "ml", place: "uniovi", year: 2026, file: "parameterized_nn.ipynb", anim: "param", img: "assets/projects/pl02.webp", plot: true,
+  { id: "param", media: ["anim", "assets/projects/g/param-1.webp", "assets/projects/g/param-2.webp", "assets/projects/g/param-3.webp"], theme: "ml", place: "uniovi", year: 2026, file: "parameterized_nn.ipynb", anim: "param", img: "assets/projects/pl02.webp", plot: true,
     title: { en: "Parameterized neural networks for an X → tt̄ search", es: "Redes neuronales paramétricas para buscar X → tt̄" },
     short: { en: "One network that takes the particle's mass as an input and still works on masses it never saw.", es: "Una sola red que recibe la masa de la partícula como entrada y funciona incluso con masas que nunca vio." },
     desc: { en: "Practical PL_02 of ADFM, based on Baldi et al. (arXiv:1601.07913). In a search for a new resonance of unknown mass, can a single parameterized network replace one specialised network per mass hypothesis, and interpolate to a mass that was left out of training?",
@@ -54,9 +54,9 @@ const PROJECTS = [
     did: { en: ["Fixed-mass networks vs. one parameterized network, compared by AUC vs. mass", "Interpolation test with the 750 GeV sample excluded from training", "Robustness across random seeds and correlation studies of the features"],
            es: ["Redes de masa fija frente a una red paramétrica, comparadas por AUC según la masa", "Prueba de interpolación excluyendo la muestra de 750 GeV del entrenamiento", "Robustez frente a semillas aleatorias y estudio de correlaciones de las variables"] },
     tech: ["Python", "PyTorch", "scikit-learn", "pandas", "seaborn"],
-    links: [{ t: "github", u: GH + "DanielV-13/ADFM---PL_02_inductive_bias_parameterized_nns.ipynb" }] },
+    links: [{ t: "github", u: GH + "DanielV-13/ADFM---PL_02_inductive_bias_parameterized_nns.ipynb" }, { t: "colab", u: COLAB + "DanielV-13/ADFM---PL_02_inductive_bias_parameterized_nns.ipynb/blob/main/ADFM_PL_02_inductive_bias_parameterized_nns.ipynb" }] },
 
-  { id: "semf", theme: "ml", place: "uniovi", year: 2026, file: "liquid_drop_SEMF.ipynb", anim: "semf",
+  { id: "semf", media: ["assets/projects/g/semf-1.webp", "anim", "assets/projects/g/semf-2.webp", "assets/projects/g/semf-3.webp"], theme: "ml", place: "uniovi", year: 2026, file: "liquid_drop_SEMF.ipynb", anim: "semf",
     title: { en: "Liquid drop model: fitting the nuclear binding energy", es: "Modelo de la gota líquida: ajuste de la energía de enlace nuclear" },
     short: { en: "Least-squares fit of the semi-empirical mass formula to real nuclear data.", es: "Ajuste por mínimos cuadrados de la fórmula semiempírica de masas a datos nucleares reales." },
     desc: { en: "A computational practical for my Nuclear and Particle Physics course (FNPE). From the Nuclear Wallet Cards I compute the binding energy per nucleon of every nucleus, map the chart of nuclides with the neutron drip line, and fit the five SEMF coefficients globally and by mass region.",
@@ -64,9 +64,9 @@ const PROJECTS = [
     did: { en: ["B/A for stable and unstable nuclei from measured mass excesses", "Chart of nuclides (Z vs N) with the neutron drip line Sₙ = 0", "Separate fits for A < 100 and A ≥ 100, compared with the reference values"],
            es: ["B/A de núcleos estables e inestables a partir del exceso de masa medido", "Carta de núclidos (Z vs N) con la línea de goteo de neutrones Sₙ = 0", "Ajustes separados para A < 100 y A ≥ 100, comparados con los valores de referencia"] },
     tech: ["Python", "NumPy", "SciPy", "pandas", "Matplotlib"],
-    links: [{ t: "github", u: GH + "DanielV-13/FNPE---CALCULO-DE-PARAMETROS-de-MODELO-DE-LA-GOTA-LIQUIDA-SEMF-" }] },
+    links: [{ t: "github", u: GH + "DanielV-13/FNPE---CALCULO-DE-PARAMETROS-de-MODELO-DE-LA-GOTA-LIQUIDA-SEMF-" }, { t: "colab", u: COLAB + "DanielV-13/FNPE---CALCULO-DE-PARAMETROS-de-MODELO-DE-LA-GOTA-LIQUIDA-SEMF-/blob/main/FNPE_MODELO_DE_LA_GOTA_LIQUIDA_%28SEMF%29.ipynb" }] },
 
-  { id: "likelihood", theme: "ml", place: "uniovi", year: 2026, file: "profile_likelihood.ipynb", anim: "likelihood", img: "assets/projects/pl01.webp", plot: true,
+  { id: "likelihood", media: ["anim", "assets/projects/g/like-1.webp", "assets/projects/g/like-2.webp", "assets/projects/g/like-3.webp"], theme: "ml", place: "uniovi", year: 2026, file: "profile_likelihood.ipynb", anim: "likelihood", img: "assets/projects/pl01.webp", plot: true,
     title: { en: "Profile likelihood fits", es: "Ajustes de verosimilitud perfilada" },
     short: { en: "How much signal is there, and how sure are we? A counting experiment done the particle-physics way.", es: "¿Cuánta señal hay y qué tan seguros estamos? Un experimento de conteo como en física de partículas." },
     desc: { en: "Practical PL_01 of ADFM. Signal plus background with a sideband measurement, a profiled likelihood, MINOS intervals and a coverage study with thousands of toy experiments.",
@@ -74,9 +74,9 @@ const PROJECTS = [
     did: { en: ["Profiled vs. frozen background nuisance parameter", "Coverage checks with 1,000 and 2,000 toy experiments", "Solved and commented every exercise"],
            es: ["Parámetro de ruido del fondo perfilado frente a congelado", "Cobertura comprobada con 1.000 y 2.000 experimentos simulados", "Todos los ejercicios resueltos y comentados"] },
     tech: ["Python", "iminuit (MINUIT)", "SciPy", "NumPy", "Matplotlib"],
-    links: [{ t: "github", u: GH + "DanielV-13/ADFM---PL_01_profile_likelihood_RESUELTO_Daniel_Vaca.ipynb" }] },
+    links: [{ t: "github", u: GH + "DanielV-13/ADFM---PL_01_profile_likelihood_RESUELTO_Daniel_Vaca.ipynb" }, { t: "colab", u: COLAB + "DanielV-13/ADFM---PL_01_profile_likelihood_RESUELTO_Daniel_Vaca.ipynb/blob/main/ADFM_PL_01_profile_likelihood_RESUELTO_Daniel_Vaca.ipynb" }] },
 
-  { id: "dnn", theme: "ml", place: "uniovi", year: 2026, file: "dnn_from_scratch.ipynb", anim: "dnn", img: "assets/projects/pa02.webp", plot: true,
+  { id: "dnn", media: ["anim", "assets/projects/g/dnn-1.webp", "assets/projects/g/dnn-2.webp", "assets/projects/g/dnn-3.webp"], theme: "ml", place: "uniovi", year: 2026, file: "dnn_from_scratch.ipynb", anim: "dnn",
     title: { en: "A neural network from scratch in NumPy", es: "Una red neuronal desde cero con NumPy" },
     short: { en: "Every piece written by hand: matrices, activations, loss, derivatives and the training loop.", es: "Cada pieza escrita a mano: matrices, activaciones, pérdida, derivadas y el bucle de entrenamiento." },
     desc: { en: "Practical PA_02 of ADFM: classify houses from San Francisco vs. New York without PyTorch or TensorFlow. The goal is not only to predict but to understand what happens inside the network.",
@@ -84,9 +84,9 @@ const PROJECTS = [
     did: { en: ["Architecture and shape diagrams for every layer", "Backpropagation implemented by hand", "My own experiments with learning rate and activations"],
            es: ["Diagramas de arquitectura y dimensiones de cada capa", "Backpropagation implementado a mano", "Experimentos propios con la tasa de aprendizaje y las activaciones"] },
     tech: ["Python", "NumPy", "pandas", "scikit-learn", "Matplotlib"],
-    links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_02_neural_network_from_scratch" }] },
+    links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_02_neural_network_from_scratch" }, { t: "colab", u: COLAB + "DanielV-13/ADFM---PA_02_neural_network_from_scratch/blob/main/ADFM_PA_02_neural_network_from_scratch.ipynb" }] },
 
-  { id: "autodiff", theme: "ml", place: "uniovi", year: 2026, file: "autodiff.ipynb", anim: "autodiff", img: "assets/projects/pa01.webp", plot: true,
+  { id: "autodiff", media: ["anim", "assets/projects/g/autodiff-1.webp", "assets/projects/g/autodiff-2.webp", "assets/projects/g/autodiff-3.webp"], theme: "ml", place: "uniovi", year: 2026, file: "autodiff.ipynb", anim: "autodiff", img: "assets/projects/pa01.webp", plot: true,
     title: { en: "Autodiff: how a computer takes derivatives", es: "Autodiff: cómo deriva un ordenador" },
     short: { en: "Analytic, symbolic, numerical and automatic derivatives, plus autodiff built from dual numbers.", es: "Derivadas analíticas, simbólicas, numéricas y automáticas, y autodiff construido con números duales." },
     desc: { en: "Practical PA_01 of ADFM, the base of everything that follows: before training a network you have to understand how a computer computes derivatives, because that is exactly what backpropagation does.",
@@ -94,7 +94,7 @@ const PROJECTS = [
     did: { en: ["A DualNumber class with its own arithmetic and sine", "Numerical error vs. step size ε", "Comparison against PyTorch's reverse mode"],
            es: ["Una clase DualNumber con su propia aritmética y seno", "Error numérico según el paso ε", "Comparación con el modo inverso de PyTorch"] },
     tech: ["Python", "NumPy", "SymPy", "PyTorch", "Matplotlib"],
-    links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_01_autodiff" }] },
+    links: [{ t: "github", u: GH + "DanielV-13/ADFM---PA_01_autodiff" }, { t: "colab", u: COLAB + "DanielV-13/ADFM---PA_01_autodiff/blob/main/ADFM_PA_01_autodiff.ipynb" }] },
 
   { id: "conv", theme: "ml", place: "uniovi", year: 2026, wip: true, file: "dense_vs_conv.ipynb", anim: "conv",
     title: { en: "Dense vs. convolutional networks", es: "Redes densas frente a convolucionales" },
@@ -103,9 +103,9 @@ const PROJECTS = [
             es: "Práctica PL_03 de Análisis de Datos en Física Moderna (ADFM): una red densa y una convolucional en PyTorch, comparadas en la misma tarea." },
     did: { en: [], es: [] },
     tech: ["Python", "PyTorch"],
-    links: [{ t: "github", u: GH + "DanielV-13/ADFM----PL_03_dense_vs_convolutional.ipynb" }] },
+    links: [{ t: "github", u: GH + "DanielV-13/ADFM----PL_03_dense_vs_convolutional.ipynb" }, { t: "colab", u: COLAB + "DanielV-13/ADFM----PL_03_dense_vs_convolutional.ipynb/blob/main/ADFM_PL_03_dense_vs_convolutional.ipynb" }] },
 
-  { id: "evac", theme: "systems", place: "uees", year: 2026, file: "evacuation_routes.py", img: "assets/projects/evac-completo.webp", gallery: ["assets/projects/evac-completo.webp", "assets/projects/evac-nodos.webp"],
+  { id: "evac", media: ["assets/projects/evac-completo.webp", "assets/projects/evac-nodos.webp"], theme: "systems", place: "uees", year: 2026, file: "evacuation_routes.py", img: "assets/projects/evac-completo.webp", gallery: ["assets/projects/evac-completo.webp", "assets/projects/evac-nodos.webp"],
     title: { en: "Earthquake evacuation routes for a shopping mall", es: "Rutas de evacuación ante sismos para un centro comercial" },
     short: { en: "Graph algorithms that find the safest way out, even when the main route is blocked.", es: "Algoritmos de grafos que encuentran la salida más segura, incluso si la ruta principal está bloqueada." },
     desc: { en: "The La Rotonda mall modelled as a weighted, undirected graph of 45 nodes and 59 edges (stores, corridors and doors). Built for security staff, it computes the optimal evacuation route from any point and alternatives when corridors are blocked, with an interactive map.",
@@ -144,7 +144,7 @@ const PROJECTS = [
            es: ["Parser para cuatro tipos de documentos del SRI", "Exportación a Excel lista para contabilidad", "Mejoras iterativas con la regla de no romper nada"] },
     tech: ["Python", "PDF parsing", "pandas", "Excel"], links: [] },
 
-  { id: "todo", theme: "software", place: "uees", year: 2025, file: "ToDoApp.java", img: "assets/projects/todo.webp",
+  { id: "todo", media: ["assets/projects/todo.webp", "assets/projects/g/todo-2.webp", "assets/projects/g/todo-3.webp"], theme: "software", place: "uees", year: 2025, file: "ToDoApp.java", img: "assets/projects/todo.webp",
     title: { en: "To-Do list manager in Java", es: "Gestor de tareas en Java" },
     short: { en: "22 options, undo and redo with stacks, history and file persistence.", es: "22 opciones, deshacer y rehacer con pilas, historial y persistencia en archivo." },
     desc: { en: "A console application for the Data Structures course: several to-do lists, each with tasks that have priority and due date, plus search, filters, moves between lists and a history of completed work.",
@@ -154,7 +154,7 @@ const PROJECTS = [
     tech: ["Java", "Data structures"], people: ["xavier"],
     links: [{ t: "github", u: GH + "DanielV-13/PROYECTO-TO-DO-APP-CARDENAS-VACA" }] },
 
-  { id: "xml", theme: "software", place: "uees", year: 2025, file: "ArbolXML.java", img: "assets/projects/parser.webp",
+  { id: "xml", media: ["assets/projects/parser.webp", "assets/projects/g/xml-2.webp", "assets/projects/g/xml-3.webp", "assets/projects/g/xml-4.webp", "assets/projects/g/xml-5.webp"], theme: "software", place: "uees", year: 2025, file: "ArbolXML.java", img: "assets/projects/parser.webp",
     title: { en: "XML parser with a multi-child tree", es: "Parser XML con árbol multihijos" },
     short: { en: "Reads, validates and rebuilds XML from scratch, without XML libraries.", es: "Lee, valida y reconstruye XML desde cero, sin librerías XML." },
     desc: { en: "A Java Swing application that builds a multi-child tree from any XML file, validates its structure and lets you traverse, search, sort and generate new XML files.",
@@ -220,12 +220,12 @@ const PROJECTS = [
     tech: ["Unity", "C#"], people: ["paula"],
     links: [{ t: "github", u: GH + "bypaupau/Catventures-Game" }] },
 
-  { id: "srihci", theme: "design", place: "uees", year: 2026, wip: true, file: "sri_redesign.fig", anim: "invoice",
+  { id: "srihci", media: ["anim", "assets/projects/g/hci-1.webp", "assets/projects/g/hci-2.webp", "assets/projects/g/hci-3.webp", "assets/projects/g/hci-4.webp", "assets/projects/g/hci-5.webp", "assets/projects/g/hci-6.webp", "assets/projects/g/hci-7.webp", "assets/projects/g/hci-8.webp"], theme: "design", place: "uees", year: 2026, wip: true, file: "sri_redesign.fig", anim: "invoice",
     title: { en: "Redesigning Ecuador's e-invoicing (SRI)", es: "Rediseño del facturador electrónico del SRI" },
     short: { en: "A human-centred redesign of the tax authority's invoice flow, prototyped in Figma.", es: "Un rediseño centrado en las personas del flujo de facturación del SRI, prototipado en Figma." },
     desc: { en: "A Human–Computer Interaction project: we studied how people struggle with the official invoicing tool and proposed a guided, step-by-step flow, presented in a video and an interactive prototype.",
             es: "Proyecto de Interacción Humano-Computador: estudiamos las dificultades de las personas con el facturador oficial y propusimos un flujo guiado paso a paso, presentado en un video y un prototipo interactivo." },
-    did: { en: ["Step-by-step invoice wizard prototype"], es: ["Prototipo de asistente de facturación paso a paso"] },
+    did: { en: ["From paper prototypes with sticky notes to an interactive high-fidelity prototype", "Four redesigned features: a 3-step invoice wizard with field validation, receipts management, products and services, and help"], es: ["Del prototipo en papel con post-its a un prototipo interactivo de alta fidelidad", "Cuatro funciones rediseñadas: asistente de factura en 3 pasos con validación de campos, administración de comprobantes, productos y servicios, y ayuda"] },
     tech: ["Figma", "User research"],
     links: [{ t: "figma", u: "https://www.figma.com/make/3B6GoCk2dkoPUfT2bJ5wp0/Invoice-Wizard-Design?fullscreen=1&t=PkJCDiROb9Ut1SuO-1&code-node-id=0-9" }, { t: "video", u: "https://drive.google.com/file/d/1IxkUrsPvYqDoRvacBT3pUclQym34asGu/view?usp=sharing" }] }
 ];
@@ -234,7 +234,7 @@ const TIMELINE = [
   { when: { en: "Sep 2026 — Jan 2027", es: "sep. 2026 — ene. 2027" }, hl: true, filter: "ml", img: "assets/story/oviedo-becario.webp",
     title: { en: "Exchange semester · international scholar", es: "Semestre de intercambio · becario internacional" }, org: "Universidad de Oviedo",
     text: { en: "Data Analysis in Modern Physics, Nuclear and Particle Physics, and Intelligent Systems.", es: "Análisis de Datos en Física Moderna, Física Nuclear y de Partículas, y Sistemas Inteligentes." } },
-  { when: { en: "Jul 2026", es: "jul. 2026" }, hl: true, open: "wids", imgs: ["assets/story/wids-equipo.webp", "assets/story/wids-badge.webp", "assets/story/wids-rutas.webp", "assets/story/wids-credencial.webp"],
+  { when: { en: "Jul 2026", es: "jul. 2026" }, hl: true, open: "wids", imgs: ["assets/story/wids-equipo.webp", "assets/story/wids-badge.webp", "assets/story/wids-rutas.webp"],
     title: { en: "3rd place · WiDS Datathon", es: "3.er lugar · Datathon WiDS" }, org: "ESPOL",
     text: { en: "Team Artemis-4: wildfire evacuation routes for Guayaquil with satellite data, wind and real streets.", es: "Equipo Artemis-4: rutas de evacuación ante incendios en Guayaquil con datos satelitales, viento y calles reales." },
     links: [{ t: { en: "Verify credential", es: "Verificar credencial" }, u: "https://verified.sertifier.com/en/verify/08910752588849/" }] },

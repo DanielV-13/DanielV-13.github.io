@@ -745,6 +745,20 @@ img[src$="apol-lista.webp"]{object-position:50% 70%}
 @media (prefers-reduced-motion:reduce){.backuni{transition:none}.backuni.todo .dot{animation:none}}
 .sm-panel .rm:focus:not(:focus-visible){outline:none}
 .sm-panel .txt em{font-style:italic;color:#dfe4f8}
+
+/* ===== v23: project media (animation + real pictures, in turns) ===== */
+.screen.multi .sl,.m-hero .sl{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;pointer-events:none}
+.screen.multi .sl.on,.m-hero .sl.on{opacity:1;pointer-events:auto}
+.screen.multi .sl img,.screen.multi .sl canvas{width:100%;height:100%;display:block;object-fit:cover}
+.sdots{position:absolute;right:10px;bottom:8px;display:flex;gap:4px;padding:4px 6px;border-radius:999px;background:rgba(5,8,22,.62);z-index:2}
+.sdots i{width:5px;height:5px;border-radius:3px;background:#5b6aa0;transition:width .3s,background .3s}
+.sdots i.on{width:13px;background:var(--ember)}
+.m-hero.gal .sl img{width:100%;height:100%;object-fit:contain;display:block}
+.m-hero.gal .sl canvas{width:100%;height:100%;display:block}
+.m-hero .g-nav{z-index:3}.m-hero .g-dots{z-index:3}.m-hero .g-dots i{cursor:var(--cp,pointer)}
+.g-n{position:absolute;right:14px;bottom:12px;z-index:3;font-size:11px;color:#c3cbea;background:rgba(5,8,22,.7);padding:3px 8px;border-radius:999px}
+@media (max-width:760px){.m-hero.gal{aspect-ratio:16/10.5}.g-nav{width:36px;height:36px;font-size:19px}.g-nav.prev{left:8px}.g-nav.next{right:8px}}
+@media (prefers-reduced-motion:reduce){.screen.multi .sl,.m-hero .sl{transition:none}}
 </style>
 </head>
 <body>
