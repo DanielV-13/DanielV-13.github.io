@@ -130,50 +130,106 @@ const ANIMS = {
     c.fillStyle = "#62e3b5"; c.font = `700 ${fs * 1.05}px Space Mono, monospace`; c.fillText("risk −42%", ...P(.04, .1));
   },
   gyRoute(c, w, h, t) {
-    /* Gy: no physics degree in Guayaquil → computing → code and data → physics → the world */
-    const P = "#b18cff", g = c.createLinearGradient(0, 0, 0, h); g.addColorStop(0, "#0b0c26"); g.addColorStop(1, "#140f33");
-    c.fillStyle = g; c.fillRect(0, 0, w, h);
-    const u = Math.min(w, h * .8), cyc = 9, ph = (t % cyc) / cyc;
-    // stars
-    for (let i = 0; i < 40; i++) { const x = (i * 97.3) % w, y = (i * 53.1) % (h * .6); c.fillStyle = `rgba(232,237,255,${.25 + .25 * Math.sin(t * 1.5 + i)})`; c.fillRect(x, y, 1.4, 1.4); }
-    // river Guayas
-    const ry = h * .9;
-    for (let k = 0; k < 3; k++) { c.strokeStyle = `rgba(124,178,255,${.35 - k * .1})`; c.lineWidth = 1.2; c.beginPath();
-      for (let x = 0; x <= w; x += 6) { const y = ry + k * 9 + Math.sin(x * .03 + t * 1.2 + k) * 2.2; x ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke(); }
-    // Cerro Santa Ana with Las Peñas houses and the lighthouse
-    const hx = w * .26, hy = h * .62;
-    c.fillStyle = "#1c1645"; c.strokeStyle = P; c.lineWidth = 1.6; c.beginPath(); c.moveTo(0, ry); c.quadraticCurveTo(w * .05, hy + h * .08, hx, hy); c.quadraticCurveTo(w * .42, hy + h * .1, w * .5, ry); c.closePath(); c.fill(); c.stroke();
-    const cols = ["#ff9a4c", "#62e3b5", "#e8b64c", "#ff5a76", "#7cb2ff"];
-    for (let i = 0; i < 11; i++) { const f = i / 10, x = w * .04 + f * w * .42, yTop = ry - (ry - hy) * Math.sin(f * Math.PI) * .82 - 4; c.fillStyle = cols[i % 5]; c.globalAlpha = .75; c.fillRect(x, yTop, w * .028, 9); c.globalAlpha = 1; }
-    c.strokeStyle = "#e8edff"; c.lineWidth = 2; c.beginPath(); c.moveTo(hx, hy); c.lineTo(hx, hy - u * .07); c.stroke();
-    const blink = .5 + .5 * Math.sin(t * 3); c.fillStyle = `rgba(255,214,102,${.4 + .6 * blink})`; c.beginPath(); c.arc(hx, hy - u * .075, 3.5, 0, 7); c.fill();
-    const lg = c.createRadialGradient(hx, hy - u * .075, 0, hx, hy - u * .075, u * .09); lg.addColorStop(0, `rgba(255,214,102,${.25 * blink})`); lg.addColorStop(1, "rgba(255,214,102,0)"); c.fillStyle = lg; c.fillRect(hx - u * .1, hy - u * .17, u * .2, u * .2);
-    // city towers to the right
-    [[.58, .16], [.63, .24], [.69, .12], [.74, .2], [.8, .3], [.86, .14], [.92, .22]].forEach(([x, hh]) => { c.strokeStyle = "rgba(177,140,255,.55)"; c.lineWidth = 1.2; c.strokeRect(w * x, ry - h * hh, w * .04, h * hh); });
-    // pin GYE and «física ✕»
-    const px = w * .5, py = h * .78; c.fillStyle = "#ff5a76"; c.shadowColor = "#ff5a76"; c.shadowBlur = 12; c.beginPath(); c.arc(px, py, 6, 0, 7); c.fill(); c.shadowBlur = 0;
-    const fs = Math.max(10, u * .045); c.font = `700 ${fs}px Space Mono, monospace`; c.textAlign = "left"; c.fillStyle = "#e8edff"; c.fillText("GYE", px + 12, py + 4);
-    c.font = `${fs * .9}px Space Mono, monospace`; c.fillStyle = "rgba(195,203,234,.55)"; const ft = "física"; c.fillText(ft, px + 12, py + fs * 1.4);
-    const tw = c.measureText(ft).width; c.strokeStyle = "rgba(255,90,118,.8)"; c.lineWidth = 1.5; c.beginPath(); c.moveTo(px + 10, py + fs * 1.1); c.lineTo(px + 14 + tw, py + fs * 1.1); c.stroke();
-    // the path upward: code → data → particle track → atom
-    const pts = [[px, py], [w * .42, h * .62], [w * .52, h * .48], [w * .44, h * .34], [w * .56, h * .22]];
-    const at = f => { const n = pts.length - 1, k = Math.min(n - 1, Math.floor(f * n)), l = f * n - k, a = pts[k], b = pts[k + 1]; return [a[0] + (b[0] - a[0]) * l, a[1] + (b[1] - a[1]) * l]; };
-    const draw = Math.min(1, ph / .6);
-    c.strokeStyle = P; c.lineWidth = 2; c.setLineDash([6, 6]); c.beginPath(); for (let i = 0; i <= 60 * draw; i++) { const [x, y] = at(i / 60); i ? c.lineTo(x, y) : c.moveTo(x, y); } c.stroke(); c.setLineDash([]);
-    const tokens = [["{ }", .12], ["for", .24], ["np.", .36]];
-    c.font = `${fs}px Space Mono, monospace`;
-    tokens.forEach(([tx, f]) => { if (draw < f) return; const [x, y] = at(f), a = Math.min(1, (draw - f) * 6); c.globalAlpha = a; c.fillStyle = "#62e3b5"; c.fillText(tx, x + 10, y); c.globalAlpha = 1; });
-    if (draw > .5) for (let i = 0; i < 9; i++) { const f = .48 + i * .02, [x, y] = at(f); c.fillStyle = "#7cb2ff"; c.globalAlpha = Math.min(1, (draw - f) * 8); c.fillRect(x + 12 + Math.sin(i * 2.3) * 14, y + Math.cos(i * 1.7) * 6, 3, 3); c.globalAlpha = 1; }
-    if (draw > .7) { const [x, y] = at(.72); c.strokeStyle = "#ffb45e"; c.lineWidth = 1.6; c.beginPath(); c.moveTo(x, y); c.quadraticCurveTo(x + u * .12, y - u * .05, x + u * .2, y - u * .02); c.stroke(); }
-    // atom at the end of the path
-    if (draw > .85) { const [ax, ay] = pts[pts.length - 1], R = u * .07, a = Math.min(1, (draw - .85) * 7); c.globalAlpha = a; c.strokeStyle = P; c.lineWidth = 1.4;
-      for (let k = 0; k < 3; k++) { c.save(); c.translate(ax, ay); c.rotate(k * Math.PI / 3 + t * .4); c.beginPath(); c.ellipse(0, 0, R, R * .35, 0, 0, 7); c.stroke(); c.restore(); }
-      c.fillStyle = "#e8b64c"; c.beginPath(); c.arc(ax, ay, 4, 0, 7); c.fill(); c.globalAlpha = 1; }
-    // last act: an arc out to the world
-    if (ph > .62) { const k = Math.min(1, (ph - .62) / .3), [ax, ay] = pts[pts.length - 1], bx = w * .9, by = h * .08, cx2 = w * .82, cy2 = h * .3;
-      c.strokeStyle = "#e8b64c"; c.lineWidth = 1.6; c.setLineDash([4, 5]); c.beginPath(); c.moveTo(ax, ay);
-      for (let i = 1; i <= 30 * k; i++) { const f = i / 30, x = (1 - f) * (1 - f) * ax + 2 * (1 - f) * f * cx2 + f * f * bx, y = (1 - f) * (1 - f) * ay + 2 * (1 - f) * f * cy2 + f * f * by; c.lineTo(x, y); } c.stroke(); c.setLineDash([]);
-      if (k >= 1) { c.strokeStyle = "#e8b64c"; c.lineWidth = 1.3; const gr = u * .035; c.beginPath(); c.arc(bx, by, gr, 0, 7); c.stroke(); c.beginPath(); c.ellipse(bx, by, gr * .45, gr, 0, 0, 7); c.stroke(); c.beginPath(); c.moveTo(bx - gr, by); c.lineTo(bx + gr, by); c.stroke(); } }
+    /* Gy: a terminal that types the story: no physics in Guayaquil → computing → code + data → physics → the world */
+    const es = LANG === "es", L1 = es ? [
+      [0, 'buscar("física", ciudad="Guayaquil")'], [1, "0 resultados ✕"], [0, 'carrera = "Ingeniería en Computación"'],
+      [0, "camino  = código + datos → física"], [2, "▸ Uniovi · Análisis de Datos en Física Moderna ✓"], [0, 'siguiente = "el mundo" ✈']
+    ] : [
+      [0, 'search("physics", city="Guayaquil")'], [1, "0 results ✕"], [0, 'degree = "Computer Engineering"'],
+      [0, "path = code + data → physics"], [2, "▸ Uniovi · Data Analysis in Modern Physics ✓"], [0, 'next = "the world" ✈']
+    ];
+    c.fillStyle = "#0b0c26"; c.fillRect(0, 0, w, h);
+    const pad = Math.max(10, w * .045), bar = Math.max(18, h * .07);
+    c.fillStyle = "#141536"; c.fillRect(0, 0, w, bar);
+    ["#ff5f57", "#febc2e", "#28c840"].forEach((col, i) => { c.fillStyle = col; c.beginPath(); c.arc(pad + i * bar * .55, bar / 2, bar * .14, 0, 7); c.fill(); });
+    /* wrap long lines on spaces so the story also fits a narrow, portrait panel; shrink the font if that leaves room for the arc */
+    const wrapAt = (str, maxC) => { const out = []; let cur = ""; for (const word of str.split(" ")) { const nx = cur ? cur + " " + word : word; if (nx.length > maxC && cur) { out.push(cur + " "); cur = word; } else cur = nx; } out.push(cur); return out; };
+    const need = f => { const mc = Math.max(12, Math.floor((w - pad * 2 - f * 1.25) / (f * .6))); return bar + pad * .6 + f * 1.2 + L1.reduce((a, [, s]) => a + wrapAt(s, mc).length * f * 1.6 + f * .4, 0) + f * 4.5; };
+    let fs = Math.max(10, Math.min(h / 17, w / 30, 17));
+    for (let i = 0; i < 6 && fs > 10 && need(fs) > h; i++) fs = Math.max(10, fs * .9);
+    const lh = fs * 1.6, cw = fs * .6, ind = fs * 1.25;
+    c.font = `${fs * .8}px Space Mono, monospace`; c.fillStyle = "#8d97c0"; c.textAlign = "left"; c.textBaseline = "middle";
+    c.fillText("daniel@gye: ~", pad + bar * 1.9, bar / 2);
+    const maxC = Math.max(12, Math.floor((w - pad * 2 - ind) / cw)), wrap = s => wrapAt(s, maxC);
+    /* timeline: typed commands at ~24 chars/s, outputs appear after a short pause */
+    const CPS = 24, sched = []; let T = .6;
+    for (const [k, s] of L1) { const d = k ? .35 : s.length / CPS; sched.push([T, d]); T += d + (k ? .5 : .25); }
+    const cyc = T + 4.5, tt = t % cyc;
+    c.font = `${fs}px Space Mono, monospace`; c.textBaseline = "alphabetic";
+    let y = bar + pad * .6 + fs * 1.2, curX = pad, curY = y, lastDone = true;
+    /* if the text leaves no room below it (short panels), it dims at the end and the arc crosses over it */
+    const yEnd = y + L1.reduce((a, [, s]) => a + wrap(s).length * lh + lh * .25, 0), tight = h - yEnd < fs * 4.5;
+    const dim = tight ? clamp((tt - T - .6) / .6, 0, 1) : 0; c.globalAlpha = 1 - .82 * dim;
+    L1.forEach(([k, s], i) => {
+      const [t0] = sched[i]; if (tt < t0) return;
+      const n = k ? s.length : Math.min(s.length, Math.floor((tt - t0) * CPS));
+      if (!k) { c.fillStyle = "#b18cff"; c.fillText(">", pad, y); }
+      let used = 0, inQ = false;
+      for (const seg of wrap(s)) {
+        if (used >= n && used) break;
+        const txt = seg.slice(0, Math.max(0, n - used)); let x = pad + ind;
+        c.fillStyle = k === 1 ? "#ff5a76" : k === 2 ? "#62e3b5" : "#e8edff";
+        if (k) c.fillText(txt, x, y);
+        else for (const ch of txt) { if (ch === '"') inQ = !inQ; c.fillStyle = inQ || ch === '"' ? "#e8b64c" : "#e8edff"; c.fillText(ch, x, y); x += cw; }
+        if (k) x += c.measureText(txt).width;
+        curX = x; curY = y; used += seg.length; y += lh;
+      }
+      lastDone = n >= s.length; y += lh * .25;
+    });
+    if (Math.floor(tt * 2.2) % 2 === 0 || !lastDone) { c.fillStyle = "#e8edff"; c.fillRect(curX + 2, curY - fs * .85, fs * .55, fs); }
+    c.globalAlpha = 1;
+    /* finale: a small GYE → OVD arc with a travelling dot */
+    const k = clamp((tt - T + (tight ? -.9 : .2)) / 1.6, 0, 1);
+    if (k > 0) {
+      const ax = w * .14, ay = tight ? h * .7 : h - (h - yEnd) * .28, bx = w * .78, by = tight ? h * .64 : h - (h - yEnd) * .36, cx2 = w * .46, cy2 = tight ? h * .3 : yEnd + fs * .2;
+      const q = f => [(1 - f) * (1 - f) * ax + 2 * (1 - f) * f * cx2 + f * f * bx, (1 - f) * (1 - f) * ay + 2 * (1 - f) * f * cy2 + f * f * by];
+      c.globalAlpha = Math.min(1, k * 3); c.strokeStyle = "rgba(232,182,76,.85)"; c.lineWidth = 1.5; c.setLineDash([4, 5]); c.beginPath(); c.moveTo(ax, ay);
+      for (let i = 1; i <= 40 * k; i++) { const [x, yy] = q(i / 40); c.lineTo(x, yy); } c.stroke(); c.setLineDash([]);
+      const [px, py] = q(k); c.fillStyle = "#e8b64c"; c.shadowColor = "#e8b64c"; c.shadowBlur = 10; c.beginPath(); c.arc(px, py, 3.5, 0, 7); c.fill(); c.shadowBlur = 0;
+      c.font = `700 ${fs * .85}px Space Mono, monospace`; c.textAlign = "center";
+      c.fillStyle = "#ff5a76"; c.beginPath(); c.arc(ax, ay, 4, 0, 7); c.fill(); c.fillStyle = "#e8edff"; c.fillText("GYE", ax, ay - fs * .7);
+      if (k >= 1) { c.fillStyle = "#62e3b5"; c.beginPath(); c.arc(bx, by, 4, 0, 7); c.fill(); c.fillStyle = "#e8edff"; c.fillText("OVD", bx, by - fs * .7); }
+      c.globalAlpha = 1; c.textAlign = "left";
+    }
+  },
+  cine(c, w, h, t) {
+    /* SO project: 12 threads, Semaphore(4) = 4 seats, round robin with q = 20 min, 50 % voluntary I/O (bathroom) */
+    const S = ANIMS.cine.s || (ANIMS.cine.s = (() => {
+      let r = 7; const rnd = () => (r = (r * 16807) % 2147483647) / 2147483647, ri = (a, b) => a + Math.floor(rnd() * (b - a + 1));
+      const N = 12, seats = [null, null, null, null], left = Array(N).fill(0), away = Array(N).fill(0), seen = Array(N).fill(0), q = []; const out = [];
+      for (let i = 0; i < N; i++) q.push(i);
+      for (let m = 0; m < 225; m++) {
+        for (let s = 0; s < 4; s++) if (seats[s] === null && q.length) { const u = q.shift(); seats[s] = u; left[u] = rnd() < .5 ? -ri(5, 15) : 20; }
+        out.push({ seats: seats.map(u => u === null ? null : [u, Math.abs(left[u])]), q: q.slice(), io: away.map((a, i) => a > 0 ? i : -1).filter(i => i >= 0), seen: seen.slice() });
+        for (let s = 0; s < 4; s++) { const u = seats[s]; if (u === null) continue; seen[u]++; const v = left[u]; left[u] = v < 0 ? v + 1 : v - 1;
+          if (left[u] === 0) { seats[s] = null; if (v < 0) away[u] = ri(5, 15); else q.push(u); } }
+        for (let i = 0; i < N; i++) if (away[i] > 0 && --away[i] === 0) q.push(i);
+      }
+      return out;
+    })());
+    const m = Math.min(224, Math.floor((t * 9) % 250)), st = S[m], fs = Math.max(9, Math.min(h * .055, w * .032));
+    const hue = i => `hsl(${(i * 137.5) % 360} 70% 66%)`;
+    c.fillStyle = "#0a0d24"; c.fillRect(0, 0, w, h);
+    /* screen + film progress */
+    const sx = w * .2, sw = w * .6, sy = h * .08, sh = h * .12, k = m / 224;
+    const g = c.createLinearGradient(0, sy, 0, sy + sh * 3); g.addColorStop(0, "rgba(124,178,255,.35)"); g.addColorStop(1, "rgba(124,178,255,0)");
+    c.fillStyle = g; c.beginPath(); c.moveTo(sx, sy + sh); c.lineTo(sx + sw, sy + sh); c.lineTo(w * .9, h * .62); c.lineTo(w * .1, h * .62); c.fill();
+    c.fillStyle = "#1a2552"; c.fillRect(sx, sy, sw, sh); c.fillStyle = "#7cb2ff"; c.fillRect(sx, sy + sh - 4, sw * k, 4);
+    c.font = `700 ${fs}px Space Mono, monospace`; c.textAlign = "center"; c.fillStyle = "#e8edff"; c.fillText(`[${String(m).padStart(3, "0")}:00] / 225`, w / 2, sy + sh * .62);
+    /* 4 seats */
+    const seatW = w * .13, gap = w * .035, x0 = w / 2 - (4 * seatW + 3 * gap) / 2, y0 = h * .44;
+    st.seats.forEach((o, s) => { const x = x0 + s * (seatW + gap);
+      c.fillStyle = o ? hue(o[0]) : "#1a2047"; c.globalAlpha = o ? .9 : 1; roundRect(c, x, y0, seatW, seatW * .8, 6); c.fill(); c.globalAlpha = 1;
+      c.fillStyle = "#0a0d24"; c.font = `700 ${fs}px Space Mono, monospace`; if (o) c.fillText("T" + (o[0] + 1), x + seatW / 2, y0 + seatW * .48);
+      if (o) { c.fillStyle = "rgba(255,255,255,.75)"; c.fillRect(x + 4, y0 + seatW * .8 - 6, (seatW - 8) * Math.min(1, o[1] / 20), 3); } });
+    c.font = `${fs * .8}px Space Mono, monospace`; c.fillStyle = "#8d97c0"; c.fillText("Semaphore(4) · q = 20 min", w / 2, y0 + seatW * .8 + fs * 1.4);
+    /* ready queue (left) and I/O (right) */
+    const r = Math.max(5, fs * .55), yQ = h * .86;
+    c.textAlign = "left"; c.fillStyle = "#62e3b5"; c.fillText(LANG === "es" ? "fila" : "queue", w * .06, yQ - r * 2.4);
+    st.q.slice(0, 8).forEach((u, i) => { c.fillStyle = hue(u); c.beginPath(); c.arc(w * .06 + r + i * r * 2.5, yQ, r, 0, 7); c.fill(); });
+    c.textAlign = "right"; c.fillStyle = "#ffb45e"; c.fillText(LANG === "es" ? "I/O · baño" : "I/O · bathroom", w * .94, yQ - r * 2.4);
+    st.io.slice(0, 6).forEach((u, i) => { c.fillStyle = hue(u); c.globalAlpha = .55 + .45 * Math.sin(t * 4 + u); c.beginPath(); c.arc(w * .94 - r - i * r * 2.5, yQ, r, 0, 7); c.fill(); c.globalAlpha = 1; });
+    c.textAlign = "left";
   },
   semf(c, w, h, t) {
     c.fillStyle = "#0a1030"; c.fillRect(0, 0, w, h);

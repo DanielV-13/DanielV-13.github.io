@@ -698,18 +698,21 @@ function lightbox(src, list) {
 /* ===================== JOURNEY: stickers + timeline ===================== */
 /* About: the two achievements that matter most, stuck on the access pass (Dean's List first, then WiDS) */
 const PASS_STK = [
-  { id: "dean", u: "https://uees.edu.ec/distinciones-academicas-deans-list/", tip: { en: "Dean's List UEES · see the official list ↗", es: "Dean's List UEES · ver la lista oficial ↗" }, rot: -10, cls: "a" },
-  { id: "wids", u: "https://verified.sertifier.com/en/verify/08910752588849/", tip: { en: "3rd place WiDS · verify the credential ↗", es: "3.er lugar WiDS · verificar credencial ↗" }, rot: 8, cls: "b" }
+  { id: "dean", u: "https://uees.edu.ec/distinciones-academicas-deans-list/", tip: { en: "Dean's List UEES · see the official list ↗", es: "Dean's List UEES · ver la lista oficial ↗" }, rot: 8, cls: "a" },
+  { id: "wids", u: "https://verified.sertifier.com/en/verify/08910752588849/", tip: { en: "3rd place WiDS · verify the credential ↗", es: "3.er lugar WiDS · verificar credencial ↗" }, rot: -8, cls: "b", host: "pass" }
 ];
 function renderPassStickers() {
   const ph = $(".pass .pass-photo"); if (!ph) return;
   let lay = $(".pstk-layer"); if (!lay) { lay = document.createElement("div"); lay.className = "pstk-layer"; ph.after(lay); }
-  lay.innerHTML = PASS_STK.map(k => {
+  let lay2 = $(".pstk-layer2"); if (!lay2) { lay2 = document.createElement("div"); lay2.className = "pstk-layer2"; $(".pass").appendChild(lay2); }
+  const html = k => {
     const s = STICKERS.find(x => x.id === k.id); if (!s) return "";
     const face = s.m ? `<span class="lg${s.small ? " sm" : ""}" style="--m:url(${s.m})"></span>` : `<span style="font-size:17px">${s.txt}</span>`;
     const sub = s.sub ? `<small>${esc(L(s.sub))}</small>` : "";
     return `<a class="sticker pstk ${k.cls}" href="${k.u}" target="_blank" rel="noopener" style="--rot:${k.rot}deg" data-tip="${esc(L(k.tip))}" aria-label="${esc(L(k.tip))}"><span class="shadow"></span><span class="s-rot"><span class="s-in"><span class="s-face" style="--bg:${s.bg};--fg:${s.fg}">${face}${sub}</span></span></span></a>`;
-  }).join("");
+  };
+  lay.innerHTML = PASS_STK.filter(k => !k.host).map(html).join("");
+  lay2.innerHTML = PASS_STK.filter(k => k.host === "pass").map(html).join("");
   const fit = () => { lay.style.top = ph.offsetTop + "px"; lay.style.left = ph.offsetLeft + "px"; lay.style.width = ph.offsetWidth + "px"; lay.style.height = ph.offsetHeight + "px"; };
   fit(); if (!lay._ro && "ResizeObserver" in window) { lay._ro = new ResizeObserver(fit); lay._ro.observe(ph); }
 }
