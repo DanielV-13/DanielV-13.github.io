@@ -251,13 +251,13 @@ const VidPlay = {
     if (this.io) this.io.disconnect(); this.ratio.clear();
     if (!VID_OK) return;
     this.io = new IntersectionObserver(es => { es.forEach(e => this.ratio.set(e.target, e.isIntersecting ? e.intersectionRatio : 0)); this.sync(); }, { threshold: [0, .35, .6, .9] });
-    $$(".screen video", root).forEach(v => this.io.observe(v));
+    $$(".screen video", root).forEach(v => { this.io.observe(v); v._t = 0; v.addEventListener("timeupdate", () => { if (v.currentTime > v._t) v._t = v.currentTime; }); });
   },
   sync() {
     if (!VID_OK) return;
     const open = $("#modal").classList.contains("open") || CURVIEW !== "work" || document.hidden, phone = innerWidth < 760 || matchMedia("(pointer:coarse)").matches;
-    /* one video at a time keeps "All" at 60 fps; the Games filter has no canvas animations, so all visible clips play together */
-    const max = FILTER === "games" && !phone ? 3 : 1;
+    /* phones play one clip; desktop "All" plays the two most visible (the kart + Catventures pair); the Games filter has no canvas animations, so three */
+    const max = phone ? 1 : FILTER === "games" ? 3 : 2;
     const ranked = [...this.ratio].filter(([v, r]) => { const sl = v.closest(".sl"); return r >= .35 && (!sl || sl.classList.contains("on")); }).sort((a, b) => b[1] - a[1]).slice(0, max).map(x => x[0]);
     this.ratio.forEach((r, v) => {
       const go = !open && ranked.includes(v);
@@ -291,14 +291,16 @@ const CardRot = {
     if (!this.timer && !REDUCED) this.timer = setInterval(() => this.tick(), 400);
   },
   show(c, k) {
-    c.k = k; $$(".sl", c.el).forEach((s, j) => { s.classList.toggle("on", j === k); const cv = $("canvas", s); if (cv) Previews.setOff(cv, j !== k); });
+    c.k = k; const v = $$(".sl", c.el)[k]?.querySelector("video"); if (v) v._t = 0; $$(".sl", c.el).forEach((s, j) => { s.classList.toggle("on", j === k); const cv = $("canvas", s); if (cv) Previews.setOff(cv, j !== k); });
     $$(".sdots i", c.el).forEach((d, j) => d.classList.toggle("on", j === k));
     VidPlay.sync();
   },
   tick() {
     if (document.hidden || CURVIEW !== "work" || $("#modal").classList.contains("open")) return;
     const now = performance.now();
-    this.cards.forEach(c => { if (!c.vis || c.hover) { c.next = Math.max(c.next, now + 1200); return; } if (now >= c.next) { this.show(c, (c.k + 1) % c.n); c.next = now + ($(".sl.on video", c.el) ? 7000 : this.every); } });
+    /* a video slide is never skipped before the clip has actually played (≈6 s or to its end), so a paused clip waits for its turn instead of flipping to stills */
+    const unseen = c => { const v = $(".sl.on video", c.el); return v && (v._t || 0) < Math.min(6, (v.duration || 6) - .4); };
+    this.cards.forEach(c => { if (!c.vis || c.hover || unseen(c)) { c.next = Math.max(c.next, now + 1200); return; } if (now >= c.next) { this.show(c, (c.k + 1) % c.n); c.next = now + ($(".sl.on video", c.el) ? 7000 : this.every); } });
   }
 };
 function renderGrid() {
