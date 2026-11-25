@@ -256,10 +256,11 @@ const VidPlay = {
   sync() {
     if (!VID_OK) return;
     const open = $("#modal").classList.contains("open") || CURVIEW !== "work" || document.hidden, phone = innerWidth < 760 || matchMedia("(pointer:coarse)").matches;
-    let best = null, br = 0; this.ratio.forEach((r, v) => { const sl = v.closest(".sl"); if ((!sl || sl.classList.contains("on")) && r > br) { best = v; br = r; } });
+    /* one video at a time keeps "All" at 60 fps; the Games filter has no canvas animations, so all visible clips play together */
+    const max = FILTER === "games" && !phone ? 3 : 1;
+    const ranked = [...this.ratio].filter(([v, r]) => { const sl = v.closest(".sl"); return r >= .35 && (!sl || sl.classList.contains("on")); }).sort((a, b) => b[1] - a[1]).slice(0, max).map(x => x[0]);
     this.ratio.forEach((r, v) => {
-      const sl = v.closest(".sl"), active = !sl || sl.classList.contains("on");
-      const go = !open && active && r >= .35 && v === best;   // one video at a time keeps the page at 60 fps
+      const go = !open && ranked.includes(v);
       if (go) { if (!v.src) v.src = v.dataset.src; const pr = v.play(); if (pr) pr.catch(() => {}); } else if (!v.paused) v.pause();
     });
   }
@@ -271,7 +272,7 @@ function cardHTML(p, i) {
     ? `<div class="screen multi">${md.map((m, k) => slideHTML(p, m, !k, true, true)).join("")}<div class="sdots" aria-hidden="true">${md.map((_, k) => `<i class="${k ? "" : "on"}"></i>`).join("")}</div></div>`
     : `<div class="screen">${slideHTML(p, md[0], true, true, true)}</div>`;
   const first = p.award ? `<span class="tag award">★ ${esc(L(p.award))}</span>` : `<span class="tag">${esc(L(THEMES[p.theme]))}</span>`;
-  return `<button class="win${p.feat ? " feat" : ""}" type="button" data-id="${p.id}" style="animation-delay:${Math.min(i, 12) * 35}ms">${screen}
+  return `<button class="win${p.feat ? " feat" : ""}" type="button" data-id="${p.id}" style="animation-delay:${Math.min(i, 12) * 35}ms;--o4:${ORDER4.indexOf(p.id)}">${screen}
     <div class="win-body"><div class="win-meta">${first}<span class="tag place-${p.place}">${p.place === "uees" ? "UEES" : "Uniovi"}</span>${p.playable ? `<span class="tag play">▶ ${esc(T().playable)}</span>` : ""}${p.wip ? `<span class="tag wip">${esc(T().wip)}</span>` : ""}</div>
     <h3>${esc(L(p.title))}</h3></div></button>`;
 }
@@ -346,14 +347,14 @@ function fillModal() {
   else if (md[0] && md[0] !== "anim") hero.innerHTML = isVid(md[0]) ? `<video src="${md[0]}" autoplay muted loop playsinline></video>` : `<img src="${md[0]}" alt="${esc(L(p.title))}">`;
   else { hero.innerHTML = `<canvas data-anim="${p.anim}" aria-hidden="true"></canvas>`; modalAnim = $("canvas", hero); Previews.add(modalAnim, true); }
   const linkBtn = l => {
-    const lab = { github: t.code, colab: t.colab, figma: t.figma, video: t.video, map: t.map, release: t.release }[l.t];
+    const lab = l.lab ? esc(L(l.lab)) : { github: t.code, colab: t.colab, figma: t.figma, video: t.video, map: t.map, release: t.release }[l.t];
     const ic = l.t === "github" ? '<path d="M9 19c-4 1.5-4-2-6-2.5M15 21v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/>' : '<path d="M7 17 17 7M8 7h9v9"/>';
     const gold = l.t === "release" || (l.t === "github" && !p.links.some(x => x.t === "release"));
     const ic2 = l.t === "release" ? '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>' : ic;
     return `<a class="btn${gold ? "" : " ghost"}${l.t === "release" ? " rel" : ""}" href="${l.u}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24">${ic2}</svg>${lab}</a>`;
   };
   const did = L(p.did) || [];
-  const people = (p.people || []).map(k => `<a href="${PEOPLE[k][1]}" target="_blank" rel="noopener">${PEOPLE[k][0]}</a>`).join(", ");
+  const people = (p.people || []).map(k => PEOPLE[k][1] ? `<a href="${PEOPLE[k][1]}" target="_blank" rel="noopener">${PEOPLE[k][0]}</a>` : PEOPLE[k][0]).join(", ");
   let links = p.links.map(linkBtn).join("");
   if (p.company) links += `<div class="note"><span aria-hidden="true">🏢</span><span>${t.company}</span></div>`;
   if (p.teamRepoNote) links += `<div class="note"><span aria-hidden="true">ℹ</span><span>${t.teamnote}</span></div>`;
@@ -364,7 +365,7 @@ function fillModal() {
       ${did.length ? `<h4>${t.did}</h4><ul>${did.map(d => `<li>${esc(d)}</li>`).join("")}</ul>` : ""}</div>
     <div class="m-side"><div class="m-links">${links}</div>
       <div><h4>${t.tech}</h4><div class="techs">${p.tech.map(x => `<span>${esc(x)}</span>`).join("")}</div></div>
-      ${people ? `<p class="people">${t.with}: ${people}</p>` : ""}</div>`;
+      ${people ? `<p class="people">${t.with}: ${people}</p>` : ""}${p.credit ? `<p class="people credit">${esc(L(p.credit))}</p>` : ""}</div>`;
   $("#mCount").textContent = String(MODAL_I + 1).padStart(2, "0") + " / " + String(MODAL_LIST.length).padStart(2, "0");
   $("#mDots").innerHTML = MODAL_LIST.map((_, i) => `<i class="${i === MODAL_I ? "on" : ""}"></i>`).join("");
   $("#mPanel").scrollTop = 0;
@@ -698,7 +699,7 @@ function lightbox(src, list) {
 /* ===================== JOURNEY: stickers + timeline ===================== */
 /* About: the two achievements that matter most, stuck on the access pass (Dean's List first, then WiDS) */
 const PASS_STK = [
-  { id: "dean", u: "https://uees.edu.ec/distinciones-academicas-deans-list/", tip: { en: "Dean's List UEES · see the official list ↗", es: "Dean's List UEES · ver la lista oficial ↗" }, rot: 8, cls: "a" },
+  { id: "dean", u: "assets/docs/transcript-uees.pdf", tip: { en: "Dean's List · see my grades (transcript, Jun 2026) ↗", es: "Dean's List · ver mis notas (récord, jun. 2026) ↗" }, rot: 8, cls: "a" },
   { id: "wids", u: "https://verified.sertifier.com/en/verify/08910752588849/", tip: { en: "3rd place WiDS · verify the credential ↗", es: "3.er lugar WiDS · verificar credencial ↗" }, rot: -8, cls: "b", host: "pass" }
 ];
 function renderPassStickers() {

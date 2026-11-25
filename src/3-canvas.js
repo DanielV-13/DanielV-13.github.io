@@ -847,7 +847,7 @@ const Portal = {
     if (p._pk) return p._pk;
     const cm = (p.cardMedia || []).find(m => /\.mp4$/.test(m)) || p.video;
     const md = (p.media || []).concat(p.cardMedia || []).find(m => m !== "anim" && !/\.mp4$/.test(m)) || p.img;
-    const pk = cm ? { v: cm } : md ? { i: md, plot: /\/g\/(higgs|param|like|autodiff|dnn|semf|wids-[1-4]|ov-)|\/(pa0|pl0)/.test(md) || p.plot } : p.anim ? { a: p.anim } : {};
+    const pk = cm ? { v: cm } : md ? { i: md, plot: /\/g\/(higgs|param|like|autodiff|dnn|semf|wids-[1-4]|ov-|sch-1)|\/(pa0|pl0)/.test(md) || p.plot } : p.anim ? { a: p.anim } : {};
     return (p._pk = pk);
   },
   prep() {

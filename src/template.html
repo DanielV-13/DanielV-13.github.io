@@ -193,6 +193,17 @@ body.in-view .view-bg{opacity:1}
 .win.feat{grid-column:span 2}
 .screen{position:relative;aspect-ratio:16/10;background:#060a1c;overflow:hidden}
 .win.feat .screen{aspect-ratio:16/8}
+/* big cards: 2 columns × 2 rows, two normal cards stacked beside them (no stretched cards, no gaps) */
+@media (min-width:1101px){
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .win.feat{grid-row:span 2}
+  .win.feat .screen{aspect-ratio:auto;flex:1 1 0;min-height:0}
+  .grid .win.feat .screen .sl img{object-fit:contain;background:#151726}
+  .grid .win.feat .screen .sl img[src*="/projects/g/"]{background:#fff}
+  .grid .win.feat .screen .sl img[src$="wids-5.webp"]{object-fit:cover;background:none}
+}
+@media (min-width:1300px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.grid .win{order:var(--o4,0)}}
+.people.credit{opacity:.75;font-style:italic}
 .screen img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
 .screen canvas{width:100%;height:100%;display:block}
 .win:hover .screen img{transform:scale(1.05)}
